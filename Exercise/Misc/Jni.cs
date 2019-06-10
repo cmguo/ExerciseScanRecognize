@@ -1,10 +1,9 @@
 ﻿using java.io;
 using java.lang;
-using java.util;
 using net.sf.jni4net;
 using net.sf.jni4net.adaptors;
 
-namespace Misc
+namespace Exercise.Misc
 {
     public class Jni
     {
@@ -13,7 +12,7 @@ namespace Misc
             // create bridge, with default setup
             // it will lookup jni4net.j.jar next to jni4net.n.dll
             var bridgeSetup = new BridgeSetup();
-            bridgeSetup.AddAllJarsClassPath("Libraries");
+            bridgeSetup.AddAllJarsClassPath(".");
             bridgeSetup.Verbose = true;
             Bridge.CreateJVM(bridgeSetup);
 
@@ -22,7 +21,7 @@ namespace Misc
 
             // OK, simple hello is boring, let's play with Java properties
             // they are Hashtable realy
-            Properties javaSystemProperties = java.lang.System.getProperties();
+            java.util.Properties javaSystemProperties = java.lang.System.getProperties();
 
             // let's enumerate all keys. 
             // We use Adapt helper to convert enumeration from java o .NET

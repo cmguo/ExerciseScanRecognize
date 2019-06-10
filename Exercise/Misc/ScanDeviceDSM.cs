@@ -1,12 +1,9 @@
-﻿using scan2web;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using TWAINComm;
-using WIA;
 
 namespace Exercise.Misc
 {

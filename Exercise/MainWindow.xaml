@@ -4,6 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Exercise"
+        xmlns:account="clr-namespace:Account;assembly=Account"
         mc:Ignorable="d"
-        Title="教育测练工具" Height="450" Width="800" WindowState="Maximized" Source="View\AccountPage.xaml">
+        Title="教育测练工具" Height="450" Width="800" WindowState="Maximized" Source="pack://application:,,,/Account;component/View/AccountPage.xaml">
 </NavigationWindow>

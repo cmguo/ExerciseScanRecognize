@@ -9,13 +9,7 @@
 //
 
 using System;
-using System.Text;
 using System.Runtime.InteropServices;
-using System.Drawing;
-using System.Collections;
-using System.ComponentModel;
-using System.Windows.Forms;
-using System.Windows;
 using System.Windows.Media.Imaging;
 using System.Windows.Media;
 

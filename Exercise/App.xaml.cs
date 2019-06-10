@@ -13,5 +13,9 @@ namespace Exercise
     /// </summary>
     public partial class App : Application
     {
+        App()
+        {
+            Account.Module.Init(this);
+        }
     }
 }

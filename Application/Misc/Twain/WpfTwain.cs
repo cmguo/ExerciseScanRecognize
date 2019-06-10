@@ -18,7 +18,6 @@ using IBN_Util;
 
 using TwainLib;
 using System.Windows.Interop;
-using Exercise;
 
 namespace scan2web
 {
@@ -41,7 +40,7 @@ namespace scan2web
 
         private System.IntPtr _handle = IntPtr.Zero;
 
-        public Window TheMainWindow { get { return App.Current.MainWindow; } }
+        public Window TheMainWindow { get { return Application.App.Current.MainWindow; } }
 
         public uint WM_App_Acquire = Win32.RegisterWindowMessage("IBN_WfpTwain_Acquire");
         //If you do not want so register a message, a simple const will do (just make sure it is unique)

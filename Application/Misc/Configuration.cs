@@ -2,7 +2,7 @@
 using System.Configuration;
 using System.Xml;
 
-namespace Exercise.Misc
+namespace Application.Misc
 {
 
     class Configuration
@@ -22,7 +22,7 @@ namespace Exercise.Misc
         public static void UpdateKey(string strKey, string newValue)
         {
             XmlDocument xmlDoc = new XmlDocument();
-            xmlDoc.Load(AppDomain.CurrentDomain.BaseDirectory + "..\\..\\App.config");
+            xmlDoc.Load(AppDomain.CurrentDomain.BaseDirectory + "..\\..\\Application.config");
 
             if (!KeyExists(strKey))
             {
@@ -35,14 +35,14 @@ namespace Exercise.Misc
                 if (childNode.Attributes["key"].Value == strKey)
                     childNode.Attributes["value"].Value = newValue;
             }
-            xmlDoc.Save(AppDomain.CurrentDomain.BaseDirectory + "..\\..\\App.config");
+            xmlDoc.Save(AppDomain.CurrentDomain.BaseDirectory + "..\\..\\Application.config");
             xmlDoc.Save(AppDomain.CurrentDomain.SetupInformation.ConfigurationFile);
         }
 
         public static bool KeyExists(string strKey)
         {
             XmlDocument xmlDoc = new XmlDocument();
-            xmlDoc.Load(AppDomain.CurrentDomain.BaseDirectory + "..\\..\\App.config");
+            xmlDoc.Load(AppDomain.CurrentDomain.BaseDirectory + "..\\..\\Application.config");
 
             XmlNode appSettingsNode = xmlDoc.SelectSingleNode("configuration/appSettings");
 

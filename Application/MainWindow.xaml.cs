@@ -13,14 +13,14 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace Exercise.View
+namespace Application
 {
     /// <summary>
-    /// WebPage.xaml 的交互逻辑
+    /// MainWindow.xaml 的交互逻辑
     /// </summary>
-    public partial class WebPage : Page
+    public partial class MainWindow : NavigationWindow
     {
-        public WebPage()
+        public MainWindow()
         {
             InitializeComponent();
         }

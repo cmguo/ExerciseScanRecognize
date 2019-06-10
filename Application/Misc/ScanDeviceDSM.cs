@@ -5,7 +5,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using TWAINComm;
 
-namespace Exercise.Misc
+namespace Application.Misc
 {
     class ScanDeviceDSM : IScanDevice
     {
@@ -17,7 +17,7 @@ namespace Exercise.Misc
         {
             TWAINComm.Feedback feedback = new TWAINComm.Feedback();
             feedback.ScanEnd += Twain_ScanEnd;
-            feedback.ApplicationIdentityChanged += Twain_ApplicationIdentityChanged;
+            feedback.ApplicationIdentityChanged += Twain_ApplicationlicationIdentityChanged;
             feedback.DataSourceIdentityChanged += Twain_DataSourceIdentityChanged;
             feedback.TwainStateChanged += Twain_TwainStateChanged;
             feedback.TwainActionChanged += Twain_TwainActionChanged;
@@ -70,7 +70,7 @@ namespace Exercise.Misc
             Task.TrySetResult(images);
         }
 
-        private void Twain_ApplicationIdentityChanged(TW_IDENTITY twIdentity)
+        private void Twain_ApplicationlicationIdentityChanged(TW_IDENTITY twIdentity)
         {
         }
 

@@ -3,7 +3,7 @@ using java.lang;
 using net.sf.jni4net;
 using net.sf.jni4net.adaptors;
 
-namespace Exercise.Misc
+namespace Application.Misc
 {
     public class Jni
     {

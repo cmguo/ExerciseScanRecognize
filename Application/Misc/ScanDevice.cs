@@ -2,7 +2,7 @@
 using System.Threading.Tasks;
 using System.Windows.Media;
 
-namespace Exercise.Misc
+namespace Application.Misc
 {
 
     interface IScanDevice

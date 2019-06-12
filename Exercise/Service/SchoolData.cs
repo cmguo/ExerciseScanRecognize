@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Exercise
+namespace Exercise.Service
 {
-    public class Class1
+    public class SchoolData
     {
     }
 }

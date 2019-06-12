@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace Account.Service
 {
-    class AccountHandler : HttpClientHandler
+    public class AccountHandler : HttpClientHandler
     {
         public AccountHandler()
         {

@@ -6,6 +6,9 @@ using TalBase.Service;
 namespace Account.Service
 {
     [BaseUri("http://interactablet.itest.talcloud.com/app/v1")]
+    [MessageHandler(typeof(AccountHandler))]
+    [ContentSerializer(typeof(ResultSerializer))]
+    [Retry(3, 1000)]
     public interface IAccount
     {
 

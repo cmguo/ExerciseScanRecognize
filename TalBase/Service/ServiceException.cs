@@ -9,16 +9,12 @@ namespace TalBase.Service
     class ServiceException : Exception
     {
 
-        private int _status;
+        public int Status { get; private set; }
 
         public ServiceException(int status, string message) : base(message)
         {
-            _status = status;
+            Status = status;
         }
 
-        public int GetStatus()
-        {
-            return _status;
-        }
     }
 }

@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace TalBase.Service
 {
-    class ResultSerializer : IContentSerializer
+    public class ResultSerializer : IContentSerializer
     {
         class Result<T>
         {

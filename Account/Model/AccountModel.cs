@@ -35,7 +35,7 @@ namespace Account.Model
         {
             LoginData = new LoginData() { UserName = "guochunmao", Password = "guochunmao123" };
             Account = new Service.AccountData();
-            Service = TalBase.Service.Services.Get<IAccount>();
+            Service = Base.Service.Services.Get<IAccount>();
         }
 
         public async Task Login()

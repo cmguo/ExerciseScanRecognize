@@ -52,8 +52,9 @@ namespace Exercise.Model
 
         private SchoolModel schoolModel = SchoolModel.Instance;
         private ScanModel scanModel = ScanModel.Instance;
-        private IExercise Service;
+        private IExercise service;
 
+        private SubmitModel.SubmitTask task;
         public ObservableCollection<ExceptionList> Exceptions = new ObservableCollection<ExceptionList>();
         public ObservableCollection<Page> PageDropped = new ObservableCollection<Page>();
         private List<Page> emptyPages;
@@ -63,7 +64,13 @@ namespace Exercise.Model
         {
             scanModel.Pages.CollectionChanged += Pages_CollectionChanged;
             scanModel.PropertyChanged += ScanModel_PropertyChanged;
-            Service = Services.Get<IExercise>();
+            service = Services.Get<IExercise>();
+        }
+
+        public void NewTask()
+        {
+            task = SubmitModel.Instance.AddTask();
+            scanModel.SetSavePath(task.SavePath);
         }
 
         public void MakeResult()
@@ -71,11 +78,23 @@ namespace Exercise.Model
             schoolModel.GetLostPageStudents(s => AddException(ExceptionType.PageLost, s));
         }
 
+        public void SubmitTask()
+        {
+            SubmitModel.Instance.Submit(task);
+            task = null;
+            emptyPages = null;
+            exerciseData = null;
+            Exceptions.Clear();
+            PageDropped.Clear();
+            scanModel.ClearPages();
+            schoolModel.Clear();
+        }
+
         private async void ScanModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
         {
             if (e.PropertyName == "PageCode")
             {
-                exerciseData = await Service.GetExercise(scanModel.PageCode);
+                exerciseData = await service.GetExercise(scanModel.PageCode);
                 emptyPages = new List<Page>();
                 while (emptyPages.Count < (exerciseData.pages.Count() + 1) / 2)
                     emptyPages.Add(null);
@@ -92,9 +111,9 @@ namespace Exercise.Model
         private void AddPage(Page page)
         {
             ExceptionType type = ExceptionType.None;
-            if (page.PageCode == null)
+            if (page.PaperCode == null)
                 type = ExceptionType.NoPageCode;
-            else if (page.PageCode != scanModel.PageCode)
+            else if (page.PaperCode != scanModel.PageCode)
                 type = ExceptionType.PageCodeMissMatch;
             else if (page.StudentCode == null || (page.Student = schoolModel.GetStudent(page.StudentCode)) == null)
                 type = ExceptionType.NoStudentCode;

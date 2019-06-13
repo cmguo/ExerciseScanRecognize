@@ -2,6 +2,8 @@
 using Account.Service;
 using Base.Helpers;
 using System;
+using System.Windows;
+using System.Windows.Navigation;
 using TalBase.ViewModel;
 
 namespace Account.ViewModel
@@ -51,7 +53,7 @@ namespace Account.ViewModel
         private async void DoLogin(object obj)
         {
             await AccountModel.Instance.Login();
-            //((MainWindow) App.Current.MainWindow).Navigate(new Uri("pack://application:,,,/View/WebPage.xaml"));
+            (obj as NavigationWindow).Navigate(new Uri(Configuration.StartupPage));
         }
 
         private bool CanDoLogout(object obj)

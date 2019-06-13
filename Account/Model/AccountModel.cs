@@ -34,8 +34,8 @@ namespace Account.Model
 
         public AccountModel()
         {
-            LoginData = new LoginData() { UserName = "guochunmao", Password = "guochunmao123",
-                authenticationType = LoginData.LOGIN_BY_PASSWORD };
+            LoginData = new LoginData() { LoginName = "18638217959", Password = "123@qwe",
+                AuthenticationType = LoginData.LOGIN_BY_PASSWORD };
             Account = new Service.AccountData();
             Service = Base.Service.Services.Get<IAccount>();
         }
@@ -46,7 +46,7 @@ namespace Account.Model
             byte[] output = md5.ComputeHash(Encoding.UTF8.GetBytes(LoginData.Password));
             LoginData.Password = BitConverter.ToString(output).Replace("-", "").ToLower();
             Account = await Service.Login(LoginData);
-            LoginData.authenticationType = LoginData.LOGIN_BY_TICKET;
+            LoginData.AuthenticationType = LoginData.LOGIN_BY_TICKET;
         }
     }
 }

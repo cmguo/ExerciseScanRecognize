@@ -1,8 +1,8 @@
-﻿using Exercise.Service;
+﻿using Base.Service;
+using Exercise.Service;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using TalBase.Model;
 
@@ -23,23 +23,30 @@ namespace Exercise.Model
             }
         }
 
-        public IList<ClassData> Classes { get; private set; }
+        public IList<ClassInfo> Classes { get; private set; }
 
+        private IExercise service;
         private SchoolData schoolData;
 
         public SchoolModel()
         {
-            Classes = new List<ClassData>();
+            Classes = new List<ClassInfo>();
+            service = Services.Get<IExercise>();
         }
 
-        public StudentData GetStudent(string id)
+        public async Task refresh()
         {
-            StudentData student = schoolData.students.FirstOrDefault(s => s.number == id);
+            schoolData = await service.getAllClass();
+        }
+
+        public StudentInfo GetStudent(string id)
+        {
+            StudentInfo student = schoolData.StudentInfoList.FirstOrDefault(s => s.TalNo == id);
             if (student != null && student.AnswerPages == null)
             {
-                if (Classes.FirstOrDefault(c => c.id == student.clsid) == null)
+                if (Classes.FirstOrDefault(c => c.ClassId == student.ClassId) == null)
                 {
-                    ClassData classData = schoolData.classes.FirstOrDefault(c => c.id == student.clsid);
+                    ClassInfo classData = schoolData.ClassInfoList.FirstOrDefault(c => c.ClassId == student.ClassId);
                     if (classData == null)
                         return null;
                     Classes.Add(classData);
@@ -48,12 +55,18 @@ namespace Exercise.Model
             return student;
         }
 
-        public void GetLostPageStudents(Action<StudentData> visitor)
+        public void GetLostPageStudents(Action<StudentInfo> visitor)
         {
-            IEnumerable<StudentData> students = schoolData.students.Where(
-                s => Classes.FirstOrDefault(c => c.id == s.clsid) != null && (s.AnswerPages == null || s.AnswerPages.Contains(null)));
-            foreach (StudentData s in students)
+            IEnumerable<StudentInfo> students = schoolData.StudentInfoList.Where(
+                s => Classes.FirstOrDefault(c => c.ClassId == s.ClassId) != null && (s.AnswerPages == null || s.AnswerPages.Contains(null)));
+            foreach (StudentInfo s in students)
                 visitor(s);
+        }
+
+        public void Clear()
+        {
+            schoolData = null;
+            Classes = null;
         }
     }
 }

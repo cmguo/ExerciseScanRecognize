@@ -8,26 +8,27 @@ namespace Account.Service
         public static readonly int LOGIN_BY_PASSWORD = 1;
         public static readonly int LOGIN_BY_TICKET = 2;
 
-        [JsonProperty(PropertyName = "loginName")]
-        public string UserName { get; set; }
-
-        [JsonProperty(PropertyName = "password")]
+        public long AuthenticationType { get; set; }
+        public string LoginName { get; set; }
         public string Password { get; set; }
+        public long NextAutoLogin { get; set; }
+        public string ClientType { get; set; }
+        public string ProductVersionNumber { get; set; }
+        public string OsVersionNumber { get; set; }
+        public string DeviceNumber { get; set; }
+        public string IpAddress { get; set; }
+        public string NetType { get; set; }
 
-        public int authenticationType = 0;
+        public LoginData()
+        {
+            NextAutoLogin = 1;
+            ClientType = "ios";
+            NetType = "wifi";
+            IpAddress = "127.0.0.1";
+            DeviceNumber = "0";
+            OsVersionNumber = "10";
+            ProductVersionNumber = "youchat.2.1.31.20190428.beta";
+        }
 
-        public int nextAutoLogin = 1;
-
-        public string clientType = "exercise";
-
-        public string netType = "wifi";
-
-        public string ipAddress = "127.0.0.1";
-
-        public string deviceNumber = "0";
-
-        public string osVersionNumber = "10";
-
-        public string productVersionNumber = "1.0";
     }
 }

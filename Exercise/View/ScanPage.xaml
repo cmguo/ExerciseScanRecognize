@@ -18,6 +18,7 @@
             <Button Command="{Binding StartScanCommand}" Content="开始扫描" />
             <Button Command="{Binding StopScanCommand}" Content="停止扫描" />
             <Button Command="{Binding EndScanCommand}" Content="查看统计" />
+            <Button Command="{Binding SubmitCommand}" Content="上传成绩" />
         </StackPanel>
     </Grid>
 </Page>

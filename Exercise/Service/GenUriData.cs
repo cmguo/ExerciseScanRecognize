@@ -6,8 +6,8 @@ using System.Threading.Tasks;
 
 namespace Exercise.Service
 {
-    public class ClassData
+    public class GenUriData
     {
-        public string id { get; internal set; }
+        public List<string> ObjectNameList { get; set; }
     }
 }

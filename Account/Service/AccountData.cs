@@ -10,17 +10,11 @@ namespace Account.Service
     public class AccountData
     {
 
-        [JsonProperty(PropertyName = "id")]
-        public String UserId;
-
-        [JsonProperty(PropertyName = "name")]
-        public String UserName;
-
-        [JsonProperty(PropertyName = "password")]
-        public String Password;
-
-        [JsonProperty(PropertyName = "ticket")]
-        public String Ticket;
+        public string Ticket { get; set; }
+        public long Id { get; set; }
+        public string LoginName { get; set; }
+        public string Name { get; set; }
+        //public string[] KickedAppLoginHistoryVoList { get; set; }
 
     }
 }

@@ -28,10 +28,11 @@
         UpDown = 3
     }
 
-    public class ResultCode
+    public class Result<T>
     {
         public int code { get; set; }
         public string message { get; set; }
+        public T data;
     }
 
 }

@@ -78,7 +78,6 @@
       <HintPath>..\packages\Refit.4.7.9\lib\net461\Refit.dll</HintPath>
     </Reference>
     <Reference Include="System" />
-    <Reference Include="System.Configuration" />
     <Reference Include="System.Data" />
     <Reference Include="System.Web" />
     <Reference Include="System.Windows.Forms" />
@@ -100,7 +99,6 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="Misc\Configuration.cs" />
     <Compile Include="Misc\Jni.cs" />
     <Compile Include="Misc\ScanDeviceSaraff.cs" />
     <Compile Include="View\WebPage.xaml.cs">

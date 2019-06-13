@@ -1,28 +1,25 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Configuration;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 using System.Xml;
 
-namespace Application.Misc
+namespace Base.Misc
 {
 
-    class Configuration
+    public class Configuration
     {
-        public static string Service = ConfigurationManager.AppSettings["service"];
-
-        public static string ServiceKey = ConfigurationManager.AppSettings["serviceKey"];
-
-        public static string ClassId = ConfigurationManager.AppSettings["classId"];
-
-        public static void setClassId(string classId)
+        public static string GetByKey(string key)
         {
-            ClassId = classId;
-            UpdateKey("classId", classId);
+            return ConfigurationManager.AppSettings[key];
         }
 
         public static void UpdateKey(string strKey, string newValue)
         {
             XmlDocument xmlDoc = new XmlDocument();
-            xmlDoc.Load(AppDomain.CurrentDomain.BaseDirectory + "..\\..\\Application.config");
+            xmlDoc.Load(AppDomain.CurrentDomain.BaseDirectory + "..\\..\\App.config");
 
             if (!KeyExists(strKey))
             {
@@ -35,14 +32,14 @@ namespace Application.Misc
                 if (childNode.Attributes["key"].Value == strKey)
                     childNode.Attributes["value"].Value = newValue;
             }
-            xmlDoc.Save(AppDomain.CurrentDomain.BaseDirectory + "..\\..\\Application.config");
+            xmlDoc.Save(AppDomain.CurrentDomain.BaseDirectory + "..\\..\\App.config");
             xmlDoc.Save(AppDomain.CurrentDomain.SetupInformation.ConfigurationFile);
         }
 
         public static bool KeyExists(string strKey)
         {
             XmlDocument xmlDoc = new XmlDocument();
-            xmlDoc.Load(AppDomain.CurrentDomain.BaseDirectory + "..\\..\\Application.config");
+            xmlDoc.Load(AppDomain.CurrentDomain.BaseDirectory + "..\\..\\App.config");
 
             XmlNode appSettingsNode = xmlDoc.SelectSingleNode("configuration/appSettings");
 

@@ -11,6 +11,9 @@ namespace Exercise.Algorithm
         [JsonPropertyAttribute(Required = Required.Default)]
         public string imageName { get; set; } // 提供给中台的名称（文件数据的Md5）
 
+        [JsonPropertyAttribute(Required = Required.Default)]
+        public int pageId { get; set; } // 页面编号，可能缺页
+
         public int imgWidth { get; set; }
         public int imgHeight { get; set; }
         public IList<AreaInfo> areaInfo { get; set; }

@@ -20,12 +20,13 @@ namespace Exercise.Model
         public String Md5Name { get; set; }
 
         public Exception Exception { get; set; }
-        public String PageCode { get; set; }
+        public String PaperCode { get; set; }
         public int PageIndex { get; set; } // 0, 2, 4
         public String StudentCode { get; set; }
-        public Page Another { get; set; }
-        public StudentData Student { get; set; }
         public AnswerData Answer { get; set; }
+
+        public Page Another { get; set; }
+        public StudentInfo Student { get; set; }
         public IList<AnswerData.QuestionInfo> AnswerExceptions { get; set; }
         public IList<AnswerData.QuestionInfo> CorrectionExceptions { get; set; }
     }

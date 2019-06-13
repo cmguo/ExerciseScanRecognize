@@ -28,7 +28,7 @@ namespace Exercise.Algorithm
         {
             string args = JsonConvert.SerializeObject(input);
             string result = AnswerSheetAnalyze.analyzeAnswerSheet(method, args);
-            return JsonConvert.DeserializeObject<O>(result);
+            return JsonConvert.DeserializeObject<Result<O>>(result).data;
         }
 
 

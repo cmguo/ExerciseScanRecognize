@@ -5,17 +5,17 @@ using TalBase.Service;
 
 namespace Account.Service
 {
-    [BaseUri("http://interactablet.itest.talcloud.com/app/v1")]
+    [BaseUri("http://homework.idev.talcloud.com/homework/api/v1")]
     [MessageHandler(typeof(AccountHandler))]
     [ContentSerializer(typeof(ResultSerializer))]
     [Retry(3, 1000)]
     public interface IAccount
     {
 
-        [Post("/user/login")]
+        [Post("/answerCardApp/login")]
         Task<AccountData> Login([Body] LoginData login);
 
-        [Post("/user/logout")]
+        [Post("/answerCardApp/logout")]
         Task<Nothing> Logout();
 
     }

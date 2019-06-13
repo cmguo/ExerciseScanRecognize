@@ -111,12 +111,18 @@ namespace Application.Misc
 
         private void Twain32_AcquireCompleted(object sender, EventArgs e)
         {
-            throw new NotImplementedException();
+            if (ScanCompleted != null)
+            {
+                ScanCompleted(this, new ScanEvent());
+            }
         }
 
         private void Twain32_AcquireError(object sender, Twain32.AcquireErrorEventArgs e)
         {
-            throw new NotImplementedException();
+            if (ScanCompleted != null)
+            {
+                ScanCompleted(this, new ScanEvent());
+            }
         }
 
     }

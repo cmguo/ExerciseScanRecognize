@@ -23,9 +23,9 @@ namespace Application.Misc
             set => twain32.Capabilities.ImageFileFormat.Set((TwFF) Enum.Parse(typeof(TwFF), value));
         }
 
-        public event EventHandler<ImageEvent> OnImage;
-        public event EventHandler<ImageEvent> GetFileName;
-        public event EventHandler<ImageEvent> ScanCompleted;
+        public event EventHandler<ScanEvent> OnImage;
+        public event EventHandler<ScanEvent> GetFileName;
+        public event EventHandler<ScanEvent> ScanCompleted;
 
         private Twain32 twain32;
         private bool cancel;
@@ -35,15 +35,21 @@ namespace Application.Misc
             twain32 = new Twain32();
             twain32.Language = TwLanguage.CHINESE_SIMPLIFIED;
             twain32.Country = TwCountry.CHINA;
-            twain32.SetupFileXferEvent += Twain32_SetupFileXferEvent; ;
+            twain32.ShowUI = false;
+            twain32.SetupFileXferEvent += Twain32_SetupFileXferEvent;
             twain32.FileXferEvent += Twain32_FileXferEvent;
+            twain32.XferDone += Twain32_XferDone;
+            twain32.EndXfer += Twain32_EndXfer;
+            twain32.AcquireError += Twain32_AcquireError;
+            twain32.AcquireCompleted += Twain32_AcquireCompleted;
         }
 
         public void Open()
         {
             twain32.OpenDSM();
             twain32.OpenDataSource();
-            twain32.Capabilities.XferMech.Set(TwSX.MemFile);
+            twain32.Capabilities.Indicators.Set(false);
+            twain32.Capabilities.XferMech.Set(TwSX.File);
         }
 
         public void Scan(short count)
@@ -73,7 +79,7 @@ namespace Application.Misc
             }
             if (GetFileName != null)
             {
-                ImageEvent e1 = new ImageEvent();
+                ScanEvent e1 = new ScanEvent();
                 GetFileName.Invoke(this, e1);
                 e.FileName = e1.FileName;
             }
@@ -83,10 +89,35 @@ namespace Application.Misc
         {
             if (OnImage != null)
             {
-                OnImage(this, new ImageEvent() { FileName = e.ImageFileXfer.FileName });
+                OnImage(this, new ScanEvent() { FileName = e.ImageFileXfer.FileName });
             }
         }
 
+        private void Twain32_XferDone(object sender, Twain32.XferDoneEventArgs e)
+        {
+            if (ScanCompleted != null)
+            {
+                ScanCompleted(this, new ScanEvent());
+            }
+        }
+
+        private void Twain32_EndXfer(object sender, Twain32.EndXferEventArgs e)
+        {
+            if (ScanCompleted != null)
+            {
+                ScanCompleted(this, new ScanEvent());
+            }
+        }
+
+        private void Twain32_AcquireCompleted(object sender, EventArgs e)
+        {
+            throw new NotImplementedException();
+        }
+
+        private void Twain32_AcquireError(object sender, Twain32.AcquireErrorEventArgs e)
+        {
+            throw new NotImplementedException();
+        }
 
     }
 }

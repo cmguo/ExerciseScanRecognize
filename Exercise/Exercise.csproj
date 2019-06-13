@@ -31,6 +31,12 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="answer-sheet-analyze-sdk.j4n">
+      <HintPath>Libraries\answer-sheet-analyze-sdk.j4n.dll</HintPath>
+    </Reference>
+    <Reference Include="jni4net.n-0.8.8.0">
+      <HintPath>Libraries\jni4net.n-0.8.8.0.dll</HintPath>
+    </Reference>
     <Reference Include="MyToolkit">
       <HintPath>..\packages\MyToolkit.2.5.16\lib\portable-net45+wp8+win8+wpa81\MyToolkit.dll</HintPath>
     </Reference>
@@ -82,7 +88,6 @@
       <DependentUpon>ScanPage.xaml</DependentUpon>
     </Compile>
   </ItemGroup>
-  <ItemGroup />
   <ItemGroup>
     <ProjectReference Include="..\Account\Account.csproj">
       <Project>{7df8007b-9234-4414-8dfe-5fe07c9a970b}</Project>
@@ -103,6 +108,18 @@
       <SubType>Designer</SubType>
     </Page>
   </ItemGroup>
+  <ItemGroup>
+    <None Include="Libraries\answer-sheet-analyze-sdk.j4n.jar" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Libraries\answer-sheet-analyze-sdk.jar" />
+  </ItemGroup>
+  <PropertyGroup>
+    <PrepareForRunDependsOn>$(PrepareForRunDependsOn);MyCopyFilesToOutputDirectory</PrepareForRunDependsOn>
+  </PropertyGroup>
+  <Target Name="MyCopyFilesToOutputDirectory">
+    <Copy SourceFiles="@(None)" DestinationFolder="$(OutDir)" />
+  </Target>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="..\packages\Refit.4.7.9\build\net461\refit.targets" Condition="Exists('..\packages\Refit.4.7.9\build\net461\refit.targets')" />
 </Project>

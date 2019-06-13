@@ -21,12 +21,12 @@ namespace Exercise.Model
 
         public Exception Exception { get; set; }
         public String PageCode { get; set; }
-        public int PageIndex { get; set; }
+        public int PageIndex { get; set; } // 0, 2, 4
         public String StudentCode { get; set; }
         public Page Another { get; set; }
         public StudentData Student { get; set; }
         public AnswerData Answer { get; set; }
-        public int AnswerException { get; set; }
-        public int Answer2Exception { get; set; }
+        public IList<AnswerData.QuestionInfo> AnswerExceptions { get; set; }
+        public IList<AnswerData.QuestionInfo> CorrectionExceptions { get; set; }
     }
 }

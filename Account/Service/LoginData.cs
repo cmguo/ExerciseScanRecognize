@@ -14,7 +14,7 @@ namespace Account.Service
         [JsonProperty(PropertyName = "password")]
         public string Password { get; set; }
 
-        public int authenticationType = LOGIN_BY_TICKET;
+        public int authenticationType = 0;
 
         public int nextAutoLogin = 1;
 

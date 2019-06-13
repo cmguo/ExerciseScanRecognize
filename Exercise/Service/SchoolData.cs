@@ -8,5 +8,7 @@ namespace Exercise.Service
 {
     public class SchoolData
     {
+        public IList<ClassData> classes { get; set; }
+        public IList<StudentData> students { get; set; }
     }
 }

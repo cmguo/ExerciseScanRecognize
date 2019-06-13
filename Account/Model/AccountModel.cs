@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
+using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -33,14 +34,19 @@ namespace Account.Model
 
         public AccountModel()
         {
-            LoginData = new LoginData() { UserName = "guochunmao", Password = "guochunmao123" };
+            LoginData = new LoginData() { UserName = "guochunmao", Password = "guochunmao123",
+                authenticationType = LoginData.LOGIN_BY_PASSWORD };
             Account = new Service.AccountData();
             Service = Base.Service.Services.Get<IAccount>();
         }
 
         public async Task Login()
         {
+            MD5 md5 = new MD5CryptoServiceProvider();
+            byte[] output = md5.ComputeHash(Encoding.UTF8.GetBytes(LoginData.Password));
+            LoginData.Password = BitConverter.ToString(output).Replace("-", "").ToLower();
             Account = await Service.Login(LoginData);
+            LoginData.authenticationType = LoginData.LOGIN_BY_TICKET;
         }
     }
 }

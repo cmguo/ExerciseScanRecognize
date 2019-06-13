@@ -23,15 +23,37 @@ namespace Exercise.Model
             }
         }
 
+        public IList<ClassData> Classes { get; private set; }
+
+        private SchoolData schoolData;
+
+        public SchoolModel()
+        {
+            Classes = new List<ClassData>();
+        }
+
         public StudentData GetStudent(string id)
         {
-            return null;
+            StudentData student = schoolData.students.FirstOrDefault(s => s.number == id);
+            if (student != null && student.AnswerPages == null)
+            {
+                if (Classes.FirstOrDefault(c => c.id == student.clsid) == null)
+                {
+                    ClassData classData = schoolData.classes.FirstOrDefault(c => c.id == student.clsid);
+                    if (classData == null)
+                        return null;
+                    Classes.Add(classData);
+                }
+            }
+            return student;
         }
 
         public void GetLostPageStudents(Action<StudentData> visitor)
         {
-            StudentData student = new StudentData();
-            visitor(student);
+            IEnumerable<StudentData> students = schoolData.students.Where(
+                s => Classes.FirstOrDefault(c => c.id == s.clsid) != null && (s.AnswerPages == null || s.AnswerPages.Contains(null)));
+            foreach (StudentData s in students)
+                visitor(s);
         }
     }
 }

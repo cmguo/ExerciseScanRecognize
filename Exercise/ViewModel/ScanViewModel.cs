@@ -14,22 +14,8 @@ namespace Exercise.ViewModel
 
         public ScanViewModel()
         {
-            StartScanCommand = new RelayCommand(() => Scan());
-            StartScanCommand = new RelayCommand(() => Scan());
-        }
-
-        public void Scan(short count = -1)
-        {
-            scanModel.Scan(count);
-        }
-
-        private void ScanDevice_GetFileName(object sender, ImageEvent e)
-        {
-            
-        }
-
-        private void ScanDevice_OnImage(object sender, ImageEvent e)
-        {
+            StartScanCommand = new RelayCommand(() => scanModel.Scan());
+            StartScanCommand = new RelayCommand(() => scanModel.Scan());
         }
 
     }

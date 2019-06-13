@@ -32,8 +32,9 @@ namespace Exercise.Model
             NoPageCode,
             PageCodeMissMatch,
             NoStudentCode, // StudentCodeMissMatch,
+            AnalyzeException,
             AnswerException,
-            Answer2Exception,
+            CorrectionException,
             PageLost,
         }
 
@@ -107,58 +108,47 @@ namespace Exercise.Model
                 {
                     page.Student.AnswerPages = new List<Page>(emptyPages);
                 }
-                if (page.Student.AnswerPages[page.PageIndex] != null)
+                int pageIndex = page.PageIndex / 2;
+                if (page.Student.AnswerPages[pageIndex] != null)
                 {
-                    Page drop = page.Student.AnswerPages[page.PageIndex];
+                    Page drop = page.Student.AnswerPages[pageIndex];
                     RemovePage(drop);
                 }
-                page.Student.AnswerPages[page.PageIndex] = page;
+                page.Student.AnswerPages[pageIndex] = page;
                 if (page.Student.AnswerPages.IndexOf(null) < 0)
                 {
                     RemoveException(ExceptionType.PageLost, page.Student);
                 }
             }
-            if (page.AnswerException > 0)
-                AddException(ExceptionType.AnswerException, page);
-            if (page.Answer2Exception > 0)
-                AddException(ExceptionType.Answer2Exception, page);
-            if (page.Another.AnswerException > 0)
-                AddException(ExceptionType.AnswerException, page.Another);
-            if (page.Another.Answer2Exception > 0)
-                AddException(ExceptionType.Answer2Exception, page.Another);
+            if (page.Answer == null)
+            {
+                RemoveException(ExceptionType.AnalyzeException, page);
+            }
+            else
+            {
+                if (page.AnswerExceptions.Count > 0)
+                    AddException(ExceptionType.AnswerException, page);
+                if (page.CorrectionExceptions.Count > 0)
+                    AddException(ExceptionType.CorrectionException, page);
+                if (page.Another != page)
+                {
+                    if (page.Another.AnswerExceptions.Count > 0)
+                        AddException(ExceptionType.AnswerException, page.Another);
+                    if (page.Another.CorrectionExceptions.Count > 0)
+                        AddException(ExceptionType.CorrectionException, page.Another);
+                }
+            }
         }
 
         private void RemovePage(Page page)
         {
-            ExceptionType type = ExceptionType.None;
-            if (page.PageCode == null)
-                type = ExceptionType.NoPageCode;
-            else if (page.PageCode != scanModel.PageCode)
-                type = ExceptionType.PageCodeMissMatch;
-            else if (page.StudentCode == null || (page.Student = schoolModel.GetStudent(page.StudentCode)) == null)
-                type = ExceptionType.NoStudentCode;
-            if (type != ExceptionType.None)
+            if (page.Student != null)
             {
-                RemoveException(type, page);
+                int pageIndex = page.PageIndex / 2;
+                if (page.Student.AnswerPages[pageIndex] == page)
+                    page.Student.AnswerPages[pageIndex] = null;
             }
-            else
-            {
-                while (page.Student.AnswerPages.Count <= page.PageIndex)
-                    page.Student.AnswerPages.Add(null);
-                if (page.Student.AnswerPages[page.PageIndex] == page)
-                {
-                    Page drop = page.Student.AnswerPages[page.PageIndex];
-                }
-                page.Student.AnswerPages[page.PageIndex] = null;
-            }
-            if (page.AnswerException > 0)
-                AddException(ExceptionType.AnswerException, page);
-            if (page.Answer2Exception > 0)
-                AddException(ExceptionType.Answer2Exception, page);
-            if (page.Another.AnswerException > 0)
-                AddException(ExceptionType.AnswerException, page.Another);
-            if (page.Another.Answer2Exception > 0)
-                AddException(ExceptionType.Answer2Exception, page.Another);
+            RemoveException(ExceptionType.None, page);
             PageDropped.Add(page);
         }
 
@@ -182,11 +172,20 @@ namespace Exercise.Model
 
         private void RemoveException(ExceptionType type, Object obj)
         {
+            if (type == ExceptionType.None)
+            {
+                foreach (ExceptionType t in Enum.GetValues(typeof(ExceptionType)))
+                    if (t != type)
+                        RemoveException(t, obj);
+                return;
+            }
             ExceptionList list = Exceptions.FirstOrDefault(e => type.CompareTo(e.Type) == 0);
             if (list == null) return;
             Exception ex = list.Exceptions.FirstOrDefault(e => e.Object == obj);
             if (ex == null) return;
             list.Exceptions.Remove(ex);
+            if (list.Exceptions.Count == 0)
+                Exceptions.Remove(list);
         }
 
     }

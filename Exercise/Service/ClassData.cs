@@ -6,7 +6,8 @@ using System.Threading.Tasks;
 
 namespace Exercise.Service
 {
-    class ClassData
+    public class ClassData
     {
+        public string id { get; internal set; }
     }
 }

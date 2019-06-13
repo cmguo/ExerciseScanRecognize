@@ -10,6 +10,7 @@ namespace Application
         App()
         {
             ScanDeviceSaraff.init();
+            Jni.Init();
         }
     }
 }

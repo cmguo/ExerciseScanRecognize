@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Exercise
 {
-    public class ImageEvent
+    public class ScanEvent
     {
         public string FileName { get; set; }
     }
@@ -14,11 +14,11 @@ namespace Exercise
     public interface IScanDevice
     {
 
-        event EventHandler<ImageEvent> OnImage;
+        event EventHandler<ScanEvent> OnImage;
 
-        event EventHandler<ImageEvent> GetFileName;
+        event EventHandler<ScanEvent> GetFileName;
 
-        event EventHandler<ImageEvent> ScanCompleted;
+        event EventHandler<ScanEvent> ScanCompleted;
 
         bool Duplex { get; set; }
 

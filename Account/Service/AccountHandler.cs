@@ -18,8 +18,9 @@ namespace Account.Service
 
         protected override async Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
         {
-            string ticket = AccountModel.Instance.Account.Ticket; ;
-            request.Headers.TryAddWithoutValidation("ticket", ticket);
+            string ticket = AccountModel.Instance.Account.Ticket;
+            if (ticket != null)
+                request.Headers.TryAddWithoutValidation("ticket", ticket);
             HttpResponseMessage resp = await base.SendAsync(request, cancellationToken).ConfigureAwait(false);
             return resp;
         }

@@ -35,6 +35,7 @@ namespace Exercise.Model
 
         private object mutex = new object();
 
+        private string scanPath;
         private int scanBatch = 0;
         private int scanIndex = 0;
         private Page lastPage;
@@ -54,6 +55,9 @@ namespace Exercise.Model
                 return;
             IsScanning = true;
             RaisePropertyChanged("IsScanning");
+            scanPath = System.Environment.CurrentDirectory 
+                + "\\扫描试卷\\" + DateTime.Now.ToString("D") + "\\" + DateTime.Now.ToString("T").Replace(':', '.');
+            Directory.CreateDirectory(scanPath);
             ++scanBatch;
             scanIndex = 0;
             try
@@ -61,8 +65,10 @@ namespace Exercise.Model
                 await Task.Run(() => {
                     scanDevice.Open();
                     scanDevice.Duplex = true;
-                    scanDevice.Scan(count);
-                });
+                    //scanDevice.ImageFormat = "Jfif";
+               });
+                // 必须主线程
+               scanDevice.Scan(count);
             }
             catch (Exception e)
             {
@@ -122,6 +128,8 @@ namespace Exercise.Model
             {
                 ReadPage(pages[1], false);
             }
+            pages[1].PageCode = pages[0].PageCode;
+            pages[1].PageIndex = pages[0].PageIndex + 1;
             pages[0].Another = pages[1];
             if (pages[0].Exception == null)
             {
@@ -140,7 +148,15 @@ namespace Exercise.Model
                         }
                     }
                     ScanPage(pages[0]);
-                    ScanPage(pages[1]);
+                    if (pages[1].PageIndex < exerciseData.pages.Count)
+                    {
+                        ScanPage(pages[1]);
+                    }
+                    else
+                    {
+                        pages[0].Another = pages[0];
+                        RemovePage(pages[1]);
+                    }
                 }
             }
             pages[0].PageData = null;
@@ -158,7 +174,9 @@ namespace Exercise.Model
                 if (needCode)
                 {
                     Algorithm.QRCodeData code = algorithm.GetCode(new Algorithm.PageRaw() { imgBytes = page.PageData });
-                    page.PageCode = code.paperInfo;
+                    int split = code.paperInfo.IndexOf('_');
+                    page.PageCode = code.paperInfo.Substring(0, split);
+                    page.PageIndex = Int32.Parse(code.paperInfo.Substring(split + 1));
                     page.StudentCode = code.studentInfo;
                 }
             }
@@ -183,17 +201,22 @@ namespace Exercise.Model
             }
         }
 
-        private void ScanDevice_GetFileName(object sender, ImageEvent e)
+        private void RemovePage(Page page)
         {
-            
+            File.Delete(page.PagePath);
         }
 
-        private async void ScanDevice_OnImage(object sender, ImageEvent e)
+        private void ScanDevice_GetFileName(object sender, ScanEvent e)
+        {
+            e.FileName = scanPath + "\\" + scanIndex + ".jpg";
+        }
+
+        private async void ScanDevice_OnImage(object sender, ScanEvent e)
         {
             await AddImage(e.FileName);
         }
 
-        private void ScanDevice_ScanCompleted(object sender, ImageEvent e)
+        private void ScanDevice_ScanCompleted(object sender, ScanEvent e)
         {
         }
 

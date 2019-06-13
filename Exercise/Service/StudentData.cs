@@ -10,5 +10,9 @@ namespace Exercise.Service
     public class StudentData
     {
         public IList<Page> AnswerPages { get; set; }
+
+        public string id { get; set; }
+        public string number { get; set; }
+        public string clsid { get; set; }
     }
 }

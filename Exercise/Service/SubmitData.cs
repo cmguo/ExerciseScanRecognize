@@ -12,6 +12,7 @@ namespace Exercise.Service
         public class AnswerInfo
         {
             public String studentId { get; private set; }
+            public String paperId { get; private set; }
             public List<AnswerData> pages { get; private set; }
         };
     }

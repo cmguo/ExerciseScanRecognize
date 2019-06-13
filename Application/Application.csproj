@@ -181,6 +181,12 @@
   <ItemGroup>
     <Resource Include="COPYING.LESSER.txt" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="Libraries\answer-sheet-analyze-sdk.j4n.jar" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Libraries\answer-sheet-analyze-sdk.jar" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>

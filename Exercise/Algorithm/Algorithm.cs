@@ -1,12 +1,17 @@
 ﻿using com.talcloud.paperanalyze.service.answersheet;
 using net.sf.jni4net;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Serialization;
 using System.Threading.Tasks;
 
 namespace Exercise.Algorithm
 {
     public class Algorithm
     {
+        private readonly JsonSerializerSettings settings = new JsonSerializerSettings()
+        {
+            ContractResolver = new CamelCasePropertyNamesContractResolver()
+        };
 
         public Algorithm()
         {
@@ -26,9 +31,9 @@ namespace Exercise.Algorithm
 
         private O analyze<O, I>(string method, I input)
         {
-            string args = JsonConvert.SerializeObject(input);
+            string args = JsonConvert.SerializeObject(input, settings);
             string result = AnswerSheetAnalyze.analyzeAnswerSheet(method, args);
-            return JsonConvert.DeserializeObject<Result<O>>(result).data;
+            return JsonConvert.DeserializeObject<Result<O>>(result, settings).Data;
         }
 
 

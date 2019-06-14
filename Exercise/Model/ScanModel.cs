@@ -1,6 +1,8 @@
-﻿using Exercise.Algorithm;
+﻿using Base.Misc;
+using Exercise.Algorithm;
 using Exercise.Service;
 using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Security.Cryptography;
@@ -27,6 +29,7 @@ namespace Exercise.Model
             }
         }
 
+        public string SavePath { get; private set; }
         public ObservableCollection<Page> Pages { get; private set; }
 
         public bool IsScanning { get; set; }
@@ -37,7 +40,6 @@ namespace Exercise.Model
 
         private object mutex = new object();
 
-        private string savePath;
         private int scanBatch = 0;
         private int scanIndex = 0;
         private Page lastPage;
@@ -51,17 +53,18 @@ namespace Exercise.Model
             scanDevice.ScanCompleted += ScanDevice_ScanCompleted; ;
         }
 
-        public void SetSavePath(string path)
-        {
-            savePath = path;
-        }
-
         public async void Scan(short count = -1)
         {
             if (IsScanning)
                 return;
             IsScanning = true;
             RaisePropertyChanged("IsScanning");
+            if (SavePath == null)
+            {
+                SavePath = System.Environment.CurrentDirectory
+                    + "\\扫描试卷\\" + DateTime.Now.ToString("D") + "\\" + DateTime.Now.ToString("T").Replace(':', '.');
+                Directory.CreateDirectory(SavePath);
+            }
             ++scanBatch;
             scanIndex = 0;
             try
@@ -97,11 +100,45 @@ namespace Exercise.Model
             }
         }
 
+        public void ReleasePage(Page page)
+        {
+            File.Delete(page.PagePath);
+            page.PagePath = null;
+        }
+
+        public class PersistData
+        {
+            public ICollection<Page> Pages;
+            public string PageCode;
+            public int ScanBatch = 0;
+        }
+
+        public async Task SavePages()
+        {
+            PersistData data = new PersistData()
+            {
+                Pages = Pages,
+                PageCode = PageCode,
+                ScanBatch = scanBatch,
+            };
+            await JsonPersistent.Save(SavePath + "\\scan.json", data);
+        }
+
+        public async Task LoadPages(string path)
+        {
+            PersistData data = await JsonPersistent.Load<PersistData>(path + "\\scan.json");
+            foreach (Page p in data.Pages)
+                Pages.Add(p);
+            PageCode = data.PageCode;
+            scanBatch = data.ScanBatch;
+            SavePath = path;
+        }
+
         public void ClearPages()
         {
             scanBatch = 0;
             scanIndex = 0;
-            savePath = null;
+            SavePath = null;
         }
 
         private async Task AddImage(string fileName)
@@ -166,7 +203,7 @@ namespace Exercise.Model
                     else
                     {
                         pages[0].Another = pages[0];
-                        RemovePage(pages[1]);
+                        ReleasePage(pages[1]);
                     }
                 }
             }
@@ -200,18 +237,18 @@ namespace Exercise.Model
         private void ScanPage(Page page)
         {
             PageData pageData = exerciseData.pages[page.PageIndex + (page.Another == null ? 1 : 0)];
-            pageData.imgBytes = page.PageData;
+            pageData.ImgBytes = page.PageData;
             try
             {
                 AnswerData answerData = algorithm.GetAnswer(pageData);
                 page.Answer = answerData;
-                page.PageData = answerData.redressedImgBytes;
-                answerData.redressedImgBytes = null;
+                page.PageData = answerData.RedressedImgBytes;
+                answerData.RedressedImgBytes = null;
                 MD5 md5 = new MD5CryptoServiceProvider();
-                byte[] output = md5.ComputeHash(answerData.redressedImgBytes);
+                byte[] output = md5.ComputeHash(answerData.RedressedImgBytes);
                 page.Md5Name = BitConverter.ToString(output).Replace("-", "").ToLower() + ".jpg";
                 File.Delete(page.PagePath);
-                page.PagePath = savePath + "\\" + page.Md5Name;
+                page.PagePath = SavePath + "\\" + page.Md5Name;
                 FileStream fs = new FileStream(page.PagePath, FileMode.Create, FileAccess.Write);
                 using (fs) { new MemoryStream(page.PageData).CopyTo(fs); }
             }
@@ -225,14 +262,9 @@ namespace Exercise.Model
             }
         }
 
-        private void RemovePage(Page page)
-        {
-            File.Delete(page.PagePath);
-        }
-
         private void ScanDevice_GetFileName(object sender, ScanEvent e)
         {
-            e.FileName = savePath + "\\" + scanBatch + "_" + scanIndex + ".jpg";
+            e.FileName = SavePath + "\\" + scanBatch + "_" + scanIndex + ".jpg";
         }
 
         private async void ScanDevice_OnImage(object sender, ScanEvent e)

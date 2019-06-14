@@ -1,4 +1,5 @@
-﻿using Base.Service;
+﻿using Base.Misc;
+using Base.Service;
 using Exercise.Service;
 using System;
 using System.Collections.Generic;
@@ -28,59 +29,52 @@ namespace Exercise.Model
             }
         }
 
-        public enum SubmitStatus
-        {
-            Scaning,
-            Exception,
-            Ready, 
-            Submitting, 
-        }
-
-        public class SubmitTask
-        {
-            public DateTime CreateTime;
-            public SubmitStatus Status;
-            public string SavePath;
-            public SubmitData Data;
-        };
-
-        public List<SubmitTask> SubmitTasks { get; private set; }
+        public Dictionary<string, SubmitData> SubmitTasks { get; private set; }
 
         private IExercise service;
 
         public SubmitModel()
         {
-            SubmitTasks = new List<SubmitTask>();
+            SubmitTasks = new Dictionary<string, SubmitData>();
             service = Services.Get<IExercise>();
         }
 
-        public SubmitTask AddTask()
+        public async Task Save(string path, ExerciseData exercise, List<StudentInfo> students)
         {
-            string path = System.Environment.CurrentDirectory
-                + "\\扫描试卷\\" + DateTime.Now.ToString("D") + "\\" + DateTime.Now.ToString("T").Replace(':', '.');
-            Directory.CreateDirectory(path);
-            SubmitTask task = new SubmitTask() { CreateTime = DateTime.Now, SavePath = path, Status = SubmitStatus.Scaning };
-            SubmitTasks.Insert(0, task);
-            return task;
+            IList<SubmitData.AnswerInfo> data = students.Select(s => new SubmitData.AnswerInfo()
+            {
+                StudentId = s.StudentNo,
+                PageInfo = s.AnswerPages.Where(p => p != null).Select(p => p.Answer).ToList()
+            }).ToList();
+            SubmitData sdata = new SubmitData() { HomeworkId = exercise.exerciseId, PaperId = exercise.exerciseId, Data = data };
+            SubmitTasks[path] = sdata;
+            await JsonPersistent.Save(path + "\\submit.json", sdata);
         }
 
-        public async void Submit(SubmitTask task)
+        public async Task Submit(string path)
         {
-            task.Status = SubmitStatus.Submitting;
-            await service.Submit(task.Data);
-            List<string> pageNames = task.Data.data.SelectMany(s => s.pages.Select(p => p.imageName)).ToList();
+            SubmitData sdata = SubmitTasks[path];
+            if (sdata == null)
+            {
+                sdata = await JsonPersistent.Load<SubmitData>(path + "\\submit.json");
+                SubmitTasks[path] = sdata;
+            }
+            await service.Submit(sdata);
+            List<string> pageNames = sdata.Data.SelectMany(s => s.PageInfo.Select(p => p.ImageName)).ToList();
             Dictionary<string, string> pageUrls = await service.GeneratePresignedUrls(new GenUriData() { ObjectNameList = pageNames });
             HttpClient hc = new HttpClient();
             hc.DefaultRequestHeaders.TryAddWithoutValidation("Content-Type", "image/jpg");
             foreach (var p in pageUrls)
             {
-                FileStream fs = new FileStream(task.SavePath + "\\" + p.Key, FileMode.Open, FileAccess.Read);
+                FileStream fs = new FileStream(path + "\\" + p.Key, FileMode.Open, FileAccess.Read);
                 StreamContent content = new StreamContent(fs);
                 content.Headers.Add("Content-Type", "image/jpg");
                 var response = await hc.PutAsync(p.Value, content);
                 if (response.StatusCode.CompareTo(HttpStatusCode.Ambiguous) >= 0)
                     throw new HttpResponseException(response.StatusCode, response.ReasonPhrase);
             }
+            SubmitTasks.Remove(path);
+            Directory.Delete(path, true);
         }
 
     }

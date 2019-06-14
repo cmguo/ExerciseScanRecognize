@@ -6,14 +6,14 @@ namespace Exercise.Service
 {
     public class SubmitData
     {
-        public String homeworkId { get; private set; } // 批次记录ID，后端生成
-        public String paperId { get; private set; }
-        public IList<AnswerInfo> data { get; private set; }
+        public String HomeworkId { get; set; } // 批次记录ID，后端生成
+        public String PaperId { get; set; }
+        public IList<AnswerInfo> Data { get; set; }
 
         public class AnswerInfo
         {
-            public String studentId { get; private set; }
-            public IList<AnswerData> pages { get; private set; }
+            public String StudentId { get; set; }
+            public IList<AnswerData> PageInfo { get; set; }
         };
     }
 

@@ -2,14 +2,14 @@
 {
     public class Point
     {
-        public int x { get; set; }
-        public int y { get; set; }
+        public int X { get; set; }
+        public int Y { get; set; }
     }
 
     public class Location
     {
-        public Point leftTop { get; set; }
-        public Point rightBottom { get; set; }
+        public Point LeftTop { get; set; }
+        public Point RightBottom { get; set; }
     }
 
 
@@ -30,9 +30,9 @@
 
     public class Result<T>
     {
-        public int code { get; set; }
-        public string message { get; set; }
-        public T data;
+        public int Code { get; set; }
+        public string Message { get; set; }
+        public T Data { get; set; }
     }
 
 }

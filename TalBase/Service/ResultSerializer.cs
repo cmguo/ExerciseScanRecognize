@@ -10,31 +10,29 @@ namespace TalBase.Service
     {
         class Result<T>
         {
-            public int status = 0;
-            public string message = null;
-            public T data;
+            public int Status { get; set; }
+            public string Message { get; set; }
+            public T Data { get; set; }
 
             internal void Check()
             {
-                if (status != 0)
-                    throw new ServiceException(status, message);
+                if (Status != 0)
+                    throw new ServiceException(Status, Message);
             }
-            internal T Data { get { return data; } }
         }
 
         class Result2<T>
         {
-            public bool success;
-            public int errorCode;
-            public T result;
+            public bool Success { get; set; }
+            public int ErrorCode { get; set; }
+            [JsonProperty(PropertyName = "result")]
+            public T Data { get; set; }
 
             internal void Check()
             {
-                if (!success)
-                    throw new ServiceException(errorCode, "");
+                if (!Success)
+                    throw new ServiceException(ErrorCode, "");
             }
-
-            internal T Data { get { return result; } }
         }
 
         private JsonContentSerializer serializer = new JsonContentSerializer(new JsonSerializerSettings()

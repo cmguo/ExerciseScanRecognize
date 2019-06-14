@@ -29,7 +29,7 @@ namespace Exercise.Service
         public string StudentNo { get; set; }
         public string TalNo { get; set; }
 
-        [JsonPropertyAttribute(Required = Required.Default)]
+        [JsonIgnore]
         public IList<Page> AnswerPages { get; set; }
 
 

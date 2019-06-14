@@ -61,10 +61,6 @@
     <Prefer32Bit>true</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Interop.WIA">
-      <HintPath>Libraries\Interop.WIA.dll</HintPath>
-      <EmbedInteropTypes>True</EmbedInteropTypes>
-    </Reference>
     <Reference Include="jni4net.n-0.8.8.0">
       <HintPath>Libraries\jni4net.n-0.8.8.0.dll</HintPath>
     </Reference>

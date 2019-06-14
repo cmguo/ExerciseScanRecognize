@@ -27,7 +27,7 @@ namespace Exercise.Model
 
         public Page Another { get; set; }
         public StudentInfo Student { get; set; }
-        public IList<AnswerData.QuestionInfo> AnswerExceptions { get; set; }
-        public IList<AnswerData.QuestionInfo> CorrectionExceptions { get; set; }
+        public IList<AnswerData.Question> AnswerExceptions { get; set; }
+        public IList<AnswerData.Question> CorrectionExceptions { get; set; }
     }
 }

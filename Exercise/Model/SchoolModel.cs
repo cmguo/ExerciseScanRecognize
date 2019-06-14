@@ -1,4 +1,5 @@
-﻿using Base.Service;
+﻿using Base.Misc;
+using Base.Service;
 using Exercise.Service;
 using System;
 using System.Collections.Generic;
@@ -34,7 +35,7 @@ namespace Exercise.Model
             service = Services.Get<IExercise>();
         }
 
-        public async Task refresh()
+        public async Task Refresh()
         {
             schoolData = await service.getAllClass();
         }
@@ -61,6 +62,21 @@ namespace Exercise.Model
                 s => Classes.FirstOrDefault(c => c.ClassId == s.ClassId) != null && (s.AnswerPages == null || s.AnswerPages.Contains(null)));
             foreach (StudentInfo s in students)
                 visitor(s);
+        }
+
+        public List<StudentInfo> GetPageStudents()
+        {
+            return schoolData.StudentInfoList.Where(s => s.AnswerPages != null).ToList();
+        }
+
+        public async Task Save(string path)
+        {
+            await JsonPersistent.Save(path + "\\school.json", schoolData);
+        }
+
+        public async Task Load(string path)
+        {
+            schoolData = await JsonPersistent.Load<SchoolData>(path + "\\school.json");
         }
 
         public void Clear()

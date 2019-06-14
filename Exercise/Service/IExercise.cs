@@ -16,6 +16,7 @@ namespace Exercise.Service
         [Post("/answerCardApp/getAllClass")]
         Task<SchoolData> getAllClass();
 
+        [Post("/answerCardApp/getAllClass")]
         Task<ExerciseData> GetExercise(string pageCode);
 
         [Post("/user/logout")]

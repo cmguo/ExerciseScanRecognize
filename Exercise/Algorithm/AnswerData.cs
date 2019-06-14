@@ -5,13 +5,13 @@ namespace Exercise.Algorithm
 {
     public class AnswerData
     {
-        [JsonPropertyAttribute(Required = Required.Default)]
+        [JsonProperty(Required = Required.Default)]
         public byte[] RedressedImgBytes { get; set; }
 
-        [JsonPropertyAttribute(Required = Required.Default)]
+        [JsonProperty(Required = Required.Default)]
         public string ImageName { get; set; } // 提供给中台的名称（文件数据的Md5）
 
-        [JsonPropertyAttribute(Required = Required.Default)]
+        [JsonProperty(Required = Required.Default)]
         public int PageId { get; set; } // 页面编号，可能缺页
 
         public int ImgWidth { get; set; }

@@ -48,5 +48,12 @@ namespace Account.Model
             Account = await Service.Login(LoginData);
             LoginData.AuthenticationType = LoginData.LOGIN_BY_TICKET;
         }
+
+        public async Task Logout()
+        {
+            LogoutData logout = new LogoutData() { Ticket = Account.Ticket };
+            await Service.Logout(logout);
+            Account = new AccountData();
+        }
     }
 }

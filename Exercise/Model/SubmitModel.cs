@@ -15,6 +15,7 @@ namespace Exercise.Model
 {
     class SubmitModel
     {
+        private const int SUBIT_BATCH_SIZE = 50;
 
         private static SubmitModel s_instance;
         public static SubmitModel Instance
@@ -59,6 +60,15 @@ namespace Exercise.Model
                 sdata = await JsonPersistent.Load<SubmitData>(path + "\\submit.json");
                 SubmitTasks[path] = sdata;
             }
+            IList<SubmitData.AnswerInfo> list = sdata.Data;
+            int i = 0;
+            for (; i + SUBIT_BATCH_SIZE < list.Count; i += SUBIT_BATCH_SIZE)
+            {
+                sdata.Data = list.Skip(0).Take(SUBIT_BATCH_SIZE).ToList();
+                await service.Submit(sdata);
+            }
+            if (i > 0)
+                sdata.Data = list.Skip(i).ToList();
             await service.Submit(sdata);
             List<string> pageNames = sdata.Data.SelectMany(s => s.PageInfo.Select(p => p.ImageName)).ToList();
             Dictionary<string, string> pageUrls = await service.GeneratePresignedUrls(new GenUriData() { ObjectNameList = pageNames });

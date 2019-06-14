@@ -58,6 +58,7 @@
     <Compile Include="Service\AccountData.cs" />
     <Compile Include="Service\AccountHandler.cs" />
     <Compile Include="Service\IAccount.cs" />
+    <Compile Include="Service\LogoutData.cs" />
     <Compile Include="Service\LoginData.cs" />
     <Compile Include="ViewModel\AccountViewModel.cs" />
     <Compile Include="View\AccountPage.xaml.cs">

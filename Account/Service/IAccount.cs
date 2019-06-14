@@ -16,7 +16,7 @@ namespace Account.Service
         Task<AccountData> Login([Body] LoginData login);
 
         [Post("/answerCardApp/logout")]
-        Task<Nothing> Logout();
+        Task<Nothing> Logout(LogoutData logout);
 
     }
 }

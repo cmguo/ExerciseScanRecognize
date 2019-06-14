@@ -1,7 +1,8 @@
 ﻿using Account.Model;
 using Account.Service;
-using Base.Helpers;
+using Base.Mvvm;
 using System;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Navigation;
 using TalBase.ViewModel;
@@ -50,7 +51,7 @@ namespace Account.ViewModel
 
         public LoginData CurrentUser { get; private set; }
 
-        private async void DoLogin(object obj)
+        private async Task DoLogin(object obj)
         {
             await AccountModel.Instance.Login();
             (obj as NavigationWindow).Navigate(new Uri(Configuration.StartupPage));
@@ -61,8 +62,9 @@ namespace Account.ViewModel
             return IsAuthenticated;
         }
 
-        private void DoLogout(object obj)
+        private async Task DoLogout(object obj)
         {
+            await AccountModel.Instance.Logout();
         }
     }
 

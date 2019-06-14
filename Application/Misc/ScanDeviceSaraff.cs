@@ -7,7 +7,7 @@ namespace Application.Misc
     public partial class ScanDeviceSaraff : IScanDevice
     {
 
-        public static void init()
+        public static void Init()
         {
             Exercise.ScanDevice.Instance = new ScanDeviceSaraff();
         }

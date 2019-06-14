@@ -53,7 +53,7 @@ namespace Exercise.Model
             scanDevice.ScanCompleted += ScanDevice_ScanCompleted; ;
         }
 
-        public async void Scan(short count = -1)
+        public async Task Scan(short count = -1)
         {
             if (IsScanning)
                 return;
@@ -81,8 +81,7 @@ namespace Exercise.Model
             {
                 IsScanning = false;
                 RaisePropertyChanged("IsScanning");
-                await AddImage("");
-                await AddImage("");
+                throw e;
             }
         }
 

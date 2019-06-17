@@ -30,8 +30,8 @@ namespace Exercise.Model
         public enum ExceptionType : int
         {
             None = 0,
-            NoPageCode,
-            PageCodeMissMatch,
+            NoPageCode, 
+            PageCodeMissMatch, 
             NoStudentCode, // StudentCodeMissMatch,
             AnalyzeException,
             AnswerException,
@@ -48,8 +48,9 @@ namespace Exercise.Model
 
         public class Exception
         {
-            public Object Object { get; set; }
+            public ExceptionType Type { get; set; }
             public string Message { get; set; }
+            public Object Object { get; set; }
         }
 
         public class ExceptionList
@@ -61,12 +62,16 @@ namespace Exercise.Model
         private SchoolModel schoolModel = SchoolModel.Instance;
         private ScanModel scanModel = ScanModel.Instance;
         private SubmitModel submitModel = SubmitModel.Instance;
+        private HistoryModel historyModel = HistoryModel.Instance;
         private IExercise service;
 
         public ObservableCollection<ExceptionList> Exceptions = new ObservableCollection<ExceptionList>();
         public ObservableCollection<Page> PageDropped = new ObservableCollection<Page>();
+        public ExerciseData ExerciseData { get; private set; }
+        public ObservableCollection<StudentInfo> PageStudents { get; private set; }
+
+        private string savePath;
         private List<Page> emptyPages;
-        private ExerciseData exerciseData;
 
         public ExerciseModel()
         {
@@ -77,6 +82,8 @@ namespace Exercise.Model
 
         public async void NewTask()
         {
+            string path = historyModel.NewSavePath();
+            scanModel.SetSavePath(path);
             await schoolModel.Refresh();
         }
 
@@ -87,40 +94,49 @@ namespace Exercise.Model
 
         public async void SubmitResult()
         {
-            string savePath = scanModel.SavePath;
-            await schoolModel.Save(savePath);
-            await Save(savePath);
-            await scanModel.SavePages();
-            await submitModel.Save(savePath, exerciseData, schoolModel.GetPageStudents());
-            emptyPages = null;
-            exerciseData = null;
-            Exceptions.Clear();
-            PageDropped.Clear();
-            scanModel.ClearPages();
-            schoolModel.Clear();
+            await Save();
+            await submitModel.Save(savePath, ExerciseData, PageStudents);
+            Clear();
             await submitModel.Submit(savePath);
         }
 
-        public async Task Save(string path)
+        public async Task Save()
         {
-            await JsonPersistent.Save(path + "\\exercise.json", exerciseData);
+            await schoolModel.Save(savePath);
+            await scanModel.Save();
+            await JsonPersistent.Save(savePath + "\\exercise.json", ExerciseData);
+            await historyModel.Save(savePath);
         }
 
         public async Task Load(string path)
         {
-            exerciseData = await JsonPersistent.Load<ExerciseData>(path + "\\exercise.json");
+            Clear();
+            await schoolModel.Load(path);
+            await scanModel.Load(path);
+            ExerciseData = await JsonPersistent.Load<ExerciseData>(path + "\\exercise.json");
+            savePath = path;
         }
 
+        private void Clear()
+        {
+            emptyPages = null;
+            ExerciseData = null;
+            Exceptions.Clear();
+            PageDropped.Clear();
+            schoolModel.Clear();
+            scanModel.Clear();
+        }
 
         private async void ScanModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
         {
             if (e.PropertyName == "PageCode")
             {
-                exerciseData = await service.GetExercise(scanModel.PageCode);
+                ExerciseData = await service.GetExercise(scanModel.PageCode);
+                RaisePropertyChanged("ExerciseData");
                 emptyPages = new List<Page>();
-                while (emptyPages.Count < (exerciseData.pages.Count() + 1) / 2)
+                while (emptyPages.Count < (ExerciseData.Pages.Count() + 1) / 2)
                     emptyPages.Add(null);
-                scanModel.SetExerciseData(exerciseData);
+                scanModel.SetExerciseData(ExerciseData);
             }
         }
 
@@ -142,25 +158,25 @@ namespace Exercise.Model
             if (type != ExceptionType.None)
             {
                 AddException(type, page);
+                return;
             }
-            else
+            page.Another.Student = page.Student; // 可能单面，就是自己
+            if (page.Student.AnswerPages == null)
             {
-                page.Another.Student = page.Student; // 可能单面，就是自己
-                if (page.Student.AnswerPages == null)
-                {
-                    page.Student.AnswerPages = new List<Page>(emptyPages);
-                }
-                int pageIndex = page.PageIndex / 2;
-                if (page.Student.AnswerPages[pageIndex] != null)
-                {
-                    Page drop = page.Student.AnswerPages[pageIndex];
-                    RemovePage(drop, RemoveType.DuplexPage);
-                }
-                page.Student.AnswerPages[pageIndex] = page;
-                if (page.Student.AnswerPages.IndexOf(null) < 0)
-                {
-                    RemoveException(ExceptionType.PageLost, page.Student);
-                }
+                page.Student.AnswerPages = new List<Page>(emptyPages);
+                PageStudents.Add(page.Student);
+            }
+            int pageIndex = page.PageIndex / 2;
+            if (page.Student.AnswerPages[pageIndex] != null)
+            {
+                Page drop = page.Student.AnswerPages[pageIndex];
+                drop.Student = null;
+                RemovePage(drop, RemoveType.DuplexPage);
+            }
+            page.Student.AnswerPages[pageIndex] = page;
+            if (page.Student.AnswerPages.IndexOf(null) < 0)
+            {
+                RemoveException(ExceptionType.PageLost, page.Student);
             }
             if (page.Answer == null)
             {
@@ -185,36 +201,38 @@ namespace Exercise.Model
         public void RemovePage(Page page, RemoveType type)
         {
             // 如果 Student 为 Null，肯定是 type = DuplexPage
-            if (page.Student != null)
+            if (page.Student == null)
             {
-                if (type == RemoveType.Student)
+                RemovePage(page);
+                return;
+            }
+            if (type == RemoveType.Student)
+            {
+                for (int i = 0; i < page.Student.AnswerPages.Count; ++i)
                 {
-                    for (int i = 0; i < page.Student.AnswerPages.Count; ++i)
+                    if (page.Student.AnswerPages[i] != null)
                     {
-                        if (page.Student.AnswerPages[i] != null)
-                        {
-                            RemovePage(page.Student.AnswerPages[i]);
-                        }
-                    }
-                    page.Student.AnswerPages = null;
-                    return;
-                }
-                int pageIndex = page.PageIndex / 2;
-                if (page.Student.AnswerPages[pageIndex] == page)
-                {
-                    page.Student.AnswerPages[pageIndex] = null;
-                    if (type != RemoveType.DuplexPage && page.Another != page)
-                    {
-                        page.Student.AnswerPages[pageIndex] = page.Another;
-                        page.Another.Another = page.Another;
-                        page.Another = page;
+                        RemovePage(page.Student.AnswerPages[i]);
                     }
                 }
-                else if (page.Student.AnswerPages[pageIndex].Another == page)
+                page.Student.AnswerPages = null;
+                return;
+            }
+            int pageIndex = page.PageIndex / 2;
+            if (page.Student.AnswerPages[pageIndex] == page)
+            {
+                page.Student.AnswerPages[pageIndex] = null;
+                if (type != RemoveType.DuplexPage && page.Another != page)
                 {
-                    page.Student.AnswerPages[pageIndex].Another = page.Student.AnswerPages[pageIndex];
+                    page.Student.AnswerPages[pageIndex] = page.Another;
+                    page.Another.Another = page.Another;
                     page.Another = page;
                 }
+            }
+            else if (page.Student.AnswerPages[pageIndex].Another == page)
+            {
+                page.Student.AnswerPages[pageIndex].Another = page.Student.AnswerPages[pageIndex];
+                page.Another = page;
             }
             RemovePage(page);
         }
@@ -247,11 +265,22 @@ namespace Exercise.Model
 
         private void AddException(ExceptionType type, Object obj)
         {
+            Exception item = new Exception() { Object = obj };
+            if (type == ExceptionType.AnalyzeException)
+                type = ExceptionType.NoPageCode;
             ExceptionList list = Exceptions.FirstOrDefault(e => type.CompareTo(e.Type) <= 0);
-            if (list != null && list.Type == type)
+            if (list == null)
             {
-                list.Exceptions.Add(new Exception() { Object = obj });
+                list = new ExceptionList();
+                Exceptions.Add(list);
             }
+            else if (list.Type != type)
+            {
+                int index = Exceptions.IndexOf(list);
+                list = new ExceptionList();
+                Exceptions.Insert(index, list);
+            }
+            list.Exceptions.Add(item);
         }
 
         private void RemoveException(ExceptionType type, Object obj)
@@ -263,6 +292,8 @@ namespace Exercise.Model
                         RemoveException(t, obj);
                 return;
             }
+            if (type == ExceptionType.AnalyzeException)
+                type = ExceptionType.NoPageCode;
             ExceptionList list = Exceptions.FirstOrDefault(e => type.CompareTo(e.Type) == 0);
             if (list == null) return;
             Exception ex = list.Exceptions.FirstOrDefault(e => e.Object == obj);

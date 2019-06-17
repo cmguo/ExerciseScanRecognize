@@ -1,5 +1,6 @@
 ﻿using Account.Service;
 using Base.Service;
+using Exercise.Model;
 using Refit;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -24,5 +25,8 @@ namespace Exercise.Service
 
         [Post("/answerCardApp/batchGeneratePresignedUrl")]
         Task<Dictionary<string, string>> GeneratePresignedUrls(GenUriData names);
+
+        [Post("/answerCardApp/batchGeneratePresignedUrl")]
+        Task<RecordData> getRecords(int page);
     }
 }

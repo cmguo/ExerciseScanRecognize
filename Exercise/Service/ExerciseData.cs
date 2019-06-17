@@ -5,7 +5,8 @@ namespace Exercise.Service
 {
     public class ExerciseData
     {
-        public string exerciseId { get; set; }
-        public IList<PageData> pages { get; set; }
+        public string ExerciseId { get; set; }
+        public string ExerciseName { get; set; }
+        public IList<PageData> Pages { get; set; }
     }
 }

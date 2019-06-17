@@ -4,7 +4,7 @@ using TalBase.ViewModel;
 
 namespace Exercise.ViewModel
 {
-    class ExerciseViewModel : ViewModelBase
+    class ResolveViewModel : ViewModelBase
     {
 
         public RelayCommand StartScanCommand { get; private set; }
@@ -18,7 +18,7 @@ namespace Exercise.ViewModel
         private ExerciseModel exerciseModel = ExerciseModel.Instance;
         private ScanModel scanModel = ScanModel.Instance;
 
-        public ExerciseViewModel()
+        public ResolveViewModel()
         {
             StartScanCommand = new RelayCommand((e) => scanModel.Scan(-1));
             StopScanCommand = new RelayCommand((e) => scanModel.CancelScan());

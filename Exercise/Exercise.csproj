@@ -70,6 +70,7 @@
     <Compile Include="Algorithm\PageRaw.cs" />
     <Compile Include="Algorithm\QRCodeData.cs" />
     <Compile Include="Algorithm\AlgorithmException.cs" />
+    <Compile Include="Model\HistoryModel.cs" />
     <Compile Include="Model\SubmitModel.cs" />
     <Compile Include="Model\SchoolModel.cs" />
     <Compile Include="Model\ExerciseModel.cs" />
@@ -77,13 +78,17 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ScanDevice.cs" />
     <Compile Include="Service\GenUriData.cs" />
+    <Compile Include="Service\RecordData.cs" />
     <Compile Include="Service\SubmitData.cs" />
     <Compile Include="Model\Page.cs" />
     <Compile Include="Service\ExerciseData.cs" />
     <Compile Include="Service\IExercise.cs" />
     <Compile Include="Service\SchoolData.cs" />
+    <Compile Include="ViewModel\ScanResultViewModel.cs" />
     <Compile Include="ViewModel\ScanViewModel.cs" />
-    <Compile Include="ViewModel\ExerciseViewModel.cs" />
+    <Compile Include="ViewModel\ResolveViewModel.cs" />
+    <Compile Include="ViewModel\HistoryViewModel.cs" />
+    <Compile Include="ViewModel\SubmitViewModel.cs" />
     <Compile Include="View\ScanPage.xaml.cs">
       <DependentUpon>ScanPage.xaml</DependentUpon>
     </Compile>

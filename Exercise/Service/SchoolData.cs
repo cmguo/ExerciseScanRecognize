@@ -19,6 +19,9 @@ namespace Exercise.Service
     {
         public string ClassId { get; set; }
         public string ClassName { get; set; }
+
+        [JsonIgnore]
+        public IList<StudentInfo> Students { get; set; }
     }
 
     public class StudentInfo

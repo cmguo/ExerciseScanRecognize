@@ -37,7 +37,19 @@ namespace Exercise.Model
 
         public async Task Refresh()
         {
+            Classes.Clear();
             schoolData = await service.getAllClass();
+            Classify();
+        }
+
+        private void Classify()
+        {
+            foreach (var g in schoolData.StudentInfoList.GroupBy(s => s.ClassId))
+            {
+                ClassInfo ci = schoolData.ClassInfoList.FirstOrDefault(c => c.ClassId == g.Key);
+                if (ci != null)
+                    ci.Students = g.ToList();
+            }
         }
 
         public StudentInfo GetStudent(string id)
@@ -64,11 +76,6 @@ namespace Exercise.Model
                 visitor(s);
         }
 
-        public List<StudentInfo> GetPageStudents()
-        {
-            return schoolData.StudentInfoList.Where(s => s.AnswerPages != null).ToList();
-        }
-
         public async Task Save(string path)
         {
             await JsonPersistent.Save(path + "\\school.json", schoolData);
@@ -77,6 +84,7 @@ namespace Exercise.Model
         public async Task Load(string path)
         {
             schoolData = await JsonPersistent.Load<SchoolData>(path + "\\school.json");
+            Classify();
         }
 
         public void Clear()

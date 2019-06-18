@@ -90,6 +90,25 @@
     <Compile Include="ViewModel\ResolveViewModel.cs" />
     <Compile Include="ViewModel\HistoryViewModel.cs" />
     <Compile Include="ViewModel\SubmitViewModel.cs" />
+    <Compile Include="View\ErrorMessageBox.cs" />
+    <Compile Include="View\Resolve\ExceptionConverter.cs" />
+    <Compile Include="View\Resolve\ExceptionListConverter.cs" />
+    <Compile Include="View\Resolve\ExceptionPageConverter.cs" />
+    <Compile Include="View\ResolvePage.xaml.cs">
+      <DependentUpon>ResolvePage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\Resolve\AnswerExceptionPage.xaml.cs">
+      <DependentUpon>AnswerExceptionPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\Resolve\CorrectionExceptionPage.xaml.cs">
+      <DependentUpon>CorrectionExceptionPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\Resolve\NoStudentCodePage.xaml.cs">
+      <DependentUpon>NoStudentCodePage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\Resolve\NoPageCodePage.xaml.cs">
+      <DependentUpon>NoPageCodePage.xaml</DependentUpon>
+    </Compile>
     <Compile Include="View\SummaryPage.xaml.cs">
       <DependentUpon>SummaryPage.xaml</DependentUpon>
     </Compile>
@@ -98,9 +117,6 @@
     </Compile>
     <Compile Include="View\ScanPage.xaml.cs">
       <DependentUpon>ScanPage.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="ErrorWindow.xaml.cs">
-      <DependentUpon>ErrorWindow.xaml</DependentUpon>
     </Compile>
   </ItemGroup>
   <ItemGroup>
@@ -122,6 +138,26 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Page Include="View\ResolvePage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="View\Resolve\AnswerExceptionPage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="View\Resolve\CorrectionExceptionPage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="View\Resolve\NoStudentCodePage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="View\Resolve\NoPageCodePage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="View\SummaryPage.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -134,10 +170,6 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="ErrorWindow.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
   </ItemGroup>
   <ItemGroup>
     <None Include="Libraries\answer-sheet-analyze-sdk.j4n.jar" />
@@ -145,6 +177,7 @@
   <ItemGroup>
     <None Include="Libraries\answer-sheet-analyze-sdk.jar" />
   </ItemGroup>
+  <ItemGroup />
   <PropertyGroup>
     <PrepareForRunDependsOn>$(PrepareForRunDependsOn);MyCopyFilesToOutputDirectory</PrepareForRunDependsOn>
   </PropertyGroup>

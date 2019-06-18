@@ -1,5 +1,5 @@
 ﻿using Application.Misc;
-using Exercise;
+using Exercise.View;
 
 namespace Application
 {
@@ -10,7 +10,7 @@ namespace Application
     {
         App()
         {
-            ErrorWindow.Init();
+            ErrorMessageBox.Init();
             ScanDeviceSaraff.Init();
             Jni.Init();
         }

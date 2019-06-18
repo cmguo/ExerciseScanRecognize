@@ -22,6 +22,16 @@ namespace Base.Misc
             return rc;
         }
 
+        public static object GetInheritProperty(DependencyObject child, DependencyProperty property)
+        {
+            DependencyObject e = child;
+            while (e != null && e.ReadLocalValue(property) == DependencyProperty.UnsetValue)
+            {
+                e = LogicalTreeHelper.GetParent(e);
+            }
+            return e.ReadLocalValue(property);
+        }
+
         public static DependencyObject GetParentWithProperty(DependencyObject child, DependencyProperty property)
         {
             DependencyObject e = child;

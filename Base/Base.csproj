@@ -45,6 +45,7 @@
     <Reference Include="System" />
     <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Xaml" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -62,6 +63,10 @@
     <Compile Include="Misc\SingleThreadTaskScheduler.cs" />
     <Compile Include="Misc\SystemInfo.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="PushBinding\FreezableBinding.cs" />
+    <Compile Include="PushBinding\PushBinding.cs" />
+    <Compile Include="PushBinding\PushBindingCollection.cs" />
+    <Compile Include="PushBinding\PushBindingManager.cs" />
     <Compile Include="Service\HttpResponseException.cs" />
     <Compile Include="Service\RetryAttribute.cs" />
     <Compile Include="Service\BaseUriAttribute.cs" />

@@ -49,26 +49,30 @@ namespace Exercise.Model
         public class Exception
         {
             public ExceptionType Type { get; set; }
-            public string Message { get; set; }
             public Object Object { get; set; }
         }
 
         public class ExceptionList
         {
             public ExceptionType Type { get; set; }
-            public ObservableCollection<Exception> Exceptions;
+            public ObservableCollection<Exception> Exceptions { get; set; }
+
+            public ExceptionList()
+            {
+                Exceptions = new ObservableCollection<Exception>();
+            }
         }
+
+        public ObservableCollection<ExceptionList> Exceptions { get; private set; }
+        public ObservableCollection<Page> PageDropped { get; private set; }
+        public ExerciseData ExerciseData { get; private set; }
+        public ObservableCollection<StudentInfo> PageStudents { get; private set; }
 
         private SchoolModel schoolModel = SchoolModel.Instance;
         private ScanModel scanModel = ScanModel.Instance;
         private SubmitModel submitModel = SubmitModel.Instance;
         private HistoryModel historyModel = HistoryModel.Instance;
         private IExercise service;
-
-        public ObservableCollection<ExceptionList> Exceptions = new ObservableCollection<ExceptionList>();
-        public ObservableCollection<Page> PageDropped = new ObservableCollection<Page>();
-        public ExerciseData ExerciseData { get; private set; }
-        public ObservableCollection<StudentInfo> PageStudents { get; private set; }
 
         private string savePath;
         private List<Page> emptyPages;
@@ -78,7 +82,16 @@ namespace Exercise.Model
             scanModel.Pages.CollectionChanged += Pages_CollectionChanged;
             scanModel.PropertyChanged += ScanModel_PropertyChanged;
             service = Services.Get<IExercise>();
+            Exceptions = new ObservableCollection<ExceptionList>();
+            PageDropped = new ObservableCollection<Page>();
             PageStudents = new ObservableCollection<StudentInfo>();
+            AddException(ExceptionType.NoPageCode, new Page());
+            AddException(ExceptionType.NoStudentCode, new Page());
+            AddException(ExceptionType.PageCodeMissMatch, new Page());
+            StudentInfo student = new StudentInfo() { Name = "张三", TalNo = "1234" };
+            AddException(ExceptionType.AnalyzeException, new Page() { Student = student });
+            AddException(ExceptionType.AnswerException, new Page() { Student = student });
+            AddException(ExceptionType.CorrectionException, new Page() { Student = student });
         }
 
         public async Task NewTask()
@@ -270,19 +283,19 @@ namespace Exercise.Model
 
         private void AddException(ExceptionType type, Object obj)
         {
-            Exception item = new Exception() { Object = obj };
-            if (type == ExceptionType.AnalyzeException)
+            Exception item = new Exception() { Type = type, Object = obj };
+            if (type == ExceptionType.AnalyzeException || type == ExceptionType.PageCodeMissMatch)
                 type = ExceptionType.NoPageCode;
             ExceptionList list = Exceptions.FirstOrDefault(e => type.CompareTo(e.Type) <= 0);
             if (list == null)
             {
-                list = new ExceptionList();
+                list = new ExceptionList() { Type = type };
                 Exceptions.Add(list);
             }
             else if (list.Type != type)
             {
                 int index = Exceptions.IndexOf(list);
-                list = new ExceptionList();
+                list = new ExceptionList() { Type = type };
                 Exceptions.Insert(index, list);
             }
             list.Exceptions.Add(item);

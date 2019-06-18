@@ -10,6 +10,12 @@ namespace Exercise.ViewModel
     {
 
         public ObservableCollection<ExceptionList> Exceptions { get; private set; }
+        private Exception _SelectedException;
+        public Exception SelectedException
+        {
+            get { return _SelectedException; }
+            set { _SelectedException = value; RaisePropertyChanged("SelectedException"); }
+        }
 
         public RelayCommand StartScanCommand { get; private set; }
         public RelayCommand StopScanCommand { get; set; }

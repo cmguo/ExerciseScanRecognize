@@ -1,8 +1,9 @@
 ﻿using System.ComponentModel;
+using System.Windows;
 
 namespace TalBase.Model
 {
-    public class ModelBase : INotifyPropertyChanged
+    public class ModelBase : DependencyObject, INotifyPropertyChanged
     {
         protected void RaisePropertyChanged(string prop)
         {

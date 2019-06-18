@@ -15,8 +15,8 @@ namespace Exercise.Algorithm
 
         public Algorithm()
         {
-            Bridge.RegisterAssembly(typeof(AnswerSheetAnalyze).Assembly);
-            AnswerSheetAnalyze.init();
+            //Bridge.RegisterAssembly(typeof(AnswerSheetAnalyze).Assembly);
+           // AnswerSheetAnalyze.init();
         }
 
         public QRCodeData GetCode(PageRaw page)

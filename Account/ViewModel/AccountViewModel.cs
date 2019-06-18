@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Navigation;
 using TalBase.ViewModel;
+using Panuon.UI;
 
 namespace Account.ViewModel
 {
@@ -53,6 +54,9 @@ namespace Account.ViewModel
 
         private async Task DoLogin(object obj)
         {
+            PUMessageBox.ShowDialog("my message box test!");
+            bool? isConfirm=PUMessageBox.ShowConfirm("test confirm dialog!");
+            Console.WriteLine("yjl"+isConfirm);
             await AccountModel.Instance.Login();
             (obj as NavigationWindow).Navigate(new Uri(Configuration.StartupPage));
         }

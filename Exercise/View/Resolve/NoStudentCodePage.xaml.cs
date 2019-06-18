@@ -1,5 +1,6 @@
 ﻿using Base.Misc;
 using Base.Mvvm;
+using Exercise.Model;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -20,12 +21,13 @@ namespace Exercise.View.Resolve
     /// <summary>
     /// HomePage.xaml 的交互逻辑
     /// </summary>
-    public partial class NoPageCodePage : Page
+    public partial class NoStudentCodePage : System.Windows.Controls.Page
     {
 
-        public NoPageCodePage()
+        public NoStudentCodePage()
         {
             InitializeComponent();
+            classList.DataContext = SchoolModel.Instance;
         }
 
     }

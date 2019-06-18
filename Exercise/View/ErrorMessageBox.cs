@@ -13,6 +13,7 @@ namespace Exercise.View
         public static void Init()
         {
             RelayCommand.ActionException += RelayCommand_ActionException;
+            BackgroudWork.WorkException += RelayCommand_ActionException;
         }
 
         private static void RelayCommand_ActionException(object sender, RelayCommand.ActionExceptionEventArgs e)

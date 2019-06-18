@@ -101,6 +101,8 @@ namespace Exercise.ViewModel
 
         private void Pages_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
         {
+            if (e.NewItems == null)
+                return;
             Page page = e.NewItems[0] as Page;
             LastPage = page;
             RaisePropertyChanged("LastPage");

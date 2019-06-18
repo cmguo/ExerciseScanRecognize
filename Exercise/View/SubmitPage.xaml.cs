@@ -15,15 +15,15 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace Exercise.View.Resolve
+namespace Exercise.View
 {
     /// <summary>
     /// HomePage.xaml 的交互逻辑
     /// </summary>
-    public partial class NoPageCodePage : Page
+    public partial class SubmitPage : Page
     {
 
-        public NoPageCodePage()
+        public SubmitPage()
         {
             InitializeComponent();
         }

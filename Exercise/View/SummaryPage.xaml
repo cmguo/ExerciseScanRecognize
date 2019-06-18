@@ -33,6 +33,9 @@
                 <Button Command="{Binding ResolveCommand}" 
                     CommandParameter="{Binding RelativeSource={RelativeSource AncestorType={x:Type Page}}}" 
                     Content="处理异常" VerticalAlignment="Center" />
+                <Button Command="{Binding SubmitCommand}"
+                    CommandParameter="{Binding RelativeSource={RelativeSource AncestorType={x:Type Page}}}" 
+                    Content="上传扫描结果" VerticalAlignment="Center" />
             </StackPanel>
             <TextBlock Text="试卷扫描详情" />
             <StackPanel Orientation="Horizontal">

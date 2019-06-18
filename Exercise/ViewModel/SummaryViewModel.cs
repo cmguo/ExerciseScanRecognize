@@ -26,8 +26,8 @@ namespace Exercise.ViewModel
         public ObservableCollection<ExceptionList> Exceptions { get; private set; }
 
         public RelayCommand ContinueCommand { get; set; }
-
         public RelayCommand ResolveCommand { get; set; }
+        public RelayCommand SubmitCommand { get; set; }
 
         private ScanModel scanModel = ScanModel.Instance;
         private ExerciseModel exerciseModel = ExerciseModel.Instance;
@@ -37,7 +37,8 @@ namespace Exercise.ViewModel
         {
             ContinueCommand = new RelayCommand((e) => Continue(e));
             ResolveCommand = new RelayCommand((e) => Resolve(e));
-            ExerciseName = "三角函数";// exerciseModel.ExerciseData.ExerciseName;
+            SubmitCommand = new RelayCommand((e) => Submit(e));
+            ExerciseName = exerciseModel.ExerciseData.ExerciseName;
             StudentCount = exerciseModel.PageStudents.Where(s => s.AnswerPages.IndexOf(null) < 0).Count();
             ExceptionCount = exerciseModel.Exceptions.SelectMany(el => el.Exceptions).Count();
             ClassDetails = schoolModel.Classes.Select(c => new ClassDetail()
@@ -52,6 +53,14 @@ namespace Exercise.ViewModel
         private void Resolve(object obj)
         {
             (obj as System.Windows.Controls.Page).NavigationService.Navigate(new ResolvePage());
+        }
+
+        private async Task Submit(object obj)
+        {
+            await exerciseModel.SubmitResult();
+            SubmitPage page = new SubmitPage();
+            exerciseModel.Clear();
+            (obj as System.Windows.Controls.Page).NavigationService.Navigate(page);
         }
 
         private async Task Continue(object obj)

@@ -1,4 +1,5 @@
 ﻿using Base.Misc;
+using Base.Mvvm;
 using Base.Service;
 using Exercise.Service;
 using MyToolkit.Command;
@@ -63,6 +64,7 @@ namespace Exercise.Model
             }
         }
 
+        public string SavePath { get; private set; }
         public ObservableCollection<ExceptionList> Exceptions { get; private set; }
         public ObservableCollection<Page> PageDropped { get; private set; }
         public ExerciseData ExerciseData { get; private set; }
@@ -74,7 +76,6 @@ namespace Exercise.Model
         private HistoryModel historyModel = HistoryModel.Instance;
         private IExercise service;
 
-        private string savePath;
         private List<Page> emptyPages;
 
         public ExerciseModel()
@@ -85,6 +86,8 @@ namespace Exercise.Model
             Exceptions = new ObservableCollection<ExceptionList>();
             PageDropped = new ObservableCollection<Page>();
             PageStudents = new ObservableCollection<StudentInfo>();
+
+            ExerciseData = new ExerciseData() { ExerciseName = "三角函数" };
             AddException(ExceptionType.NoPageCode, new Page());
             AddException(ExceptionType.NoStudentCode, new Page());
             AddException(ExceptionType.PageCodeMissMatch, new Page());
@@ -98,6 +101,7 @@ namespace Exercise.Model
         {
             string path = historyModel.NewSavePath();
             scanModel.SetSavePath(path);
+            SavePath = path;
             await schoolModel.Refresh();
         }
 
@@ -110,20 +114,20 @@ namespace Exercise.Model
         {
         }
 
-        public async void SubmitResult()
+        public async Task SubmitResult()
         {
             await Save();
-            await submitModel.Save(savePath, ExerciseData, PageStudents);
-            Clear();
-            await submitModel.Submit(savePath);
+            string path = SavePath;
+            await submitModel.Save(path, ExerciseData, PageStudents);
+            BackgroudWork.Execute(() => submitModel.Submit(path));
         }
 
         public async Task Save()
         {
-            await schoolModel.Save(savePath);
+            await schoolModel.Save(SavePath);
             await scanModel.Save();
-            await JsonPersistent.Save(savePath + "\\exercise.json", ExerciseData);
-            await historyModel.Save(savePath);
+            await JsonPersistent.Save(SavePath + "\\exercise.json", ExerciseData);
+            await historyModel.Save(SavePath);
         }
 
         public async Task Load(string path)
@@ -132,10 +136,10 @@ namespace Exercise.Model
             await schoolModel.Load(path);
             await scanModel.Load(path);
             ExerciseData = await JsonPersistent.Load<ExerciseData>(path + "\\exercise.json");
-            savePath = path;
+            SavePath = path;
         }
 
-        private void Clear()
+        public void Clear()
         {
             emptyPages = null;
             ExerciseData = null;
@@ -143,12 +147,15 @@ namespace Exercise.Model
             PageDropped.Clear();
             schoolModel.Clear();
             scanModel.Clear();
+            SavePath = null;
         }
 
         private async void ScanModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
         {
             if (e.PropertyName == "PageCode")
             {
+                if (scanModel.PageCode == null)
+                    return;
                 ExerciseData = await service.GetExercise(scanModel.PageCode);
                 RaisePropertyChanged("ExerciseData");
                 emptyPages = new List<Page>();
@@ -160,8 +167,11 @@ namespace Exercise.Model
 
         private void Pages_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
         {
-            Page page = e.NewItems[0] as Page;
-            AddPage(page);
+            if (e.NewItems != null)
+            {
+                foreach (Page page in e.NewItems)
+                    AddPage(page);
+            }
         }
 
         private void AddPage(Page page)

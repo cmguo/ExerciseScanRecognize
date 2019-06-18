@@ -91,6 +91,9 @@
     <Compile Include="ViewModel\HistoryViewModel.cs" />
     <Compile Include="ViewModel\SubmitViewModel.cs" />
     <Compile Include="View\ErrorMessageBox.cs" />
+    <Compile Include="View\SubmitPage.xaml.cs">
+      <DependentUpon>SubmitPage.xaml</DependentUpon>
+    </Compile>
     <Compile Include="View\Resolve\ExceptionConverter.cs" />
     <Compile Include="View\Resolve\ExceptionListConverter.cs" />
     <Compile Include="View\Resolve\ExceptionPageConverter.cs" />
@@ -102,6 +105,9 @@
     </Compile>
     <Compile Include="View\Resolve\CorrectionExceptionPage.xaml.cs">
       <DependentUpon>CorrectionExceptionPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\Resolve\PageLostPage.xaml.cs">
+      <DependentUpon>PageLostPage.xaml</DependentUpon>
     </Compile>
     <Compile Include="View\Resolve\NoStudentCodePage.xaml.cs">
       <DependentUpon>NoStudentCodePage.xaml</DependentUpon>
@@ -138,6 +144,10 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Page Include="View\SubmitPage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="View\ResolvePage.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -147,6 +157,10 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="View\Resolve\CorrectionExceptionPage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="View\Resolve\PageLostPage.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>

@@ -23,6 +23,8 @@ namespace Exercise.View.Resolve
             switch (ex.Type)
             {
                 case ExceptionType.NoPageCode:
+                case ExceptionType.PageCodeMissMatch:
+                case ExceptionType.AnalyzeException:
                     return new NoPageCodePage() { DataContext = ex };
                 case ExceptionType.NoStudentCode:
                     return new NoStudentCodePage() { DataContext = ex };
@@ -30,6 +32,8 @@ namespace Exercise.View.Resolve
                     return new AnswerExceptionPage() { DataContext = ex };
                 case ExceptionType.CorrectionException:
                     return new CorrectionExceptionPage() { DataContext = ex };
+                case ExceptionType.PageLost:
+                    return new PageLostPage() { DataContext = ex };
                 default:
                     return null;
             }

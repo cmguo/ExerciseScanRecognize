@@ -20,10 +20,10 @@ namespace Exercise.View.Resolve
     /// <summary>
     /// HomePage.xaml 的交互逻辑
     /// </summary>
-    public partial class NoPageCodePage : Page
+    public partial class PageLostPage : Page
     {
 
-        public NoPageCodePage()
+        public PageLostPage()
         {
             InitializeComponent();
         }

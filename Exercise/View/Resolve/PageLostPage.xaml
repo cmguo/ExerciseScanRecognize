@@ -1,4 +1,4 @@
-﻿<Page x:Class="Exercise.View.Resolve.NoPageCodePage"
+﻿<Page x:Class="Exercise.View.Resolve.PageLostPage"
       xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
@@ -15,7 +15,7 @@
 
     <Grid>
         <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Orientation="Vertical">
-            <TextBlock Text="该试卷无法识别，请放入试卷，重新扫描。" />
+            <TextBlock Text="试卷缺失，请放入试卷，开始扫描。" />
             <Button Command="{Binding ScanCommand}" 
                     CommandParameter="{Binding RelativeSource={RelativeSource AncestorType={x:Type Page}}}" 
                     Content="重新扫描" />

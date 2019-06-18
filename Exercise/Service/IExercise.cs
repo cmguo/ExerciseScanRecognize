@@ -8,25 +8,28 @@ using TalBase.Service;
 
 namespace Exercise.Service
 {
-    [BaseUri("http://homework.idev.talcloud.com/homework/api/v1")]
+    [BaseUri("http://homework.idev.talcloud.com/homework/api/v1/answerCardApp")]
     [MessageHandler(typeof(AccountHandler))]
     [ContentSerializer(typeof(ResultSerializer))]
     public interface IExercise
     {
 
-        [Post("/answerCardApp/getAllClass")]
+        [Get("/getAllClass")]
         Task<SchoolData> getAllClass();
 
-        [Post("/answerCardApp/getAllClass")]
-        Task<ExerciseData> GetExercise(string pageCode);
+        [Get("/getAnswersheetData")]
+        Task<ExerciseData> GetExercise(string pagerId);
 
-        [Post("/user/logout")]
+        [Get("/getTempHomeWorkIdTempId")]
+        Task<string> GetSubmitId();
+
+        [Post("/uploadResult")]
         Task<Nothing> Submit(SubmitData data);
 
-        [Post("/answerCardApp/batchGeneratePresignedUrl")]
+        [Post("/batchGeneratePresignedUrl")]
         Task<Dictionary<string, string>> GeneratePresignedUrls(GenUriData names);
 
-        [Post("/answerCardApp/batchGeneratePresignedUrl")]
+        [Get("/batchGeneratePresignedUrl")]
         Task<RecordData> getRecords(int page);
     }
 }

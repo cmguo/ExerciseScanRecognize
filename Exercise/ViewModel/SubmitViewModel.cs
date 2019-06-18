@@ -12,6 +12,7 @@ namespace Exercise.ViewModel
     {
         public string ExerciseName { get; private set; }
         public SubmitModel.SubmitTask Task { get; private set; }
+        public int Percent { get; private set; }
 
         private SubmitModel submitModel = SubmitModel.Instance;
         private ExerciseModel exerciseModel = ExerciseModel.Instance;
@@ -19,8 +20,17 @@ namespace Exercise.ViewModel
         public SubmitViewModel()
         {
             ExerciseName = exerciseModel.ExerciseData.ExerciseName;
-            string exerciseId = null;
-            Task = submitModel.SubmitTasks[exerciseId];
+            Task = submitModel.SubmitTasks[exerciseModel.SavePath];
+            Task.PropertyChanged += Task_PropertyChanged; ;
+        }
+
+        private void Task_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
+        {
+            if (e.PropertyName == "Finish")
+            {
+                Percent = Task.Finish * 100 / Task.Total;
+                RaisePropertyChanged("Percent");
+            }
         }
     }
 }

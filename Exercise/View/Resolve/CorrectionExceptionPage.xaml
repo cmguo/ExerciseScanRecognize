@@ -15,9 +15,16 @@
 
     <Grid>
         <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Orientation="Vertical">
-            <Button Command="{Binding StartCommand}" 
-                    CommandParameter="{Binding RelativeSource={RelativeSource AncestorType={x:Type Window}}}" 
-                    Content="开始扫描" />
+            <TextBlock Text="以下题号存在批改识别异常，请确认得分。" />
+            <Button Command="{Binding ComfireCommand}" 
+                    CommandParameter="{Binding RelativeSource={RelativeSource AncestorType={x:Type Page}}}" 
+                    Content="确认" />
+            <Button Command="{Binding IgnoreCommand}" 
+                    CommandParameter="{Binding RelativeSource={RelativeSource AncestorType={x:Type Page}}}" 
+                    Content="忽略所有批改异常" />
+            <Button Command="{Binding DropCommand}" 
+                    CommandParameter="{Binding RelativeSource={RelativeSource AncestorType={x:Type Page}}}" 
+                    Content="忽略该试卷" />
         </StackPanel>
     </Grid>
 </Page>

@@ -22,8 +22,8 @@
     </Page.Resources>
     
     <Grid>
-        <StackPanel Orientation="Vertical">
-            <TreeView ItemsSource="{Binding Exceptions}" Width="400">
+        <StackPanel Orientation="Horizontal">
+            <TreeView ItemsSource="{Binding Exceptions}" Width="400" >
                 <pb:PushBindingManager.PushBindings>
                     <pb:PushBinding TargetProperty="SelectedValue" Path="SelectedException"/>
                 </pb:PushBindingManager.PushBindings>
@@ -38,7 +38,7 @@
                     </HierarchicalDataTemplate>
                 </TreeView.ItemTemplate>
             </TreeView>
-            <Border Background="Black">
+            <Border Background="Black" HorizontalAlignment="Stretch">
                 <Image />
             </Border>
             <Frame Content="{Binding SelectedException, Converter={StaticResource ExceptionPageConverter}}" Width="400"/>

@@ -76,6 +76,10 @@ namespace Exercise.Model
             SubmitData sdata = task.Data;
             task.Total = (sdata.Data.Count + SUBIT_BATCH_SIZE - 1) / SUBIT_BATCH_SIZE + sdata.Data.Select(d => d.PageInfo).Count();
             task.Finish = 0;
+            if (sdata.HomeworkId == null)
+            {
+                sdata.HomeworkId = await service.GetSubmitId();
+            }
             IList<SubmitData.AnswerInfo> list = sdata.Data;
             int i = 0;
             for (; i + SUBIT_BATCH_SIZE < list.Count; i += SUBIT_BATCH_SIZE)

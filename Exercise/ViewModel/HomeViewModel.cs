@@ -27,7 +27,7 @@ namespace Exercise.ViewModel
         {
             await exerciseModel.NewTask();
             //await scanModel.Scan();
-            (obj as NavigationWindow).Navigate(new ScanPage());
+            (obj as System.Windows.Controls.Page).NavigationService.Navigate(new ScanPage());
         }
     }
 }

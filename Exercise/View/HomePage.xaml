@@ -16,7 +16,7 @@
     <Grid>
         <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Orientation="Vertical">
             <Button Command="{Binding StartCommand}" 
-                    CommandParameter="{Binding RelativeSource={RelativeSource AncestorType={x:Type Window}}}" 
+                    CommandParameter="{Binding RelativeSource={RelativeSource AncestorType={x:Type Page}}}" 
                     Content="开始扫描" />
         </StackPanel>
     </Grid>

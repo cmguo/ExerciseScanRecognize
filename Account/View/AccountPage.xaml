@@ -30,7 +30,7 @@
         <TextBlock Text="Password" Grid.Row="2" Margin="3"/>
         <TextBox x:Name="txtPassword" Text="{Binding CurrentUser.Password}" Grid.Column="1" Grid.Row="2" Margin="3" MinWidth="100" HorizontalAlignment="Left"/>
         <Button Command="{Binding LoginCommand}" 
-                CommandParameter="{Binding RelativeSource={RelativeSource AncestorType={x:Type Window}}}" 
+                CommandParameter="{Binding RelativeSource={RelativeSource AncestorType={x:Type Page}}}" 
                 Content="Log in" Grid.Row="3" Grid.Column="1" Margin="3"/>
     </Grid>
 </Page>

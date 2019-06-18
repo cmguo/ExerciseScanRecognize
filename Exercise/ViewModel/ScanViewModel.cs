@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Navigation;
 using TalBase.ViewModel;
+using Panuon.UI;
 
 namespace Exercise.ViewModel
 {
@@ -36,52 +37,50 @@ namespace Exercise.ViewModel
 
         private async Task EndScan(object obj)
         {
-            MessageBoxResult result = MessageBox.Show("扫描仪中还有试卷待扫描，确认结束扫描并查看结果吗？", "提示",
-                MessageBoxButton.OKCancel, MessageBoxImage.Information, MessageBoxResult.OK);
-            if (result == MessageBoxResult.OK)
+            bool? isConfirm = PUMessageBox.ShowConfirm("扫描仪中还有试卷待扫描，确认结束扫描并查看结果吗？", "提示");
+            if (isConfirm != null && isConfirm.Value)
             {
                 await scanModel.CancelScan();
                 exerciseModel.MakeResult();
-                (obj as NavigationWindow).Navigate(new SummaryPage());
+                (obj as System.Windows.Controls.Page).NavigationService.Navigate(new SummaryPage());
             }
         }
 
         private async Task Close(object obj)
         {
-            MessageBoxResult result = MessageBox.Show("当前仍有扫描任务进行中，退出后本次扫描结果将放弃，确认退出吗？", "提示",
-                MessageBoxButton.OKCancel, MessageBoxImage.Information, MessageBoxResult.OK);
-            if (result == MessageBoxResult.OK)
+          
+            bool? isConfirm = PUMessageBox.ShowConfirm("当前仍有扫描任务进行中，退出后本次扫描结果将放弃，确认退出吗？", "提示");
+            if (isConfirm != null && isConfirm.Value)
             {
                 await scanModel.CancelScan();
                 exerciseModel.Discard();
-                (obj as NavigationWindow).Navigate(new HomePage());
+                (obj as System.Windows.Controls.Page).NavigationService.Navigate(new HomePage());
             }
+
         }
 
         private async Task Discard(object obj)
         {
-            MessageBoxResult result = MessageBox.Show("放弃后，本次扫描结果将作废，确认放弃吗？", "提示",
-                MessageBoxButton.OKCancel, MessageBoxImage.Information, MessageBoxResult.OK);
-            if (result == MessageBoxResult.OK)
+            bool? isConfirm = PUMessageBox.ShowConfirm("放弃后，本次扫描结果将作废，确认放弃吗？", "提示");
+            if (isConfirm != null && isConfirm.Value)
             {
                 await scanModel.CancelScan();
                 exerciseModel.Discard();
-                (obj as NavigationWindow).Navigate(new HomePage());
+                (obj as System.Windows.Controls.Page).NavigationService.Navigate(new HomePage());
             }
         }
 
         private async Task Continue(object obj)
         {
-            MessageBoxResult result = MessageBox.Show("扫描仪已无试卷，请添加试卷继续扫描。若已全部扫描，可查看扫描结果。", "提示",
-                MessageBoxButton.OKCancel, MessageBoxImage.Information, MessageBoxResult.OK);
-            if (result == MessageBoxResult.OK)
+            bool? isConfirm = PUMessageBox.ShowConfirm("扫描仪已无试卷，请添加试卷继续扫描。若已全部扫描，可查看扫描结果。", "提示");
+            if (isConfirm != null && !isConfirm.Value)
             {
-                await scanModel.Scan();
+                exerciseModel.MakeResult();
+                (obj as System.Windows.Controls.Page).NavigationService.Navigate(new SummaryPage());
             }
             else
             {
-                exerciseModel.MakeResult();
-                (obj as NavigationWindow).Navigate(new SummaryPage());
+                await scanModel.Scan();
             }
         }
 

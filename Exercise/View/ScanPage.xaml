@@ -34,10 +34,10 @@
             <TextBlock Text="{Binding PageCount, StringFormat=已扫描{0}张试卷}" HorizontalAlignment="Center"/>
             <TextBlock Text="{Binding StudentCount, StringFormat=共计{0}份试卷}" HorizontalAlignment="Center"/>
             <Button Command="{Binding EndScanCommand}"
-                    CommandParameter="{Binding RelativeSource={RelativeSource AncestorType={x:Type Window}}}" 
+                    CommandParameter="{Binding RelativeSource={RelativeSource AncestorType={x:Type Page}}}" 
                     Content="结束扫描，查看结果" HorizontalAlignment="Center"/>
             <Button Command="{Binding DiscardCommand}"
-                    CommandParameter="{Binding RelativeSource={RelativeSource AncestorType={x:Type Window}}}" 
+                    CommandParameter="{Binding RelativeSource={RelativeSource AncestorType={x:Type Page}}}" 
                     Content="放弃本次扫描" HorizontalAlignment="Center" />
         </StackPanel>
     </Grid>

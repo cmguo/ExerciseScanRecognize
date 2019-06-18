@@ -7,6 +7,7 @@ using System.Windows;
 using System.Windows.Navigation;
 using TalBase.ViewModel;
 using Panuon.UI;
+using System.Windows.Controls;
 
 namespace Account.ViewModel
 {
@@ -55,7 +56,7 @@ namespace Account.ViewModel
         private async Task DoLogin(object obj)
         {
             await AccountModel.Instance.Login();
-            (obj as NavigationWindow).Navigate(new Uri(Configuration.StartupPage));
+            (obj as Page).NavigationService.Navigate(new Uri(Configuration.StartupPage));
         }
 
         private bool CanDoLogout(object obj)

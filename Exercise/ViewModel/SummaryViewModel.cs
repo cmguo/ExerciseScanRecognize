@@ -6,7 +6,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using System.Windows.Navigation;
 
 namespace Exercise.ViewModel
 {
@@ -49,12 +48,12 @@ namespace Exercise.ViewModel
 
         private void HandleException(object obj)
         {
-            (obj as NavigationWindow).Navigate((Page) null);
+            (obj as System.Windows.Controls.Page).NavigationService.Navigate(null);
         }
 
         private void ContinueScan(object obj)
         {
-            (obj as NavigationWindow).Navigate((Page) null);
+            (obj as System.Windows.Controls.Page).NavigationService.Navigate(null);
         }
     }
 }

@@ -1,4 +1,4 @@
-﻿<Page x:Class="Exercise.View.WebPage"
+﻿<Page x:Class="Exercise.View.ScanPage"
       xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
@@ -14,11 +14,31 @@
     </Page.DataContext>
 
     <Grid>
-        <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Orientation="Vertical">
-            <Button Command="{Binding StartScanCommand}" Content="开始扫描" />
-            <Button Command="{Binding StopScanCommand}" Content="停止扫描" />
-            <Button Command="{Binding EndScanCommand}" Content="查看统计" />
-            <Button Command="{Binding SubmitCommand}" Content="上传成绩" />
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="auto" />
+        </Grid.ColumnDefinitions>
+        <Border Background="Black">
+            <Image Source="{Binding LastPage.PagePath}"/>
+        </Border>
+        <StackPanel Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Center" Orientation="Vertical">
+            <TextBlock Text="{Binding LastPage.Student.Name}" HorizontalAlignment="Center"/>
+            <TextBlock HorizontalAlignment="Center">
+                <TextBlock.Text>
+                    <MultiBinding StringFormat="第{0}页/共{1}页}。">
+                        <Binding Path="LastPage.PageIndex" />
+                        <Binding Path="ExcecisePageCount" />
+                    </MultiBinding>
+                </TextBlock.Text>
+            </TextBlock>
+            <TextBlock Text="{Binding PageCount, StringFormat=已扫描{0}张试卷}" HorizontalAlignment="Center"/>
+            <TextBlock Text="{Binding StudentCount, StringFormat=共计{0}份试卷}" HorizontalAlignment="Center"/>
+            <Button Command="{Binding EndScanCommand}"
+                    CommandParameter="{Binding RelativeSource={RelativeSource AncestorType={x:Type Window}}}" 
+                    Content="结束扫描，查看结果" HorizontalAlignment="Center"/>
+            <Button Command="{Binding DiscardCommand}"
+                    CommandParameter="{Binding RelativeSource={RelativeSource AncestorType={x:Type Window}}}" 
+                    Content="放弃本次扫描" HorizontalAlignment="Center" />
         </StackPanel>
     </Grid>
 </Page>

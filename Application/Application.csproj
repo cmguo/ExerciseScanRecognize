@@ -151,6 +151,10 @@
     <Resource Include="COPYING.txt" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\Saraff.Twain.NET\Saraff.Twain.csproj">
+      <Project>{658f9851-4d1c-4d57-904e-f9d7da7f24fc}</Project>
+      <Name>Saraff.Twain</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Account\Account.csproj">
       <Project>{7df8007b-9234-4414-8dfe-5fe07c9a970b}</Project>
       <Name>Account</Name>
@@ -166,10 +170,6 @@
     <ProjectReference Include="..\Panuon.UI\Panuon.UI.csproj">
       <Project>{72b3698e-1784-4101-99ae-fc7b8f48e96d}</Project>
       <Name>Panuon.UI</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Saraff.Twain.NET\Saraff.Twain.csproj">
-      <Project>{658f9851-4d1c-4d57-904e-f9d7da7f24fc}</Project>
-      <Name>Saraff.Twain</Name>
     </ProjectReference>
     <ProjectReference Include="..\TalBase\TalBase.csproj">
       <Project>{ce4a2da6-a065-4f02-8ae1-b788e57aef09}</Project>

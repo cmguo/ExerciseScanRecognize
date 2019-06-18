@@ -55,6 +55,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Helpers\Converters.cs" />
+    <Compile Include="Misc\UITreeHelper.cs" />
     <Compile Include="Mvvm\RelayCommand.cs" />
     <Compile Include="Misc\Configuration.cs" />
     <Compile Include="Misc\JsonPersistent.cs" />

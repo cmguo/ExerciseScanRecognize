@@ -78,9 +78,10 @@ namespace Exercise.Model
             scanModel.Pages.CollectionChanged += Pages_CollectionChanged;
             scanModel.PropertyChanged += ScanModel_PropertyChanged;
             service = Services.Get<IExercise>();
+            PageStudents = new ObservableCollection<StudentInfo>();
         }
 
-        public async void NewTask()
+        public async Task NewTask()
         {
             string path = historyModel.NewSavePath();
             scanModel.SetSavePath(path);
@@ -90,6 +91,10 @@ namespace Exercise.Model
         public void MakeResult()
         {
             schoolModel.GetLostPageStudents(s => AddException(ExceptionType.PageLost, s));
+        }
+
+        public void Discard()
+        {
         }
 
         public async void SubmitResult()

@@ -30,7 +30,20 @@ namespace Exercise.Model
 
         public ObservableCollection<Page> Pages { get; private set; }
 
-        public bool IsScanning { get; private set; }
+        private bool _IsScannig;
+        public bool IsScanning
+        {
+            get { return _IsScannig; }
+            set
+            {
+                _IsScannig = value;
+                RaisePropertyChanged("IsScanning");
+                lock (mutex)
+                {
+                    Monitor.PulseAll(mutex);
+                }
+            }
+        }
         public string PageCode { get; private set; }
 
         private IScanDevice scanDevice = ScanDevice.Instance;
@@ -62,7 +75,6 @@ namespace Exercise.Model
             if (IsScanning)
                 return;
             IsScanning = true;
-            RaisePropertyChanged("IsScanning");
             ++scanBatch;
             scanIndex = 0;
             try
@@ -78,14 +90,21 @@ namespace Exercise.Model
             catch (Exception e)
             {
                 IsScanning = false;
-                RaisePropertyChanged("IsScanning");
                 throw e;
             }
         }
 
-        public void CancelScan()
+        public Task CancelScan()
         {
             scanDevice.CancelScan();
+            return Task.Run(() =>
+            {
+                lock (mutex)
+                {
+                    while (IsScanning)
+                        Monitor.Wait(mutex);
+                }
+            });
         }
 
         public void SetExerciseData(ExerciseData data)

@@ -10,7 +10,7 @@ using System.Windows.Navigation;
 
 namespace Exercise.ViewModel
 {
-    class ScanResultViewModel : ViewModelBase
+    class SummaryViewModel : ViewModelBase
     {
         public class ClassDetail
         {
@@ -19,6 +19,7 @@ namespace Exercise.ViewModel
             public int ResultCount { get; set; }
         }
 
+        public string ExerciseName { get; private set; }
         public int StudentCount { get; private set; }
         public int ExceptionCount { get; private set; }
         public List<ClassDetail> ClassDetails { get; private set; }
@@ -31,10 +32,11 @@ namespace Exercise.ViewModel
         private ExerciseModel exerciseModel = ExerciseModel.Instance;
         private SchoolModel schoolModel = SchoolModel.Instance;
 
-        public ScanResultViewModel() 
+        public SummaryViewModel() 
         {
             ContinueScanCommand = new RelayCommand((e) => ContinueScan(e));
             HandleExceptionCommand = new RelayCommand((e) => HandleException(e));
+            ExerciseName = "三角函数";// exerciseModel.ExerciseData.ExerciseName;
             StudentCount = exerciseModel.PageStudents.Where(s => s.AnswerPages.IndexOf(null) < 0).Count();
             ExceptionCount = exerciseModel.Exceptions.SelectMany(el => el.Exceptions).Count();
             ClassDetails = schoolModel.Classes.Select(c => new ClassDetail()

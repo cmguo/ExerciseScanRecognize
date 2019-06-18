@@ -84,11 +84,18 @@
     <Compile Include="Service\ExerciseData.cs" />
     <Compile Include="Service\IExercise.cs" />
     <Compile Include="Service\SchoolData.cs" />
-    <Compile Include="ViewModel\ScanResultViewModel.cs" />
+    <Compile Include="ViewModel\HomeViewModel.cs" />
+    <Compile Include="ViewModel\SummaryViewModel.cs" />
     <Compile Include="ViewModel\ScanViewModel.cs" />
     <Compile Include="ViewModel\ResolveViewModel.cs" />
     <Compile Include="ViewModel\HistoryViewModel.cs" />
     <Compile Include="ViewModel\SubmitViewModel.cs" />
+    <Compile Include="View\SummaryPage.xaml.cs">
+      <DependentUpon>SummaryPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\HomePage.xaml.cs">
+      <DependentUpon>HomePage.xaml</DependentUpon>
+    </Compile>
     <Compile Include="View\ScanPage.xaml.cs">
       <DependentUpon>ScanPage.xaml</DependentUpon>
     </Compile>
@@ -105,20 +112,20 @@
       <Project>{2f6a6a39-eed7-4dba-a62c-cbdf3ce0f1bc}</Project>
       <Name>Base</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Panuon.UI\Panuon.UI.csproj">
-      <Project>{72b3698e-1784-4101-99ae-fc7b8f48e96d}</Project>
-      <Name>Panuon.UI</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Saraff.Twain.NET\Saraff.Twain.csproj">
-      <Project>{658f9851-4d1c-4d57-904e-f9d7da7f24fc}</Project>
-      <Name>Saraff.Twain</Name>
-    </ProjectReference>
     <ProjectReference Include="..\TalBase\TalBase.csproj">
       <Project>{ce4a2da6-a065-4f02-8ae1-b788e57aef09}</Project>
       <Name>TalBase</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Page Include="View\SummaryPage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="View\HomePage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="View\ScanPage.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>

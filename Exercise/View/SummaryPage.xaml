@@ -1,0 +1,45 @@
+﻿<Page x:Class="Exercise.View.SummaryPage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:Exercise.View"
+      xmlns:vm="clr-namespace:Exercise.ViewModel"
+      mc:Ignorable="d" 
+      d:DesignHeight="450" d:DesignWidth="800"
+      Title="HomePage">
+
+    <Page.DataContext>
+        <vm:SummaryViewModel />
+    </Page.DataContext>
+
+    <Grid>
+        <StackPanel Grid.ColumnSpan="2" HorizontalAlignment="Center" VerticalAlignment="Center" Orientation="Horizontal">
+            <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Orientation="Vertical">
+                <TextBlock Text="{Binding ExerciseName, StringFormat=《{0}》}" />
+                <TextBlock>
+                    <TextBlock.Text>
+                        <MultiBinding StringFormat="本次扫描共收回{0}份试卷。存在{1}项异常。">
+                            <Binding Path="StudentCount" />
+                            <Binding Path="ExceptionCount" />
+                        </MultiBinding>
+                    </TextBlock.Text>
+                </TextBlock>
+            </StackPanel>
+            <Button Command="{Binding ContinueCommand}" 
+                Content="继续扫描" />
+            <Button Command="{Binding ResolveCommand}" 
+                Content="处理异常" />
+        </StackPanel>
+        <TextBlock Grid.Row="1" Grid.ColumnSpan="2" Text="试卷扫描详情" />
+        <TextBlock Grid.Row="2" Text="{Binding StudentCount, StringFormat=共收回{0}份试卷}" />
+        <TextBlock Grid.Row="2" Grid.Column="1" Text="{Binding ExceptionCount, StringFormat=共存在{0}项异常}" />
+        <DataGrid  Grid.Row="3">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="班级" Binding="{Binding ClassName}" />
+                <DataGridTextColumn Header="回收试卷（份）" Binding="{Binding ResultCount}"/>
+                <DataGridTextColumn Header="总人数（人）" Binding="{Binding StudentCount}"/>
+            </DataGrid.Columns>
+        </DataGrid>
+    </Grid>
+</Page>

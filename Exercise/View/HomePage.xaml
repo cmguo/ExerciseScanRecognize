@@ -5,7 +5,8 @@
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
       xmlns:local="clr-namespace:Exercise.View"
       xmlns:vm="clr-namespace:Exercise.ViewModel"
-      mc:Ignorable="d" 
+      xmlns:mu="clr-namespace:Panuon.UI;assembly=Panuon.UI"
+      mc:Ignorable="d"
       d:DesignHeight="450" d:DesignWidth="800"
       Title="HomePage">
 
@@ -15,8 +16,16 @@
 
     <Grid>
         <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Orientation="Vertical">
-            <Button Command="{Binding StartCommand}" 
+            <mu:PUButton Command="{Binding StartCommand}" 
+                         Height="50"
+                         Width="300"
+                         FontSize="20"
                     CommandParameter="{Binding RelativeSource={RelativeSource AncestorType={x:Type Page}}}" 
+                    BorderCornerRadius="3"
+                         ButtonStyle="Hollow"
+                         CoverBrush="Blue"
+                         BorderBrush="Blue"
+                         
                     Content="开始扫描" />
         </StackPanel>
     </Grid>

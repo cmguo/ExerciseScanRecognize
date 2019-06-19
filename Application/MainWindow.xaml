@@ -7,6 +7,7 @@
         xmlns:account="clr-namespace:Account;assembly=Account"
         mc:Ignorable="d"
         NavButtonVisibility="Visible"
+        NavbarBackground="Gray"
         WindowStyle="None">
     <Grid>
         <Grid.RowDefinitions>

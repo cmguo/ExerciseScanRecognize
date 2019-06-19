@@ -73,7 +73,7 @@ namespace Exercise.ViewModel
             if (isConfirm != null && isConfirm.Value)
             {
                 await scanModel.CancelScan();
-                exerciseModel.MakeResult();
+                await exerciseModel.MakeResult();
                 (obj as System.Windows.Controls.Page).NavigationService.Navigate(new SummaryPage());
             }
             else
@@ -119,7 +119,7 @@ namespace Exercise.ViewModel
             bool? isConfirm = PUMessageBox.ShowConfirm("扫描仪已无试卷，请添加试卷继续扫描。若已全部扫描，可查看扫描结果。", "提示");
             if (isConfirm != null && !isConfirm.Value)
             {
-                exerciseModel.MakeResult();
+                await exerciseModel.MakeResult();
                 (obj as System.Windows.Controls.Page).NavigationService.Navigate(new SummaryPage());
             }
             else

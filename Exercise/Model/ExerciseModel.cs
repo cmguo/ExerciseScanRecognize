@@ -40,11 +40,12 @@ namespace Exercise.Model
             PageLost,
         }
 
-        public enum RemoveType : int
+        public enum ResolveType : int
         {
-            Page, 
-            DuplexPage, 
-            Student
+            Ignore, 
+            RemovePage, 
+            RemoveStudent,
+            RemoveDuplexPage
         }
 
         public class Exception
@@ -99,6 +100,11 @@ namespace Exercise.Model
             AddException(ExceptionType.CorrectionException, new Page() { Student = student });
         }
 
+        internal void Discard()
+        {
+            throw new NotImplementedException();
+        }
+
         public async Task NewTask()
         {
             string path = historyModel.NewSavePath();
@@ -107,7 +113,7 @@ namespace Exercise.Model
             await schoolModel.Refresh();
         }
 
-        public void MakeResult()
+        public async Task MakeResult()
         {
             schoolModel.GetLostPageStudents(s => {
                 s.AnswerPages = new List<Page>();
@@ -119,10 +125,7 @@ namespace Exercise.Model
             {
                 AddException(ExceptionType.PageLost, p);
             }
-        }
-
-        public void Discard()
-        {
+            await Save();
         }
 
         public async Task SubmitResult()
@@ -159,6 +162,20 @@ namespace Exercise.Model
             schoolModel.Clear();
             scanModel.Clear();
             SavePath = null;
+        }
+
+        public void Resolve(Exception ex, ResolveType type)
+        {
+            if (type == ResolveType.Ignore)
+            {
+                if (ex.Type == ExceptionType.AnswerException)
+                    ex.Page.AnswerExceptions.Clear();
+                else if (ex.Type == ExceptionType.CorrectionException)
+                    ex.Page.CorrectionExceptions.Clear();
+                RemoveException(ex.Type, ex.Page);
+                return;
+            }
+            RemovePage(ex.Page, type);
         }
 
         private async void ScanModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
@@ -209,7 +226,7 @@ namespace Exercise.Model
             Page old = page.Student.AnswerPages[pageIndex];
             page.Student.AnswerPages[pageIndex] = page;
             old.Student = null;
-            RemovePage(old, RemoveType.DuplexPage);
+            RemovePage(old, ResolveType.RemovePage);
             if (page.Answer == null)
             {
                 AddException(ExceptionType.AnalyzeException, page);
@@ -230,7 +247,7 @@ namespace Exercise.Model
             }
         }
 
-        public void RemovePage(Page page, RemoveType type)
+        public void RemovePage(Page page, ResolveType type)
         {
             // 如果 Student 为 Null，肯定是 type = DuplexPage
             if (page.Student == null)
@@ -238,7 +255,7 @@ namespace Exercise.Model
                 RemovePage(page);
                 return;
             }
-            if (type == RemoveType.Student)
+            if (type == ResolveType.RemoveStudent)
             {
                 for (int i = 0; i < page.Student.AnswerPages.Count; ++i)
                 {
@@ -255,7 +272,7 @@ namespace Exercise.Model
             if (page.Student.AnswerPages[pageIndex] == page)
             {
                 page.Student.AnswerPages[pageIndex] = sEmptyPage;
-                if (type != RemoveType.DuplexPage && page.Another != page)
+                if (type != ResolveType.RemoveDuplexPage && page.Another != page)
                 {
                     page.Student.AnswerPages[pageIndex] = page.Another;
                     page.Another.Another = page.Another;

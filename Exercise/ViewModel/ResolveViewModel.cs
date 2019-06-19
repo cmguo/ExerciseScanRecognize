@@ -9,6 +9,8 @@ namespace Exercise.ViewModel
     class ResolveViewModel : ViewModelBase
     {
 
+        #region Properties
+
         public ObservableCollection<ExceptionList> Exceptions { get; private set; }
         private Exception _SelectedException;
         public Exception SelectedException
@@ -17,19 +19,24 @@ namespace Exercise.ViewModel
             set { _SelectedException = value; RaisePropertyChanged("SelectedException"); }
         }
 
-        public RelayCommand StartScanCommand { get; private set; }
-        public RelayCommand StopScanCommand { get; set; }
-        public RelayCommand EndScanCommand { get; set; }
-        public RelayCommand DiscardPageCommand { get; private set; }
+        #endregion
+
+        #region Commands
+
+        public RelayCommand ConitnueCommand { get; private set; }
+        public RelayCommand IgnoreCommand { get; set; }
+        public RelayCommand DropCommand { get; set; }
+
+        #endregion
 
         private ExerciseModel exerciseModel = ExerciseModel.Instance;
         private ScanModel scanModel = ScanModel.Instance;
 
         public ResolveViewModel()
         {
-            StartScanCommand = new RelayCommand((e) => scanModel.Scan(-1));
-            StopScanCommand = new RelayCommand((e) => scanModel.CancelScan());
-            EndScanCommand = new RelayCommand((e) => exerciseModel.MakeResult());
+            ConitnueCommand = new RelayCommand((e) => scanModel.Scan(-1));
+            IgnoreCommand = new RelayCommand((e) => exerciseModel.Resolve(SelectedException, ResolveType.Ignore));
+            DropCommand = new RelayCommand((e) => exerciseModel.Resolve(SelectedException, ResolveType.RemovePage));
             Exceptions = exerciseModel.Exceptions;
         }
 

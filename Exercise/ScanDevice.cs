@@ -20,9 +20,12 @@ namespace Exercise
 
         event EventHandler<ScanEvent> ScanCompleted;
 
-        bool Duplex { get; set; }
+        bool DuplexEnabled { get; set; }
 
         string ImageFormat { get; set; }
+
+        float XResolution { get; set; }
+        float YResolution { get; set; }
 
         void Open();
 

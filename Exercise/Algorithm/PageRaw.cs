@@ -8,6 +8,6 @@ namespace Exercise.Algorithm
 {
     public class PageRaw
     {
-        public byte[] imgBytes { get; set; }
+        public byte[] ImgBytes { get; set; }
     }
 }

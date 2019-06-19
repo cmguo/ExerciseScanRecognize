@@ -81,7 +81,7 @@ namespace Exercise.Model
             {
                 await Task.Run(() => {
                     scanDevice.Open();
-                    scanDevice.Duplex = true;
+                    scanDevice.DuplexEnabled = true;
                     //scanDevice.ImageFormat = "Jfif";
                scanDevice.Scan(count);
                });
@@ -251,7 +251,7 @@ namespace Exercise.Model
                 page.PageData = stream.GetBuffer();
                 if (needCode)
                 {
-                    Algorithm.QRCodeData code = algorithm.GetCode(new Algorithm.PageRaw() { imgBytes = page.PageData });
+                    Algorithm.QRCodeData code = algorithm.GetCode(new Algorithm.PageRaw() { ImgBytes = page.PageData });
                     int split = code.paperInfo.IndexOf('_');
                     page.PaperCode = code.paperInfo.Substring(0, split);
                     page.PageIndex = Int32.Parse(code.paperInfo.Substring(split + 1));

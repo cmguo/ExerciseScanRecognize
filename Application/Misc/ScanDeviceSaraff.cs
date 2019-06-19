@@ -2,6 +2,8 @@
 using Saraff.Twain;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
+using System.Reflection;
 using System.Threading;
 using System.Windows;
 
@@ -15,15 +17,46 @@ namespace Application.Misc
             Exercise.ScanDevice.Instance = new ScanDeviceSaraff(window);
         }
 
-        public bool Duplex
+        public bool Indicators
+        {
+            get => twain32.Capabilities.Indicators.GetCurrent();
+            set => twain32.Capabilities.Indicators.Set(value);
+        }
+
+        public string CameraSide
+        {
+            get => twain32.Capabilities.CameraSide.GetCurrent().ToString();
+            set => twain32.Capabilities.CameraSide.Set((TwCS)Enum.Parse(typeof(TwCS), value));
+        }
+
+        public string Duplex
+        {
+            get => twain32.Capabilities.Duplex.GetCurrent().ToString();
+            set => twain32.Capabilities.Duplex.Set((TwDX)Enum.Parse(typeof(TwDX), value));
+        }
+
+        public bool DuplexEnabled
         {
             get => twain32.Capabilities.DuplexEnabled.GetCurrent();
             set => twain32.Capabilities.DuplexEnabled.Set(value);
         }
+
         public string ImageFormat
         {
             get => twain32.Capabilities.ImageFileFormat.GetCurrent().ToString();
             set => twain32.Capabilities.ImageFileFormat.Set((TwFF)Enum.Parse(typeof(TwFF), value));
+        }
+
+        public float XResolution
+        {
+            get => twain32.Capabilities.XResolution.GetCurrent();
+            set => twain32.Capabilities.XResolution.Set(value);
+        }
+
+        public float YResolution
+        {
+            get => twain32.Capabilities.YResolution.GetCurrent();
+            set => twain32.Capabilities.YResolution.Set(value);
         }
 
         public ICollection<string> ImageFormats
@@ -63,7 +96,19 @@ namespace Application.Misc
             twain32.OpenDSM();
             twain32.OpenDataSource();
             twain32.Capabilities.Indicators.Set(false);
+            var versionInfo = FileVersionInfo.GetVersionInfo(Assembly.GetEntryAssembly().Location);
+            if (twain32.Capabilities.Author.IsSupported(TwQC.Set))
+                twain32.Capabilities.Author.Set(versionInfo.CompanyName);
+            if (twain32.Capabilities.Caption.IsSupported(TwQC.Set))
+                twain32.Capabilities.Caption.Set(AppDomain.CurrentDomain.FriendlyName);
+            twain32.Capabilities.CameraSide.Set(TwCS.Both);
+            twain32.Capabilities.AutoDiscardBlankPages.Set(TwBP.Disable);
+            twain32.Capabilities.DuplexEnabled.Set(true);
+            twain32.Capabilities.ImageFileFormat.Set(TwFF.Jfif);
+            twain32.Capabilities.Compression.Set(TwCompression.Jpeg);
             twain32.Capabilities.XferMech.Set(TwSX.File);
+            XResolution = 200;
+            YResolution = 200;
         }
 
         public void Scan(short count)

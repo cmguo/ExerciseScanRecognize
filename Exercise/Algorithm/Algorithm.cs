@@ -1,7 +1,10 @@
-﻿using com.talcloud.paperanalyze.service.answersheet;
+﻿using Base.Misc;
+using Base.Protocol;
+using com.talcloud.paperanalyze.service.answersheet;
 using net.sf.jni4net;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
+using System;
 using System.Threading.Tasks;
 
 namespace Exercise.Algorithm
@@ -17,6 +20,7 @@ namespace Exercise.Algorithm
         {
             Bridge.RegisterAssembly(typeof(AnswerSheetAnalyze).Assembly);
             AnswerSheetAnalyze.init();
+            //Test();
         }
 
         public QRCodeData GetCode(PageRaw page)
@@ -36,6 +40,17 @@ namespace Exercise.Algorithm
             return JsonConvert.DeserializeObject<Result<O>>(result, settings).Data;
         }
 
+        public async void Test()
+        {
+            string json = @"C:\Users\Brandon\source\repos\DotNet\Exercise\long_text_2019-06-18-15-12-30.txt";
+            string jpg = @"C:\Users\Brandon\source\repos\DotNet\Exercise\answersheet.jpg";
+            PageRaw pagew = new PageRaw();
+            pagew.ImgBytes = await UriFetcher.GetDataAsync(new Uri(jpg));
+            QRCodeData code = GetCode(pagew);
+            PageData page = await JsonPersistent.Load<PageData>(json);
+            page.ImgBytes = pagew.ImgBytes;
+            AnswerData answer = GetAnswer(page);
+        }
 
     }
 }

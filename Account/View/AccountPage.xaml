@@ -26,11 +26,16 @@
         </Grid.RowDefinitions>
         <TextBlock Text="Log in" Grid.ColumnSpan="2" FontWeight="Bold" HorizontalAlignment="Center" Margin="5" FontSize="20"/>
         <TextBlock Text="Name" Grid.Row="1" Margin="3"/>
-        <TextBox x:Name="txtName" Text="{Binding CurrentUser.LoginName}" Grid.Row="1" Grid.Column="1" Margin="3" MinWidth="100" HorizontalAlignment="Left"/>
+        <mu:PUTextBox x:Name="txtName" Text="{Binding CurrentUser.LoginName}" Grid.Row="1" Grid.Column="1" Margin="3" Width="100" Height="20" HorizontalAlignment="Left" BorderBrush="LightGray"
+                      Watermark="输入用户名"/>
         <TextBlock Text="Password" Grid.Row="2" Margin="3"/>
-        <TextBox x:Name="txtPassword" Text="{Binding CurrentUser.Password}" Grid.Column="1" Grid.Row="2" Margin="3" MinWidth="100" HorizontalAlignment="Left"/>
-        <Button Command="{Binding LoginCommand}" 
+        <mu:PUPasswordBox x:Name="txtPassword" Password="{Binding CurrentUser.Password}" Grid.Column="1" Grid.Row="2" Margin="3" Width="100" Height="20" HorizontalAlignment="Left"   VerticalAlignment="Center"
+                           Watermark="IconGroup"
+                                              IsShowPwdButtonShow="True"
+                                              BorderCornerRadius="2"/>
+        <mu:PUButton Command="{Binding LoginCommand}" 
                 CommandParameter="{Binding RelativeSource={RelativeSource AncestorType={x:Type Page}}}" 
-                Content="Log in" Grid.Row="3" Grid.Column="1" Margin="3"/>
+                BorderCornerRadius="3"
+                Content="Log in" Grid.Row="3" Grid.Column="1" Margin="3" Height="20"/>
     </Grid>
 </Page>

@@ -38,8 +38,8 @@ namespace Application
         public void LoadNavButtons()
         {
             Thickness thickness = new Thickness();
-            thickness.Left = 20;
-            thickness.Right = 20;
+            thickness.Left = 5;
+            thickness.Right = 5;
             var btn1 = new PUButton()
             {
                 VerticalAlignment = VerticalAlignment.Center,
@@ -55,12 +55,13 @@ namespace Application
                 HorizontalAlignment = System.Windows.HorizontalAlignment.Center,
                 Content = "卢湾一中心小学",
                 Padding = thickness,
+                Margin = thickness,
 
 
-          
+
             };
-            AppendNavButton(btn1, new RoutedEventHandler((s, e) => { PUMessageBox.ShowDialog("你点击了第二个按钮!"); Result = 2; }), false);
-            AppendNavButton(btn2, new RoutedEventHandler((s, e) => { PUMessageBox.ShowDialog("你点击了第一个按钮!"); Result = 1; }), false);
+            AppendNavButton(btn1, new RoutedEventHandler((s, e) => { PUMessageBox.ShowDialog("点击了扫描试卷管理记录页面"); Result = 2; }), false);
+            AppendNavButton(btn2, new RoutedEventHandler((s, e) => { PUMessageBox.ShowDialog("点击了学校管理，需要退出吗？"); Result = 1; }), false);
         }
 
         private void showHeadOrTitle(Page page)

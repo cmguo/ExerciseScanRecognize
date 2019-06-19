@@ -259,7 +259,7 @@ namespace Panuon.UI
         public object Convert(object[] values, Type targetType, object parameter, CultureInfo culture)
         {
             //0是Header，1是Title
-            return (string)values[0] == null ? (string)values[1]: (string)values[0];
+            return values[0] == null ? (string)values[1]: values[0];
         }
 
         public object[] ConvertBack(object value, Type[] targetTypes, object parameter, CultureInfo culture)

@@ -19,11 +19,69 @@ namespace Application
     /// </summary>
     public partial class MainWindow : PUWindow
     {
+   
         public MainWindow()
         {
             this.MaxHeight = SystemParameters.MaximizedPrimaryScreenHeight;
             this.MaxWidth = SystemParameters.MaximizedPrimaryScreenWidth;
             InitializeComponent();
+            LoadNavButtons();
+            Result = 0;
+            frmMain.Navigated += FrmMain_Navigated;
         }
+
+        private void FrmMain_Navigated(object sender, NavigationEventArgs e)
+        {
+            showHeadOrTitle(e.Content as Page);
+        }
+
+        public void LoadNavButtons()
+        {
+            Thickness thickness = new Thickness();
+            thickness.Left = 20;
+            thickness.Right = 20;
+            var btn1 = new PUButton()
+            {
+                VerticalAlignment = VerticalAlignment.Center,
+                HorizontalAlignment = System.Windows.HorizontalAlignment.Center,
+                Content = "试卷扫描记录管理",
+                Padding = thickness,
+                Margin =thickness,
+                
+            };
+            var btn2 = new PUButton()
+            {
+                VerticalAlignment = VerticalAlignment.Center,
+                HorizontalAlignment = System.Windows.HorizontalAlignment.Center,
+                Content = "卢湾一中心小学",
+                Padding = thickness,
+
+
+          
+            };
+            AppendNavButton(btn1, new RoutedEventHandler((s, e) => { PUMessageBox.ShowDialog("你点击了第二个按钮!"); Result = 2; }), false);
+            AppendNavButton(btn2, new RoutedEventHandler((s, e) => { PUMessageBox.ShowDialog("你点击了第一个按钮!"); Result = 1; }), false);
+        }
+
+        private void showHeadOrTitle(Page page)
+        {
+            if (Visibility.Visible == GetNavTitleBarVisibility(page))
+            {
+                Title = "读卷客户端";
+            }
+            else
+            {
+                var backBtn = new PUButton
+                {
+                    Content = new TextBlock
+                    {
+                        Text = "返回首页"
+                    }
+                };
+                backBtn.Click += new RoutedEventHandler((s, e) => { PUMessageBox.ShowDialog("你点击返回到首页按钮!"); });
+                Header = backBtn;
+            }
+        }
+
     }
 }

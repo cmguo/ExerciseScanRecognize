@@ -13,7 +13,7 @@ namespace Base.Mvvm
 
         public static event EventHandler<ActionExceptionEventArgs> WorkException;
 
-        public static async void Execute(Work work)
+        public static async void Execute(Work work, object owner)
         {
             try
             {
@@ -22,10 +22,15 @@ namespace Base.Mvvm
             catch (Exception e)
             {
                 ActionExceptionEventArgs e1 = new ActionExceptionEventArgs(e);
-                WorkException?.Invoke(typeof(BackgroudWork), e1);
+                WorkException?.Invoke(owner, e1);
                 if (!e1.IsHandled)
                     throw e;
             }
+        }
+
+        public static void Execute(Work work)
+        {
+            Execute(work, work);
         }
     }
 }

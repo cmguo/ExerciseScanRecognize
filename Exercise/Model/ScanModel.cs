@@ -83,15 +83,25 @@ namespace Exercise.Model
                     scanDevice.Open();
                     scanDevice.Duplex = true;
                     //scanDevice.ImageFormat = "Jfif";
+               scanDevice.Scan(count);
                });
                 // 必须主线程
-               scanDevice.Scan(count);
             }
             catch (Exception e)
             {
                 IsScanning = false;
                 throw e;
             }
+        }
+
+        public void PauseScan()
+        {
+            scanDevice.PauseScan();
+        }
+
+        public void ResumeScan()
+        {
+            scanDevice.ResumeScan();
         }
 
         public Task CancelScan()

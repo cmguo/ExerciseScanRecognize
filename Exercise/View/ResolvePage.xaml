@@ -39,7 +39,7 @@
                 </TreeView.ItemTemplate>
             </TreeView>
             <Border Background="Black" HorizontalAlignment="Stretch">
-                <Image />
+                <Image Source="{Binding SelectedException.Page.PagePath}"/>
             </Border>
             <Frame Content="{Binding SelectedException, Converter={StaticResource ExceptionPageConverter}}" Width="400"/>
         </StackPanel>

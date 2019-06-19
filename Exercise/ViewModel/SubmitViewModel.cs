@@ -19,7 +19,7 @@ namespace Exercise.ViewModel
 
         public SubmitViewModel()
         {
-            ExerciseName = exerciseModel.ExerciseData.ExerciseName;
+            ExerciseName = exerciseModel.ExerciseData.Title;
             Task = submitModel.SubmitTasks[exerciseModel.SavePath];
             Task.PropertyChanged += Task_PropertyChanged; ;
         }

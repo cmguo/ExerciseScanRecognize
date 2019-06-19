@@ -1,12 +1,13 @@
 ﻿using Exercise.Algorithm;
+using Newtonsoft.Json;
 using System.Collections.Generic;
 
 namespace Exercise.Service
 {
     public class ExerciseData
     {
-        public string ExerciseId { get; set; }
-        public string ExerciseName { get; set; }
+        public string Title { get; set; }
+        [JsonProperty("typesettingResultList")]
         public IList<PageData> Pages { get; set; }
     }
 }

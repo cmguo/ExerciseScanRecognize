@@ -30,6 +30,10 @@ namespace Exercise
 
         void CancelScan();
 
+        void PauseScan();
+
+        void ResumeScan();
+
         void Close();
     }
 

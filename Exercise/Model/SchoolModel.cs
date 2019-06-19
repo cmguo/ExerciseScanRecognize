@@ -70,9 +70,7 @@ namespace Exercise.Model
 
         public void GetLostPageStudents(Action<StudentInfo> visitor)
         {
-            IEnumerable<StudentInfo> students = schoolData.StudentInfoList.Where(
-                s => Classes.FirstOrDefault(c => c.ClassId == s.ClassId) != null && (s.AnswerPages == null || s.AnswerPages.Contains(null)));
-            foreach (StudentInfo s in students)
+            foreach (StudentInfo s in Classes.Select(c => c.Students.Where(s => s.AnswerPages == null)))
                 visitor(s);
         }
 

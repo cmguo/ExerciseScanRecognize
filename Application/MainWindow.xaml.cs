@@ -10,6 +10,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using Application.Misc;
 using Panuon.UI;
 
 namespace Application
@@ -25,6 +26,7 @@ namespace Application
             this.MaxHeight = SystemParameters.MaximizedPrimaryScreenHeight;
             this.MaxWidth = SystemParameters.MaximizedPrimaryScreenWidth;
             InitializeComponent();
+            ScanDeviceSaraff.Init(this);
             LoadNavButtons();
             Result = 0;
             frmMain.Navigated += FrmMain_Navigated;

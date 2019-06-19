@@ -53,9 +53,9 @@ namespace Exercise.Model
             List<ClassDetail> classes = SchoolModel.Instance.Classes.Select(c => new ClassDetail()
             {
                 ClassName = c.ClassName,
-                ResultCount = c.Students.Where(s => s.AnswerPages.IndexOf(null) < 0).Count(),
+                ResultCount = c.Students.Where(s => s.AnswerPages.Any(p => p.StudentCode == null)).Count(),
             }).ToList();
-            Record record = new Record() { ExerciseName = ExerciseModel.Instance.ExerciseData.ExerciseName, ClassDetails = classes };
+            Record record = new Record() { ExerciseName = ExerciseModel.Instance.ExerciseData.Title, ClassDetails = classes };
             await JsonPersistent.Save(path + "\\record.json", record);
         }
 
@@ -81,6 +81,7 @@ namespace Exercise.Model
                 }
                 catch (Exception e)
                 {
+                    Console.Out.WriteLine("LoadLocal", e.Message);
                 }
             }
         }

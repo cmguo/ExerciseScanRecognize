@@ -11,7 +11,6 @@ namespace Application
         App()
         {
             ErrorMessageBox.Init();
-            ScanDeviceSaraff.Init();
             Jni.Init();
         }
     }

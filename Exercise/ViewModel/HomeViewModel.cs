@@ -26,8 +26,8 @@ namespace Exercise.ViewModel
         private async Task Start(object obj)
         {
             await exerciseModel.NewTask();
-            //await scanModel.Scan();
             (obj as System.Windows.Controls.Page).NavigationService.Navigate(new ScanPage());
+            await scanModel.Scan();
         }
     }
 }

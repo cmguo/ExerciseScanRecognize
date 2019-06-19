@@ -19,7 +19,7 @@ namespace Exercise.View.Resolve
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
             ExerciseModel.Exception ex = value as Model.ExerciseModel.Exception;
-            Page page = ex.Object as Page;
+            Page page = ex.Page;
             if (ex == null)
                 return null;
             switch (ex.Type)

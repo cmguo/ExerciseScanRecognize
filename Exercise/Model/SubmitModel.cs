@@ -53,14 +53,14 @@ namespace Exercise.Model
             service = Services.Get<IExercise>();
         }
 
-        public async Task Save(string path, ExerciseData exercise, ICollection<StudentInfo> students)
+        public async Task Save(string path, string exerciseId, ExerciseData exercise, ICollection<StudentInfo> students)
         {
             IList<SubmitData.AnswerInfo> data = students.Select(s => new SubmitData.AnswerInfo()
             {
                 StudentId = s.StudentNo,
-                PageInfo = s.AnswerPages.Where(p => p != null).Select(p => p.Answer).ToList()
+                PageInfo = s.AnswerPages.Where(p => p.StudentCode != null).Select(p => p.Answer).ToList()
             }).ToList();
-            SubmitData sdata = new SubmitData() { HomeworkId = exercise.ExerciseId, PaperId = exercise.ExerciseId, Data = data };
+            SubmitData sdata = new SubmitData() { PaperId = exerciseId, Data = data };
             SubmitTasks[path] = new SubmitTask() { Data = sdata };
             await JsonPersistent.Save(path + "\\submit.json", sdata);
         }

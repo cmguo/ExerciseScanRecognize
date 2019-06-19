@@ -38,14 +38,14 @@ namespace Exercise.ViewModel
             ContinueCommand = new RelayCommand((e) => Continue(e));
             ResolveCommand = new RelayCommand((e) => Resolve(e));
             SubmitCommand = new RelayCommand((e) => Submit(e));
-            ExerciseName = exerciseModel.ExerciseData.ExerciseName;
-            StudentCount = exerciseModel.PageStudents.Where(s => s.AnswerPages.IndexOf(null) < 0).Count();
+            ExerciseName = exerciseModel.ExerciseData.Title;
+            StudentCount = exerciseModel.PageStudents.Where(s => s.AnswerPages.Any(p => p.StudentCode == null)).Count();
             ExceptionCount = exerciseModel.Exceptions.SelectMany(el => el.Exceptions).Count();
             ClassDetails = schoolModel.Classes.Select(c => new ClassDetail()
             {
                 ClassName = c.ClassName,
                 StudentCount = c.Students.Count(),
-                ResultCount = c.Students.Where(s => s.AnswerPages.IndexOf(null) < 0).Count(),
+                ResultCount = c.Students.Where(s => s.AnswerPages.Any(p => p.StudentCode == null)).Count(),
             }).ToList();
             Exceptions = exerciseModel.Exceptions;
         }

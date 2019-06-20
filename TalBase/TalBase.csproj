@@ -31,10 +31,13 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Microsoft.VisualBasic" />
     <Reference Include="Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\Newtonsoft.Json.12.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
+    <Reference Include="PresentationCore" />
+    <Reference Include="PresentationFramework" />
     <Reference Include="Refit">
       <HintPath>..\packages\Refit.4.7.9\lib\net461\Refit.dll</HintPath>
     </Reference>
@@ -55,12 +58,17 @@
     <Compile Include="Service\ServiceException.cs" />
     <Compile Include="Service\Nothing.cs" />
     <Compile Include="Service\ResultSerializer.cs" />
+    <Compile Include="Utils\Utils.cs" />
     <Compile Include="ViewModel\ViewModelBase.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Base\Base.csproj">
       <Project>{2f6a6a39-eed7-4dba-a62c-cbdf3ce0f1bc}</Project>
       <Name>Base</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Panuon.UI\Panuon.UI.csproj">
+      <Project>{72b3698e-1784-4101-99ae-fc7b8f48e96d}</Project>
+      <Name>Panuon.UI</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

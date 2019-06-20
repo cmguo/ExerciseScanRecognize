@@ -4,6 +4,9 @@ using Exercise.View;
 using Panuon.UI;
 using System;
 using System.Threading.Tasks;
+using System.Windows.Navigation;
+using TalBase.ViewModel;
+using TalBase.Utils;
 
 namespace Exercise.ViewModel
 {
@@ -32,6 +35,10 @@ namespace Exercise.ViewModel
 
         private async Task Start(object obj)
         {
+            if (!NetWorkManager.CheckNetWorkAvailable())
+            {
+                return;
+            }
             try
             {
                 SourceIndex = SourceIndex;

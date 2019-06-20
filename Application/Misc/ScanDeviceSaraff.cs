@@ -47,6 +47,11 @@ namespace Application.Misc
             }
             set
             {
+                if (SourceIndex == value)
+                {
+                    twain32.OpenDataSource();
+                    return;
+                }
                 twain32.CloseDataSource();
                 twain32.SourceIndex = value;
                 OpenDataSource();
@@ -89,7 +94,7 @@ namespace Application.Misc
             set => twain32.Capabilities.YResolution.Set(value);
         }
 
-        public bool PaperDetectable => twain32.Capabilities.PaperDetectable.GetCurrent();
+        public bool FeederLoaded => twain32.Capabilities.FeederLoaded.GetCurrent();
 
         public ICollection<string> ImageFormats
         {

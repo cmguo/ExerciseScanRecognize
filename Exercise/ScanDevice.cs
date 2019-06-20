@@ -31,7 +31,7 @@ namespace Exercise
         float XResolution { get; set; }
         float YResolution { get; set; }
 
-        bool PaperDetectable { get; }
+        bool FeederLoaded { get; }
 
         void Open();
 

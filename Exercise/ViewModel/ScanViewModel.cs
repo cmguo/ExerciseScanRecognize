@@ -58,7 +58,7 @@ namespace Exercise.ViewModel
 
         protected virtual void Continue(object obj)
         {
-            while (!scanModel.PaperDetectable)
+            while (!scanModel.FeederLoaded)
             {
                 PUMessageBox.ShowConfirm("扫描仪里面没有纸张，请添加试卷。", "提示");
             }

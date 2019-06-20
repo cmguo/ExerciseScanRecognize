@@ -45,7 +45,7 @@ namespace Exercise.Model
             set => scanDevice.SourceIndex = value;
         }
 
-        public bool PaperDetectable => scanDevice.PaperDetectable;
+        public bool FeederLoaded => scanDevice.FeederLoaded;
 
         private bool _IsScannig;
         public bool IsScanning

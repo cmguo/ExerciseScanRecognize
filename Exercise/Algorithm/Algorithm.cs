@@ -37,7 +37,10 @@ namespace Exercise.Algorithm
         {
             string args = JsonConvert.SerializeObject(input, settings);
             string result = AnswerSheetAnalyze.analyzeAnswerSheet(method, args);
-            return JsonConvert.DeserializeObject<Result<O>>(result, settings).Data;
+            Result<O> result1 = JsonConvert.DeserializeObject<Result<O>>(result, settings);
+            if (result1.Code != 0)
+                throw new AlgorithmException(result1.Code, result1.Message);
+            return result1.Data;
         }
 
         public async void Test()

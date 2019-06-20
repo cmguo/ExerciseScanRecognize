@@ -70,7 +70,15 @@ namespace Exercise.Model
             savePath = path;
         }
 
-        public async Task Scan(short count = -1)
+        public async Task Open()
+        {
+            await Task.Run(() => {
+                scanDevice.Open();
+                scanDevice.DuplexEnabled = true;
+            });
+        }
+
+        public void Scan(short count = -1)
         {
             if (IsScanning)
                 return;
@@ -79,13 +87,7 @@ namespace Exercise.Model
             scanIndex = 0;
             try
             {
-                await Task.Run(() => {
-                    scanDevice.Open();
-                    scanDevice.DuplexEnabled = true;
-                    //scanDevice.ImageFormat = "Jfif";
                scanDevice.Scan(count);
-               });
-                // 必须主线程
             }
             catch (Exception e)
             {
@@ -174,18 +176,22 @@ namespace Exercise.Model
         private async Task AddImage(string fileName)
         {
             Page page = new Page() { ScanBatch = scanBatch, ScanIndex = ++scanIndex, PagePath = fileName };
-            if (lastPage == null)
+            Page page1 = null;
+            lock (mutex)
             {
-                lastPage = page;
-                return;
+                if (lastPage == null)
+                {
+                    lastPage = page;
+                    return;
+                }
+                page1 = lastPage;
+                lastPage = null;
             }
-            Page page1 = lastPage;
-            lastPage = null;
+            Console.Out.WriteLine("AddImage " + fileName);
             Page page2 = page;
             Page[] pages = new Page[] { page1, page2 };
             await Task.Factory.StartNew(() => ScanTwoPage(pages));
             Pages.Add(pages[0]);
-            lastPage = null;
         }
 
         private void ScanTwoPage(Page[] pages)

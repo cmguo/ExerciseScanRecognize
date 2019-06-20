@@ -5,7 +5,8 @@ namespace Exercise.Algorithm
 {
     public class PageData
     {
-        [JsonPropertyAttribute(Required = Required.Default)]
+        [JsonProperty(Required = Required.Default)]
+        [JsonConverter(typeof(ByteArrayJsonConverter))]
         public byte[] ImgBytes { get; set; }
         public int numOfAreaMarkers { get; set; }
         public IList<Area> AreaInfo { get; set; }

@@ -65,6 +65,7 @@
   <ItemGroup>
     <Compile Include="Algorithm\Algorithm.cs" />
     <Compile Include="Algorithm\AnswerData.cs" />
+    <Compile Include="Algorithm\ByteArrayJsonConverter.cs" />
     <Compile Include="Algorithm\CommonData.cs" />
     <Compile Include="Algorithm\PageData.cs" />
     <Compile Include="Algorithm\PageRaw.cs" />

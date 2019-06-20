@@ -1,6 +1,7 @@
 ﻿using Base.Mvvm;
 using Exercise.Model;
 using Exercise.View;
+using Panuon.UI;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -25,9 +26,17 @@ namespace Exercise.ViewModel
 
         private async Task Start(object obj)
         {
+            try
+            {
+                await scanModel.Open();
+            }
+            catch (Exception e)
+            {
+                PUMessageBox.ShowConfirm("扫描仪未连接，请检查后重试？", "提示", Buttons.OK);
+            }
             await exerciseModel.NewTask();
             (obj as System.Windows.Controls.Page).NavigationService.Navigate(new ScanPage());
-            await scanModel.Scan();
+            scanModel.Scan();
         }
     }
 }

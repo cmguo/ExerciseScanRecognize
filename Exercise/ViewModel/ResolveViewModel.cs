@@ -23,9 +23,11 @@ namespace Exercise.ViewModel
 
         #region Commands
 
+        public RelayCommand RescanCommand { get; private set; }
         public RelayCommand ConitnueCommand { get; private set; }
         public RelayCommand IgnoreCommand { get; set; }
-        public RelayCommand DropCommand { get; set; }
+        public RelayCommand RemovePageCommand { get; set; }
+        public RelayCommand RemoveStudentCommand { get; set; }
 
         #endregion
 
@@ -34,9 +36,11 @@ namespace Exercise.ViewModel
 
         public ResolveViewModel()
         {
+            RescanCommand = new RelayCommand((e) => scanModel.Scan(-1));
             ConitnueCommand = new RelayCommand((e) => scanModel.Scan(-1));
             IgnoreCommand = new RelayCommand((e) => exerciseModel.Resolve(SelectedException, ResolveType.Ignore));
-            DropCommand = new RelayCommand((e) => exerciseModel.Resolve(SelectedException, ResolveType.RemovePage));
+            RemovePageCommand = new RelayCommand((e) => exerciseModel.Resolve(SelectedException, ResolveType.RemovePage));
+            RemoveStudentCommand = new RelayCommand((e) => exerciseModel.Resolve(SelectedException, ResolveType.RemoveStudent));
             Exceptions = exerciseModel.Exceptions;
         }
 

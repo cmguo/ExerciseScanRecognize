@@ -84,6 +84,8 @@ namespace Application.Misc
             twain32.Language = TwLanguage.CHINESE_SIMPLIFIED;
             twain32.Country = TwCountry.CHINA;
             twain32.ShowUI = false;
+            var versionInfo = FileVersionInfo.GetVersionInfo(Assembly.GetEntryAssembly().Location);
+            twain32.AppProductName = versionInfo.ProductName;
             twain32.SetupFileXferEvent += Twain32_SetupFileXferEvent;
             twain32.XferDone += Twain32_XferDone;
             twain32.FileXferEvent += Twain32_FileXferEvent; // 很慢
@@ -94,15 +96,17 @@ namespace Application.Misc
         public void Open()
         {
             twain32.OpenDSM();
+            //twain32.SelectSource();
             twain32.OpenDataSource();
             twain32.Capabilities.Indicators.Set(false);
             var versionInfo = FileVersionInfo.GetVersionInfo(Assembly.GetEntryAssembly().Location);
             if (twain32.Capabilities.Author.IsSupported(TwQC.Set))
                 twain32.Capabilities.Author.Set(versionInfo.CompanyName);
             if (twain32.Capabilities.Caption.IsSupported(TwQC.Set))
-                twain32.Capabilities.Caption.Set(AppDomain.CurrentDomain.FriendlyName);
+                twain32.Capabilities.Caption.Set(versionInfo.ProductName);
             twain32.Capabilities.CameraSide.Set(TwCS.Both);
-            twain32.Capabilities.AutoDiscardBlankPages.Set(TwBP.Disable);
+            if (twain32.Capabilities.AutoDiscardBlankPages.IsSupported(TwQC.Set))
+                twain32.Capabilities.AutoDiscardBlankPages.Set(TwBP.Disable);
             twain32.Capabilities.DuplexEnabled.Set(true);
             twain32.Capabilities.ImageFileFormat.Set(TwFF.Jfif);
             twain32.Capabilities.Compression.Set(TwCompression.Jpeg);
@@ -184,6 +188,12 @@ namespace Application.Misc
             }
         }
 
+        private void Twain32_XferDone(object sender, Twain32.XferDoneEventArgs e)
+        {
+            Console.Out.WriteLine("Twain32_XferDone");
+            CheckStatus(e);
+        }
+
         private void Twain32_FileXferEvent(object sender, Twain32.FileXferEventArgs e)
         {
             Console.Out.WriteLine("Twain32_FileXferEvent: " + e.ImageFileXfer.FileName);
@@ -191,12 +201,6 @@ namespace Application.Misc
             {
                 OnImage(this, new ScanEvent() { FileName = e.ImageFileXfer.FileName });
             }
-        }
-
-        private void Twain32_XferDone(object sender, Twain32.XferDoneEventArgs e)
-        {
-            Console.Out.WriteLine("Twain32_XferDone");
-            CheckStatus(e);
         }
 
         private void Twain32_AcquireCompleted(object sender, EventArgs e)

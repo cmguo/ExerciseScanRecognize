@@ -13,7 +13,7 @@
         <Grid.RowDefinitions>
             <RowDefinition></RowDefinition>
         </Grid.RowDefinitions>
-        <Frame Name="frmMain" NavigationUIVisibility="Hidden" Source="pack://application:,,,/Account;component/View/AccountPage.xaml" VerticalAlignment="Center"/>
+        <Frame Name="frmMain" NavigationUIVisibility="Hidden" Source="pack://application:,,,/Account;component/View/AccountPage.xaml"/>
     </Grid>
 </tal:PUWindow>
     <!--Source="pack://application:,,,/Exercise;component/View/ScanPage.xaml"-->

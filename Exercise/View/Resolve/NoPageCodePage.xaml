@@ -16,15 +16,6 @@
     <Grid>
         <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Orientation="Vertical">
             <TextBlock Text="该试卷无法识别，请放入试卷，重新扫描。" />
-            <Button Command="{Binding ScanCommand}" 
-                    CommandParameter="{Binding RelativeSource={RelativeSource AncestorType={x:Type Page}}}" 
-                    Content="重新扫描" />
-            <Button Command="{Binding DropCommand}" 
-                    CommandParameter="{Binding RelativeSource={RelativeSource AncestorType={x:Type Page}}}" 
-                    Content="忽略该试卷" />
-            <Button Command="{Binding ContinueCommand}" 
-                    CommandParameter="{Binding RelativeSource={RelativeSource AncestorType={x:Type Page}}}" 
-                    Content="批量扫描" />
         </StackPanel>
     </Grid>
 </Page>

@@ -29,9 +29,6 @@
             <Button Command="{Binding ComfirmCommand}" 
                     CommandParameter="{Binding RelativeSource={RelativeSource AncestorType={x:Type Page}}}" 
                     Content="确认" />
-            <Button Command="{Binding RemoveCommand}" 
-                    CommandParameter="{Binding RelativeSource={RelativeSource AncestorType={x:Type Page}}}" 
-                    Content="删除此份试卷" />
         </StackPanel>
     </Grid>
 </Page>

@@ -6,6 +6,7 @@ namespace Exercise.Algorithm
     public class AnswerData
     {
         [JsonProperty(Required = Required.Default)]
+        [JsonConverter(typeof(ByteArrayJsonConverter))]
         public byte[] RedressedImgBytes { get; set; }
 
         [JsonProperty(Required = Required.Default)]

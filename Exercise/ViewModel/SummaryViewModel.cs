@@ -63,9 +63,9 @@ namespace Exercise.ViewModel
             (obj as System.Windows.Controls.Page).NavigationService.Navigate(page);
         }
 
-        private async Task Continue(object obj)
+        private void Continue(object obj)
         {
-            await scanModel.Scan();
+            scanModel.Scan();
             (obj as System.Windows.Controls.Page).NavigationService.Navigate(new ScanPage());
         }
 

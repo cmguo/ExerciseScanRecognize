@@ -124,7 +124,7 @@ namespace Exercise.ViewModel
             }
             else
             {
-                await scanModel.Scan();
+                scanModel.Scan();
             }
         }
 

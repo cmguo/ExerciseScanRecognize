@@ -30,6 +30,23 @@ namespace Exercise.Model
 
         public ObservableCollection<Page> Pages { get; private set; }
 
+        public string[] SourceList
+        {
+            get
+            {
+                scanDevice.Open();
+                return scanDevice.SourceList;
+            }
+        }
+
+        public int SourceIndex
+        {
+            get => scanDevice.SourceIndex;
+            set => scanDevice.SourceIndex = value;
+        }
+
+        public bool PaperDetectable => scanDevice.PaperDetectable;
+
         private bool _IsScannig;
         public bool IsScanning
         {
@@ -70,14 +87,6 @@ namespace Exercise.Model
             savePath = path;
         }
 
-        public async Task Open()
-        {
-            await Task.Run(() => {
-                scanDevice.Open();
-                scanDevice.DuplexEnabled = true;
-            });
-        }
-
         public void Scan(short count = -1)
         {
             if (IsScanning)
@@ -87,7 +96,8 @@ namespace Exercise.Model
             scanIndex = 0;
             try
             {
-               scanDevice.Scan(count);
+                scanDevice.DuplexEnabled = true;
+                scanDevice.Scan(count);
             }
             catch (Exception e)
             {

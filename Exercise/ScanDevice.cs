@@ -20,12 +20,18 @@ namespace Exercise
 
         event EventHandler<ScanEvent> ScanCompleted;
 
+        string[] SourceList { get; }
+
+        int SourceIndex { get; set; }
+
         bool DuplexEnabled { get; set; }
 
         string ImageFormat { get; set; }
 
         float XResolution { get; set; }
         float YResolution { get; set; }
+
+        bool PaperDetectable { get; }
 
         void Open();
 

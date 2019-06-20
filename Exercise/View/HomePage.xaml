@@ -16,6 +16,7 @@
 
     <Grid>
         <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Orientation="Vertical">
+            <ComboBox ItemsSource="{Binding SourceList}" SelectedIndex="{Binding SourceIndex}" />
             <mu:PUButton Command="{Binding StartCommand}" 
                          Height="50"
                          Width="300"

@@ -1,12 +1,11 @@
 ﻿using Base.Mvvm;
 using Exercise.Model;
 using System.Collections.ObjectModel;
-using TalBase.ViewModel;
 using static Exercise.Model.ExerciseModel;
 
 namespace Exercise.ViewModel
 {
-    class ResolveViewModel : ViewModelBase
+    class ResolveViewModel : ScanViewModel
     {
 
         #region Properties
@@ -24,7 +23,6 @@ namespace Exercise.ViewModel
         #region Commands
 
         public RelayCommand RescanCommand { get; private set; }
-        public RelayCommand ConitnueCommand { get; private set; }
         public RelayCommand IgnoreCommand { get; set; }
         public RelayCommand RemovePageCommand { get; set; }
         public RelayCommand RemoveStudentCommand { get; set; }
@@ -36,13 +34,16 @@ namespace Exercise.ViewModel
 
         public ResolveViewModel()
         {
-            RescanCommand = new RelayCommand((e) => scanModel.Scan(-1));
-            ConitnueCommand = new RelayCommand((e) => scanModel.Scan(-1));
+            RescanCommand = new RelayCommand((e) => Rescan(e));
             IgnoreCommand = new RelayCommand((e) => exerciseModel.Resolve(SelectedException, ResolveType.Ignore));
             RemovePageCommand = new RelayCommand((e) => exerciseModel.Resolve(SelectedException, ResolveType.RemovePage));
             RemoveStudentCommand = new RelayCommand((e) => exerciseModel.Resolve(SelectedException, ResolveType.RemoveStudent));
             Exceptions = exerciseModel.Exceptions;
         }
 
+        private void Rescan(object obj)
+        {
+            base.Continue(obj);
+        }
     }
 }

@@ -23,6 +23,36 @@ namespace Application.Misc
             set => twain32.Capabilities.Indicators.Set(value);
         }
 
+        public string[] SourceList
+        {
+            get
+            {
+                string[] names = new string[twain32.SourcesCount];
+                for (int i = 0; i < names.Length; ++i)
+                    names[i] = twain32.GetSourceProductName(i);
+                return names;
+            }
+        }
+
+        public int SourceIndex
+        {
+            get
+            {
+                int index = twain32.SourceIndex;
+                if (index < 0)
+                {
+                    index = twain32.GetDefaultSource();
+                }
+                return index;
+            }
+            set
+            {
+                twain32.CloseDataSource();
+                twain32.SourceIndex = value;
+                OpenDataSource();
+            }
+        }
+
         public string CameraSide
         {
             get => twain32.Capabilities.CameraSide.GetCurrent().ToString();
@@ -58,6 +88,8 @@ namespace Application.Misc
             get => twain32.Capabilities.YResolution.GetCurrent();
             set => twain32.Capabilities.YResolution.Set(value);
         }
+
+        public bool PaperDetectable => twain32.Capabilities.PaperDetectable.GetCurrent();
 
         public ICollection<string> ImageFormats
         {
@@ -96,8 +128,13 @@ namespace Application.Misc
         public void Open()
         {
             twain32.OpenDSM();
+        }
+
+        public void OpenDataSource()
+        {
             //twain32.SelectSource();
             twain32.OpenDataSource();
+            //twain32.Capabilities.DeviceOnline.Get();
             twain32.Capabilities.Indicators.Set(false);
             var versionInfo = FileVersionInfo.GetVersionInfo(Assembly.GetEntryAssembly().Location);
             if (twain32.Capabilities.Author.IsSupported(TwQC.Set))

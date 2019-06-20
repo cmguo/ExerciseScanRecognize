@@ -5,9 +5,9 @@ namespace Exercise.View
     /// <summary>
     /// WebPage.xaml 的交互逻辑
     /// </summary>
-    public partial class ScanPage : Page
+    public partial class ScanningPage : Page
     {
-        public ScanPage()
+        public ScanningPage()
         {
             InitializeComponent();
         }

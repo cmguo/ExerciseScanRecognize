@@ -1,7 +1,6 @@
 ﻿using Base.Mvvm;
 using Exercise.Model;
 using Exercise.View;
-using MyToolkit.Mvvm;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
@@ -10,7 +9,7 @@ using static Exercise.Model.ExerciseModel;
 
 namespace Exercise.ViewModel
 {
-    class SummaryViewModel : ViewModelBase
+    class SummaryViewModel : ScanViewModel
     {
         public class ClassDetail
         {
@@ -25,7 +24,6 @@ namespace Exercise.ViewModel
         public List<ClassDetail> ClassDetails { get; private set; }
         public ObservableCollection<ExceptionList> Exceptions { get; private set; }
 
-        public RelayCommand ContinueCommand { get; set; }
         public RelayCommand ResolveCommand { get; set; }
         public RelayCommand SubmitCommand { get; set; }
 
@@ -35,7 +33,6 @@ namespace Exercise.ViewModel
 
         public SummaryViewModel() 
         {
-            ContinueCommand = new RelayCommand((e) => Continue(e));
             ResolveCommand = new RelayCommand((e) => Resolve(e));
             SubmitCommand = new RelayCommand((e) => Submit(e));
             ExerciseName = exerciseModel.ExerciseData.Title;
@@ -63,10 +60,10 @@ namespace Exercise.ViewModel
             (obj as System.Windows.Controls.Page).NavigationService.Navigate(page);
         }
 
-        private void Continue(object obj)
+        protected override void Continue(object obj)
         {
-            scanModel.Scan();
-            (obj as System.Windows.Controls.Page).NavigationService.Navigate(new ScanPage());
+            base.Continue(obj);
+            (obj as System.Windows.Controls.Page).NavigationService.Navigate(new ScanningPage());
         }
 
     }

@@ -1233,7 +1233,7 @@
             <Trigger Property="AnimationStyle"
                      Value="Scale">
                 <Setter Property="Opacity"
-                        Value="0.5"></Setter>
+                        Value="0.1"></Setter>
                 <Setter Property="Template">
                     <Setter.Value>
                         <ControlTemplate TargetType="{x:Type local:PUWindow}">
@@ -1499,7 +1499,7 @@
                                             <Storyboard>
                                                 <DoubleAnimation Storyboard.TargetName="bdrCover"
                                                                  Storyboard.TargetProperty="Opacity"
-                                                                 To="0.7"
+                                                                 To="0.2"
                                                                  Duration="0:0:0.2"></DoubleAnimation>
                                                 <BooleanAnimationUsingKeyFrames Storyboard.TargetName="bdrCover"
                                                                                 Storyboard.TargetProperty="IsHitTestVisible">

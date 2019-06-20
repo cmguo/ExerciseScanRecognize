@@ -18,7 +18,7 @@
             <ColumnDefinition Width="*" />
             <ColumnDefinition Width="auto" />
         </Grid.ColumnDefinitions>
-        <Border Background="Black">
+        <Border Background="Black" Margin="20,20,0,20">
             <Image Source="{Binding LastPage.PagePath}"/>
         </Border>
         <StackPanel Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Center" Orientation="Vertical" Width="200">
@@ -31,7 +31,28 @@
                     </MultiBinding>
                 </TextBlock.Text>
             </TextBlock>
-            <TextBlock Text="{Binding PageCount, StringFormat=已扫描{0}张试卷}" HorizontalAlignment="Center"/>
+            <StackPanel Height="100" Background="Yellow" Width="60">
+                <Button x:Name="test" Background="White" Height="2" Width="50">
+                    <Button.Triggers>
+                        <EventTrigger RoutedEvent="Page.Loaded">
+                            <EventTrigger.Actions>
+                                <BeginStoryboard Name="sb2">
+                                    <Storyboard>
+                                        <ThicknessAnimation From="0,20,0,0" To="0,80,0,0"
+                                                            Storyboard.TargetName="test"
+                                                            RepeatBehavior="Forever"
+                                                            Duration="0:0:4"
+                                                            AutoReverse="True"
+                                                            Storyboard.TargetProperty="Margin"
+                                                            />
+                                    </Storyboard>
+                                </BeginStoryboard>
+                            </EventTrigger.Actions>
+                        </EventTrigger>
+                    </Button.Triggers>
+                </Button>
+            </StackPanel>
+            <TextBlock Text="{Binding PageCount, StringFormat=已扫描{0}张试卷}" HorizontalAlignment="Center" Margin="0,40,0,0"/>
             <TextBlock Text="{Binding StudentCount, StringFormat=共计{0}份试卷}" HorizontalAlignment="Center"/>
             <Button Command="{Binding EndScanCommand}"
                     CommandParameter="{Binding RelativeSource={RelativeSource AncestorType={x:Type Page}}}" 

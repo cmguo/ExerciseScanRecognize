@@ -1,7 +1,6 @@
-
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.28307.421
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29009.5
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Application", "Application\Application.csproj", "{11351FBD-66EC-49C0-823B-D2228868639D}"
 	ProjectSection(ProjectDependencies) = postProject
@@ -25,7 +24,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Exercise", "Exercise\Exerci
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Panuon.UI", "Panuon.UI\Panuon.UI.csproj", "{72B3698E-1784-4101-99AE-FC7B8F48E96D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Saraff.Twain", "..\Saraff.Twain.NET\Saraff.Twain.csproj", "{658F9851-4D1C-4D57-904E-F9D7DA7F24FC}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Saraff.Twain", "submodule\Saraff.Twain.NET\Saraff.Twain.csproj", "{658F9851-4D1C-4D57-904E-F9D7DA7F24FC}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

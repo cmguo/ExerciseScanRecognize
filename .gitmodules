@@ -1,0 +1,3 @@
+[submodule "submodule/Saraff.Twain.NET"]
+	path = submodule/Saraff.Twain.NET
+	url = git@github.com:cmguo/Saraff.Twain.NET.git

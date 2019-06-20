@@ -5,6 +5,7 @@
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
       xmlns:local="clr-namespace:Exercise.View"
       xmlns:vm="clr-namespace:Exercise.ViewModel"
+      xmlns:mu="clr-namespace:Panuon.UI;assembly=Panuon.UI"
       mc:Ignorable="d" 
       d:DesignHeight="450" d:DesignWidth="800"
       Title="HomePage">
@@ -15,10 +16,21 @@
 
     <Grid>
         <StackPanel Orientation="Vertical">
-             <StackPanel Orientation="Horizontal">
-                <StackPanel HorizontalAlignment="Stretch" VerticalAlignment="Center" Orientation="Vertical">
-                    <TextBlock Text="{Binding ExerciseName, StringFormat=《{0}》}" />
-                    <TextBlock>
+            <Grid Height="100" Background="LightGray">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                </Grid.ColumnDefinitions>
+                <StackPanel HorizontalAlignment="Stretch" VerticalAlignment="Center" Orientation="Vertical" 
+                            Grid.ColumnSpan="3" Margin="30,0,0,0">
+                    <TextBlock Text="{Binding ExerciseName, StringFormat=《{0}》}" FontSize="16" 
+                               Margin="0,0,0,10"
+                               />
+                    <TextBlock FontSize="20">
                         <TextBlock.Text>
                             <MultiBinding StringFormat="本次扫描共收回{0}份试卷。存在{1}项异常。">
                                 <Binding Path="StudentCount" />
@@ -27,38 +39,87 @@
                         </TextBlock.Text>
                     </TextBlock>
                 </StackPanel>
-                <Button Command="{Binding ContinueCommand}" 
+
+                <mu:PUButton Command="{Binding ContinueCommand}" 
                     CommandParameter="{Binding RelativeSource={RelativeSource AncestorType={x:Type Page}}}" 
-                    Content="继续扫描" VerticalAlignment="Center" />
-                <Button Command="{Binding ResolveCommand}" 
+                    Content="继续扫描" VerticalAlignment="Center" 
+                             FontSize="16"
+                    Grid.Column="3"
+                             Background="White"
+                             Foreground="Black"
+                        Margin="0,0,5,0"
+                             BorderCornerRadius="3"
+                             Padding="0,10,0,10"
+                        />
+                <mu:PUButton Command="{Binding ResolveCommand}" 
                     CommandParameter="{Binding RelativeSource={RelativeSource AncestorType={x:Type Page}}}" 
-                    Content="处理异常" VerticalAlignment="Center" />
-                <Button Command="{Binding SubmitCommand}"
+                    Content="处理异常" VerticalAlignment="Center"
+                        Grid.Column="4"
+                             FontSize="16"
+                             BorderCornerRadius="3"
+                             Background="Blue"
+                             Foreground="White"
+                        Margin="10,0,5,0"
+                             Padding="0,10,0,10"
+                        />
+                <mu:PUButton Command="{Binding SubmitCommand}"
                     CommandParameter="{Binding RelativeSource={RelativeSource AncestorType={x:Type Page}}}" 
-                    Content="上传扫描结果" VerticalAlignment="Center" />
-            </StackPanel>
-            <TextBlock Text="试卷扫描详情" />
-            <StackPanel Orientation="Horizontal">
-                <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Orientation="Vertical">
-                    <TextBlock Grid.Row="2" Grid.Column="0" Text="{Binding StudentCount, StringFormat=共收回{0}份试卷}" />
-                    <DataGrid  Grid.Row="3" Grid.Column="0" AutoGenerateColumns="False" ItemsSource="{Binding ClassDetails}">
+                    Content="上传扫描结果" VerticalAlignment="Center"
+                        BorderCornerRadius="3"
+                        Grid.Column="5"
+                             Foreground="Black"
+                             Background="White"
+                             FontSize="16"
+                        Margin="10,0,20,0"
+                             Padding="0,10,0,10"
+                        />
+            </Grid>
+            <Grid Margin="20,0,20,0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                </Grid.ColumnDefinitions>
+           
+                <StackPanel  VerticalAlignment="Center" Orientation="Vertical" HorizontalAlignment="Left">
+                    <TextBlock Text="试卷扫描详情" Margin="0,20,0,0" FontSize="16"/>
+                    <TextBlock Grid.Row="2" Grid.Column="0" Text="{Binding StudentCount, StringFormat=共收回{0}份试卷}" 
+                               FontSize="14"
+                               Margin="0,20,0,0"/>
+                    <DataGrid  Grid.Row="3" Grid.Column="0" AutoGenerateColumns="False" ItemsSource="{Binding ClassDetails}"
+                               Margin="0,20,0,0"  RowHeaderWidth="0" ColumnHeaderHeight="50"
+                               GridLinesVisibility="Horizontal"
+                               BorderThickness="0,0,0,0"
+                               HorizontalGridLinesBrush="Gray"
+                               >
+
                         <DataGrid.Columns>
-                            <DataGridTextColumn Header="班级" Binding="{Binding ClassName}" />
-                            <DataGridTextColumn Header="回收试卷（份）" Binding="{Binding ResultCount}"/>
-                            <DataGridTextColumn Header="总人数（人）" Binding="{Binding StudentCount}"/>
+                            <DataGridTextColumn Header="班级" Binding="{Binding ClassName}" FontSize="14" Width="120"/>
+                            <DataGridTextColumn Header="回收试卷（份）" Binding="{Binding ResultCount}" FontSize="14" Width="90" />
+                            <DataGridTextColumn Header="总人数（人）" Binding="{Binding StudentCount}" FontSize="14" Width="90" />
                         </DataGrid.Columns>
                     </DataGrid>
                 </StackPanel>
-                <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Orientation="Vertical">
-                    <TextBlock Grid.Row="2" Grid.Column="1" Text="{Binding ExceptionCount, StringFormat=共存在{0}项异常}" />
-                    <DataGrid  Grid.Row="3" Grid.Column="1" AutoGenerateColumns="False" ItemsSource="{Binding Exceptions}">
+                <StackPanel  HorizontalAlignment="Left" VerticalAlignment="Center" Orientation="Vertical" Grid.Column="1">
+                    <TextBlock Grid.Row="2" Grid.Column="1" Text="{Binding ExceptionCount, StringFormat=共存在{0}项异常}" FontSize="14" Margin="0,60,0,20"/>
+                    <DataGrid  Grid.Row="2" Grid.Column="1" AutoGenerateColumns="False" ItemsSource="{Binding Exceptions}"
+                            RowHeaderWidth="0"  ColumnHeaderHeight="50" BorderThickness="0,0,0,0" GridLinesVisibility="Horizontal"
+                               HorizontalGridLinesBrush="Gray"
+                               RowHeight="30"
+                               >
+                        <DataGrid.CellStyle>
+                            <Style TargetType="DataGridCell">
+                                <Setter Property="HorizontalAlignment" Value="Center"/>
+                                <Setter Property="VerticalAlignment" Value="Center"/>
+                                <Setter Property="FontStyle" Value="Normal"/>
+                            </Style>
+                        </DataGrid.CellStyle>
                         <DataGrid.Columns>
-                            <DataGridTextColumn Header="异常项" Binding="{Binding TypeName}"/>
-                            <DataGridTextColumn Header="回收试卷" Binding="{Binding Exceptions.Count}"/>
+                            <DataGridTextColumn Header="异常项" Binding="{Binding TypeName}" FontSize="14" Width="140"/>
+                            <DataGridTextColumn Header="回收试卷" Binding="{Binding Exceptions.Count}" FontSize="14" Width="100"/>
                         </DataGrid.Columns>
                     </DataGrid>
                 </StackPanel>
-        </StackPanel>
+        </Grid>
         </StackPanel>
     </Grid>
 </Page>

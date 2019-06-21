@@ -53,6 +53,8 @@ namespace Exercise.Model
             get { return _IsScannig; }
             set
             {
+                if (_IsScannig == value)
+                    return;
                 _IsScannig = value;
                 RaisePropertyChanged("IsScanning");
                 lock (mutex)

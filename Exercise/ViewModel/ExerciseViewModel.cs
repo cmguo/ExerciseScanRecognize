@@ -37,7 +37,16 @@ namespace Exercise.ViewModel
                 StudentCount = c.Students.Count(),
                 ResultCount = c.Students.Where(s => s.AnswerPages.Any(p => p.StudentCode == null)).Count(),
             });
+            exerciseModel.PropertyChanged += ExerciseModel_PropertyChanged;
         }
 
+        private void ExerciseModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
+        {
+            if (e.PropertyName == "")
+            {
+                if (exerciseModel.ExerciseData == null)
+                    Error = 2;
+            }
+        }
     }
 }

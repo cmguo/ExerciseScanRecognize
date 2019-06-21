@@ -41,5 +41,28 @@ namespace Base.Mvvm
             return result;
         }
 
+        public static ObservableCollection<I> Select2<I>(this ObservableCollection<I> origin, Func<I, bool> predicate)
+        {
+            ObservableCollection<I> result = new ObservableCollection<I>(origin.Where(predicate));
+            origin.CollectionChanged += (s, e) =>
+            {
+                switch (e.Action)
+                {
+                    case NotifyCollectionChangedAction.Reset:
+                        result.Clear();
+                        break;
+                    case NotifyCollectionChangedAction.Add:
+                        break;
+                    case NotifyCollectionChangedAction.Remove:
+                        break;
+                    case NotifyCollectionChangedAction.Move:
+                        break;
+                    case NotifyCollectionChangedAction.Replace:
+                        throw new NotImplementedException("Replace");
+                }
+            };
+            return result;
+        }
+
     }
 }

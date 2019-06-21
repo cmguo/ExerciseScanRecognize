@@ -111,12 +111,14 @@ namespace Application.Misc
         public event EventHandler<ScanEvent> GetFileName;
         public event EventHandler<ScanEvent> ScanCompleted;
 
+        private Window window;
         private Twain32 twain32;
         private bool cancel;
         private bool pause;
 
         public ScanDeviceSaraff(Window window)
         {
+            this.window = window;
             twain32 = new Twain32(window);
             twain32.Language = TwLanguage.CHINESE_SIMPLIFIED;
             twain32.Country = TwCountry.CHINA;
@@ -241,7 +243,8 @@ namespace Application.Misc
             Console.Out.WriteLine("Twain32_FileXferEvent: " + e.ImageFileXfer.FileName);
             if (OnImage != null)
             {
-                OnImage(this, new ScanEvent() { FileName = e.ImageFileXfer.FileName });
+                window.Dispatcher.Invoke(() =>
+                    OnImage(this, new ScanEvent() { FileName = e.ImageFileXfer.FileName }));
             }
         }
 
@@ -250,7 +253,8 @@ namespace Application.Misc
             Console.Out.WriteLine("Twain32_AcquireCompleted");
             if (ScanCompleted != null)
             {
-                ScanCompleted(this, new ScanEvent());
+                window.Dispatcher.Invoke(() =>
+                    ScanCompleted(this, new ScanEvent()));
             }
         }
 
@@ -259,7 +263,8 @@ namespace Application.Misc
             Console.Out.WriteLine("Twain32_AcquireError");
             if (ScanCompleted != null)
             {
-                ScanCompleted(this, new ScanEvent());
+                window.Dispatcher.Invoke(() =>
+                    ScanCompleted(this, new ScanEvent()));
             }
         }
 

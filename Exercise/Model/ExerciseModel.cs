@@ -6,6 +6,7 @@ using MyToolkit.Command;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -101,9 +102,12 @@ namespace Exercise.Model
             */
         }
 
-        internal void Discard()
+        public void Discard()
         {
-            throw new NotImplementedException();
+            string path = SavePath;
+            Clear();
+            if (path != null)
+                Directory.Delete(path, true);
         }
 
         public async Task NewTask()
@@ -116,6 +120,8 @@ namespace Exercise.Model
 
         public async Task MakeResult()
         {
+            if (ExerciseData == null)
+                throw new NullReferenceException("没有有效试卷信息");
             schoolModel.GetLostPageStudents(s => {
                 s.AnswerPages = new List<Page>();
                 for (int i = 0; i < ExerciseData.Pages.Count; i += 2)
@@ -185,10 +191,7 @@ namespace Exercise.Model
             {
                 if (scanModel.PageCode == null)
                     return;
-                exerciseId = scanModel.PageCode;
-                ExerciseData = await service.GetExercise(exerciseId);
-                RaisePropertyChanged("ExerciseData");
-                scanModel.SetExerciseData(ExerciseData);
+                LoadExercise();
             }
         }
 
@@ -198,6 +201,22 @@ namespace Exercise.Model
             {
                 foreach (Page page in e.NewItems)
                     AddPage(page);
+            }
+        }
+
+        private async void LoadExercise()
+        {
+            try
+            {
+                exerciseId = scanModel.PageCode;
+                ExerciseData = await service.GetExercise(exerciseId);
+                RaisePropertyChanged("ExerciseData");
+                scanModel.SetExerciseData(ExerciseData);
+            }
+            catch
+            {
+                ExerciseData = null;
+                RaisePropertyChanged("ExerciseData");
             }
         }
 

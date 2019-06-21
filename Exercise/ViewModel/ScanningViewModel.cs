@@ -33,6 +33,8 @@ namespace Exercise.ViewModel
         #region Commands
 
         public RelayCommand DiscardCommand { get; set; }
+        public RelayCommand FinishCommand { get; set; }
+        public RelayCommand ErrorCommand { get; set; }
 
         #endregion
 
@@ -42,6 +44,8 @@ namespace Exercise.ViewModel
         public ScanningViewModel()
         {
             DiscardCommand = new RelayCommand((e) => Discard(e));
+            FinishCommand = new RelayCommand((e) => Finish(e));
+            ErrorCommand = new RelayCommand((e) => OnError(e));
             exerciseModel.PageStudents.CollectionChanged += PageStudents_CollectionChanged;
             exerciseModel.PropertyChanged += ExerciseModel_PropertyChanged;
         }
@@ -96,11 +100,44 @@ namespace Exercise.ViewModel
             }
         }
 
+        private async Task OnError(object obj)
+        {
+            bool isScanning = IsScanning;
+            if (isScanning)
+                scanModel.PauseScan();
+            string msg = null;
+            if (Error == 0)
+                msg = "当前试卷二维码无法识别，不能查看结果";
+            else if (Error == 1)
+                msg = "当前试卷二维码无法识别，请检查试卷后重试";
+            else if (Error == 2)
+                msg = "数据连接异常，请联系服务人员";
+            bool? isConfirm = PUMessageBox.ShowConfirm(msg, "提示");
+            if (isConfirm != null && isConfirm.Value)
+            {
+                await scanModel.CancelScan();
+                exerciseModel.Discard();
+                (obj as System.Windows.Controls.Page).NavigationService.Navigate(new HomePage());
+            }
+            else
+            {
+                if (isScanning)
+                    scanModel.ResumeScan();
+                else
+                    base.Continue(obj);
+            }
+        }
+
         private async Task Finish(object obj)
         {
             bool? isConfirm = PUMessageBox.ShowConfirm("扫描仪已无试卷，请添加试卷继续扫描。若已全部扫描，可查看扫描结果。", "提示");
             if (isConfirm != null && !isConfirm.Value)
             {
+                if (scanModel.PageCode == null || exerciseModel.ExerciseData == null)
+                {
+                    await OnError(obj);
+                    return;
+                }
                 await exerciseModel.MakeResult();
                 (obj as System.Windows.Controls.Page).NavigationService.Navigate(new SummaryPage());
             }

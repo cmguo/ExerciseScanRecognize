@@ -26,6 +26,15 @@ namespace Exercise.ViewModel
             private set { _pageCount = value; RaisePropertyChanged("PageCount"); }
         }
 
+        public int _error;
+        public int Error
+        {
+            get { return _error; }
+            protected set { _error = value; RaisePropertyChanged("Error"); }
+        }
+
+        public bool IsScanning => scanModel.IsScanning;
+
         #endregion
 
         #region Commands
@@ -42,13 +51,14 @@ namespace Exercise.ViewModel
             ContinueCommand = new RelayCommand((e) => Continue(e));
             EndScanCommand = new RelayCommand((e) => EndScan(e));
             scanModel.Pages.CollectionChanged += Pages_CollectionChanged;
+            scanModel.PropertyChanged += ScanModel_PropertyChanged;
         }
 
         #region Command Implements
 
         protected virtual async Task EndScan(object obj)
         {
-            await Task.FromException(new NotImplementedException("EndScan"));
+            await scanModel.CancelScan();
         }
 
         protected virtual async Task Close(object obj)
@@ -74,6 +84,15 @@ namespace Exercise.ViewModel
             Page page = e.NewItems[0] as Page;
             LastPage = page;
             PageCount = scanModel.Pages.Count;
+            if (PageCount >= 5 && scanModel.PageCode == null)
+                Error = 1;
         }
+
+        private void ScanModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
+        {
+            if (e.PropertyName == "IsScanning")
+                RaisePropertyChanged(e.PropertyName);
+        }
+
     }
 }

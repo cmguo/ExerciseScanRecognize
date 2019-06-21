@@ -8,7 +8,7 @@ namespace Exercise.Algorithm
 {
     public class QRCodeData
     {
-        public string paperInfo { get; set; }
-        public string studentInfo { get; set; }
+        public string PaperInfo { get; set; }
+        public string StudentInfo { get; set; }
     }
 }

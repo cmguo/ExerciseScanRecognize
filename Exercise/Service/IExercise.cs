@@ -18,7 +18,7 @@ namespace Exercise.Service
         Task<SchoolData> getAllClass();
 
         [Get("/getAnswersheetData")]
-        Task<ExerciseData> GetExercise(string pagerId);
+        Task<ExerciseData> GetExercise([Query("paperId")] string paperId);
 
         [Get("/getTempHomeWorkIdTempId")]
         Task<string> GetSubmitId();

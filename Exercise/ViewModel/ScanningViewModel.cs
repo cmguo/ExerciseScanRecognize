@@ -10,7 +10,7 @@ using Panuon.UI;
 
 namespace Exercise.ViewModel
 {
-    public class ScanningViewModel : ScanViewModel
+    public class ScanningViewModel : ExerciseViewModel
     {
 
         #region Properties
@@ -22,10 +22,10 @@ namespace Exercise.ViewModel
             private set{ _excecisePageCount = value ; RaisePropertyChanged("ExcecisePageCount"); }
         }
         public int _studentCount;
-        public int StudentCount
+        public int StudentSumary
         {
             get { return _studentCount; }
-            private set { _studentCount = value; RaisePropertyChanged("StudentCount"); }
+            private set { _studentCount = value; RaisePropertyChanged("StudentSumary"); }
         }
 
         #endregion
@@ -114,7 +114,7 @@ namespace Exercise.ViewModel
 
         private void PageStudents_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
         {
-            StudentCount = exerciseModel.PageStudents.Count;
+            StudentSumary = exerciseModel.PageStudents.Count;
         }
 
         private void ExerciseModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)

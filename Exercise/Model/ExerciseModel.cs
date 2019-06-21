@@ -89,7 +89,7 @@ namespace Exercise.Model
             Exceptions = new ObservableCollection<ExceptionList>();
             PageDropped = new ObservableCollection<Page>();
             PageStudents = new ObservableCollection<StudentInfo>();
-
+            /* Test
             ExerciseData = new ExerciseData() { Title = "三角函数" };
             AddException(ExceptionType.NoPageCode, new Page());
             AddException(ExceptionType.NoStudentCode, new Page());
@@ -98,6 +98,7 @@ namespace Exercise.Model
             AddException(ExceptionType.AnalyzeException, new Page() { Student = student });
             AddException(ExceptionType.AnswerException, new Page() { Student = student });
             AddException(ExceptionType.CorrectionException, new Page() { Student = student });
+            */
         }
 
         internal void Discard()

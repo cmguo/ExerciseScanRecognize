@@ -9,19 +9,10 @@ using static Exercise.Model.ExerciseModel;
 
 namespace Exercise.ViewModel
 {
-    class SummaryViewModel : ScanViewModel
+    class SummaryViewModel : ExerciseViewModel
     {
-        public class ClassDetail
-        {
-            public string ClassName { get; set; }
-            public int StudentCount { get; set; }
-            public int ResultCount { get; set; }
-        }
-
         public string ExerciseName { get; private set; }
-        public int StudentCount { get; private set; }
         public int ExceptionCount { get; private set; }
-        public List<ClassDetail> ClassDetails { get; private set; }
         public ObservableCollection<ExceptionList> Exceptions { get; private set; }
 
         public RelayCommand ResolveCommand { get; set; }
@@ -36,14 +27,7 @@ namespace Exercise.ViewModel
             ResolveCommand = new RelayCommand((e) => Resolve(e));
             SubmitCommand = new RelayCommand((e) => Submit(e));
             ExerciseName = exerciseModel.ExerciseData.Title;
-            StudentCount = exerciseModel.PageStudents.Where(s => s.AnswerPages.Any(p => p.StudentCode == null)).Count();
             ExceptionCount = exerciseModel.Exceptions.SelectMany(el => el.Exceptions).Count();
-            ClassDetails = schoolModel.Classes.Select(c => new ClassDetail()
-            {
-                ClassName = c.ClassName,
-                StudentCount = c.Students.Count(),
-                ResultCount = c.Students.Where(s => s.AnswerPages.Any(p => p.StudentCode == null)).Count(),
-            }).ToList();
             Exceptions = exerciseModel.Exceptions;
         }
 

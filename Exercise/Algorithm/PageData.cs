@@ -13,7 +13,7 @@ namespace Exercise.Algorithm
 
         public class Item
         {
-            public int TotalScore { get; set; }
+            public float TotalScore { get; set; }
             // 选择题的选项信息，以英文逗号分隔 "A,B,C,D"
             // 填空题该字段为空
             // 解答题每小题的分值信息（按从左到右顺序给到，以英文逗号分隔）

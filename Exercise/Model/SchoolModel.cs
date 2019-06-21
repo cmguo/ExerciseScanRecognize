@@ -2,7 +2,7 @@
 using Base.Service;
 using Exercise.Service;
 using System;
-using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
 using TalBase.Model;
@@ -24,14 +24,14 @@ namespace Exercise.Model
             }
         }
 
-        public IList<ClassInfo> Classes { get; private set; }
+        public ObservableCollection<ClassInfo> Classes { get; private set; }
 
         private IExercise service;
         private SchoolData schoolData;
 
         public SchoolModel()
         {
-            Classes = new List<ClassInfo>();
+            Classes = new ObservableCollection<ClassInfo>();
             service = Services.Get<IExercise>();
         }
 

@@ -49,7 +49,7 @@ namespace Application.Misc
             {
                 if (SourceIndex == value)
                 {
-                    twain32.OpenDataSource();
+                    OpenDataSource();
                     return;
                 }
                 twain32.CloseDataSource();
@@ -122,7 +122,7 @@ namespace Application.Misc
             twain32.Country = TwCountry.CHINA;
             twain32.ShowUI = false;
             var versionInfo = FileVersionInfo.GetVersionInfo(Assembly.GetEntryAssembly().Location);
-            twain32.AppProductName = versionInfo.ProductName;
+            //twain32.AppProductName = versionInfo.ProductName;
             twain32.SetupFileXferEvent += Twain32_SetupFileXferEvent;
             twain32.XferDone += Twain32_XferDone;
             twain32.FileXferEvent += Twain32_FileXferEvent; // 很慢

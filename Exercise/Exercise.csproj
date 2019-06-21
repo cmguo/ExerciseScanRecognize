@@ -87,6 +87,7 @@
     <Compile Include="Service\SchoolData.cs" />
     <Compile Include="ViewModel\HomeViewModel.cs" />
     <Compile Include="ViewModel\ScanningViewModel.cs" />
+    <Compile Include="ViewModel\ExerciseViewModel.cs" />
     <Compile Include="ViewModel\SummaryViewModel.cs" />
     <Compile Include="ViewModel\ScanViewModel.cs" />
     <Compile Include="ViewModel\ResolveViewModel.cs" />

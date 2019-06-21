@@ -25,7 +25,12 @@ namespace Exercise.Algorithm
 
         public QRCodeData GetCode(PageRaw page)
         {
-            return analyze<QRCodeData, PageRaw>(AnswerSheetAnalyze.METHOD_QR_CODE_RECOGNIZE, page);
+            QRCodeData code = analyze<QRCodeData, PageRaw>(AnswerSheetAnalyze.METHOD_QR_CODE_RECOGNIZE, page);
+            if (code.PaperInfo == null || code.PaperInfo.Length == 0)
+                throw new NullReferenceException("QRCodeData");
+            if (code.StudentInfo == "")
+                code.StudentInfo = null;
+            return code;
         }
 
         public AnswerData GetAnswer(PageData page)
@@ -37,16 +42,16 @@ namespace Exercise.Algorithm
         {
             string args = JsonConvert.SerializeObject(input, settings);
             string result = AnswerSheetAnalyze.analyzeAnswerSheet(method, args);
-            Result<O> result1 = JsonConvert.DeserializeObject<Result<O>>(result, settings);
-            if (result1.Code != 0)
-                throw new AlgorithmException(result1.Code, result1.Message);
-            return result1.Data;
+            Result<O> output = JsonConvert.DeserializeObject<Result<O>>(result, settings);
+            if (output.Code != 0)
+                throw new AlgorithmException(output.Code, output.Message);
+            return output.Data;
         }
 
         public async void Test()
         {
-            string json = @"C:\Users\Brandon\source\repos\DotNet\Exercise\long_text_2019-06-18-15-12-30.txt";
-            string jpg = @"C:\Users\Brandon\source\repos\DotNet\Exercise\answersheet.jpg";
+            string json = @"C:\Users\Brandon\source\repos\DotNet\Exercise\0620\long_text_2019-06-20-16-53-51.txt";
+            string jpg = @"C:\Users\Brandon\source\repos\DotNet\Exercise\0620\3.jpg";
             PageRaw pagew = new PageRaw();
             pagew.ImgBytes = await UriFetcher.GetDataAsync(new Uri(jpg));
             QRCodeData code = GetCode(pagew);

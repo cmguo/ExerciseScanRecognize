@@ -268,10 +268,18 @@ namespace Exercise.Model
                 if (needCode)
                 {
                     Algorithm.QRCodeData code = algorithm.GetCode(new Algorithm.PageRaw() { ImgBytes = page.PageData });
-                    int split = code.paperInfo.IndexOf('_');
-                    page.PaperCode = code.paperInfo.Substring(0, split);
-                    page.PageIndex = Int32.Parse(code.paperInfo.Substring(split + 1));
-                    page.StudentCode = code.studentInfo;
+                    int split = code.PaperInfo.IndexOf('_');
+                    if (split < 0)
+                    {
+                        page.PaperCode = code.PaperInfo;
+                        page.PageIndex = 0;
+                    }
+                    else
+                    {
+                        page.PaperCode = code.PaperInfo.Substring(0, split);
+                        page.PageIndex = Int32.Parse(code.PaperInfo.Substring(split + 1));
+                    }
+                    page.StudentCode = code.StudentInfo;
                 }
             }
             catch (Exception e)

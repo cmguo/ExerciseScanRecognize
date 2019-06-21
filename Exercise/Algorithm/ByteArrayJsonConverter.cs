@@ -12,7 +12,13 @@ namespace Exercise.Algorithm
     {
         public override byte[] ReadJson(JsonReader reader, Type objectType, byte[] existingValue, bool hasExistingValue, JsonSerializer serializer)
         {
-            return System.Convert.FromBase64String(reader.ReadAsString());
+            List<byte> bytes = new List<byte>();
+            int? b;
+            while ((b = reader.ReadAsInt32()) != null)
+            {
+                bytes.Add((byte)b);
+            }
+            return bytes.ToArray();
         }
 
         public override void WriteJson(JsonWriter writer, byte[] value, JsonSerializer serializer)

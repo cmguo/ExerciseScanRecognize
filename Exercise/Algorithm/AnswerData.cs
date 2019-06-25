@@ -29,8 +29,8 @@ namespace Exercise.Algorithm
         public class Question
         {
             public string QuestionId { get; set; }
+            public PagingInfo PagingInfo { get; set; }
             public Location QuestionLocation { get; set; }
-            public int NumOfRectsToDetectInQuestion { get; set; }
             public IList<Item> ItemInfo { get; set; }
         }
 
@@ -38,7 +38,6 @@ namespace Exercise.Algorithm
         {
             public int AreaId { get; set; }
             public AreaType AreaType { get; set; }
-            public int NumOfQuestions { get; set; }
             public Location AreaLocation { get; set; }
             public IList<Question> QuestionInfo { get; set; }
         }

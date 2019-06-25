@@ -1,5 +1,6 @@
 ﻿using Exercise.Algorithm;
 using Exercise.Service;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -25,9 +26,16 @@ namespace Exercise.Model
         public String StudentCode { get; set; }
         public AnswerData Answer { get; set; }
 
+        [JsonIgnore]
         public Page Another { get; set; }
+
+        [JsonIgnore]
         public StudentInfo Student { get; set; }
+
+        [JsonIgnore]
         public IList<AnswerData.Question> AnswerExceptions { get; set; }
+
+        [JsonIgnore]
         public IList<AnswerData.Question> CorrectionExceptions { get; set; }
     }
 }

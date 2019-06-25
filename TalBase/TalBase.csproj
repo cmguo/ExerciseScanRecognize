@@ -58,6 +58,7 @@
     <Compile Include="Service\ServiceException.cs" />
     <Compile Include="Service\Nothing.cs" />
     <Compile Include="Service\ResultSerializer.cs" />
+    <Compile Include="Service\NothingJsonConverter.cs" />
     <Compile Include="Utils\Utils.cs" />
     <Compile Include="ViewModel\ViewModelBase.cs" />
   </ItemGroup>

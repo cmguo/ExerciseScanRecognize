@@ -80,6 +80,7 @@
     <Compile Include="ScanDevice.cs" />
     <Compile Include="Service\GenUriData.cs" />
     <Compile Include="Service\RecordData.cs" />
+    <Compile Include="Service\SubmitPrepare.cs" />
     <Compile Include="Service\SubmitData.cs" />
     <Compile Include="Model\Page.cs" />
     <Compile Include="Service\ExerciseData.cs" />

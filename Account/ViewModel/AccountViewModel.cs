@@ -17,39 +17,13 @@ namespace Account.ViewModel
         public RelayCommand LoginCommand { get; set; }
         public RelayCommand LogoutCommand { get; set; }
 
+        private AccountModel accountModel = AccountModel.Instance;
+
         public AccountViewModel()
         {
             CurrentUser = AccountModel.Instance.LoginData;
             LoginCommand = new RelayCommand(DoLogin);
-            LogoutCommand = new RelayCommand(DoLogout, CanDoAuthenticated);
-        }
-
-        private bool _IsAuthenticated;
-        public bool IsAuthenticated
-        {
-            get { return _IsAuthenticated; }
-            set
-            {
-                if (value != _IsAuthenticated)
-                {
-                    _IsAuthenticated = value;
-                    RaisePropertyChanged("IsAuthenticated");
-                    RaisePropertyChanged("IsNotAuthenticated");
-                }
-            }
-        }
-
-        public bool IsNotAuthenticated
-        {
-            get
-            {
-                return !IsAuthenticated;
-            }
-        }
-
-        public bool CanDoAuthenticated(object ignore)
-        {
-            return IsAuthenticated;
+            LogoutCommand = new RelayCommand(DoLogout);
         }
 
         public LoginData CurrentUser { get; private set; }
@@ -61,11 +35,6 @@ namespace Account.ViewModel
                 await AccountModel.Instance.Login();
                 (obj as Page).NavigationService.Navigate(new Uri(Configuration.StartupPage));
             }
-        }
-
-        private bool CanDoLogout(object obj)
-        {
-            return IsAuthenticated;
         }
 
         private async Task DoLogout(object obj)

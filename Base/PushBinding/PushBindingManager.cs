@@ -11,7 +11,7 @@ namespace Base.PushBinding
     public class PushBindingManager
     {
         public static DependencyProperty PushBindingsProperty =
-            DependencyProperty.RegisterAttached("PushBindings",
+            DependencyProperty.RegisterAttached("PushBindingsInternal",
                                                 typeof(PushBindingCollection),
                                                 typeof(PushBindingManager),
                                                 new UIPropertyMetadata(null));

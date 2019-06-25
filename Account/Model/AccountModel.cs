@@ -34,7 +34,7 @@ namespace Account.Model
 
         public AccountModel()
         {
-            LoginData = new LoginData() { LoginName = "18638217959", Password = "123@qwe",
+            LoginData = new LoginData() { LoginName = "xujinming", Password = "123@qwe",
                 AuthenticationType = LoginData.LOGIN_BY_PASSWORD };
             Account = new Service.AccountData();
             Service = Base.Service.Services.Get<IAccount>();

@@ -1,4 +1,5 @@
 ﻿using Base.Misc;
+using Base.Mvvm;
 using Exercise.Algorithm;
 using Exercise.Service;
 using System;
@@ -47,6 +48,8 @@ namespace Exercise.Model
 
         public bool FeederLoaded => scanDevice.FeederLoaded;
 
+        public string PageCode { get; private set; }
+
         private bool _IsScannig;
         public bool IsScanning
         {
@@ -63,7 +66,23 @@ namespace Exercise.Model
                 }
             }
         }
-        public string PageCode { get; private set; }
+
+        private bool _IsPaused;
+        public bool IsPaused
+        {
+            get { return _IsPaused; }
+            set
+            {
+                if (_IsPaused == value)
+                    return;
+                _IsPaused = value;
+                RaisePropertyChanged("IsPaused");
+                lock (mutex)
+                {
+                    Monitor.PulseAll(mutex);
+                }
+            }
+        }
 
         private IScanDevice scanDevice = ScanDevice.Instance;
         private Algorithm.Algorithm algorithm = new Algorithm.Algorithm();
@@ -81,6 +100,7 @@ namespace Exercise.Model
             Pages = new ObservableCollection<Page>();
             scanDevice.OnImage += ScanDevice_OnImage;
             scanDevice.GetFileName += ScanDevice_GetFileName;
+            scanDevice.ScanPaused += ScanDevice_ScanPaused; ;
             scanDevice.ScanCompleted += ScanDevice_ScanCompleted; ;
         }
 
@@ -94,6 +114,7 @@ namespace Exercise.Model
             if (IsScanning)
                 return;
             IsScanning = true;
+            IsPaused = false;
             ++scanBatch;
             scanIndex = 0;
             try
@@ -108,13 +129,23 @@ namespace Exercise.Model
             }
         }
 
-        public void PauseScan()
+        public async Task<bool> PauseScan()
         {
             scanDevice.PauseScan();
+            await Task.Run(() =>
+            {
+                lock (mutex)
+                {
+                    while (IsScanning && !IsPaused)
+                        Monitor.Wait(mutex);
+                }
+            });
+            return IsScanning;
         }
 
         public void ResumeScan()
         {
+            IsPaused = false;
             scanDevice.ResumeScan();
         }
 
@@ -292,7 +323,7 @@ namespace Exercise.Model
 
         private void ScanPage(Page page)
         {
-            PageData pageData = exerciseData.Pages[page.PageIndex + (page.Another == null ? 1 : 0)];
+            PageData pageData = exerciseData.Pages[page.PageIndex];
             pageData.ImgBytes = page.PageData;
             try
             {
@@ -301,7 +332,7 @@ namespace Exercise.Model
                 page.PageData = answerData.RedressedImgBytes;
                 answerData.RedressedImgBytes = null;
                 MD5 md5 = new MD5CryptoServiceProvider();
-                byte[] output = md5.ComputeHash(answerData.RedressedImgBytes);
+                byte[] output = md5.ComputeHash(page.PageData);
                 page.Md5Name = BitConverter.ToString(output).Replace("-", "").ToLower() + ".jpg";
                 File.Delete(page.PagePath);
                 page.PagePath = savePath + "\\" + page.Md5Name;
@@ -323,15 +354,19 @@ namespace Exercise.Model
             e.FileName = savePath + "\\" + scanBatch + "_" + scanIndex + ".jpg";
         }
 
-        private async void ScanDevice_OnImage(object sender, ScanEvent e)
+        private void ScanDevice_OnImage(object sender, ScanEvent e)
         {
-            await AddImage(e.FileName);
+            BackgroudWork.Execute(() => AddImage(e.FileName));
+        }
+
+        private void ScanDevice_ScanPaused(object sender, ScanEvent e)
+        {
+            IsPaused = false;
         }
 
         private void ScanDevice_ScanCompleted(object sender, ScanEvent e)
         {
             IsScanning = false;
-            RaisePropertyChanged("IsScanning");
         }
 
     }

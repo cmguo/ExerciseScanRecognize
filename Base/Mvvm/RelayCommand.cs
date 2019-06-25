@@ -33,6 +33,7 @@ namespace Base.Mvvm
         readonly Action<object> _execute;
         readonly AsyncAction<object> _asyncExecute;
         readonly Predicate<object> _canExecute;
+        private bool executing;
 
         #endregion // Fields
 
@@ -73,7 +74,7 @@ namespace Base.Mvvm
         [DebuggerStepThrough]
         public bool CanExecute(object parameter)
         {
-            return _canExecute == null ? true : _canExecute(parameter);
+            return !executing && (_canExecute == null ? true : _canExecute(parameter));
         }
 
         public event EventHandler CanExecuteChanged
@@ -87,14 +88,24 @@ namespace Base.Mvvm
             try
             {
                 if (_execute != null)
+                {
                     _execute(parameter);
+                }
                 else
+                {
+                    executing = true;
+                    CommandManager.InvalidateRequerySuggested();
                     await _asyncExecute(parameter);
+                    executing = false;
+                    CommandManager.InvalidateRequerySuggested();
+                }
             }
             catch (Exception e)
             {
                 ActionExceptionEventArgs e1 = new ActionExceptionEventArgs(e);
                 ActionException?.Invoke(this, e1);
+                executing = false;
+                CommandManager.InvalidateRequerySuggested();
                 if (!e1.IsHandled)
                     throw e;
             }

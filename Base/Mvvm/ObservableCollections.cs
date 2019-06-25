@@ -35,7 +35,10 @@ namespace Base.Mvvm
                         result.Move(e.OldStartingIndex, e.NewStartingIndex);
                         break;
                     case NotifyCollectionChangedAction.Replace:
-                        throw new NotImplementedException("Replace");
+                        int n3 = e.NewStartingIndex;
+                        foreach (I i in e.NewItems)
+                            result[n3++] = selector(i);
+                        break;
                 }
             };
             return result;

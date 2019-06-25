@@ -109,6 +109,7 @@ namespace Application.Misc
 
         public event EventHandler<ScanEvent> OnImage;
         public event EventHandler<ScanEvent> GetFileName;
+        public event EventHandler<ScanEvent> ScanPaused;
         public event EventHandler<ScanEvent> ScanCompleted;
 
         private Window window;
@@ -209,6 +210,7 @@ namespace Application.Misc
             {
                 while (pause)
                 {
+                    ScanPaused?.Invoke(this, new ScanEvent());
                     Monitor.Wait(twain32);
                 }
                 e.Cancel = cancel;

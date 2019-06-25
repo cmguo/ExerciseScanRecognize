@@ -1,6 +1,5 @@
 ﻿using Account.Service;
 using Base.Service;
-using Exercise.Model;
 using Refit;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -20,8 +19,8 @@ namespace Exercise.Service
         [Get("/getAnswersheetData")]
         Task<ExerciseData> GetExercise([Query("paperId")] string paperId);
 
-        [Get("/getTempHomeWorkIdTempId")]
-        Task<string> GetSubmitId();
+        [Post("/getTempHomeWorkIdTempId")]
+        Task<StringData> GetSubmitId(SubmitPrepare prepare);
 
         [Post("/uploadResult")]
         Task<Nothing> Submit(SubmitData data);

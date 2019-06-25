@@ -50,11 +50,19 @@ namespace Exercise.ViewModel
             exerciseModel.PropertyChanged += ExerciseModel_PropertyChanged;
         }
 
+        public override void Release()
+        {
+            base.Release();
+            exerciseModel.PageStudents.CollectionChanged -= PageStudents_CollectionChanged;
+            exerciseModel.PropertyChanged -= ExerciseModel_PropertyChanged;
+        }
+
         #region Command Implements
 
         protected override async Task EndScan(object obj)
         {
-            scanModel.PauseScan();
+            if (!await scanModel.PauseScan())
+                return;
             bool? isConfirm = PUMessageBox.ShowConfirm("扫描仪中还有试卷待扫描，确认结束扫描并查看结果吗？", "提示");
             if (isConfirm != null && isConfirm.Value)
             {
@@ -70,7 +78,8 @@ namespace Exercise.ViewModel
 
         protected override async Task Close(object obj)
         {
-            scanModel.PauseScan();
+            if (!await scanModel.PauseScan())
+                return;
             bool? isConfirm = PUMessageBox.ShowConfirm("当前仍有扫描任务进行中，退出后本次扫描结果将放弃，确认退出吗？", "提示");
             if (isConfirm != null && isConfirm.Value)
             {
@@ -86,7 +95,8 @@ namespace Exercise.ViewModel
 
         private async Task Discard(object obj)
         {
-            scanModel.PauseScan();
+            if (!await scanModel.PauseScan())
+                return;
             bool? isConfirm = PUMessageBox.ShowConfirm("放弃后，本次扫描结果将作废，确认放弃吗？", "提示");
             if (isConfirm != null && isConfirm.Value)
             {
@@ -104,7 +114,7 @@ namespace Exercise.ViewModel
         {
             bool isScanning = IsScanning;
             if (isScanning)
-                scanModel.PauseScan();
+                await scanModel.PauseScan();
             string msg = null;
             if (Error == 0)
                 msg = "当前试卷二维码无法识别，不能查看结果";
@@ -130,6 +140,7 @@ namespace Exercise.ViewModel
 
         private async Task Finish(object obj)
         {
+            Update();
             bool? isConfirm = PUMessageBox.ShowConfirm("扫描仪已无试卷，请添加试卷继续扫描。若已全部扫描，可查看扫描结果。", "提示");
             if (isConfirm != null && !isConfirm.Value)
             {

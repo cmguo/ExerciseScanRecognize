@@ -20,6 +20,8 @@ namespace Exercise
 
         event EventHandler<ScanEvent> ScanCompleted;
 
+        event EventHandler<ScanEvent> ScanPaused;
+
         string[] SourceList { get; }
 
         int SourceIndex { get; set; }

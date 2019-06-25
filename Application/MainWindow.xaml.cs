@@ -12,6 +12,7 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using Application.Misc;
 using Panuon.UI;
+using TalBase.ViewModel;
 
 namespace Application
 {
@@ -20,7 +21,9 @@ namespace Application
     /// </summary>
     public partial class MainWindow : PUWindow
     {
-   
+
+        private Page lastPage;
+
         public MainWindow()
         {
             this.MaxHeight = SystemParameters.MaximizedPrimaryScreenHeight;
@@ -29,12 +32,22 @@ namespace Application
             ScanDeviceSaraff.Init(this);
             LoadNavButtons();
             Result = 0;
+            frmMain.Navigating += FrmMain_Navigating;
             frmMain.Navigated += FrmMain_Navigated;
+        }
+
+        private void FrmMain_Navigating(object sender, NavigatingCancelEventArgs e)
+        {
+            if (lastPage == null)
+                return;
+            ViewModelBase vm = lastPage.DataContext as ViewModelBase;
+            vm.Release();
         }
 
         private void FrmMain_Navigated(object sender, NavigationEventArgs e)
         {
-            showHeadOrTitle(e.Content as Page);
+            lastPage = e.Content as Page;
+            showHeadOrTitle(lastPage);
         }
 
         public void LoadNavButtons()

@@ -20,7 +20,7 @@ namespace Exercise.ViewModel
         #region Properties
 
         public int StudentCount { get; private set; }
-        public ObservableCollection<ClassDetail> ClassDetails { get; private set; }
+        public List<ClassDetail> ClassDetails { get; private set; }
 
         #endregion
 
@@ -28,21 +28,34 @@ namespace Exercise.ViewModel
         private ExerciseModel exerciseModel = ExerciseModel.Instance;
         private SchoolModel schoolModel = SchoolModel.Instance;
 
-        public ExerciseViewModel() 
+        public ExerciseViewModel()
         {
-            StudentCount = exerciseModel.PageStudents.Where(s => s.AnswerPages.Any(p => p.StudentCode == null)).Count();
-            ClassDetails = schoolModel.Classes.Select2(c => new ClassDetail()
+            exerciseModel.PropertyChanged += ExerciseModel_PropertyChanged;
+            Update();
+        }
+
+        protected void Update()
+        {
+            StudentCount = exerciseModel.PageStudents.Where(s => s.AnswerPages.All(p => p != null && p.PagePath == null)).Count();
+            ClassDetails = schoolModel.Classes.Select(c => new ClassDetail()
             {
                 ClassName = c.ClassName,
                 StudentCount = c.Students.Count(),
-                ResultCount = c.Students.Where(s => s.AnswerPages.Any(p => p.StudentCode == null)).Count(),
-            });
-            exerciseModel.PropertyChanged += ExerciseModel_PropertyChanged;
+                ResultCount = c.Students.Where(
+                    s => s.AnswerPages != null && s.AnswerPages.All(p => p != null && p.PagePath != null)).Count(),
+            }).ToList();
+        }
+
+        public override void Release()
+        {
+            base.Release();
+            ClassDetails = null;
+            exerciseModel.PropertyChanged -= ExerciseModel_PropertyChanged;
         }
 
         private void ExerciseModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
         {
-            if (e.PropertyName == "")
+            if (e.PropertyName == "ExerciseData")
             {
                 if (exerciseModel.ExerciseData == null)
                     Error = 2;

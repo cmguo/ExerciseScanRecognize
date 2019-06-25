@@ -54,6 +54,13 @@ namespace Exercise.ViewModel
             scanModel.PropertyChanged += ScanModel_PropertyChanged;
         }
 
+        public override void Release()
+        {
+            base.Release();
+            scanModel.Pages.CollectionChanged -= Pages_CollectionChanged;
+            scanModel.PropertyChanged -= ScanModel_PropertyChanged;
+        }
+
         #region Command Implements
 
         protected virtual async Task EndScan(object obj)
@@ -70,7 +77,7 @@ namespace Exercise.ViewModel
         {
             while (!scanModel.FeederLoaded)
             {
-                PUMessageBox.ShowConfirm("扫描仪里面没有纸张，请添加试卷。", "提示");
+                PUMessageBox.ShowConfirm("扫描仪里面没有纸张，请添加试卷。", "提示", Buttons.OK);
             }
             scanModel.Scan();
         }

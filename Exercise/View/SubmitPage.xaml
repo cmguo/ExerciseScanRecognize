@@ -13,12 +13,48 @@
         <vm:SubmitViewModel />
     </Page.DataContext>
 
+    <Page.Resources>
+        <local:RetryConverter x:Key="RetryConverter" />
+        <local:ReturnConverter x:Key="ReturnConverter" />
+        <local:SubmittingConverter x:Key="SubmittingConverter" />
+        <local:CompletedConverter x:Key="CompletedConverter" />
+    </Page.Resources>
+    
     <Grid>
         <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Orientation="Vertical">
             <TextBlock Text="{Binding ExerciseName, StringFormat=《{0}》}" />
-            <TextBlock Text="扫描结果上传中，请勿关闭客户端..." />
-            <ProgressBar Minimum="{Binding Task.Total}" Value="{Binding Task.Finish}"/>
-            <TextBlock Text="{Binding Percent, StringFormat={}{0}%}" />
+            <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Orientation="Vertical"
+                       Visibility="{Binding Task.Status, Converter={StaticResource SubmittingConverter}}">
+                <TextBlock Text="扫描结果上传中，请勿关闭客户端..."/>
+                <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Orientation="Horizontal">
+                    <ProgressBar Maximum="{Binding Task.Total, Mode=OneWay}" Value="{Binding Task.Finish, Mode=OneWay}"/>
+                    <TextBlock Text="{Binding Percent, StringFormat={}{0}%}" />
+                </StackPanel>
+            </StackPanel>
+            <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Orientation="Vertical"
+                       Visibility="{Binding Task.Status, Converter={StaticResource CompletedConverter}}">
+                <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Orientation="Horizontal">
+                    <Image />
+                    <TextBlock Text="扫描结果上传成功" />
+                </StackPanel>
+                <TextBlock Text="稍后您可在网页端测试记录页面查看本次扫描结果" />
+            </StackPanel>
+            <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Orientation="Vertical"
+                       Visibility="{Binding Task.Status, Converter={StaticResource RetryConverter}}">
+                <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Orientation="Horizontal">
+                    <Image />
+                    <TextBlock Text="上传失败，网络存在异常，请检查后重新上传" />
+                </StackPanel>
+                <TextBlock Text="本次扫描结果已经保存，后续可在“扫描记录管理”中重新上传" />
+            </StackPanel>
+            <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Orientation="Horizontal">
+                <Button Command="{Binding RetryCommand}"
+                    CommandParameter="{Binding RelativeSource={RelativeSource AncestorType={x:Type Page}}}" 
+                    Content="重新上传" Visibility="{Binding Task.Status, Converter={StaticResource RetryConverter}}" />
+                <Button Command="{Binding ReturnCommand}"
+                    CommandParameter="{Binding RelativeSource={RelativeSource AncestorType={x:Type Page}}}" 
+                    Content="返回首页" Visibility="{Binding Task.Status, Converter={StaticResource ReturnConverter}}" />
+            </StackPanel>
         </StackPanel>
     </Grid>
 </Page>

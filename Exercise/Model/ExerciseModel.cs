@@ -81,6 +81,7 @@ namespace Exercise.Model
         private IExercise service;
 
         private string exerciseId;
+        private List<Page> emptyPages;
 
         public ExerciseModel()
         {
@@ -123,14 +124,21 @@ namespace Exercise.Model
             if (ExerciseData == null)
                 throw new NullReferenceException("没有有效试卷信息");
             schoolModel.GetLostPageStudents(s => {
-                s.AnswerPages = new List<Page>();
-                for (int i = 0; i < ExerciseData.Pages.Count; i += 2)
-                    s.AnswerPages.Add(new Page() { PageIndex = i, Student = s });
+                s.AnswerPages = new List<Page>(emptyPages);
                 PageStudents.Add(s);
             });
-            foreach (Page p in PageStudents.Select(s => s.AnswerPages.Where(p => p.StudentCode == null)))
+            foreach (StudentInfo s in PageStudents)
             {
-                AddException(ExceptionType.PageLost, p);
+                for (int i = 0; i < s.AnswerPages.Count; ++i)
+                {
+                    if (s.AnswerPages[i] == null)
+                    {
+                        Page p = new Page() { PageIndex = i * 2, Student = s };
+                        p.Another = p;
+                        s.AnswerPages[i] = p;
+                        AddException(ExceptionType.PageLost, p);
+                    }
+                }
             }
             await Save();
         }
@@ -139,7 +147,7 @@ namespace Exercise.Model
         {
             await Save();
             string path = SavePath;
-            await submitModel.Save(path, exerciseId, ExerciseData, PageStudents);
+            await submitModel.Save(path, exerciseId, schoolModel.Classes, PageStudents);
             BackgroudWork.Execute(() => submitModel.Submit(path));
         }
 
@@ -163,6 +171,7 @@ namespace Exercise.Model
         public void Clear()
         {
             exerciseId = null;
+            emptyPages = null;
             ExerciseData = null;
             Exceptions.Clear();
             PageDropped.Clear();
@@ -176,9 +185,9 @@ namespace Exercise.Model
             if (type == ResolveType.Ignore)
             {
                 if (ex.Type == ExceptionType.AnswerException)
-                    ex.Page.AnswerExceptions.Clear();
+                    ex.Page.AnswerExceptions = null;
                 else if (ex.Type == ExceptionType.CorrectionException)
-                    ex.Page.CorrectionExceptions.Clear();
+                    ex.Page.CorrectionExceptions = null;
                 RemoveException(ex.Type, ex.Page);
                 return;
             }
@@ -210,6 +219,10 @@ namespace Exercise.Model
             {
                 exerciseId = scanModel.PageCode;
                 ExerciseData = await service.GetExercise(exerciseId);
+                int n = (ExerciseData.Pages.Count + 1) / 2;
+                emptyPages = new List<Page>(n);
+                while (n-- > 0)
+                    emptyPages.Add(null);
                 RaisePropertyChanged("ExerciseData");
                 scanModel.SetExerciseData(ExerciseData);
             }
@@ -227,7 +240,8 @@ namespace Exercise.Model
                 type = ExceptionType.NoPageCode;
             else if (page.PaperCode != scanModel.PageCode)
                 type = ExceptionType.PageCodeMissMatch;
-            else if (page.StudentCode == null || (page.Student = schoolModel.GetStudent(page.StudentCode)) == null)
+            else if (page.StudentCode == null 
+                || (page.Student = schoolModel.GetStudent(page.StudentCode)) == null)
                 type = ExceptionType.NoStudentCode;
             if (type != ExceptionType.None)
             {
@@ -237,31 +251,32 @@ namespace Exercise.Model
             page.Another.Student = page.Student; // 可能单面，就是自己
             if (page.Student.AnswerPages == null)
             {
-                page.Student.AnswerPages = new List<Page>();
-                for (int i = 0; i < ExerciseData.Pages.Count; i += 2)
-                    page.Student.AnswerPages.Add(new Page() { PageIndex = i, Student = page.Student });
+                page.Student.AnswerPages = new List<Page>(emptyPages);
                 PageStudents.Add(page.Student);
             }
             int pageIndex = page.PageIndex / 2;
             Page old = page.Student.AnswerPages[pageIndex];
             page.Student.AnswerPages[pageIndex] = page;
-            old.Student = null;
-            RemovePage(old, ResolveType.RemovePage);
+            if (old != null)
+            {
+                old.Student = null;
+                RemovePage(old, ResolveType.RemovePage);
+            }
             if (page.Answer == null)
             {
                 AddException(ExceptionType.AnalyzeException, page);
             }
             else
             {
-                if (page.AnswerExceptions.Count > 0)
+                if (page.AnswerExceptions != null)
                     AddException(ExceptionType.AnswerException, page);
-                if (page.CorrectionExceptions.Count > 0)
+                if (page.CorrectionExceptions != null)
                     AddException(ExceptionType.CorrectionException, page);
                 if (page.Another != page)
                 {
-                    if (page.Another.AnswerExceptions.Count > 0)
+                    if (page.Another.AnswerExceptions != null)
                         AddException(ExceptionType.AnswerException, page.Another);
-                    if (page.Another.CorrectionExceptions.Count > 0)
+                    if (page.Another.CorrectionExceptions != null)
                         AddException(ExceptionType.CorrectionException, page.Another);
                 }
             }
@@ -312,7 +327,10 @@ namespace Exercise.Model
             RemoveException(ExceptionType.None, page);
             page.Student = null;
             PageDropped.Add(page);
-            scanModel.ReleasePage(page);
+            if (page.PagePath != null)
+            {
+                scanModel.ReleasePage(page);
+            }
             if (page.Another != page)
             {
                 RemoveException(ExceptionType.None, page.Another);

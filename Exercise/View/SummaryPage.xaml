@@ -4,6 +4,7 @@
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
       xmlns:local="clr-namespace:Exercise.View"
+      xmlns:resolve="clr-namespace:Exercise.View.Resolve"
       xmlns:vm="clr-namespace:Exercise.ViewModel"
       xmlns:mu="clr-namespace:Panuon.UI;assembly=Panuon.UI"
       mc:Ignorable="d" 
@@ -13,6 +14,10 @@
     <Page.DataContext>
         <vm:SummaryViewModel />
     </Page.DataContext>
+
+    <Page.Resources>
+        <resolve:ExceptionListConverter x:Key="ExceptionListConverter" />
+    </Page.Resources>
 
     <Grid>
         <StackPanel Orientation="Vertical">
@@ -114,7 +119,7 @@
                             </Style>
                         </DataGrid.CellStyle>
                         <DataGrid.Columns>
-                            <DataGridTextColumn Header="异常项" Binding="{Binding TypeName}" FontSize="14" Width="140"/>
+                            <DataGridTextColumn Header="异常项" Binding="{Binding Converter={StaticResource ExceptionListConverter}}" FontSize="14" Width="140"/>
                             <DataGridTextColumn Header="回收试卷" Binding="{Binding Exceptions.Count}" FontSize="14" Width="100"/>
                         </DataGrid.Columns>
                     </DataGrid>

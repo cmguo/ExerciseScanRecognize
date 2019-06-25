@@ -2,6 +2,7 @@
 using Base.Service;
 using Exercise.Service;
 using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
@@ -57,12 +58,19 @@ namespace Exercise.Model
             StudentInfo student = schoolData.StudentInfoList.FirstOrDefault(s => s.TalNo == id);
             if (student != null && student.AnswerPages == null)
             {
-                if (Classes.FirstOrDefault(c => c.ClassId == student.ClassId) == null)
+                ClassInfo classData = Classes.FirstOrDefault(c => c.ClassId == student.ClassId);
+                if (classData == null)
                 {
-                    ClassInfo classData = schoolData.ClassInfoList.FirstOrDefault(c => c.ClassId == student.ClassId);
+                    classData = schoolData.ClassInfoList.FirstOrDefault(c => c.ClassId == student.ClassId);
                     if (classData == null)
                         return null;
                     Classes.Add(classData);
+                }
+                else
+                {
+                    // notify replace
+                    int index = Classes.IndexOf(classData);
+                    Classes[index] = Classes[index];
                 }
             }
             return student;
@@ -70,7 +78,7 @@ namespace Exercise.Model
 
         public void GetLostPageStudents(Action<StudentInfo> visitor)
         {
-            foreach (StudentInfo s in Classes.Select(c => c.Students.Where(s => s.AnswerPages == null)))
+            foreach (StudentInfo s in Classes.SelectMany(c => c.Students.Where(s => s.AnswerPages == null)))
                 visitor(s);
         }
 

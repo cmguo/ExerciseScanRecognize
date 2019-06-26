@@ -46,7 +46,7 @@ namespace Exercise.Model
             Ignore, 
             RemovePage, 
             RemoveStudent,
-            RemoveDuplexPage
+            //RemoveDuplexPage
         }
 
         public class Exception
@@ -193,7 +193,13 @@ namespace Exercise.Model
             RemovePage(ex.Page, type);
         }
 
-        private async void ScanModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
+        public void Resolve(ExceptionList el, ResolveType type)
+        {
+            foreach (Exception ex in el.Exceptions)
+                Resolve(ex, type);
+        }
+
+        private void ScanModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
         {
             if (e.PropertyName == "PageCode")
             {
@@ -306,16 +312,16 @@ namespace Exercise.Model
             int pageIndex = page.PageIndex / 2;
             if (page.Student.AnswerPages[pageIndex] == page)
             {
-                page.Student.AnswerPages[pageIndex] = sEmptyPage;
-                if (type != ResolveType.RemoveDuplexPage && page.Another != null)
+                page.Student.AnswerPages[pageIndex] = null;
+                if (/*type != ResolveType.RemoveDuplexPage && */page.Another != null)
                 {
                     page.Student.AnswerPages[pageIndex] = page.Another;
+                    page.Another = null;
                 }
             }
             else if (page.Student.AnswerPages[pageIndex].Another == page)
             {
-                page.Student.AnswerPages[pageIndex].Another = page.Student.AnswerPages[pageIndex];
-                page.Another = null;
+                page.Student.AnswerPages[pageIndex].Another = null;
             }
             RemovePage(page);
         }

@@ -9,10 +9,6 @@
       d:DesignHeight="450" d:DesignWidth="800"
       Title="HomePage">
 
-    <Page.DataContext>
-        <vm:HomeViewModel />
-    </Page.DataContext>
-
     <Grid>
         <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Orientation="Vertical">
             <TextBlock Text="以下题号存在批改识别异常，请确认得分。" />

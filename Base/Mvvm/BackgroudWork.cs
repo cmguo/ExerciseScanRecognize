@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -21,6 +22,7 @@ namespace Base.Mvvm
             }
             catch (Exception e)
             {
+                Debug.WriteLine(e);
                 ActionExceptionEventArgs e1 = new ActionExceptionEventArgs(e);
                 WorkException?.Invoke(owner, e1);
                 if (!e1.IsHandled)

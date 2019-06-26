@@ -300,7 +300,7 @@ namespace Exercise.Model
                     }
                     else
                     {
-                        pages[0].Another = pages[0];
+                        pages[0].Another = null;
                         ReleasePage(pages[1]);
                     }
                 }
@@ -357,6 +357,7 @@ namespace Exercise.Model
                 page.PagePath = savePath + "\\" + page.Md5Name;
                 FileStream fs = new FileStream(page.PagePath, FileMode.Create, FileAccess.Write);
                 using (fs) { new MemoryStream(page.PageData).CopyTo(fs); }
+                page.PageData = null;
                 fs.Close();
             }
             catch (Exception e)

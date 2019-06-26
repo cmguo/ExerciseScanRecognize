@@ -9,10 +9,6 @@
       d:DesignHeight="450" d:DesignWidth="800"
       Title="HomePage">
 
-    <Page.DataContext>
-        <vm:HomeViewModel />
-    </Page.DataContext>
-
     <Grid>
         <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Orientation="Vertical">
             <TextBlock Text="试卷缺失，请放入试卷，开始扫描。" />

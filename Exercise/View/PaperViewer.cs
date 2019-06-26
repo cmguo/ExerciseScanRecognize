@@ -68,7 +68,11 @@ namespace Exercise.View
             {
                 image.ImageSource = paper = null;
             }
-            paper = new BitmapImage(new Uri(uri));
+            paper = new BitmapImage();
+            paper.BeginInit();
+            paper.CacheOption = BitmapCacheOption.OnLoad;
+            paper.UriSource = new Uri(uri);
+            paper.EndInit();
             Paper_Changed(paper, null);
         }
 

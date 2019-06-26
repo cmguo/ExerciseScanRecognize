@@ -18,7 +18,7 @@ namespace Exercise.View
 
         private static void RelayCommand_ActionException(object sender, RelayCommand.ActionExceptionEventArgs e)
         {
-            MessageBox.Show(e.Exception.ToString(), "错误", MessageBoxButton.OKCancel);
+            MessageBox.Show(e.Exception.Message, "错误", MessageBoxButton.OKCancel);
             e.IsHandled = true;
         }
     }

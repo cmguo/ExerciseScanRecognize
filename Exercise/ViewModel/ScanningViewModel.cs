@@ -62,7 +62,11 @@ namespace Exercise.ViewModel
         protected override async Task EndScan(object obj)
         {
             if (!await scanModel.PauseScan())
+            {
+                await exerciseModel.MakeResult();
+                (obj as System.Windows.Controls.Page).NavigationService.Navigate(new SummaryPage());
                 return;
+            }
             bool? isConfirm = PUMessageBox.ShowConfirm("扫描仪中还有试卷待扫描，确认结束扫描并查看结果吗？", "提示");
             if (isConfirm != null && isConfirm.Value)
             {

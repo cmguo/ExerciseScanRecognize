@@ -102,6 +102,7 @@ namespace Base.Mvvm
             }
             catch (Exception e)
             {
+                Debug.WriteLine(e);
                 ActionExceptionEventArgs e1 = new ActionExceptionEventArgs(e);
                 ActionException?.Invoke(this, e1);
                 executing = false;

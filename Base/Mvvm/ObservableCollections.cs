@@ -44,7 +44,7 @@ namespace Base.Mvvm
             return result;
         }
 
-        public static ObservableCollection<I> Select2<I>(this ObservableCollection<I> origin, Func<I, bool> predicate)
+        public static ObservableCollection<I> Where2<I>(this ObservableCollection<I> origin, Func<I, bool> predicate)
         {
             ObservableCollection<I> result = new ObservableCollection<I>(origin.Where(predicate));
             origin.CollectionChanged += (s, e) =>
@@ -67,5 +67,15 @@ namespace Base.Mvvm
             return result;
         }
 
+
+        public static I Find<I>(this ObservableCollection<I> origin, Func<I, bool> predicate)
+        {
+            foreach (I i in origin)
+            {
+                if (predicate(i))
+                    return i;
+            }
+            return default(I);
+        }
     }
 }

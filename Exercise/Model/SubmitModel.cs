@@ -162,8 +162,7 @@ namespace Exercise.Model
             hc.DefaultRequestHeaders.TryAddWithoutValidation("Content-Type", "image/jpg");
             foreach (AnswerData p in pages)
             {
-                FileStream fs = new FileStream(task.Path + "\\" + p.ImageName, FileMode.Open, FileAccess.Read);
-                using (fs)
+                using (FileStream fs = new FileStream(task.Path + "\\" + p.ImageName, FileMode.Open, FileAccess.Read))
                 {
                     StreamContent content = new StreamContent(fs);
                     content.Headers.Add("Content-Type", "image/jpg");
@@ -171,7 +170,6 @@ namespace Exercise.Model
                     if (response.StatusCode.CompareTo(HttpStatusCode.Ambiguous) >= 0)
                         throw new HttpResponseException(response.StatusCode, response.ReasonPhrase);
                 }
-                fs.Close();
                 p.ImageName = null;
                 ++task.Finish;
             }

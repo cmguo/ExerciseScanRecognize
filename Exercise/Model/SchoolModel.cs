@@ -96,7 +96,7 @@ namespace Exercise.Model
         public void Clear()
         {
             schoolData = null;
-            Classes = null;
+            Classes.Clear();
         }
     }
 }

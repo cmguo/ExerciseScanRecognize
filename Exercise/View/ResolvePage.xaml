@@ -57,6 +57,22 @@
                             CommandParameter="{Binding RelativeSource={RelativeSource AncestorType={x:Type Page}}}" 
                             Content="丢弃改学生成绩" />
                 </StackPanel>
+                <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Orientation="Vertical">
+                    <TextBlock Text="以下试卷均缺失，可批量全部忽略" />
+                    <ListView ItemsSource="{Binding SelectedExceptionList.Exceptions}">
+                        <ListView.ItemTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding Converter={StaticResource ExceptionConverter}}" />
+                            </DataTemplate>
+                        </ListView.ItemTemplate>
+                    </ListView>
+                    <Button Command="{Binding IgnoreListCommand}" 
+                            CommandParameter="{Binding RelativeSource={RelativeSource AncestorType={x:Type Page}}}" 
+                            Content="忽略以上异常" />
+                    <Button Command="{Binding RemovePageListCommand}" 
+                            CommandParameter="{Binding RelativeSource={RelativeSource AncestorType={x:Type Page}}}" 
+                            Content="删除以上试卷" />
+                </StackPanel>
             </StackPanel>
             <DockPanel>
                 <local:PaperViewer Paper="{Binding SelectedException.Page.PagePath}"/>

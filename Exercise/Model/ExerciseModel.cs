@@ -134,7 +134,6 @@ namespace Exercise.Model
                     if (s.AnswerPages[i] == null)
                     {
                         Page p = new Page() { PageIndex = i * 2, Student = s };
-                        p.Another = p;
                         s.AnswerPages[i] = p;
                         AddException(ExceptionType.PageLost, p);
                     }
@@ -248,7 +247,8 @@ namespace Exercise.Model
                 AddException(type, page);
                 return;
             }
-            page.Another.Student = page.Student; // 可能单面，就是自己
+            if (page.Another != null)
+                page.Another.Student = page.Student; // 可能单面，就是自己
             if (page.Student.AnswerPages == null)
             {
                 page.Student.AnswerPages = new List<Page>(emptyPages);
@@ -272,7 +272,7 @@ namespace Exercise.Model
                     AddException(ExceptionType.AnswerException, page);
                 if (page.CorrectionExceptions != null)
                     AddException(ExceptionType.CorrectionException, page);
-                if (page.Another != page)
+                if (page.Another != null)
                 {
                     if (page.Another.AnswerExceptions != null)
                         AddException(ExceptionType.AnswerException, page.Another);
@@ -307,17 +307,15 @@ namespace Exercise.Model
             if (page.Student.AnswerPages[pageIndex] == page)
             {
                 page.Student.AnswerPages[pageIndex] = sEmptyPage;
-                if (type != ResolveType.RemoveDuplexPage && page.Another != page)
+                if (type != ResolveType.RemoveDuplexPage && page.Another != null)
                 {
                     page.Student.AnswerPages[pageIndex] = page.Another;
-                    page.Another.Another = page.Another;
-                    page.Another = page;
                 }
             }
             else if (page.Student.AnswerPages[pageIndex].Another == page)
             {
                 page.Student.AnswerPages[pageIndex].Another = page.Student.AnswerPages[pageIndex];
-                page.Another = page;
+                page.Another = null;
             }
             RemovePage(page);
         }
@@ -331,15 +329,14 @@ namespace Exercise.Model
             {
                 scanModel.ReleasePage(page);
             }
-            if (page.Another != page)
+            if (page.Another != null)
             {
                 RemoveException(ExceptionType.None, page.Another);
                 page.Another.Student = null;
                 PageDropped.Add(page.Another);
                 scanModel.ReleasePage(page.Another);
-                page.Another.Another = page.Another;
+                page.Another = null;
             }
-            page.Another = page;
         }
 
         public void UpdatePage(ExceptionType type, Page page)

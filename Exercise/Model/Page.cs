@@ -26,7 +26,6 @@ namespace Exercise.Model
         public String StudentCode { get; set; }
         public AnswerData Answer { get; set; }
 
-        [JsonIgnore]
         public Page Another { get; set; }
 
         [JsonIgnore]

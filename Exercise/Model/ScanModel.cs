@@ -84,6 +84,19 @@ namespace Exercise.Model
             }
         }
 
+        private bool _IsCompleted;
+        public bool IsCompleted
+        {
+            get { return _IsCompleted; }
+            set
+            {
+                if (_IsCompleted == value)
+                    return;
+                _IsCompleted = value;
+                RaisePropertyChanged("IsCompleted");
+            }
+        }
+
         private IScanDevice scanDevice = ScanDevice.Instance;
         private Algorithm.Algorithm algorithm = new Algorithm.Algorithm();
 
@@ -115,6 +128,7 @@ namespace Exercise.Model
                 return;
             IsScanning = true;
             IsPaused = false;
+            IsCompleted = false;
             ++scanBatch;
             scanIndex = 0;
             try
@@ -218,7 +232,10 @@ namespace Exercise.Model
 
         private async Task AddImage(string fileName)
         {
-            Page page = new Page() { ScanBatch = scanBatch, ScanIndex = ++scanIndex, PagePath = fileName };
+            int n1 = fileName.LastIndexOf('_') + 1;
+            int n2 = fileName.LastIndexOf(".");
+            int index = Int32.Parse(fileName.Substring(n1, n2 - n1));
+            Page page = new Page() { ScanBatch = scanBatch, ScanIndex = index, PagePath = fileName };
             Page page1 = null;
             lock (mutex)
             {
@@ -235,6 +252,8 @@ namespace Exercise.Model
             Page[] pages = new Page[] { page1, page2 };
             await Task.Factory.StartNew(() => ScanTwoPage(pages));
             Pages.Add(pages[0]);
+            if (index + 1 == scanIndex && !IsScanning)
+                IsCompleted = true;
         }
 
         private void ScanTwoPage(Page[] pages)
@@ -338,6 +357,7 @@ namespace Exercise.Model
                 page.PagePath = savePath + "\\" + page.Md5Name;
                 FileStream fs = new FileStream(page.PagePath, FileMode.Create, FileAccess.Write);
                 using (fs) { new MemoryStream(page.PageData).CopyTo(fs); }
+                fs.Close();
             }
             catch (Exception e)
             {
@@ -351,7 +371,7 @@ namespace Exercise.Model
 
         private void ScanDevice_GetFileName(object sender, ScanEvent e)
         {
-            e.FileName = savePath + "\\" + scanBatch + "_" + scanIndex + ".jpg";
+            e.FileName = savePath + "\\" + scanBatch + "_" + (scanIndex++) + ".jpg";
         }
 
         private void ScanDevice_OnImage(object sender, ScanEvent e)

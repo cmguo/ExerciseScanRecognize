@@ -5,11 +5,11 @@ namespace Exercise.Algorithm
 {
     public class AnswerData
     {
-        [JsonProperty(Required = Required.Default)]
+        [JsonProperty(Required = Required.Default, NullValueHandling = NullValueHandling.Ignore)]
         [JsonConverter(typeof(ByteArrayJsonConverter))]
         public byte[] RedressedImgBytes { get; set; }
 
-        [JsonProperty(Required = Required.Default)]
+        [JsonProperty(Required = Required.Default, NullValueHandling = NullValueHandling.Ignore)]
         public string ImageName { get; set; } // 提供给中台的名称（文件数据的Md5）
 
         [JsonProperty(Required = Required.Default)]
@@ -17,13 +17,22 @@ namespace Exercise.Algorithm
 
         public int ImgWidth { get; set; }
         public int ImgHeight { get; set; }
+
+        public IList<Marker> PaperMarkers { get; set; }
+        public IList<Marker> AreaMarkers { get; set; }
         public IList<Area> AreaInfo { get; set; }
+
+        public class Result
+        {
+            public string Value { get; set; }
+            public Location ValueLocation { get; set; }
+        }
 
         public class Item
         {
             public int StatusOfItem { get; set; } // 0 SUCCESS 1 检测结果异常
             public Location ItemLocation { get; set; } // 相对于图像左上角的位置，绝对位置
-            public string AnalyzeResult { get; set; }
+            public IList<Result> AnalyzeResult { get; set; }
         }
 
         public class Question
@@ -40,6 +49,11 @@ namespace Exercise.Algorithm
             public AreaType AreaType { get; set; }
             public Location AreaLocation { get; set; }
             public IList<Question> QuestionInfo { get; set; }
+        }
+
+        public class Marker
+        {
+            public Location MarkerLocation { get; set; }
         }
 
     }

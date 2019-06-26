@@ -94,6 +94,12 @@ namespace Application.Misc
             set => twain32.Capabilities.YResolution.Set(value);
         }
 
+        public string PixelType
+        {
+            get => twain32.Capabilities.PixelType.GetCurrent().ToString();
+            set => twain32.Capabilities.PixelType.Set((TwPixelType)Enum.Parse(typeof(TwPixelType), value));
+        }
+
         public bool FeederLoaded => twain32.Capabilities.FeederLoaded.GetCurrent();
 
         public ICollection<string> ImageFormats
@@ -156,6 +162,7 @@ namespace Application.Misc
             twain32.Capabilities.ImageFileFormat.Set(TwFF.Jfif);
             twain32.Capabilities.Compression.Set(TwCompression.Jpeg);
             twain32.Capabilities.XferMech.Set(TwSX.File);
+            twain32.Capabilities.PixelType.Set(TwPixelType.RGB);
             XResolution = 200;
             YResolution = 200;
         }

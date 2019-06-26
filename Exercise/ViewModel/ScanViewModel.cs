@@ -34,6 +34,7 @@ namespace Exercise.ViewModel
         }
 
         public bool IsScanning => scanModel.IsScanning;
+        public bool IsCompleted => scanModel.IsCompleted;
 
         #endregion
 
@@ -48,6 +49,7 @@ namespace Exercise.ViewModel
 
         public ScanViewModel()
         {
+            PageCount = scanModel.Pages.Count;
             ContinueCommand = new RelayCommand((e) => Continue(e));
             EndScanCommand = new RelayCommand((e) => EndScan(e));
             scanModel.Pages.CollectionChanged += Pages_CollectionChanged;
@@ -97,7 +99,9 @@ namespace Exercise.ViewModel
 
         private void ScanModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
         {
-            if (e.PropertyName == "IsScanning")
+            if (e.PropertyName == "IsScanning"
+                || e.PropertyName == "IsCompleted"
+                || e.PropertyName == "IsPaused")
                 RaisePropertyChanged(e.PropertyName);
         }
 

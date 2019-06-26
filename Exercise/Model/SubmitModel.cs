@@ -74,7 +74,7 @@ namespace Exercise.Model
         {
             IList<SubmitData.AnswerInfo> data = students
                 .Where(s => s.AnswerPages != null && s.AnswerPages.Any(p => p != null && p.Answer != null))
-                .Select(s => new SubmitData.AnswerInfo() { StudentId = s.StudentNo, PageInfo = GetAnswers(s) })
+                .Select(s => new SubmitData.AnswerInfo() { StudentId = s.Id, PageInfo = GetAnswers(s) })
                 .ToList();
             SubmitData sdata = new SubmitData() { PaperId = exerciseId, Data = data };
             SubmitPrepare prepare = new SubmitPrepare() { PaperId = exerciseId, ClassIdList = classes.Select(c => c.ClassId).ToList() };
@@ -122,7 +122,7 @@ namespace Exercise.Model
                     p.Answer.PageId = p.PageIndex;
                     answers.Add(p.Answer);
                 }
-                if (p.Another != p && p.Another.Answer != null)
+                if (p.Another != null && p.Another.Answer != null)
                 {
                     p.Another.Answer.ImageName = p.Another.Md5Name;
                     p.Another.Answer.PageId = p.Another.PageIndex;
@@ -171,6 +171,7 @@ namespace Exercise.Model
                     if (response.StatusCode.CompareTo(HttpStatusCode.Ambiguous) >= 0)
                         throw new HttpResponseException(response.StatusCode, response.ReasonPhrase);
                 }
+                fs.Close();
                 p.ImageName = null;
                 ++task.Finish;
             }

@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using System.Windows.Navigation;
 using TalBase.ViewModel;
 using TalBase.Utils;
+using System.Diagnostics;
 
 namespace Exercise.ViewModel
 {
@@ -43,8 +44,9 @@ namespace Exercise.ViewModel
             {
                 SourceIndex = SourceIndex;
             }
-            catch
+            catch (Exception e)
             {
+                Debug.WriteLine(e.ToString());
                 PUMessageBox.ShowConfirm("扫描仪未连接，请检查后重试？", "提示", Buttons.OK);
                 return;
             }

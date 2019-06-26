@@ -26,14 +26,14 @@ namespace TalBase.Service
             public bool Success { get; set; }
             public int ErrorCode { get; set; }
             [JsonProperty(Required = Required.Default)]
-            public string ErrorMessage { get; set; }
+            public string ErrorMsg { get; set; }
             [JsonProperty("result")]
             public T Data { get; set; }
 
             internal void Check()
             {
                 if (!Success)
-                    throw new ServiceException(ErrorCode, ErrorMessage);
+                    throw new ServiceException(ErrorCode, ErrorMsg);
             }
         }
 

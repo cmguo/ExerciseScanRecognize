@@ -59,7 +59,7 @@
                 </StackPanel>
             </StackPanel>
             <DockPanel>
-                <Image Source="{Binding SelectedException.Page.PagePath}"/>
+                <local:PaperViewer Paper="{Binding SelectedException.Page.PagePath}"/>
             </DockPanel>
         </DockPanel>
     </Grid>

@@ -28,6 +28,7 @@ namespace Exercise.ViewModel
             Task = submitModel.SubmitTasks[exerciseModel.SavePath];
             Task.PropertyChanged += Task_PropertyChanged;
             RetryCommand = new RelayCommand((e) => Retry(e));
+            ReturnCommand = new RelayCommand((e) => Return(e));
         }
 
         public override void Release()

@@ -2,6 +2,8 @@
 using Exercise.Model;
 using Exercise.View;
 using Panuon.UI;
+using System.Windows;
+using System.Windows.Input;
 using TalBase.ViewModel;
 
 namespace Exercise.ViewModel
@@ -16,6 +18,7 @@ namespace Exercise.ViewModel
 
         public RelayCommand RetryCommand { get; private set; }
         public RelayCommand ReturnCommand { get; private set; }
+        public RelayCommand CloseCommand { get; private set; }
 
         #endregion
 
@@ -29,6 +32,7 @@ namespace Exercise.ViewModel
             Task.PropertyChanged += Task_PropertyChanged;
             RetryCommand = new RelayCommand((e) => Retry(e));
             ReturnCommand = new RelayCommand((e) => Return(e));
+            CloseCommand = new RelayCommand((e) => Close(e));
         }
 
         public override void Release()
@@ -47,12 +51,13 @@ namespace Exercise.ViewModel
             (obj as System.Windows.Controls.Page).NavigationService.Navigate(new HomePage());
         }
 
-        private void Close(object obj)
+        private async void Close(object obj)
         {
             bool? isConfirm = PUMessageBox.ShowConfirm("扫描结果上传中，退出后，扫描结果将放弃，确认退出吗？", "提示");
             if (isConfirm != null && isConfirm.Value)
             {
-                (obj as System.Windows.Controls.Page).NavigationService.Navigate(new HomePage());
+                await submitModel.Cancel(Task);
+                Window.GetWindow((obj as ExecutedRoutedEventArgs).OriginalSource as UIElement).Close();
             }
         }
 

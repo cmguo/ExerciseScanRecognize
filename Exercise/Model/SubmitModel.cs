@@ -8,8 +8,6 @@ using System.IO;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
-using System.Text;
-using System.Threading;
 using System.Threading.Tasks;
 using TalBase.Model;
 
@@ -37,7 +35,9 @@ namespace Exercise.Model
             Wait, 
             Submiting, 
             Completed, 
-            Failed
+            Failed, 
+            Cancel, 
+            Canceled
         }
 
         public class SubmitTask : ModelBase
@@ -58,6 +58,8 @@ namespace Exercise.Model
             }
             public SubmitPrepare Prepare { get; set; }
             public SubmitData Submit { get; set; }
+            public IList<string> PageNames { get; set; }
+
         }
 
         public Dictionary<string, SubmitTask> SubmitTasks { get; private set; }
@@ -78,7 +80,9 @@ namespace Exercise.Model
                 .ToList();
             SubmitData sdata = new SubmitData() { PaperId = exerciseId, Data = data };
             SubmitPrepare prepare = new SubmitPrepare() { PaperId = exerciseId, ClassIdList = classes.Select(c => c.ClassId).ToList() };
-            SubmitTask task = new SubmitTask() { Path = path, Status = TaskStatus.Wait, Prepare = prepare, Submit = sdata };
+            IList<string> names = data.SelectMany(s => s.PageInfo.Select(p => p.ImageName)).ToList();
+            int total = (data.Count + SUBIT_BATCH_SIZE - 1) / SUBIT_BATCH_SIZE + names.Count;
+            SubmitTask task = new SubmitTask() { Path = path, Status = TaskStatus.Wait, Total = total, Prepare = prepare, Submit = sdata, PageNames = names };
             SubmitTasks[path] = task;
             await JsonPersistent.Save(path + "\\submit.json", task);
         }
@@ -92,6 +96,12 @@ namespace Exercise.Model
                 SubmitTasks[path] = task;
             }
             await Submit(task);
+        }
+
+        public async Task Cancel(SubmitTask task)
+        {
+            task.Status = TaskStatus.Cancel;
+            await JsonPersistent.Save(task.Path + "\\submit.json", task);
         }
 
         public async Task Submit(SubmitTask task)
@@ -135,47 +145,70 @@ namespace Exercise.Model
         private async Task SubmitInner(SubmitTask task)
         {
             SubmitData sdata = task.Submit;
-            task.Total = (sdata.Data.Count + SUBIT_BATCH_SIZE - 1) / SUBIT_BATCH_SIZE 
-                + sdata.Data.Select(d => d.PageInfo).Count();
-            task.Finish = sdata.Data.SelectMany(d => d.PageInfo.Where(p => p.ImageName == null)).Count();
+            int left = sdata.Data.Count + task.PageNames.Count;
+            task.Finish = task.Total - left;
             if (sdata.HomeworkId == null)
             {
                 StringData data = await service.GetSubmitId(task.Prepare);
                 sdata.HomeworkId = data.Value;
             }
-            IList<SubmitData.AnswerInfo> list = sdata.Data;
-            int i = 0;
-            for (; i + SUBIT_BATCH_SIZE < list.Count; i += SUBIT_BATCH_SIZE)
-            {
-                sdata.Data = list.Skip(0).Take(SUBIT_BATCH_SIZE).ToList();
-                await service.Submit(sdata);
-                ++task.Finish;
-            }
-            if (i > 0)
-                sdata.Data = list.Skip(i).ToList();
-            await service.Submit(sdata);
-            ++task.Finish;
-            ICollection<AnswerData> pages = sdata.Data.SelectMany(s => s.PageInfo.Where(p => p.ImageName != null)).ToList();
-            List<string> pageNames = pages.Select(p => p.ImageName).ToList();
-            Dictionary<string, string> pageUrls = await service.GeneratePresignedUrls(new GenUriData() { ObjectNameList = pageNames });
-            HttpClient hc = new HttpClient();
-            hc.DefaultRequestHeaders.TryAddWithoutValidation("Content-Type", "image/jpg");
-            foreach (AnswerData p in pages)
-            {
-                using (FileStream fs = new FileStream(task.Path + "\\" + p.ImageName, FileMode.Open, FileAccess.Read))
-                {
-                    StreamContent content = new StreamContent(fs);
-                    content.Headers.Add("Content-Type", "image/jpg");
-                    var response = await hc.PutAsync(pageUrls[p.ImageName], content);
-                    if (response.StatusCode.CompareTo(HttpStatusCode.Ambiguous) >= 0)
-                        throw new HttpResponseException(response.StatusCode, response.ReasonPhrase);
-                }
-                p.ImageName = null;
-                ++task.Finish;
-            }
+            await SubmitImages(task);
+            await SubmitInfo(task, sdata);
             SubmitTasks.Remove(task.Path);
             Directory.Delete(task.Path, true);
             task.Status = TaskStatus.Completed;
+        }
+
+        private async Task SubmitInfo(SubmitTask task, SubmitData sdata)
+        {
+            IList<SubmitData.AnswerInfo> list = sdata.Data;
+            if (list.Count == 0)
+                return;
+            int i = 0;
+            try
+            {
+                for (; i + SUBIT_BATCH_SIZE < list.Count; i += SUBIT_BATCH_SIZE)
+                {
+                    sdata.Data = list.Skip(i).Take(SUBIT_BATCH_SIZE).ToList();
+                    await service.Submit(sdata);
+                    ++task.Finish;
+                }
+                if (i > 0)
+                    sdata.Data = list.Skip(i).ToList();
+                await service.Submit(sdata);
+                i = list.Count;
+                ++task.Finish;
+                sdata.Data.Clear();
+            }
+            finally
+            {
+                if (i < list.Count)
+                    sdata.Data = list.Skip(i).ToList();
+            }
+        }
+
+        private async Task SubmitImages(SubmitTask task)
+        {
+            IList<string> pageNames = task.PageNames;
+            if (pageNames.Count == 0)
+                return;
+            Dictionary<string, string> pageUrls = await service.GeneratePresignedUrls(new GenUriData() { ObjectNameList = pageNames });
+            HttpClient hc = new HttpClient();
+            hc.DefaultRequestHeaders.TryAddWithoutValidation("Content-Type", "image/jpg");
+            while (pageNames.Count > 0)
+            {
+                string n = pageNames.First();
+                using (FileStream fs = new FileStream(task.Path + "\\" + n, FileMode.Open, FileAccess.Read))
+                {
+                    StreamContent content = new StreamContent(fs);
+                    content.Headers.Add("Content-Type", "image/jpg");
+                    var response = await hc.PutAsync(pageUrls[n], content);
+                    if (response.StatusCode.CompareTo(HttpStatusCode.Ambiguous) >= 0)
+                        throw new HttpResponseException(response.StatusCode, response.ReasonPhrase);
+                }
+                pageNames.RemoveAt(0);
+                ++task.Finish;
+            }
         }
 
     }

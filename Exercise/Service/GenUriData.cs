@@ -8,6 +8,6 @@ namespace Exercise.Service
 {
     public class GenUriData
     {
-        public List<string> ObjectNameList { get; set; }
+        public IList<string> ObjectNameList { get; set; }
     }
 }

@@ -1,16 +1,9 @@
-﻿using System.Linq;
-using System.Threading.Tasks;
-using System.Windows;
+﻿using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Forms;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
-using System.Windows.Shapes;
 using Application.Misc;
+using Base.TitleBar;
 using Panuon.UI;
 using TalBase.ViewModel;
 
@@ -30,7 +23,6 @@ namespace Application
             this.MaxWidth = SystemParameters.MaximizedPrimaryScreenWidth;
             InitializeComponent();
             ScanDeviceSaraff.Init(this);
-            LoadNavButtons();
             Result = 0;
             frmMain.Navigating += FrmMain_Navigating;
             frmMain.Navigated += FrmMain_Navigated;
@@ -46,37 +38,79 @@ namespace Application
 
         private void FrmMain_Navigated(object sender, NavigationEventArgs e)
         {
-            lastPage = e.Content as Page;
-            showHeadOrTitle(lastPage);
+            Page page = e.Content as Page;
+            showHeadOrTitle(page);
+            if (lastPage != null)
+                UnLoadNavButtons(lastPage);
+            LoadNavButtons(page);
+            if (IsLoaded)
+                SetNavCommands(page);
+            else
+                Loaded += delegate
+                {
+                    SetNavCommands(page);
+                };
+            lastPage = page;
         }
 
-        public void LoadNavButtons()
+        public void UnLoadNavButtons(Page page)
         {
-            Thickness thickness = new Thickness();
-            thickness.Left = 5;
-            thickness.Right = 5;
-            var btn1 = new PUButton()
+            TitleButtonCollection buttons = TitleBarManager.GetButtons(page);
+            if (buttons == null)
+                return;
+            buttons.ResolveGloabalButtons();
+            foreach (TitleButton b in buttons)
             {
-                VerticalAlignment = VerticalAlignment.Center,
-                HorizontalAlignment = System.Windows.HorizontalAlignment.Center,
-                Content = "试卷扫描记录管理",
-                Padding = thickness,
-                Margin =thickness,
-                
-            };
-            var btn2 = new PUButton()
+                RemoveNavButton(b.Content);
+                if (b.Content.DataContext == page.DataContext)
+                    b.Content.DataContext = null;
+                Button button = b.Content as Button;
+                if (button != null && button.CommandParameter == page)
+                    button.CommandParameter = null;
+            }
+        }
+
+        public void LoadNavButtons(Page page)
+        {
+            TitleButtonCollection buttons = TitleBarManager.GetButtons(page);
+            if (buttons != null)
             {
-                VerticalAlignment = VerticalAlignment.Center,
-                HorizontalAlignment = System.Windows.HorizontalAlignment.Center,
-                Content = "卢湾一中心小学",
-                Padding = thickness,
-                Margin = thickness,
+                buttons.ResolveGloabalButtons();
+                foreach (TitleButton b in buttons)
+                {
+                    if (b.Content.DataContext == null)
+                        b.Content.DataContext = page.DataContext;
+                    Button button = b.Content as Button;
+                    if (button != null && button.CommandParameter == null)
+                        button.CommandParameter = page;
+                    AppendNavButton(b.Content);
+                }
+            }
+        }
 
-
-
-            };
-            AppendNavButton(btn1, new RoutedEventHandler((s, e) => { PUMessageBox.ShowDialog("点击了扫描试卷管理记录页面"); Result = 2; }), false);
-            AppendNavButton(btn2, new RoutedEventHandler((s, e) => { PUMessageBox.ShowDialog("点击了学校管理，需要退出吗？"); Result = 1; }), false);
+        public void SetNavCommands(Page page)
+        {
+            TitleCommandCollection commands = TitleBarManager.GetCommands(page);
+            if (commands != null)
+            {
+                foreach (TitleCommand b in commands)
+                {
+                    PUButton button = GetNavButton(b.Name);
+                    button.CommandBindings.Add(new CommandBinding(button.Command, (s, e) =>
+                    {
+                        object arg = b.CommandParameter;
+                        if (arg == null)
+                            arg = e;
+                        b.Command.Execute(arg);
+                    }, (s, e) =>
+                    {
+                        object arg = b.CommandParameter;
+                        if (arg == null)
+                            arg = e;
+                        e.CanExecute = b.Command.CanExecute(arg);
+                    }));
+                }
+            }
         }
 
         private void showHeadOrTitle(Page page)

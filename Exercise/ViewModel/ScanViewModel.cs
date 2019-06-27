@@ -70,11 +70,6 @@ namespace Exercise.ViewModel
             await scanModel.CancelScan();
         }
 
-        protected virtual async Task Close(object obj)
-        {
-            await Task.FromException(new NotImplementedException("Close"));
-        }
-
         protected virtual void Continue(object obj)
         {
             while (!scanModel.FeederLoaded)

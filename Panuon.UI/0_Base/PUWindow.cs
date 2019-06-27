@@ -82,6 +82,10 @@ namespace Panuon.UI
             catch (Exception ex) { }
 
             PreviewMouseMove += OnPreviewMouseMove;
+
+            CommandBindings.Add(new CommandBinding(ApplicationCommands.Close, 
+                (s, e) => CloseCommand.Execute(this), 
+                (s, e) => e.CanExecute = CloseCommand.CanExecute(this)));
         }
         #endregion
 
@@ -659,6 +663,16 @@ namespace Panuon.UI
             var fontsize = new Binding() { Path = new PropertyPath("FontSize"), UpdateSourceTrigger = UpdateSourceTrigger.PropertyChanged, Source = this, Mode = BindingMode.OneWay };
             BindingOperations.SetBinding(btn, FontSizeProperty, fontsize);
             btn.Click += clickHandler;
+            AppendNavButton(btn);
+        }
+
+        public void RemoveNavButton(UIElement btn)
+        {
+            _stkNav.Children.Remove(btn);
+        }
+
+        public void AppendNavButton(UIElement btn)
+        {
             if (IsLoaded)
                 _stkNav.Children.Insert(0, btn);
             else
@@ -669,6 +683,21 @@ namespace Panuon.UI
                 };
             }
         }
+
+        public PUButton GetNavButton(string name)
+        {
+            name = "btn" + name;
+            foreach (UIElement e in _stkNav.Children)
+            {
+                PUButton b = e as PUButton;
+                if (b == null)
+                    continue;
+                if (b.Name == name)
+                    return b;
+            }
+            return null;
+        }
+
         #endregion
 
         #region Function

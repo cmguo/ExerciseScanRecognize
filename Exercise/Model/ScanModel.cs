@@ -252,7 +252,7 @@ namespace Exercise.Model
             Page[] pages = new Page[] { page1, page2 };
             await Task.Factory.StartNew(() => ScanTwoPage(pages));
             Pages.Add(pages[0]);
-            if (index + 1 == scanIndex && !IsScanning)
+            if (index + 1 == scanIndex)
                 IsCompleted = true;
         }
 
@@ -382,7 +382,7 @@ namespace Exercise.Model
 
         private void ScanDevice_ScanPaused(object sender, ScanEvent e)
         {
-            IsPaused = false;
+            IsPaused = true;
         }
 
         private void ScanDevice_ScanCompleted(object sender, ScanEvent e)

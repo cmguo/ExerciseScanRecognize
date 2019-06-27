@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Windows;
-using System.ComponentModel;
-using System.Windows.Data;
+﻿using System.Windows;
 using System.Windows.Controls;
 
 namespace Base.TitleBar
@@ -15,16 +9,16 @@ namespace Base.TitleBar
 
         public static DependencyProperty NameProperty =
             DependencyProperty.Register("Name",
-                                        typeof(object),
+                                        typeof(string),
                                         typeof(TitleButton));
         public static DependencyProperty ContentProperty =
             DependencyProperty.Register("Content",
-                                        typeof(object),
+                                        typeof(FrameworkElement),
                                         typeof(TitleButton));
 
         public Dock? GetDock()
         {
-            return (Dock) GetValue(DockPanel.DockProperty);
+            return (Dock) Content.GetValue(DockPanel.DockProperty);
         }
 
         #endregion // Dependency Properties
@@ -39,29 +33,15 @@ namespace Base.TitleBar
 
         #region Properties
 
-        public object Name
+        public string Name
         {
-            get { return GetValue(NameProperty); }
+            get { return GetValue(NameProperty) as string; }
             set { SetValue(NameProperty, value); }
         }
-        public object Content
+        public FrameworkElement Content
         {
-            get { return GetValue(ContentProperty); }
+            get { return GetValue(ContentProperty) as FrameworkElement; }
             set { SetValue(ContentProperty, value); }
-        }
-
-        [DefaultValue(null)]
-        public string TargetProperty
-        {
-            get;
-            set;
-        }
-
-        [DefaultValue(null)]
-        public DependencyProperty TargetDependencyProperty
-        {
-            get;
-            set;
         }
 
         #endregion // Properties
@@ -79,8 +59,6 @@ namespace Base.TitleBar
         protected override void CloneCore(Freezable sourceFreezable)
         {
             TitleButton pushBinding = sourceFreezable as TitleButton;
-            TargetProperty = pushBinding.TargetProperty;
-            TargetDependencyProperty = pushBinding.TargetDependencyProperty;
             base.CloneCore(sourceFreezable);
         }
 

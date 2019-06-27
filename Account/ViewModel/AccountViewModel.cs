@@ -40,6 +40,7 @@ namespace Account.ViewModel
         private async Task DoLogout(object obj)
         {
             await AccountModel.Instance.Logout();
+            (obj as Page).NavigationService.Navigate(new AccountPage());
         }
     }
 

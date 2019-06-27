@@ -172,6 +172,7 @@ namespace Exercise.Model
             exerciseId = null;
             emptyPages = null;
             ExerciseData = null;
+            PageStudents.Clear();
             Exceptions.Clear();
             PageDropped.Clear();
             schoolModel.Clear();

@@ -1,12 +1,11 @@
 ﻿using Base.Mvvm;
 using Exercise.Model;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using static Exercise.Model.ExerciseModel;
 
 namespace Exercise.ViewModel
 {
-    class ResolveViewModel : ScanViewModel
+    class ResolveViewModel : ExerciseViewModel
     {
 
         #region Properties

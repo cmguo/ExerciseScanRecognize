@@ -3,12 +3,12 @@
 namespace Exercise.View
 {
     /// <summary>
-    /// HomePage.xaml 的交互逻辑
+    /// HistoryPage.xaml 的交互逻辑
     /// </summary>
-    public partial class HomePage : Page
+    public partial class HistoryPage : Page
     {
 
-        public HomePage()
+        public HistoryPage()
         {
             InitializeComponent();
         }

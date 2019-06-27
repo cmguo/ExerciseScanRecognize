@@ -18,10 +18,10 @@ namespace Exercise.View
 
         private void Vm_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
         {
-            if (e.PropertyName == "IsCompleted")
+            if (e.PropertyName == "IsCompleted" || e.PropertyName == "IsScanning")
             {
                 ScanningViewModel vm = DataContext as ScanningViewModel;
-                if (vm.IsCompleted)
+                if (vm.IsCompleted && !vm.IsScanning)
                 {
                     Dispatcher.BeginInvoke((ThreadStart)delegate ()
                     {

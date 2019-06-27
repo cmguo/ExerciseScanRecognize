@@ -32,7 +32,6 @@ namespace Exercise.ViewModel
 
         #region Commands
 
-        public RelayCommand DiscardCommand { get; set; }
         public RelayCommand FinishCommand { get; set; }
         public RelayCommand ErrorCommand { get; set; }
 
@@ -43,11 +42,12 @@ namespace Exercise.ViewModel
 
         public ScanningViewModel()
         {
-            DiscardCommand = new RelayCommand((e) => Discard(e));
             FinishCommand = new RelayCommand((e) => Finish(e));
             ErrorCommand = new RelayCommand((e) => OnError(e));
             exerciseModel.PageStudents.CollectionChanged += PageStudents_CollectionChanged;
             exerciseModel.PropertyChanged += ExerciseModel_PropertyChanged;
+            CloseMessage = "当前仍有扫描任务进行中，" + CloseMessage;
+            StudentSumary = exerciseModel.PageStudents.Count;
         }
 
         public override void Release()
@@ -73,40 +73,6 @@ namespace Exercise.ViewModel
                 await scanModel.CancelScan();
                 await exerciseModel.MakeResult();
                 (obj as System.Windows.Controls.Page).NavigationService.Navigate(new SummaryPage());
-            }
-            else
-            {
-                scanModel.ResumeScan();
-            }
-        }
-
-        protected override async Task Close(object obj)
-        {
-            if (!await scanModel.PauseScan())
-                return;
-            bool? isConfirm = PUMessageBox.ShowConfirm("当前仍有扫描任务进行中，退出后本次扫描结果将放弃，确认退出吗？", "提示");
-            if (isConfirm != null && isConfirm.Value)
-            {
-                await scanModel.CancelScan();
-                exerciseModel.Discard();
-                (obj as System.Windows.Controls.Page).NavigationService.Navigate(new HomePage());
-            }
-            else
-            {
-                scanModel.ResumeScan();
-            }
-        }
-
-        private async Task Discard(object obj)
-        {
-            if (!await scanModel.PauseScan())
-                return;
-            bool? isConfirm = PUMessageBox.ShowConfirm("放弃后，本次扫描结果将作废，确认放弃吗？", "提示");
-            if (isConfirm != null && isConfirm.Value)
-            {
-                await scanModel.CancelScan();
-                exerciseModel.Discard();
-                (obj as System.Windows.Controls.Page).NavigationService.Navigate(new HomePage());
             }
             else
             {

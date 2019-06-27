@@ -7,6 +7,7 @@
       xmlns:resolve="clr-namespace:Exercise.View.Resolve"
       xmlns:vm="clr-namespace:Exercise.ViewModel"
       xmlns:pb="clr-namespace:Base.PushBinding;assembly=Base"
+      xmlns:tb="clr-namespace:Base.TitleBar;assembly=Base"
       mc:Ignorable="d" 
       d:DesignHeight="450" d:DesignWidth="800"
       Title="HomePage">
@@ -19,7 +20,15 @@
         <resolve:ExceptionListConverter x:Key="ExceptionListConverter" />
         <resolve:ExceptionConverter x:Key="ExceptionConverter" />
         <resolve:ExceptionPageConverter x:Key="ExceptionPageConverter" />
+        <Button x:Key="Drop" Command="{Binding DropCommand}" 
+                CommandParameter="{Binding RelativeSource={RelativeSource AncestorType={x:Type Page}}}" 
+                Content="放弃本次扫描" />
     </Page.Resources>
+
+    <tb:TitleBarManager.Buttons>
+        <tb:TitleButton Name="Account" />
+        <tb:TitleButton Content="{StaticResource Drop}" />
+    </tb:TitleBarManager.Buttons>
 
     <Grid>
         <DockPanel>
@@ -74,9 +83,9 @@
                             Content="删除以上试卷" />
                 </StackPanel>
             </StackPanel>
-            <DockPanel>
+            <Border BorderThickness="2" BorderBrush="Blue">
                 <local:PaperViewer Paper="{Binding SelectedException.Page.PagePath}"/>
-            </DockPanel>
+            </Border>
         </DockPanel>
     </Grid>
 </Page>

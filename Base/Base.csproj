@@ -71,6 +71,9 @@
     <Compile Include="Misc\SystemInfo.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Protocol\UriFetcher.cs" />
+    <Compile Include="TitleBar\TitleButton.cs" />
+    <Compile Include="TitleBar\TitleButtonCollection.cs" />
+    <Compile Include="TitleBar\TitleBarManager.cs" />
     <Compile Include="PushBinding\FreezableBinding.cs" />
     <Compile Include="PushBinding\PushBinding.cs" />
     <Compile Include="PushBinding\PushBindingCollection.cs" />

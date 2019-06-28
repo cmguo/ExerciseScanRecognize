@@ -6,5 +6,7 @@
 .*
 obj/
 bin/
+Debug/
+Release/
 publish/
 packages/

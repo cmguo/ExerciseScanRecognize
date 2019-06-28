@@ -5,6 +5,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Controls;
+using TalBase.View;
 
 namespace Exercise.View
 {
@@ -18,7 +20,7 @@ namespace Exercise.View
 
         private static void RelayCommand_ActionException(object sender, RelayCommand.ActionExceptionEventArgs e)
         {
-            MessageBox.Show(e.Exception.Message, "错误", MessageBoxButton.OKCancel);
+            PopupDialog.Show(e.Exception.Message, 0, "确定");
             e.IsHandled = true;
         }
     }

@@ -1,6 +1,7 @@
 ﻿
 using Microsoft.VisualBasic.Devices;
 using Panuon.UI;
+using TalBase.View;
 
 namespace TalBase.Utils
 {
@@ -13,7 +14,7 @@ namespace TalBase.Utils
             {
                 return true;
             }
-            PUMessageBox.ShowDialog("当前电脑无网络连接，请检查后再开始扫描", "", Buttons.OK, false);
+            PopupDialog.Show("当前电脑无网络连接，请检查后再开始扫描。", 0, "确定");
             return false;
             
         }

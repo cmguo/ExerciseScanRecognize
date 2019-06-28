@@ -10,6 +10,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
+using TalBase.View;
 using static Exercise.Model.ExerciseModel;
 
 namespace Exercise.ViewModel
@@ -74,8 +75,8 @@ namespace Exercise.ViewModel
         protected virtual async Task Close(object obj)
         {
             bool paused = await scanModel.PauseScan();
-            bool? isConfirm = PUMessageBox.ShowConfirm(CloseMessage, "提示");
-            if (isConfirm != null && isConfirm.Value)
+            int result = PopupDialog.Show(CloseMessage, 1, "退出", "取消");
+            if (result == 0)
             {
                 await scanModel.CancelScan();
                 exerciseModel.Discard();
@@ -91,8 +92,8 @@ namespace Exercise.ViewModel
         protected async Task Discard(object obj)
         {
             bool paused = await scanModel.PauseScan();
-            bool? isConfirm = PUMessageBox.ShowConfirm("放弃后，本次扫描结果将作废，确认放弃吗？", "提示");
-            if (isConfirm != null && isConfirm.Value)
+            int result = PopupDialog.Show("放弃后，本次扫描结果将作废，确认放弃吗？", 0, "放弃本次扫描", "取消");
+            if (result == 0)
             {
                 await scanModel.CancelScan();
                 exerciseModel.Discard();

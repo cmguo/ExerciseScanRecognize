@@ -6,6 +6,7 @@ using System;
 using System.Threading.Tasks;
 using TalBase.Utils;
 using System.Diagnostics;
+using TalBase.View;
 
 namespace Exercise.ViewModel
 {
@@ -51,7 +52,7 @@ namespace Exercise.ViewModel
             catch (Exception e)
             {
                 Debug.WriteLine(e.ToString());
-                PUMessageBox.ShowConfirm("扫描仪未连接，请检查后重试？", "提示", Buttons.OK);
+                PopupDialog.Show("扫描仪未连接，请检查后重试。", 0, "确定");
                 return;
             }
             await exerciseModel.NewTask();

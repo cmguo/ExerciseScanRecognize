@@ -7,6 +7,7 @@ using System.Windows;
 using System.Windows.Navigation;
 using TalBase.ViewModel;
 using Panuon.UI;
+using TalBase.View;
 
 namespace Exercise.ViewModel
 {
@@ -67,8 +68,8 @@ namespace Exercise.ViewModel
                 (obj as System.Windows.Controls.Page).NavigationService.Navigate(new SummaryPage());
                 return;
             }
-            bool? isConfirm = PUMessageBox.ShowConfirm("扫描仪中还有试卷待扫描，确认结束扫描并查看结果吗？", "提示");
-            if (isConfirm != null && isConfirm.Value)
+            int result = PopupDialog.Show("扫描仪中还有试卷待扫描，确认结束扫描并查看结果吗？", 0, "查看结果", "继续扫描");
+            if (result == 0)
             {
                 await scanModel.CancelScan();
                 await exerciseModel.MakeResult();
@@ -92,8 +93,8 @@ namespace Exercise.ViewModel
                 msg = "当前试卷二维码无法识别，请检查试卷后重试";
             else if (Error == 2)
                 msg = "数据连接异常，请联系服务人员";
-            bool? isConfirm = PUMessageBox.ShowConfirm(msg, "提示");
-            if (isConfirm != null && isConfirm.Value)
+            int result = PopupDialog.Show(msg, 0, "确定");
+            if (result == 1)
             {
                 await scanModel.CancelScan();
                 exerciseModel.Discard();
@@ -111,8 +112,10 @@ namespace Exercise.ViewModel
         private async Task Finish(object obj)
         {
             Update();
-            bool? isConfirm = PUMessageBox.ShowConfirm("扫描仪已无试卷，请添加试卷继续扫描。若已全部扫描，可查看扫描结果。", "提示");
-            if (isConfirm != null && !isConfirm.Value)
+            FrameworkElement element = (obj as System.Windows.Controls.Page).Resources.FindName("ClassDetail") as FrameworkElement;
+            element.DataContext = this;
+            int result = PopupDialog.Show("扫描仪已无试卷，请添加试卷继续扫描。若已全部扫描，可查看扫描结果。", element, 0, "查看结果", "继续扫描");
+            if (result == 0)
             {
                 if (scanModel.PageCode == null || exerciseModel.ExerciseData == null)
                 {

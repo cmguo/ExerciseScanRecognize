@@ -4,6 +4,7 @@ using Exercise.View;
 using Panuon.UI;
 using System.Windows;
 using System.Windows.Input;
+using TalBase.View;
 using TalBase.ViewModel;
 
 namespace Exercise.ViewModel
@@ -53,8 +54,8 @@ namespace Exercise.ViewModel
 
         private async void Close(object obj)
         {
-            bool? isConfirm = PUMessageBox.ShowConfirm("扫描结果上传中，退出后，扫描结果将放弃，确认退出吗？", "提示");
-            if (isConfirm != null && isConfirm.Value)
+            int result = PopupDialog.Show("扫描结果上传中，退出后，扫描结果将放弃，确认退出吗？", 0, "退出", "取消");
+            if (result == 0)
             {
                 await submitModel.Cancel(Task);
                 Window.GetWindow((obj as ExecutedRoutedEventArgs).OriginalSource as UIElement).Close();

@@ -4,6 +4,7 @@ using System;
 using System.Threading.Tasks;
 using TalBase.ViewModel;
 using Panuon.UI;
+using TalBase.View;
 
 namespace Exercise.ViewModel
 {
@@ -74,7 +75,7 @@ namespace Exercise.ViewModel
         {
             while (!scanModel.FeederLoaded)
             {
-                PUMessageBox.ShowConfirm("扫描仪里面没有纸张，请添加试卷。", "提示", Buttons.OK);
+                PopupDialog.Show("扫描仪里面没有纸张，请添加试卷。", 0, "确定");
             }
             scanModel.Scan();
         }

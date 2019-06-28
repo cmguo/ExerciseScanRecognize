@@ -18,6 +18,19 @@
     <Page.Resources>
         <Button x:Key="Discard" Content="放弃本次扫描" 
                 Command="{Binding DiscardCommand}" />
+        <DataGrid x:Key="ClassDetail" AutoGenerateColumns="False" ItemsSource="{Binding ClassDetails}"
+                               Margin="0,20,0,0"  RowHeaderWidth="0" ColumnHeaderHeight="50"
+                               GridLinesVisibility="Horizontal"
+                               BorderThickness="0,0,0,0"
+                               HorizontalGridLinesBrush="Gray"
+                               IsReadOnly="True"
+                               >
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="班级" Binding="{Binding ClassName}" FontSize="14" Width="120"/>
+                <DataGridTextColumn Header="回收试卷（份）" Binding="{Binding ResultCount}" FontSize="14" Width="90" />
+                <DataGridTextColumn Header="总人数（人）" Binding="{Binding StudentCount}" FontSize="14" Width="90" />
+            </DataGrid.Columns>
+        </DataGrid>
     </Page.Resources>
 
     <tb:TitleBarManager.GlobalButtons>

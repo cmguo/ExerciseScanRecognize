@@ -5,6 +5,8 @@ using TalBase.Service;
 
 namespace Account.Service
 {
+
+    
     [BaseUri("http://homework.idev.talcloud.com/homework/api/v1/answerCardApp")]
     [MessageHandler(typeof(AccountHandler))]
     [ContentSerializer(typeof(ResultSerializer))]

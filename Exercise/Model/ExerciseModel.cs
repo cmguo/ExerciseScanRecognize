@@ -82,6 +82,7 @@ namespace Exercise.Model
 
         private string exerciseId;
         private List<Page> emptyPages;
+        private Exception targetException;
 
         public ExerciseModel()
         {
@@ -180,6 +181,11 @@ namespace Exercise.Model
             SavePath = null;
         }
 
+        public void ScanOne(Exception ex)
+        {
+            targetException = ex;
+        }
+
         public void Resolve(Exception ex, ResolveType type)
         {
             if (type == ResolveType.Ignore)
@@ -214,6 +220,11 @@ namespace Exercise.Model
         {
             if (e.NewItems != null)
             {
+                if (targetException != null)
+                {
+                    ReplacePage(e.NewItems[0] as Page);
+                    return;
+                }
                 foreach (Page page in e.NewItems)
                     AddPage(page);
             }
@@ -327,7 +338,30 @@ namespace Exercise.Model
             RemovePage(page);
         }
 
-        public void RemovePage(Page page)
+        private void ReplacePage(Page page)
+        {
+            bool replace = false;
+            switch (targetException.Type)
+            {
+                case ExceptionType.NoPageCode:
+                case ExceptionType.PageCodeMissMatch:
+                    replace = page.PaperCode == scanModel.PageCode;
+                    break;
+                case ExceptionType.NoStudentCode:
+                    break;
+                case ExceptionType.AnalyzeException:
+                    replace = page.StudentCode == targetException.Page.StudentCode && page.Answer != null;
+                    break;
+            }
+            if (replace)
+            {
+                RemovePage(targetException.Page);
+                targetException = null;
+                AddPage(page);
+            }
+        }
+
+        private void RemovePage(Page page)
         {
             RemoveException(ExceptionType.None, page);
             page.Student = null;

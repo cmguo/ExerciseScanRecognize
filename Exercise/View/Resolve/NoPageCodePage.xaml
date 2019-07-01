@@ -4,14 +4,21 @@
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
       xmlns:local="clr-namespace:Exercise.View"
-      xmlns:vm="clr-namespace:Exercise.ViewModel"
+      xmlns:resolve="clr-namespace:Exercise.View.Resolve"
       mc:Ignorable="d" 
       d:DesignHeight="450" d:DesignWidth="800"
       Title="HomePage">
 
+    <Page.Resources>
+        <resolve:ExceptionConverter x:Key="ExceptionConverter" />
+    </Page.Resources>
+
     <Grid>
         <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Orientation="Vertical">
-            <TextBlock Text="该试卷无法识别，请放入试卷，重新扫描。" />
+            <TextBlock Text="{Binding Converter={StaticResource ExceptionConverter}, 
+                ConverterParameter=Title}" />
+            <TextBlock Text="{Binding Converter={StaticResource ExceptionConverter}, 
+                ConverterParameter=Type}" />
         </StackPanel>
     </Grid>
 </Page>

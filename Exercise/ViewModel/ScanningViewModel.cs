@@ -112,7 +112,8 @@ namespace Exercise.ViewModel
         private async Task Finish(object obj)
         {
             Update();
-            FrameworkElement element = (obj as System.Windows.Controls.Page).Resources.FindName("ClassDetail") as FrameworkElement;
+            System.Windows.Controls.Page page = obj as System.Windows.Controls.Page;
+            FrameworkElement element = page.Resources["ClassDetail"] as FrameworkElement;
             element.DataContext = this;
             int result = PopupDialog.Show("扫描仪已无试卷，请添加试卷继续扫描。若已全部扫描，可查看扫描结果。", element, 0, "查看结果", "继续扫描");
             if (result == 0)
@@ -123,7 +124,7 @@ namespace Exercise.ViewModel
                     return;
                 }
                 await exerciseModel.MakeResult();
-                (obj as System.Windows.Controls.Page).NavigationService.Navigate(new SummaryPage());
+                page.NavigationService.Navigate(new SummaryPage());
             }
             else
             {
@@ -142,7 +143,8 @@ namespace Exercise.ViewModel
         {
             if (e.PropertyName == "ExerciseData")
             {
-                ExcecisePageCount = exerciseModel.ExerciseData.Pages.Count;
+                if (exerciseModel.ExerciseData != null)
+                    ExcecisePageCount = exerciseModel.ExerciseData.Pages.Count;
             }
         }
 

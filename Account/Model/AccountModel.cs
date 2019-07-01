@@ -28,9 +28,25 @@ namespace Account.Model
             }
         }
 
+        public string ServiceUri { get; private set; }
+
+        public Dictionary<string, string> ServiceUris { get; private set; }
+
+        private int _SelectedServiceUri;
+        public int SelectedServiceUri {
+            get => _SelectedServiceUri;
+            set
+            {
+                _SelectedServiceUri = value;
+                string uri = ServiceUris.ElementAt(value).Value;
+                ServiceUri = uri;
+                Configuration.ServiceUri = uri;
+            }
+        }
+
         public LoginData LoginData { get; private set; }
 
-        public Service.AccountData Account { get; private set; }
+        public AccountData Account { get; private set; }
 
         private IAccount service;
 
@@ -38,7 +54,13 @@ namespace Account.Model
 
         public AccountModel()
         {
-            LoginData = new LoginData() { LoginName = "xujinming", Password = "123@qwe",
+            ServiceUris = new Dictionary<string, string>();
+            ServiceUris.Add("开发环境", "http://homework.idev.talcloud.com/homework/api/v1/answerCardApp");
+            ServiceUris.Add("测试环境", "http://homework.itest.talcloud.com/homework/api/v1/answerCardApp");
+            ServiceUris.Add("线上环境", "http://homework.ipub.talcloud.com/homework/api/v1/answerCardApp");
+            ServiceUri = Configuration.ServiceUri;
+            _SelectedServiceUri = ServiceUris.Values.ToList().IndexOf(Configuration.ServiceUri);
+            LoginData = new LoginData() { LoginName = "huanglaoshi3", Password = "2019@100tal",
                 AuthenticationType = LoginData.LOGIN_BY_PASSWORD };
             Account = new Service.AccountData();
             service = Base.Service.Services.Get<IAccount>();

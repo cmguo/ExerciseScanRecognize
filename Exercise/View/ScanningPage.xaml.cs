@@ -31,9 +31,9 @@ namespace Exercise.View
             }
             else if (e.PropertyName == "Error")
             {
-                ScanningViewModel vm = DataContext as ScanningViewModel;
                 Dispatcher.BeginInvoke((ThreadStart) delegate () 
                 {
+                    ScanningViewModel vm = DataContext as ScanningViewModel;
                     vm.ErrorCommand.Execute(this);
                 });
             }

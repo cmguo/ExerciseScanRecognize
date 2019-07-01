@@ -42,6 +42,7 @@
             <RowDefinition/>
             <RowDefinition/>
             <RowDefinition/>
+            <RowDefinition/>
         </Grid.RowDefinitions>
         <TextBlock Text="Log in" Grid.ColumnSpan="2" FontWeight="Bold" HorizontalAlignment="Center" Margin="5" FontSize="20"/>
         <TextBlock Text="Name" Grid.Row="1" Margin="3"/>
@@ -54,7 +55,8 @@
                                               BorderCornerRadius="2"/>
         <mu:PUButton Command="{Binding LoginCommand}" 
                 CommandParameter="{Binding ElementName=Page}" 
-                BorderCornerRadius="3"
+                BorderCornerRadius="3" IsEnabled="{Binding CurrentUser.Password}"
                 Content="Log in" Grid.Row="3" Grid.Column="1" Margin="3" Height="20"/>
+        <ComboBox Grid.Row="3" ItemsSource="{Binding ServiceUris}" SelectedIndex="{Binding SelectedServiceUri}" />
     </Grid>
 </Page>

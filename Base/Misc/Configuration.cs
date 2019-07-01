@@ -16,40 +16,19 @@ namespace Base.Misc
             return ConfigurationManager.AppSettings[key];
         }
 
-        public static void UpdateKey(string strKey, string newValue)
+        public static void SetByKey(string key, string value)
         {
-            XmlDocument xmlDoc = new XmlDocument();
-            xmlDoc.Load(AppDomain.CurrentDomain.BaseDirectory + "..\\..\\App.config");
-
-            if (!KeyExists(strKey))
-            {
-                throw new ArgumentNullException("Key", "<" + strKey + "> does not exist in the configuration. Update failed.");
-            }
-            XmlNode appSettingsNode = xmlDoc.SelectSingleNode("configuration/appSettings");
-
-            foreach (XmlNode childNode in appSettingsNode)
-            {
-                if (childNode.Attributes["key"].Value == strKey)
-                    childNode.Attributes["value"].Value = newValue;
-            }
-            xmlDoc.Save(AppDomain.CurrentDomain.BaseDirectory + "..\\..\\App.config");
-            xmlDoc.Save(AppDomain.CurrentDomain.SetupInformation.ConfigurationFile);
+            config.AppSettings.Settings[key].Value = value;
+            Save();
         }
 
-        public static bool KeyExists(string strKey)
+        private static System.Configuration.Configuration config =
+            ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
+
+        private static void Save()
         {
-            XmlDocument xmlDoc = new XmlDocument();
-            xmlDoc.Load(AppDomain.CurrentDomain.BaseDirectory + "..\\..\\App.config");
-
-            XmlNode appSettingsNode = xmlDoc.SelectSingleNode("configuration/appSettings");
-
-            foreach (XmlNode childNode in appSettingsNode)
-            {
-                if (childNode.Attributes["key"].Value == strKey)
-                    return true;
-            }
-            return false;
+            config.Save(ConfigurationSaveMode.Modified);
+            ConfigurationManager.RefreshSection("appSettings");
         }
-
     }
 }

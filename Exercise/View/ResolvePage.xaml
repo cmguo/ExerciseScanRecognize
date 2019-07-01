@@ -21,6 +21,7 @@
         <resolve:ExceptionListConverter x:Key="ExceptionListConverter" />
         <resolve:ExceptionConverter x:Key="ExceptionConverter" />
         <resolve:ExceptionPageConverter x:Key="ExceptionPageConverter" />
+        <local:NonNullVisibleConverter x:Key="NonNullVisibleConverter" />
     </Page.Resources>
 
     <tb:TitleBarManager.Buttons>
@@ -29,7 +30,7 @@
 
 
     <tb:TitleBarManager.Commands>
-        <tb:TitleCommand Name="Close" Command="CloseCommand" />
+        <tb:TitleCommand Name="Close" Command="{Binding CloseCommand}" />
     </tb:TitleBarManager.Commands>
 
     <Grid>
@@ -43,7 +44,7 @@
                         <TextBlock Text="{Binding Converter={StaticResource ExceptionListConverter}}"/>
                         <HierarchicalDataTemplate.ItemTemplate>
                             <DataTemplate>
-                                <TextBlock Text="{Binding Converter={StaticResource ExceptionConverter}}" />
+                                <TextBlock Text="{Binding Converter={StaticResource ExceptionConverter}, ConverterParameter=Tree}" />
                             </DataTemplate>
                         </HierarchicalDataTemplate.ItemTemplate>
                     </HierarchicalDataTemplate>
@@ -52,21 +53,25 @@
             <StackPanel Orientation="Vertical" DockPanel.Dock="Right" Background="Gray"  Width="200">
                 <Frame Content="{Binding SelectedException, Converter={StaticResource ExceptionPageConverter}}"/>
                 <StackPanel Orientation="Vertical">
-                    <Button Command="{Binding IgnoreCommand}" 
-                            CommandParameter="{Binding ElementName=Page}" 
-                            Content="忽略所有作答异常" />
                     <Button Command="{Binding RescanCommand}" 
                             CommandParameter="{Binding ElementName=Page}" 
-                            Content="重新扫描" />
-                    <Button Command="{Binding ContinueCommand}" 
-                            CommandParameter="{Binding ElementName=Page}" 
-                            Content="批量扫描" />
+                            Visibility="{Binding Content, RelativeSource={RelativeSource Self}, Converter={StaticResource NonNullVisibleConverter}}"
+                            Content="{Binding SelectedException, Converter={StaticResource ExceptionConverter}, 
+                                ConverterParameter=Rescan}" />
                     <Button Command="{Binding RemovePageCommand}" 
                             CommandParameter="{Binding ElementName=Page}" 
-                            Content="丢弃该试卷" />
+                            Visibility="{Binding Content, RelativeSource={RelativeSource Self}, Converter={StaticResource NonNullVisibleConverter}}"
+                            Content="{Binding SelectedException, Converter={StaticResource ExceptionConverter}, 
+                                ConverterParameter=RemovePage}" />
+                    <Button Command="{Binding IgnoreCommand}" 
+                            CommandParameter="{Binding ElementName=Page}" 
+                            Visibility="{Binding Content, RelativeSource={RelativeSource Self}, Converter={StaticResource NonNullVisibleConverter}}"
+                            Content="{Binding SelectedException, Converter={StaticResource ExceptionConverter}, 
+                                ConverterParameter=Ignore}" />
                     <Button Command="{Binding RemoveStudentCommand}" 
                             CommandParameter="{Binding ElementName=Page}" 
-                            Content="丢弃改学生成绩" />
+                            Content="丢弃改生试卷" Visibility="{Binding SelectedException.Page.Student, 
+                                Converter={StaticResource NonNullVisibleConverter}}" />
                 </StackPanel>
                 <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Orientation="Vertical">
                     <TextBlock Text="以下试卷均缺失，可批量全部忽略" />

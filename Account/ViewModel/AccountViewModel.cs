@@ -9,11 +9,20 @@ using TalBase.ViewModel;
 using Panuon.UI;
 using System.Windows.Controls;
 using TalBase.Utils;
+using System.Collections.Generic;
 
 namespace Account.ViewModel
 {
     public class AccountViewModel : ViewModelBase
     {
+        public ICollection<string> ServiceUris => accountModel.ServiceUris.Keys;
+
+        public int SelectedServiceUri
+        {
+            get => accountModel.SelectedServiceUri;
+            set => accountModel.SelectedServiceUri = value;
+        }
+
         public RelayCommand LoginCommand { get; set; }
         public RelayCommand LogoutCommand { get; set; }
 

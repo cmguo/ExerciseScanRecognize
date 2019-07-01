@@ -67,6 +67,7 @@ namespace Exercise.View
             if (uri == null)
             {
                 image.ImageSource = paper = null;
+                return;
             }
             paper = new BitmapImage();
             paper.BeginInit();

@@ -12,7 +12,12 @@
         Title="PopupDialog" ResizeMode="NoResize" WindowStyle="None">
     
     <Window.Resources>
-        <local:ContentVisiableConverter x:Key="ContentVisiableConverter" />
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="../Themes/Button.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+            <local:ContentVisiableConverter x:Key="ContentVisiableConverter" />
+        </ResourceDictionary>
     </Window.Resources>
     
     <Grid Background="Gray">
@@ -33,10 +38,13 @@
                         </Style>
                     </StackPanel.Resources>
                     <Button x:Name="btn2" Width="100" Height="30" Content="{Binding Button2}" 
+                            Template = "{StaticResource ButtonTemplate}" 
                             Visibility="{Binding Button2, Converter={StaticResource ContentVisiableConverter}}" />
                     <Button x:Name="btn1" Width="100" Height="30" Content="{Binding Button1}" 
+                            Template = "{StaticResource ButtonTemplate}" 
                             Visibility="{Binding Button1, Converter={StaticResource ContentVisiableConverter}}" />
                     <Button x:Name="btn0" Width="100" Height="30" Content="{Binding Button0}" 
+                            Template = "{StaticResource ButtonTemplate}" 
                             Visibility="{Binding Button0, Converter={StaticResource ContentVisiableConverter}}" />
                 </StackPanel>
             </Border>

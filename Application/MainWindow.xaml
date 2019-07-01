@@ -4,15 +4,11 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:tal="clr-namespace:Panuon.UI;assembly=Panuon.UI"
-        xmlns:account="clr-namespace:Account;assembly=Account"
         mc:Ignorable="d"
         NavButtonVisibility="Visible"
         NavbarBackground="Gray"
         WindowStyle="None">
-    <Grid>
-        <Grid.RowDefinitions>
-            <RowDefinition></RowDefinition>
-        </Grid.RowDefinitions>
+    <Grid x:Name="body">
         <Frame Name="frmMain" NavigationUIVisibility="Hidden" Source="pack://application:,,,/Account;component/View/AccountPage.xaml"/>
     </Grid>
 </tal:PUWindow>

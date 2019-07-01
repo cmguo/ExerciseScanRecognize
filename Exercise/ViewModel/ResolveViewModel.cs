@@ -1,6 +1,7 @@
 ﻿using Base.Mvvm;
 using Exercise.Model;
 using System.Collections.ObjectModel;
+using TalBase.View;
 using static Exercise.Model.ExerciseModel;
 
 namespace Exercise.ViewModel
@@ -60,7 +61,11 @@ namespace Exercise.ViewModel
 
         private void Rescan(object obj)
         {
-            base.Continue(obj);
+            while (!scanModel.FeederLoaded)
+            {
+                PopupDialog.Show("扫描仪里面没有纸张，请添加试卷。", 0, "确定");
+            }
+            exerciseModel.ScanOne(SelectedException);
         }
     }
 }

@@ -22,6 +22,9 @@ namespace Exercise.Service
         [Post("/getTempHomeWorkIdTempId")]
         Task<StringData> GetSubmitId(SubmitPrepare prepare);
 
+        [Post("/answerCardCropImageNotify")]
+        Task<Nothing> CompleteSubmit(SubmitComplete complete);
+
         [Post("/uploadResult")]
         Task<Nothing> Submit(SubmitData data);
 

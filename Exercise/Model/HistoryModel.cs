@@ -58,7 +58,7 @@ namespace Exercise.Model
             List<ClassDetail> classes = SchoolModel.Instance.Classes.Select(c => new ClassDetail()
             {
                 ClassName = c.ClassName,
-                ResultCount = c.Students.Where(s => s.AnswerPages.Any(p => p.StudentCode != null)).Count(),
+                ResultCount = c.Students.Where(s => s.AnswerPages != null && s.AnswerPages.Any(p => p.StudentCode != null)).Count(),
             }).ToList();
             Record record = new Record() { ExerciseName = ExerciseModel.Instance.ExerciseData.Title, ClassDetails = classes };
             await JsonPersistent.Save(path + "\\record.json", record);

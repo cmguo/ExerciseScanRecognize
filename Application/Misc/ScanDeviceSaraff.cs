@@ -236,20 +236,20 @@ namespace Application.Misc
             {
                 ScanEvent e1 = new ScanEvent();
                 GetFileName.Invoke(this, e1);
-                Console.Out.WriteLine("Twain32_SetupFileXferEvent: " + e1.FileName);
+                Debug.WriteLine("Twain32_SetupFileXferEvent: " + e1.FileName);
                 e.FileName = e1.FileName;
             }
         }
 
         private void Twain32_XferDone(object sender, Twain32.XferDoneEventArgs e)
         {
-            Console.Out.WriteLine("Twain32_XferDone");
+            Debug.WriteLine("Twain32_XferDone");
             CheckStatus(e);
         }
 
         private void Twain32_FileXferEvent(object sender, Twain32.FileXferEventArgs e)
         {
-            Console.Out.WriteLine("Twain32_FileXferEvent: " + e.ImageFileXfer.FileName);
+            Debug.WriteLine("Twain32_FileXferEvent: " + e.ImageFileXfer.FileName);
             if (OnImage != null)
             {
                 window.Dispatcher.Invoke(() =>
@@ -259,7 +259,7 @@ namespace Application.Misc
 
         private void Twain32_AcquireCompleted(object sender, EventArgs e)
         {
-            Console.Out.WriteLine("Twain32_AcquireCompleted");
+            Debug.WriteLine("Twain32_AcquireCompleted");
             if (ScanCompleted != null)
             {
                 window.Dispatcher.Invoke(() =>
@@ -269,7 +269,7 @@ namespace Application.Misc
 
         private void Twain32_AcquireError(object sender, Twain32.AcquireErrorEventArgs e)
         {
-            Console.Out.WriteLine("Twain32_AcquireError");
+            Debug.WriteLine("Twain32_AcquireError");
             if (ScanCompleted != null)
             {
                 window.Dispatcher.Invoke(() =>

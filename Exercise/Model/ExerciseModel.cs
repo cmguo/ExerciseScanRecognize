@@ -124,10 +124,11 @@ namespace Exercise.Model
         {
             if (ExerciseData == null)
                 throw new NullReferenceException("没有有效试卷信息");
-            schoolModel.GetLostPageStudents(s => {
-                s.AnswerPages = new List<Page>(emptyPages);
-                PageStudents.Add(s);
-            });
+            // No need
+            //schoolModel.GetLostPageStudents(s => {
+            //    s.AnswerPages = new List<Page>(emptyPages);
+            //    PageStudents.Add(s);
+            //});
             foreach (StudentInfo s in PageStudents)
             {
                 for (int i = 0; i < s.AnswerPages.Count; ++i)
@@ -333,7 +334,7 @@ namespace Exercise.Model
             int pageIndex = page.PageIndex / 2;
             if (page.Student.AnswerPages[pageIndex] == page)
             {
-                page.Student.AnswerPages[pageIndex] = null;
+                page.Student.AnswerPages[pageIndex] = sEmptyPage;
                 if (/*type != ResolveType.RemoveDuplexPage && */page.Another != null)
                 {
                     page.Student.AnswerPages[pageIndex] = page.Another;

@@ -44,7 +44,7 @@
                 <StackPanel HorizontalAlignment="Stretch" VerticalAlignment="Center" Orientation="Vertical" 
                             Grid.ColumnSpan="3" Margin="30,0,0,0">
                     <TextBlock Text="{Binding ExerciseName, StringFormat=《{0}》}" FontSize="16" 
-                               Margin="0,0,0,10"
+                               Margin="0,0,0,10" TextWrapping="WrapWithOverflow"
                                />
                     <TextBlock FontSize="20" 
                                Visibility="{Binding ExceptionCount, Converter={StaticResource HasExceptionConverter}}">

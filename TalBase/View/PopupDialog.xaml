@@ -9,6 +9,7 @@
         MaxWidth="500"
         SizeToContent="WidthAndHeight"
         WindowStartupLocation="CenterScreen"
+        ShowInTaskbar="False"
         Title="PopupDialog" ResizeMode="NoResize" WindowStyle="None">
     
     <Window.Resources>

@@ -55,13 +55,13 @@ namespace Exercise.ViewModel
 
         protected void Update()
         {
-            StudentCount = exerciseModel.PageStudents.Where(s => s.AnswerPages.All(p => p != null && p.PagePath != null)).Count();
+            StudentCount = exerciseModel.PageStudents.Where(s => s.AnswerPages.Any(p => p != null && p.PagePath != null)).Count();
             ClassDetails = schoolModel.Classes.Select(c => new ClassDetail()
             {
                 ClassName = c.ClassName,
                 StudentCount = c.Students.Count(),
                 ResultCount = c.Students.Where(
-                    s => s.AnswerPages != null && s.AnswerPages.All(p => p != null && p.PagePath != null)).Count(),
+                    s => s.AnswerPages != null && s.AnswerPages.Any(p => p != null && p.PagePath != null)).Count(),
             }).ToList();
         }
 

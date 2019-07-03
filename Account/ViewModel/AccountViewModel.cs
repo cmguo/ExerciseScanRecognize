@@ -23,6 +23,10 @@ namespace Account.ViewModel
             set => accountModel.SelectedServiceUri = value;
         }
 
+        public LoginData LoginData { get; private set; }
+
+        public AccountData Account => accountModel.Account;
+
         public RelayCommand LoginCommand { get; set; }
         public RelayCommand LogoutCommand { get; set; }
 
@@ -30,12 +34,11 @@ namespace Account.ViewModel
 
         public AccountViewModel()
         {
-            CurrentUser = AccountModel.Instance.LoginData;
+            LoginData = AccountModel.Instance.LoginData;
             LoginCommand = new RelayCommand(DoLogin);
             LogoutCommand = new RelayCommand(DoLogout);
+            accountModel.PropertyChanged += AccountModel_PropertyChanged;
         }
-
-        public LoginData CurrentUser { get; private set; }
 
         private async Task DoLogin(object obj)
         {
@@ -51,6 +54,12 @@ namespace Account.ViewModel
             await AccountModel.Instance.Logout();
             (obj as Page).NavigationService.Navigate(new AccountPage());
         }
+
+        private void AccountModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
+        {
+            RaisePropertyChanged(e.PropertyName);
+        }
+
     }
 
 }

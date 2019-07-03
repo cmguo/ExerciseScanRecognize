@@ -16,11 +16,11 @@ namespace Exercise.ViewModel
 
         #region Properties
 
-        public int _excecisePageCount;
-        public int ExcecisePageCount
+        public int _ExercisePageCount;
+        public int ExercisePageCount
         {
-            get { return _excecisePageCount; }
-            private set{ _excecisePageCount = value ; RaisePropertyChanged("ExcecisePageCount"); }
+            get { return _ExercisePageCount; }
+            private set{ _ExercisePageCount = value ; RaisePropertyChanged("ExercisePageCount"); }
         }
         public int _studentCount;
         public int StudentSumary
@@ -68,7 +68,10 @@ namespace Exercise.ViewModel
                 (obj as System.Windows.Controls.Page).NavigationService.Navigate(new SummaryPage());
                 return;
             }
-            int result = PopupDialog.Show("扫描仪中还有试卷待扫描，确认结束扫描并查看结果吗？", 0, "查看结果", "继续扫描");
+            System.Windows.Controls.Page page = obj as System.Windows.Controls.Page;
+            FrameworkElement element = page.Resources["ClassDetail"] as FrameworkElement;
+            element.DataContext = this;
+            int result = PopupDialog.Show("扫描仪中还有试卷待扫描，确认结束扫描并查看结果吗？", element, 0, "查看结果", "继续扫描");
             if (result == 0)
             {
                 await scanModel.CancelScan();
@@ -144,7 +147,7 @@ namespace Exercise.ViewModel
             if (e.PropertyName == "ExerciseData")
             {
                 if (exerciseModel.ExerciseData != null)
-                    ExcecisePageCount = exerciseModel.ExerciseData.Pages.Count;
+                    ExercisePageCount = exerciseModel.ExerciseData.Pages.Count;
             }
         }
 

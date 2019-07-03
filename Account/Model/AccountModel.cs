@@ -9,10 +9,11 @@ using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Threading;
+using TalBase.Model;
 
 namespace Account.Model
 {
-    public class AccountModel
+    public class AccountModel : ModelBase
     {
 
         private static AccountModel s_instance;
@@ -60,7 +61,9 @@ namespace Account.Model
             ServiceUris.Add("线上环境", "http://homework.ipub.talcloud.com/homework/api/v1/answerCardApp");
             ServiceUri = Configuration.ServiceUri;
             _SelectedServiceUri = ServiceUris.Values.ToList().IndexOf(Configuration.ServiceUri);
-            LoginData = new LoginData() { LoginName = "huanglaoshi3", Password = "2019@100tal",
+            //LoginData = new LoginData() { LoginName = "huanglaoshi3", Password = "2019@100tal",
+            //    AuthenticationType = LoginData.LOGIN_BY_PASSWORD };
+            LoginData = new LoginData() { LoginName = "xujinming", Password = "123@qwe",
                 AuthenticationType = LoginData.LOGIN_BY_PASSWORD };
             Account = new Service.AccountData();
             service = Base.Service.Services.Get<IAccount>();
@@ -77,6 +80,7 @@ namespace Account.Model
                 LoginData.Password = BitConverter.ToString(output).Replace("-", "").ToLower();
             }
             Account = await service.Login(LoginData);
+            RaisePropertyChanged("Account");
             LoginData.Password = null;
             LoginData.AuthenticationType = LoginData.LOGIN_BY_TICKET;
             timer.Start();
@@ -88,6 +92,7 @@ namespace Account.Model
             await service.Logout(logout);
             Account = new AccountData();
             LoginData.AuthenticationType = LoginData.LOGIN_BY_PASSWORD;
+            RaisePropertyChanged("Account");
             timer.Stop();
         }
 

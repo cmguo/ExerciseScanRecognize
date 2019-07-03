@@ -59,9 +59,9 @@
             <TextBlock Text="{Binding LastPage.Student.Name}" HorizontalAlignment="Center"/>
             <TextBlock HorizontalAlignment="Center">
                 <TextBlock.Text>
-                    <MultiBinding StringFormat="第{0}页/共{1}页}。">
-                        <Binding Path="LastPage.PageIndex" />
-                        <Binding Path="ExcecisePageCount" />
+                    <MultiBinding StringFormat="第{0}页/共{1}页">
+                        <Binding Path="LastPage.Another.PageIndex" />
+                        <Binding Path="ExercisePageCount" />
                     </MultiBinding>
                 </TextBlock.Text>
             </TextBlock>

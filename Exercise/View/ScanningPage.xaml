@@ -31,6 +31,7 @@
                 <DataGridTextColumn Header="总人数（人）" Binding="{Binding StudentCount}" FontSize="14" Width="90" />
             </DataGrid.Columns>
         </DataGrid>
+        <local:PaperOverlayConverter x:Key="PaperOverlayConverter" />
     </Page.Resources>
 
     <tb:TitleBarManager.GlobalButtons>
@@ -53,7 +54,8 @@
             <ColumnDefinition Width="auto" />
         </Grid.ColumnDefinitions>
         <Border Background="Black" Margin="20,20,0,20">
-            <local:PaperViewer Paper="{Binding LastPage.PagePath}"/>
+            <local:PaperViewer Paper="{Binding LastPage.PagePath}" 
+                               Overlay="{Binding LastPage, Converter={StaticResource PaperOverlayConverter}, ConverterParameter=Result}"/>
         </Border>
         <StackPanel Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Center" Orientation="Vertical" Width="200">
             <TextBlock Text="{Binding LastPage.Student.Name}" HorizontalAlignment="Center"/>

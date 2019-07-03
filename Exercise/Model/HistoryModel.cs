@@ -34,6 +34,8 @@ namespace Exercise.Model
 
         public ObservableCollection<Record> Records { get; private set; }
 
+        private static readonly string ROOT_PATH = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
+
         private IExercise service;
 
         private int page = 0;
@@ -47,7 +49,7 @@ namespace Exercise.Model
 
         public string NewSavePath()
         {
-            string path = System.Environment.CurrentDirectory + "\\扫描试卷\\" 
+            string path = ROOT_PATH + "\\扫描试卷\\" 
                 + DateTime.Now.ToString("D") + "\\" + DateTime.Now.ToString("T").Replace(':', '.');
             Directory.CreateDirectory(path);
             return path;
@@ -80,7 +82,7 @@ namespace Exercise.Model
 
         private async Task LoadLocal()
         {
-            string path = System.Environment.CurrentDirectory + "\\扫描试卷";
+            string path = ROOT_PATH + "\\扫描试卷";
             foreach (string path1 in Directory.EnumerateDirectories(path))
             {
                 foreach (string path2 in Directory.EnumerateDirectories(path1))

@@ -10,9 +10,17 @@ namespace Exercise.View
     public class PaperViewer : UserControl
     {
 
-        public static readonly DependencyProperty PaperProperty = 
-            DependencyProperty.Register("Paper", typeof(string), typeof(PaperViewer), 
+        public static readonly DependencyProperty PaperProperty =
+            DependencyProperty.Register("Paper", typeof(string), typeof(PaperViewer),
                 new PropertyMetadata((o, e) => (o as PaperViewer).SetPaper(e.NewValue as string)));
+
+        public static readonly DependencyProperty OverlayProperty =
+            DependencyProperty.Register("Overlay", typeof(Geometry), typeof(PaperViewer),
+                new PropertyMetadata((o, e) => (o as PaperViewer).SetOverlay(e.NewValue as Geometry)));
+
+        public static readonly DependencyProperty ScaleProperty =
+            DependencyProperty.Register("Scale", typeof(double), typeof(PaperViewer),
+                new PropertyMetadata(1.0, (o, e) => (o as PaperViewer).SetScale((double)e.NewValue)));
 
         public Uri Paper
         {
@@ -20,7 +28,18 @@ namespace Exercise.View
             set => SetValue(PaperProperty, value);
         }
 
-        public PathGeometry Overlay { get; set; } = new PathGeometry();
+        public Geometry Overlay
+        {
+            get => GetValue(OverlayProperty) as Geometry;
+            set => SetValue(OverlayProperty, value);
+        }
+
+        public double Scale
+        {
+            get => (double) GetValue(ScaleProperty);
+            set => SetValue(ScaleProperty, value);
+        }
+
         public Brush OverlayBrush
         {
             get => geometry.Brush;
@@ -38,7 +57,8 @@ namespace Exercise.View
         private GeometryDrawing geometry = new GeometryDrawing();
         private DrawingBrush brush = new DrawingBrush();
 
-        private double scale;
+        private double scaleX;
+        private double scaleY;
         private bool draging;
         private Point start;
 
@@ -49,7 +69,6 @@ namespace Exercise.View
         public PaperViewer()
         {
             group.Children.Add(image);
-            geometry.Geometry = Overlay;
             geometry.Pen = new Pen(Brushes.Red, 2);
             group.Children.Add(geometry);
             brush.Drawing = group;
@@ -74,17 +93,20 @@ namespace Exercise.View
             paper.CacheOption = BitmapCacheOption.OnLoad;
             paper.UriSource = new Uri(uri);
             paper.EndInit();
-            Paper_Changed(paper, null);
+            image.ImageSource = paper;
+            image.Rect = new Rect(0, 0, paper.Width, paper.Height);
+            Scale = 1.0;
+            Adjust();
         }
 
-        private void Paper_Changed(object sender, EventArgs e)
+        private void SetOverlay(Geometry g)
         {
-            if (paper == sender)
-            {
-                image.ImageSource = paper;
-                image.Rect = new Rect(0, 0, paper.Width, paper.Height);
-                Adjust();
-            }
+            geometry.Geometry = g;
+        }
+
+        private void SetScale(double v)
+        {
+            Adjust();
         }
 
         private void Adjust()
@@ -94,16 +116,26 @@ namespace Exercise.View
             if (paper == null)
                 return;
             double s = (RenderSize.Width * paper.Height) / (RenderSize.Height * paper.Width);
+            Rect rect;
             if (s > 1)
             {
-                scale = 1 / s / this.RenderSize.Height;
-                brush.Viewbox = new Rect(0, 0, 1, 1 / s);
+                scaleX = 1 / Scale;
+                scaleY = 1 / s / Scale;
+                rect = new Rect(0, 0, scaleX, scaleY);
             }
             else
             {
-                scale = s / this.RenderSize.Width;
-                brush.Viewbox = new Rect(0, 0, s, 1);
+                scaleX = s /  Scale;
+                scaleY = 1 / Scale;
+                rect = new Rect(0, 0, s / Scale, 1 / Scale);
             }
+            if (rect.Right > 1)
+                rect.Offset((1 - rect.Right) / 2, 0);
+            if (rect.Bottom > 1)
+                rect.Offset(0, (1 - rect.Bottom) / 2);
+            brush.Viewbox = rect;
+            scaleX /= RenderSize.Width;
+            scaleY /= RenderSize.Height;
         }
 
         protected override void OnMouseLeftButtonDown(MouseButtonEventArgs e)
@@ -131,19 +163,17 @@ namespace Exercise.View
                 return;
             Point pt = e.GetPosition(this);
             Vector off = Point.Subtract(start, pt);
-            Vector off2 = Vector.Multiply(off, scale);
+            Vector off2 = new Vector(off.X * scaleX, off.Y * scaleY);
             if (brush.Viewbox.Left + off2.X < 0)
-                off2.X = -brush.Viewbox.Left;
+                off2.X = brush.Viewbox.Left  < 0 ? 0 : - brush.Viewbox.Left;
             else if (brush.Viewbox.Right + off2.X > 1)
-                off2.X = 1 - brush.Viewbox.Right;
+                off2.X = brush.Viewbox.Right > 1 ? 0 : 1 - brush.Viewbox.Right;
             if (brush.Viewbox.Top + off2.Y < 0)
-                off2.Y = -brush.Viewbox.Top;
+                off2.Y = brush.Viewbox.Top < 0 ? 0 : - brush.Viewbox.Top;
             else if (brush.Viewbox.Bottom + off2.Y > 1)
-                off2.Y = 1 - brush.Viewbox.Bottom;
+                off2.Y = brush.Viewbox.Bottom > 1 ? 0 : 1 - brush.Viewbox.Bottom;
             Rect rect = Rect.Offset(brush.Viewbox, off2);
             brush.Viewbox = rect;
-            //off2 = Vector.Divide(off2, scale);
-            //start = Point.Add(start, Vector.Subtract(off, off2));
             start = pt;
             e.Handled = true;
         }

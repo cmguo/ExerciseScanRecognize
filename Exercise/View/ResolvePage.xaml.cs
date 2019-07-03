@@ -1,21 +1,12 @@
-﻿using Base.Misc;
-using Base.Mvvm;
-using Base.Mvvm.Converter;
-using Exercise.ViewModel;
+﻿using Exercise.ViewModel;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Globalization;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
 using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
+using static Exercise.Model.ExerciseModel;
+using Exception = Exercise.Model.ExerciseModel.Exception;
 
 namespace Exercise.View
 {
@@ -42,6 +33,7 @@ namespace Exercise.View
                 {
                     tvi.IsSelected = true;
                 }
+                ButtonFace1_Click(this, null);
             }
         }
 
@@ -64,6 +56,56 @@ namespace Exercise.View
         {
             ResolveViewModel vm = DataContext as ResolveViewModel;
             vm.ResolveCommand.Execute(this);
+        }
+
+        private PaperViewer viewer;
+
+        private void ButtonFace1_Click(object sender, RoutedEventArgs e)
+        {
+            face1.Background = Brushes.Blue;
+            face2.Background = Brushes.White;
+            viewer = paper1;
+            paper1.Visibility = Visibility.Visible;
+            paper2.Visibility = Visibility.Collapsed;
+        }
+
+        private void ButtonFace2_Click(object sender, RoutedEventArgs e)
+        {
+            face1.Background = Brushes.White;
+            face2.Background = Brushes.Blue;
+            viewer = paper2;
+            paper1.Visibility = Visibility.Collapsed;
+            paper2.Visibility = Visibility.Visible;
+        }
+
+        private void ButtonInc_Click(object sender, RoutedEventArgs e)
+        {
+            viewer.Scale *= 1.5;
+        }
+
+        private void ButtonDec_Click(object sender, RoutedEventArgs e)
+        {
+            viewer.Scale /= 1.5;
+        }
+    }
+
+    [ValueConversion(typeof(object), typeof(Visibility))]
+    internal class DuplexFaceConverter : IValueConverter
+    {
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            Exception ex = value as Exception;
+            if (ex != null && ex.Page.Another != null
+                && ex.Type != ExceptionType.AnswerException
+                && ex.Type != ExceptionType.CorrectionException)
+                return Visibility.Visible;
+            else
+                return Visibility.Collapsed;
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            throw new NotImplementedException();
         }
     }
 }

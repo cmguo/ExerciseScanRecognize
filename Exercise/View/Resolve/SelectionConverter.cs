@@ -10,12 +10,21 @@ namespace Exercise.View.Resolve
     public class SelectionConverter : IMultiValueConverter
     {
 
+        public Brush Selected { get; set; }
+        public Brush Unselected { get; set; }
+
+        public SelectionConverter()
+        {
+            Selected = Brushes.Blue;
+            Unselected = Brushes.Black;
+        }
+
         public object Convert(object[] values, Type targetType, object parameter, CultureInfo culture)
         {
             if (values[0] == values[1])
-                return Brushes.Blue;
+                return Selected;
             else
-                return Brushes.Black;
+                return Unselected;
         }
 
         public object[] ConvertBack(object value, Type[] targetTypes, object parameter, CultureInfo culture)

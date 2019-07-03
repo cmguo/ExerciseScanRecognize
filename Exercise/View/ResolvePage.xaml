@@ -22,7 +22,11 @@
         <resolve:ExceptionListConverter x:Key="ExceptionListConverter" />
         <resolve:ExceptionConverter x:Key="ExceptionConverter" />
         <resolve:ExceptionPageConverter x:Key="ExceptionPageConverter" />
+        <resolve:SelectionConverter x:Key="SelectionConverter" Unselected="White" />
         <cv:NonNullVisibleConverter x:Key="NonNullVisibleConverter" />
+        <cv:NullVisibleConverter x:Key="NullVisibleConverter" />
+        <local:DuplexFaceConverter x:Key="DuplexFaceConverter" />
+        <local:PaperOverlayConverter x:Key="PaperOverlayConverter" />
     </Page.Resources>
 
     <tb:TitleBarManager.Buttons>
@@ -103,8 +107,26 @@
                                 ConverterParameter=RemovePage}" />
                 </StackPanel>
             </StackPanel>
-            <Border BorderThickness="2" BorderBrush="Blue">
-                <local:PaperViewer Paper="{Binding SelectedException.Page.PagePath}"/>
+            <Border BorderThickness="2" BorderBrush="Blue" Background="Gray">
+                <Grid>
+                    <TextBlock Text="{Binding SelectedException, StringFormat={}{0} 试卷缺失, 
+                        Converter={StaticResource ExceptionConverter}, ConverterParameter=Tree}" 
+                               HorizontalAlignment="Center" VerticalAlignment="Center"
+                               Visibility="{Binding SelectedException.Page.PagePath, Converter={StaticResource NullVisibleConverter}}"/>
+                    <local:PaperViewer x:Name="paper1" Paper="{Binding SelectedException.Page.PagePath}"
+                                       Overlay="{Binding SelectedException, Converter={StaticResource PaperOverlayConverter}}"/>
+                    <local:PaperViewer x:Name="paper2" Paper="{Binding SelectedException.Page.Another.PagePath}"/>
+                    <StackPanel Orientation="Horizontal" VerticalAlignment="Top" HorizontalAlignment="Center"
+                                Visibility="{Binding SelectedException, Converter={StaticResource DuplexFaceConverter}}">
+                        <Button x:Name="face1" Click="ButtonFace1_Click" Content="正面"/>
+                        <Button x:Name="face2" Click="ButtonFace2_Click" Content="反面"/>
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal" VerticalAlignment="Top" HorizontalAlignment="Right"
+                                Visibility="{Binding SelectedException.Page.PagePath, Converter={StaticResource NonNullVisibleConverter}, FallbackValue=Hidden}">
+                        <Button Click="ButtonInc_Click" Content="+"/>
+                        <Button Click="ButtonDec_Click" Content="-"/>
+                    </StackPanel>
+                </Grid>
             </Border>
         </DockPanel>
     </Grid>

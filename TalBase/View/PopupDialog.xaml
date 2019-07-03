@@ -24,8 +24,8 @@
         <Border BorderThickness="3" BorderBrush="Bisque" />
         <StackPanel Orientation="Vertical" Margin="30">
             <StackPanel Orientation="Horizontal">
-                <Image Source="{Binding Icon}" Width="20" Height="20" VerticalAlignment="Top" />
-                <StackPanel x:Name="body" Orientation="Vertical">
+                <Image Source="{Binding Image}" Width="20" Height="20" VerticalAlignment="Top" />
+                <StackPanel x:Name="body" Width="350" Orientation="Vertical">
                     <TextBlock FontSize="20" TextWrapping="Wrap" Text="{Binding Message}" />
                 </StackPanel>
             </StackPanel>

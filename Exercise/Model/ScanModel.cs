@@ -5,6 +5,7 @@ using Exercise.Service;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.IO;
 using System.Security.Cryptography;
 using System.Threading;
@@ -212,11 +213,15 @@ namespace Exercise.Model
         public async Task Load(string path)
         {
             PersistData data = await JsonPersistent.Load<PersistData>(path + "\\scan.json");
-            foreach (Page p in data.Pages)
-                Pages.Add(p);
             PageCode = data.PageCode;
             scanBatch = data.ScanBatch;
             savePath = path;
+            foreach (Page p in data.Pages)
+            {
+                if (p.PaperCode == PageCode)
+                    p.MetaData = exerciseData.Pages[p.PageIndex];
+                Pages.Add(p);
+            }
         }
 
         public void Clear()
@@ -247,7 +252,7 @@ namespace Exercise.Model
                 page1 = lastPage;
                 lastPage = null;
             }
-            Console.Out.WriteLine("AddImage " + fileName);
+            Debug.WriteLine("AddImage " + fileName);
             Page page2 = page;
             Page[] pages = new Page[] { page1, page2 };
             await Task.Factory.StartNew(() => ScanTwoPage(pages));
@@ -344,6 +349,7 @@ namespace Exercise.Model
         {
             PageData pageData = exerciseData.Pages[page.PageIndex];
             pageData.ImgBytes = page.PageData;
+            page.MetaData = pageData;
             try
             {
                 AnswerData answerData = algorithm.GetAnswer(pageData);
@@ -367,6 +373,7 @@ namespace Exercise.Model
             finally
             {
                 page.PageData = null;
+                pageData.ImgBytes = null;
             }
         }
 

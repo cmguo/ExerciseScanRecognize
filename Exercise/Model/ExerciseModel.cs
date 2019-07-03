@@ -2,13 +2,11 @@
 using Base.Mvvm;
 using Base.Service;
 using Exercise.Service;
-using MyToolkit.Command;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using TalBase.Model;
 
@@ -46,12 +44,14 @@ namespace Exercise.Model
             Ignore, 
             RemovePage, 
             RemoveStudent,
+            Resolve
             //RemoveDuplexPage
         }
 
         public class Exception
         {
             public ExceptionType Type { get; set; }
+            public int Index { get; set; }
             public Page Page { get; set; }
         }
 
@@ -163,8 +163,13 @@ namespace Exercise.Model
         {
             Clear();
             await schoolModel.Load(path);
-            await scanModel.Load(path);
             ExerciseData = await JsonPersistent.Load<ExerciseData>(path + "\\exercise.json");
+            int n = (ExerciseData.Pages.Count + 1) / 2;
+            emptyPages = new List<Page>(n);
+            while (n-- > 0)
+                emptyPages.Add(null);
+            scanModel.SetExerciseData(ExerciseData);
+            await scanModel.Load(path);
             SavePath = path;
         }
 
@@ -188,13 +193,16 @@ namespace Exercise.Model
 
         public void Resolve(Exception ex, ResolveType type)
         {
-            if (type == ResolveType.Ignore)
+            if (type == ResolveType.Ignore
+                || type == ResolveType.Resolve)
             {
                 if (ex.Type == ExceptionType.AnswerException)
-                    ex.Page.AnswerExceptions = null;
+                    ex.Page.Answer.AnswerExceptions = null;
                 else if (ex.Type == ExceptionType.CorrectionException)
-                    ex.Page.CorrectionExceptions = null;
+                    ex.Page.Answer.CorrectionExceptions = null;
                 RemoveException(ex.Type, ex.Page);
+                if (ex.Type == ExceptionType.NoStudentCode)
+                    AddPage(ex.Page);
                 return;
             }
             RemovePage(ex.Page, type);
@@ -266,7 +274,7 @@ namespace Exercise.Model
                 return;
             }
             if (page.Another != null)
-                page.Another.Student = page.Student; // 可能单面，就是自己
+                page.Another.Student = page.Student;
             if (page.Student.AnswerPages == null)
             {
                 page.Student.AnswerPages = new List<Page>(emptyPages);
@@ -275,7 +283,7 @@ namespace Exercise.Model
             int pageIndex = page.PageIndex / 2;
             Page old = page.Student.AnswerPages[pageIndex];
             page.Student.AnswerPages[pageIndex] = page;
-            if (old != null)
+            if (old != null && old != page)
             {
                 old.Student = null;
                 RemovePage(old, ResolveType.RemovePage);
@@ -286,15 +294,15 @@ namespace Exercise.Model
             }
             else
             {
-                if (page.AnswerExceptions != null)
+                if (page.Answer.AnswerExceptions != null)
                     AddException(ExceptionType.AnswerException, page);
-                if (page.CorrectionExceptions != null)
+                if (page.Answer.CorrectionExceptions != null)
                     AddException(ExceptionType.CorrectionException, page);
                 if (page.Another != null)
                 {
-                    if (page.Another.AnswerExceptions != null)
+                    if (page.Another.Answer.AnswerExceptions != null)
                         AddException(ExceptionType.AnswerException, page.Another);
-                    if (page.Another.CorrectionExceptions != null)
+                    if (page.Another.Answer.CorrectionExceptions != null)
                         AddException(ExceptionType.CorrectionException, page.Another);
                 }
             }
@@ -310,15 +318,16 @@ namespace Exercise.Model
             }
             if (type == ResolveType.RemoveStudent)
             {
-                for (int i = 0; i < page.Student.AnswerPages.Count; ++i)
+                PageStudents.Remove(page.Student);
+                IList<Page> pages = page.Student.AnswerPages;
+                page.Student.AnswerPages = null;
+                for (int i = 0; i < pages.Count; ++i)
                 {
-                    if (page.Student.AnswerPages[i] != null)
+                    if (pages[i] != null)
                     {
-                        RemovePage(page.Student.AnswerPages[i]);
+                        RemovePage(pages[i]);
                     }
                 }
-                page.Student.AnswerPages = null;
-                PageStudents.Remove(page.Student);
                 return;
             }
             int pageIndex = page.PageIndex / 2;
@@ -407,6 +416,14 @@ namespace Exercise.Model
                 Exceptions.Insert(index, list);
             }
             list.Exceptions.Add(item);
+            if (type == ExceptionType.NoPageCode || type == ExceptionType.PageCodeMissMatch)
+            {
+                item.Index = list.Exceptions.Where(e => e.Type != ExceptionType.AnalyzeException).Count();
+            }
+            else if (type == ExceptionType.NoStudentCode)
+            {
+                item.Index = list.Exceptions.Count();
+            }
         }
 
         private void RemoveException(ExceptionType type, Page page)
@@ -414,11 +431,11 @@ namespace Exercise.Model
             if (type == ExceptionType.None)
             {
                 foreach (ExceptionType t in Enum.GetValues(typeof(ExceptionType)))
-                    if (t != type && t != ExceptionType.PageLost)
+                    if (t != type)
                         RemoveException(t, page);
                 return;
             }
-            if (type == ExceptionType.AnalyzeException)
+            if (type == ExceptionType.AnalyzeException || type == ExceptionType.PageCodeMissMatch)
                 type = ExceptionType.NoPageCode;
             ExceptionList list = Exceptions.FirstOrDefault(e => type.CompareTo(e.Type) == 0);
             if (list == null) return;

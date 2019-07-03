@@ -7,16 +7,70 @@
       xmlns:vm="clr-namespace:Exercise.ViewModel"
       xmlns:mu="clr-namespace:Panuon.UI;assembly=Panuon.UI"
       xmlns:tb="clr-namespace:Base.TitleBar;assembly=Base"
+      xmlns:cv="clr-namespace:Base.Mvvm.Converter;assembly=Base"
       mc:Ignorable="d"
       x:Name="Page"
       d:DesignHeight="450" d:DesignWidth="800"
       Title="HomePage">
 
-    <Page.DataContext>
-        <vm:HistoryViewModel />
-    </Page.DataContext>
+    <Page.Resources>
+        <cv:MultiValueConverter x:Key="MultiValueConverter" />
+        <vm:HistoryViewModel x:Key="ViewModel" />
+    </Page.Resources>
 
     <Grid>
-        <DataGrid />
+        <Grid.RowDefinitions>
+            <RowDefinition/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+        <ListView Grid.Row="0" ItemsSource="{Binding LocalRecords}">
+            <ListView.ItemTemplate>
+                <DataTemplate>
+                    <DockPanel>
+                        <StackPanel DockPanel.Dock="Left" Orientation="Horizontal">
+                            <Image/>
+                            <TextBlock>
+                                <TextBlock.Text>
+                                    <MultiBinding StringFormat="异常退出待处理：{0}，扫描时间：{1}">
+                                        <Binding Path="ExerciseName"/>
+                                        <Binding Path="DateTime"/>
+                                    </MultiBinding>
+                                </TextBlock.Text>
+                            </TextBlock>
+                        </StackPanel>
+                        <StackPanel DockPanel.Dock="Right" Orientation="Horizontal">
+                            <Button Content="查看扫描结果" 
+                                    Command="{Binding SummaryCommand, Source={StaticResource ViewModel}}">
+                                <Button.CommandParameter>
+                                    <MultiBinding Converter="{StaticResource MultiValueConverter}">
+                                        <Binding ElementName="Page"/>
+                                        <Binding/>
+                                    </MultiBinding>
+                                </Button.CommandParameter>
+                            </Button>
+                            <Button Content="放弃本次扫描" 
+                                    Command="{Binding DiscardCommand, Source={StaticResource ViewModel}}"
+                                    CommandParameter="{Binding}" />
+                        </StackPanel>
+                        <TextBlock/>
+                    </DockPanel>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+        </ListView>
+        <DataGrid Grid.Row="1"  AutoGenerateColumns="False" ItemsSource="{Binding Records}" IsReadOnly="True">
+            <DataGrid.CellStyle>
+                <Style TargetType="DataGridCell">
+                    <Setter Property="HorizontalAlignment" Value="Center"/>
+                    <Setter Property="VerticalAlignment" Value="Center"/>
+                    <Setter Property="FontStyle" Value="Normal"/>
+                </Style>
+            </DataGrid.CellStyle>
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="试卷名称" FontSize="14" Width="140"/>
+                <DataGridTextColumn Header="扫描统计" FontSize="14" Width="100"/>
+                <DataGridTextColumn Header="扫描时间" FontSize="14" Width="100"/>
+                <DataGridTextColumn Header="操作" FontSize="14" Width="100"/>
+            </DataGrid.Columns>
+        </DataGrid>
     </Grid>
 </Page>

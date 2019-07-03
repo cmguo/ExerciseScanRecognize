@@ -20,20 +20,51 @@ namespace Exercise.View.Resolve
             ExerciseModel.ExceptionList el = value as Model.ExerciseModel.ExceptionList;
             if (el == null)
                 return null;
-            switch (el.Type)
+            if ((string)parameter == "Tree")
             {
-                case ExceptionType.NoPageCode:
-                    return "无法识别的试卷";
-                case ExceptionType.NoStudentCode:
-                    return "待认领的试卷";
-                case ExceptionType.AnswerException:
-                    return "作答识别异常";
-                case ExceptionType.CorrectionException:
-                    return "批改识别异常";
-                case ExceptionType.PageLost:
-                    return "缺失的学生试卷";
-                default:
-                    return null;
+                switch (el.Type)
+                {
+                    case ExceptionType.NoPageCode:
+                        return "无法识别的试卷";
+                    case ExceptionType.NoStudentCode:
+                        return "待认领的试卷";
+                    case ExceptionType.AnswerException:
+                        return "作答识别异常";
+                    case ExceptionType.CorrectionException:
+                        return "批改识别异常";
+                    case ExceptionType.PageLost:
+                        return "缺失的学生试卷";
+                    default:
+                        return null;
+                }
+            }
+            else if ((string)parameter == "Title")
+            {
+                switch (el.Type)
+                {
+                    case ExceptionType.PageLost:
+                        return "以下试卷均缺失，可批量全部忽略";
+                    default:
+                        return null;
+                }
+            }
+            else if ((string)parameter == "RemovePage")
+            {
+                switch (el.Type)
+                {
+                    case ExceptionType.PageLost:
+                        return "忽略以上异常";
+                    default:
+                        return null;
+                }
+            }
+            else if ((string)parameter == "Ignore")
+            {
+                return null;
+            }
+            else
+            {
+                return null;
             }
         }
 

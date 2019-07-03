@@ -12,11 +12,19 @@ namespace Exercise.Algorithm
     {
         public override byte[] ReadJson(JsonReader reader, Type objectType, byte[] existingValue, bool hasExistingValue, JsonSerializer serializer)
         {
-            List<byte> bytes = new List<byte>();
-            int? b;
-            while ((b = reader.ReadAsInt32()) != null)
+            if (reader.TokenType == JsonToken.Null)
             {
-                bytes.Add((byte)b);
+                return null;
+            }
+            List<byte> bytes = new List<byte>();
+            while (reader.Read())
+            {
+                if (reader.TokenType == JsonToken.Integer)
+                    bytes.Add((byte)(Int64)reader.Value);
+                else if (reader.TokenType == JsonToken.EndArray)
+                {
+                    break;
+                }
             }
             return bytes.ToArray();
         }

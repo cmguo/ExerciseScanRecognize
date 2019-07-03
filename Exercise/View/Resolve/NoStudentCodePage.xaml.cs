@@ -30,5 +30,10 @@ namespace Exercise.View.Resolve
             classList.DataContext = SchoolModel.Instance;
         }
 
+        private void Confirm_Click(object sender, RoutedEventArgs e)
+        {
+            ResolvePage rp = UITreeHelper.GetParentOfType<ResolvePage>(this);
+            rp.Resolve();
+        }
     }
 }

@@ -32,6 +32,6 @@ namespace Exercise.Service
         Task<Dictionary<string, string>> GeneratePresignedUrls(GenUriData names);
 
         [Get("/batchGeneratePresignedUrl")]
-        Task<RecordData> getRecords(int page);
+        Task<HistoryData> getRecords(int page);
     }
 }

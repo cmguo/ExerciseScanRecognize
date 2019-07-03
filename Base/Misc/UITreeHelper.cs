@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Media;
 
 namespace Base.Misc
 {
@@ -48,7 +49,7 @@ namespace Base.Misc
             Type type = typeof(T);
             while (e != null && !type.IsInstanceOfType(e))
             {
-                e = LogicalTreeHelper.GetParent(e);
+                e = VisualTreeHelper.GetParent(e);
             }
             return e as T;
         }

@@ -7,6 +7,7 @@
       xmlns:mu="clr-namespace:Panuon.UI;assembly=Panuon.UI"
       xmlns:vm="clr-namespace:Account.ViewModel"
       xmlns:tb="clr-namespace:Base.TitleBar;assembly=Base"
+      xmlns:cv="clr-namespace:Base.Mvvm.Converter;assembly=Base"
       mc:Ignorable="d"
       x:Name="Page"
       mu:PUWindow.NavTitleBarVisibility="Visible"
@@ -24,6 +25,7 @@
                 <vm:AccountViewModel />
             </Button.DataContext>
         </Button>
+        <cv:NonNullTrueConverter x:Key="NonNullTrueConverter" />
     </Page.Resources>
     
     <tb:TitleBarManager.GlobalButtons>
@@ -50,12 +52,10 @@
                       Watermark="输入用户名"/>
         <TextBlock Text="Password" Grid.Row="2" Margin="3"/>
         <mu:PUPasswordBox x:Name="txtPassword" Password="{Binding CurrentUser.Password, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Column="1" Grid.Row="2" Margin="3" Width="100" Height="20" HorizontalAlignment="Left"   VerticalAlignment="Center"
-                           Watermark="IconGroup"
-                                              IsShowPwdButtonShow="True"
-                                              BorderCornerRadius="2"/>
+                           Watermark="输入密码" IsShowPwdButtonShow="True" BorderCornerRadius="2"/>
         <mu:PUButton Command="{Binding LoginCommand}" 
                 CommandParameter="{Binding ElementName=Page}" 
-                BorderCornerRadius="3" IsEnabled="{Binding CurrentUser.Password}"
+                BorderCornerRadius="3" IsEnabled="{Binding CurrentUser.Password, Converter={StaticResource NonNullTrueConverter}}"
                 Content="Log in" Grid.Row="3" Grid.Column="1" Margin="3" Height="20"/>
         <ComboBox Grid.Row="3" ItemsSource="{Binding ServiceUris}" SelectedIndex="{Binding SelectedServiceUri}" />
     </Grid>

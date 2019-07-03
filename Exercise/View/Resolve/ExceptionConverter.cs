@@ -28,9 +28,9 @@ namespace Exercise.View.Resolve
                 {
                     case ExceptionType.NoPageCode:
                     case ExceptionType.PageCodeMissMatch:
-                        return "未知试卷";
+                        return "试卷" + ex.Index;
                     case ExceptionType.NoStudentCode:
-                        return String.Format("试卷 （{0}-{1}页）", page.PageIndex + 1, page.PageIndex + 2);
+                        return String.Format("试卷{2} （{0}-{1}页）", page.PageIndex + 1, page.PageIndex + 2, ex.Index);
                     case ExceptionType.AnalyzeException:
                         return String.Format("{0} {1} （{2}-{3}页）", page.Student.TalNo, page.Student.Name, page.PageIndex + 1, page.PageIndex + 2);
                     case ExceptionType.AnswerException:
@@ -67,6 +67,15 @@ namespace Exercise.View.Resolve
                         return null;
                 }
             }
+            else if ((string)parameter == "Message")
+            {
+                if (page.Exception != null)
+                    return page.Exception.Message;
+                else if (ex.Type == ExceptionType.PageCodeMissMatch)
+                    return "该试卷非本校试卷";
+                else
+                    return null;
+            }
             else if ((string)parameter == "Rescan")
             {
                 switch (ex.Type)
@@ -88,6 +97,7 @@ namespace Exercise.View.Resolve
                     case ExceptionType.NoPageCode:
                     case ExceptionType.PageCodeMissMatch:
                     case ExceptionType.AnalyzeException:
+                    case ExceptionType.NoStudentCode:
                         return "忽略此异常";
                     default:
                         return null;

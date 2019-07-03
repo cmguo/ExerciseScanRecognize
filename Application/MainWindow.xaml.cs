@@ -61,6 +61,8 @@ namespace Application
             buttons.ResolveGloabalButtons();
             foreach (TitleButton b in buttons)
             {
+                if (b.Content == null)
+                    continue;
                 RemoveNavButton(b.Content);
                 if (b.Content.DataContext == page.DataContext)
                     b.Content.DataContext = null;
@@ -78,6 +80,8 @@ namespace Application
                 buttons.ResolveGloabalButtons();
                 foreach (TitleButton b in buttons)
                 {
+                    if (b.Content == null)
+                        continue;
                     if (b.Content.DataContext == null)
                         b.Content.DataContext = page.DataContext;
                     Button button = b.Content as Button;

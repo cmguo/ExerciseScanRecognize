@@ -9,6 +9,7 @@
       xmlns:mu="clr-namespace:Panuon.UI;assembly=Panuon.UI"
       xmlns:tb="clr-namespace:Base.TitleBar;assembly=Base"
       mc:Ignorable="d" 
+      x:Name="Page"
       d:DesignHeight="450" d:DesignWidth="800"
       Title="HomePage">
 
@@ -60,7 +61,7 @@
                 </StackPanel>
 
                 <mu:PUButton Command="{Binding ContinueCommand}" 
-                    CommandParameter="{Binding RelativeSource={RelativeSource AncestorType={x:Type Page}}}" 
+                    CommandParameter="{Binding ElementName=Page}" 
                     Content="继续扫描" VerticalAlignment="Center" 
                              FontSize="16"
                     Grid.Column="3"
@@ -71,7 +72,7 @@
                              Padding="0,10,0,10"
                         />
                 <mu:PUButton Command="{Binding ResolveCommand}" 
-                             CommandParameter="{Binding RelativeSource={RelativeSource AncestorType={x:Type Page}}}" 
+                             CommandParameter="{Binding ElementName=Page}" 
                              Content="处理异常" VerticalAlignment="Center" 
                              Visibility="{Binding ExceptionCount, Converter={StaticResource HasExceptionConverter}}"
                              Grid.Column="4"
@@ -83,7 +84,7 @@
                              Padding="0,10,0,10"
                         />
                 <mu:PUButton Command="{Binding SubmitCommand}"
-                             CommandParameter="{Binding RelativeSource={RelativeSource AncestorType={x:Type Page}}}" 
+                             CommandParameter="{Binding ElementName=Page}" 
                              Visibility="{Binding ExceptionCount, Converter={StaticResource NoExceptionConverter}}"
                              Content="上传扫描结果" VerticalAlignment="Center"
                              BorderCornerRadius="3"
@@ -138,7 +139,7 @@
                             </Style>
                         </DataGrid.CellStyle>
                         <DataGrid.Columns>
-                            <DataGridTextColumn Header="异常项" Binding="{Binding Converter={StaticResource ExceptionListConverter}}" FontSize="14" Width="140"/>
+                            <DataGridTextColumn Header="异常项" Binding="{Binding Converter={StaticResource ExceptionListConverter}, ConverterParameter=Tree}" FontSize="14" Width="140"/>
                             <DataGridTextColumn Header="回收试卷" Binding="{Binding Exceptions.Count}" FontSize="14" Width="100"/>
                         </DataGrid.Columns>
                     </DataGrid>

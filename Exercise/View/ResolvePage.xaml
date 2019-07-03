@@ -7,6 +7,7 @@
       xmlns:resolve="clr-namespace:Exercise.View.Resolve"
       xmlns:vm="clr-namespace:Exercise.ViewModel"
       xmlns:pb="clr-namespace:Base.PushBinding;assembly=Base"
+      xmlns:cv="clr-namespace:Base.Mvvm.Converter;assembly=Base"
       xmlns:tb="clr-namespace:Base.TitleBar;assembly=Base"
       mc:Ignorable="d" 
       x:Name="Page"
@@ -21,7 +22,7 @@
         <resolve:ExceptionListConverter x:Key="ExceptionListConverter" />
         <resolve:ExceptionConverter x:Key="ExceptionConverter" />
         <resolve:ExceptionPageConverter x:Key="ExceptionPageConverter" />
-        <local:NonNullVisibleConverter x:Key="NonNullVisibleConverter" />
+        <cv:NonNullVisibleConverter x:Key="NonNullVisibleConverter" />
     </Page.Resources>
 
     <tb:TitleBarManager.Buttons>
@@ -35,13 +36,18 @@
 
     <Grid>
         <DockPanel>
-            <TreeView ItemsSource="{Binding Exceptions}" DockPanel.Dock="Left" Width="200" >
+            <TreeView x:Name="treeView" ItemsSource="{Binding Exceptions}" DockPanel.Dock="Left" Width="200" >
                 <pb:PushBindingManager.PushBindings>
-                    <pb:PushBinding TargetProperty="SelectedValue" Path="SelectedException"/>
+                    <pb:PushBinding TargetProperty="SelectedItem" Path="Selection"/>
                 </pb:PushBindingManager.PushBindings>
+                <TreeView.ItemContainerStyle>
+                    <Style TargetType="{x:Type TreeViewItem}">
+                        <Setter Property="IsExpanded" Value="True"/>
+                    </Style>
+                </TreeView.ItemContainerStyle>
                 <TreeView.ItemTemplate>
                     <HierarchicalDataTemplate ItemsSource="{Binding Exceptions}">
-                        <TextBlock Text="{Binding Converter={StaticResource ExceptionListConverter}}"/>
+                        <TextBlock Text="{Binding Converter={StaticResource ExceptionListConverter}, ConverterParameter=Tree}"/>
                         <HierarchicalDataTemplate.ItemTemplate>
                             <DataTemplate>
                                 <TextBlock Text="{Binding Converter={StaticResource ExceptionConverter}, ConverterParameter=Tree}" />
@@ -51,6 +57,8 @@
                 </TreeView.ItemTemplate>
             </TreeView>
             <StackPanel Orientation="Vertical" DockPanel.Dock="Right" Background="Gray"  Width="200">
+                <TextBlock Text="{Binding SelectedException, Converter={StaticResource ExceptionConverter}, 
+                    ConverterParameter=Title}" TextWrapping="Wrap" />
                 <Frame Content="{Binding SelectedException, Converter={StaticResource ExceptionPageConverter}}"/>
                 <StackPanel Orientation="Vertical">
                     <Button Command="{Binding RescanCommand}" 
@@ -71,23 +79,28 @@
                     <Button Command="{Binding RemoveStudentCommand}" 
                             CommandParameter="{Binding ElementName=Page}" 
                             Content="丢弃改生试卷" Visibility="{Binding SelectedException.Page.Student, 
-                                Converter={StaticResource NonNullVisibleConverter}}" />
+                                Converter={StaticResource NonNullVisibleConverter}, FallbackValue=Collapsed}" />
                 </StackPanel>
-                <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Orientation="Vertical">
-                    <TextBlock Text="以下试卷均缺失，可批量全部忽略" />
+                <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Orientation="Vertical" 
+                            Visibility="{Binding Text, ElementName=ListTitle, Converter={StaticResource NonNullVisibleConverter}}">
+                    <TextBlock x:Name="ListTitle" Text="{Binding SelectedExceptionList, Converter={StaticResource ExceptionListConverter}, 
+                            ConverterParameter=Title}" TextWrapping="Wrap" />
                     <ListView ItemsSource="{Binding SelectedExceptionList.Exceptions}">
                         <ListView.ItemTemplate>
                             <DataTemplate>
-                                <TextBlock Text="{Binding Converter={StaticResource ExceptionConverter}}" />
+                                <TextBlock Text="{Binding Converter={StaticResource ExceptionConverter}, ConverterParameter=Tree}" />
                             </DataTemplate>
                         </ListView.ItemTemplate>
                     </ListView>
                     <Button Command="{Binding IgnoreListCommand}" 
                             CommandParameter="{Binding ElementName=Page}" 
-                            Content="忽略以上异常" />
+                            Visibility="{Binding Content, RelativeSource={RelativeSource Self}, Converter={StaticResource NonNullVisibleConverter}}"
+                            Content="{Binding SelectedExceptionList, Converter={StaticResource ExceptionListConverter}, 
+                                ConverterParameter=Ignore}" />
                     <Button Command="{Binding RemovePageListCommand}" 
                             CommandParameter="{Binding ElementName=Page}" 
-                            Content="删除以上试卷" />
+                            Content="{Binding SelectedExceptionList, Converter={StaticResource ExceptionListConverter}, 
+                                ConverterParameter=RemovePage}" />
                 </StackPanel>
             </StackPanel>
             <Border BorderThickness="2" BorderBrush="Blue">

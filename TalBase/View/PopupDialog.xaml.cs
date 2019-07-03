@@ -20,7 +20,7 @@ namespace TalBase.View
     public partial class PopupDialog : Window
     {
 
-        public string Icon { get; set; }
+        public string Image { get; set; }
         public string Message { get; set; }
         public FrameworkElement Body { set; get; }
         public string Button0 { get; set; }
@@ -53,6 +53,8 @@ namespace TalBase.View
                 result = 1;
             else
                 result = 2;
+            if (Body != null)
+                body.Children.Remove(Body);
             Close();
         }
 
@@ -77,7 +79,7 @@ namespace TalBase.View
 
         public static int Show(string msg, string icon, int def, params string[] buttons)
         {
-            return new PopupDialog(buttons) { Message = msg, Icon = icon, Default = def }.Popup();
+            return new PopupDialog(buttons) { Message = msg, Image = icon, Default = def }.Popup();
         }
 
         public static int Show(string msg, FrameworkElement body, int def, params string[] buttons)
@@ -87,7 +89,7 @@ namespace TalBase.View
 
         public static int Show(string msg, string icon, FrameworkElement body, int def, params string[] buttons)
         {
-            return new PopupDialog(buttons) { Message = msg, Icon = icon, Body = body, Default = def }.Popup();
+            return new PopupDialog(buttons) { Message = msg, Image = icon, Body = body, Default = def }.Popup();
         }
     }
 }

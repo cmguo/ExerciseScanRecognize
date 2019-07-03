@@ -6,10 +6,10 @@ namespace Exercise.Algorithm
 {
     public class PageData
     {
-        [JsonProperty(Required = Required.Default)]
+        [JsonProperty(Required = Required.Default, NullValueHandling = NullValueHandling.Ignore)]
         [JsonConverter(typeof(ByteArrayJsonConverter))]
         public byte[] ImgBytes { get; set; }
-        public int numOfAreaMarkers { get; set; }
+        public int NumOfAreaMarkers { get; set; }
         public IList<Area> AreaInfo { get; set; }
 
         [JsonExtensionData]
@@ -19,11 +19,11 @@ namespace Exercise.Algorithm
         public class Item
         {
             // public float TotalScore { get; set; }
+            public int Index { get; set; }
+            public PagingInfo PagingInfo { get; set; }
             // 选择题的选项信息，以英文逗号分隔 "A,B,C,D"
             // 填空题该字段为空
             // 解答题每小题的分值信息（按从左到右顺序给到，以英文逗号分隔）
-            public int Index { get; set; }
-            public PagingInfo PagingInfo { get; set; }
             public string Value { get; set; }
             public Location ItemLocation { get; set; }
 

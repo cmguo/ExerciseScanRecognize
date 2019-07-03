@@ -29,9 +29,8 @@ namespace Exercise.View.Resolve
                 case ExceptionType.NoStudentCode:
                     return new NoStudentCodePage() { DataContext = ex };
                 case ExceptionType.AnswerException:
-                    return new AnswerExceptionPage() { DataContext = ex };
                 case ExceptionType.CorrectionException:
-                    return new CorrectionExceptionPage() { DataContext = ex };
+                    return new AnswerExceptionPage() { DataContext = ex };
                 case ExceptionType.PageLost:
                     return new PageLostPage() { DataContext = ex };
                 default:

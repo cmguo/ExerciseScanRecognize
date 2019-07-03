@@ -27,7 +27,7 @@ namespace Exercise.Algorithm
         {
             QRCodeData code = analyze<QRCodeData, PageRaw>(AnswerSheetAnalyze.METHOD_QR_CODE_RECOGNIZE, page);
             if (code.PaperInfo == null || code.PaperInfo.Length == 0)
-                throw new NullReferenceException("QRCodeData");
+                throw new NullReferenceException("试卷二维码未识别");
             if (code.StudentInfo == "")
                 code.StudentInfo = null;
             return code;

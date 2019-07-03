@@ -11,6 +11,7 @@ namespace Exercise.View
         public HistoryPage()
         {
             InitializeComponent();
+            DataContext = FindResource("ViewModel");
         }
 
     }

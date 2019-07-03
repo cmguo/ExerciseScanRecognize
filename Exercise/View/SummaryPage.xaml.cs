@@ -22,8 +22,8 @@ namespace Exercise.View
     {
         internal HasExceptionConverter()
         {
-            //CollapsedValues = new object[] { 0 };
-            VisibleValues = new object[0];
+            CollapsedValues = new object[] { 0 };
+            //VisibleValues = new object[0];
         }
     }
 
@@ -31,8 +31,8 @@ namespace Exercise.View
     {
         internal NoExceptionConverter()
         {
-            //VisibleValues = new object[] { 0 };
-            CollapsedValues = new object[0];
+            VisibleValues = new object[] { 0 };
+            //CollapsedValues = new object[0];
         }
     }
 

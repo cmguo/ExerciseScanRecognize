@@ -16,9 +16,7 @@
     <Grid>
         <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Orientation="Vertical">
             <TextBlock Text="{Binding Converter={StaticResource ExceptionConverter}, 
-                ConverterParameter=Title}" />
-            <TextBlock Text="{Binding Converter={StaticResource ExceptionConverter}, 
-                ConverterParameter=Type}" />
+                ConverterParameter=Message, StringFormat=- {0}}" TextWrapping="Wrap" />
         </StackPanel>
     </Grid>
 </Page>

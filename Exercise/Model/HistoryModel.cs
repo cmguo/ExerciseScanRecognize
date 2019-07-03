@@ -4,11 +4,13 @@ using Exercise.Service;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using TalBase.Model;
+using static Exercise.Service.HistoryData;
 
 namespace Exercise.Model
 {
@@ -28,6 +30,8 @@ namespace Exercise.Model
             }
         }
 
+        public ObservableCollection<Record> LocalRecords { get; private set; }
+
         public ObservableCollection<Record> Records { get; private set; }
 
         private IExercise service;
@@ -36,6 +40,7 @@ namespace Exercise.Model
 
         public HistoryModel()
         {
+            LocalRecords = new ObservableCollection<Record>();
             Records = new ObservableCollection<Record>();
             service = Services.Get<IExercise>();
         }
@@ -53,14 +58,21 @@ namespace Exercise.Model
             List<ClassDetail> classes = SchoolModel.Instance.Classes.Select(c => new ClassDetail()
             {
                 ClassName = c.ClassName,
-                ResultCount = c.Students.Where(s => s.AnswerPages.Any(p => p.StudentCode == null)).Count(),
+                ResultCount = c.Students.Where(s => s.AnswerPages.Any(p => p.StudentCode != null)).Count(),
             }).ToList();
             Record record = new Record() { ExerciseName = ExerciseModel.Instance.ExerciseData.Title, ClassDetails = classes };
             await JsonPersistent.Save(path + "\\record.json", record);
         }
 
+        public void Remove(Record record)
+        {
+            LocalRecords.Remove(record);
+            Directory.Delete(record.LocalPath, true);
+        }
+
         public async Task Load()
         {
+            LocalRecords.Clear();
             Records.Clear();
             await LoadLocal();
             await LoadMore();
@@ -69,26 +81,40 @@ namespace Exercise.Model
         private async Task LoadLocal()
         {
             string path = System.Environment.CurrentDirectory + "\\扫描试卷";
-            foreach (string path2 in Directory.EnumerateDirectories(path))
+            foreach (string path1 in Directory.EnumerateDirectories(path))
             {
-                string path1 = path2 + "\\record.json";
-                if (!File.Exists(path1))
-                    continue;
+                foreach (string path2 in Directory.EnumerateDirectories(path1))
+                {
+                    string path3 = path2 + "\\record.json";
+                    if (!File.Exists(path3))
+                    {
+                        Directory.Delete(path2, true);
+                        continue;
+                    }
+                    try
+                    {
+                        Record record = await JsonPersistent.Load<Record>(path3);
+                        record.LocalPath = path2;
+                        LocalRecords.Add(record);
+                    }
+                    catch (Exception e)
+                    {
+                        Debug.WriteLine("LoadLocal", e.Message);
+                    }
+                }
                 try
                 {
-                    Record record = await JsonPersistent.Load<Record>(path1);
-                    Records.Add(record);
+                    Directory.Delete(path1);
                 }
-                catch (Exception e)
+                catch
                 {
-                    Console.Out.WriteLine("LoadLocal", e.Message);
                 }
             }
         }
 
         public async Task LoadMore()
         {
-            RecordData records = await service.getRecords(page);
+            HistoryData records = await service.getRecords(page);
             ++page;
             foreach (Record r in records.Records)
                 Records.Add(r);

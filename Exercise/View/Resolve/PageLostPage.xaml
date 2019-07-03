@@ -11,7 +11,6 @@
 
     <Grid>
         <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Orientation="Vertical">
-            <TextBlock Text="试卷缺失，请放入试卷，开始扫描。" />
         </StackPanel>
     </Grid>
 </Page>

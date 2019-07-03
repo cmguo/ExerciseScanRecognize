@@ -65,6 +65,7 @@
   <ItemGroup>
     <Compile Include="Algorithm\Algorithm.cs" />
     <Compile Include="Algorithm\AnswerData.cs" />
+    <Compile Include="Algorithm\ExceptionJsonConverter.cs" />
     <Compile Include="Algorithm\ByteArrayJsonConverter.cs" />
     <Compile Include="Algorithm\CommonData.cs" />
     <Compile Include="Algorithm\PageData.cs" />
@@ -79,7 +80,8 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ScanDevice.cs" />
     <Compile Include="Service\GenUriData.cs" />
-    <Compile Include="Service\RecordData.cs" />
+    <Compile Include="Service\HistoryData.cs" />
+    <Compile Include="Service\SubmitComplete.cs" />
     <Compile Include="Service\SubmitPrepare.cs" />
     <Compile Include="Service\SubmitData.cs" />
     <Compile Include="Model\Page.cs" />
@@ -99,6 +101,8 @@
       <DependentUpon>HistoryPage.xaml</DependentUpon>
     </Compile>
     <Compile Include="View\PaperViewer.cs" />
+    <Compile Include="View\Resolve\FalseVisibleConverter.cs" />
+    <Compile Include="View\Resolve\SelectionConverter.cs" />
     <Compile Include="View\SubmitPage.xaml.cs">
       <DependentUpon>SubmitPage.xaml</DependentUpon>
     </Compile>
@@ -110,9 +114,6 @@
     </Compile>
     <Compile Include="View\Resolve\AnswerExceptionPage.xaml.cs">
       <DependentUpon>AnswerExceptionPage.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="View\Resolve\CorrectionExceptionPage.xaml.cs">
-      <DependentUpon>CorrectionExceptionPage.xaml</DependentUpon>
     </Compile>
     <Compile Include="View\Resolve\PageLostPage.xaml.cs">
       <DependentUpon>PageLostPage.xaml</DependentUpon>
@@ -169,10 +170,6 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="View\Resolve\AnswerExceptionPage.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="View\Resolve\CorrectionExceptionPage.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>

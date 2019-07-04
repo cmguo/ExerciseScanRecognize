@@ -21,6 +21,7 @@ namespace Exercise.View
             InitializeComponent();
             ResolveViewModel vm = DataContext as ResolveViewModel;
             vm.PropertyChanged += Vm_PropertyChanged;
+            Loaded += (s, e) => vm.InitSelection();
         }
 
         private void Vm_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
@@ -28,13 +29,18 @@ namespace Exercise.View
             ResolveViewModel vm = sender as ResolveViewModel;
             if (e.PropertyName == "Selection")
             {
-                var tvi = FindItem(treeView, vm.Selection);
-                if (tvi != null)
-                {
-                    tvi.IsSelected = true;
-                }
-                ButtonFace1_Click(this, null);
+                Select(vm.Selection);
             }
+        }
+
+        private void Select(object item)
+        {
+            var tvi = FindItem(treeView, item);
+            if (tvi != null)
+            {
+                tvi.IsSelected = true;
+            }
+            ButtonFace1_Click(this, null);
         }
 
         private TreeViewItem FindItem(ItemsControl container, object item)

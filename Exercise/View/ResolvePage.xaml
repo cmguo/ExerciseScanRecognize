@@ -8,6 +8,7 @@
       xmlns:vm="clr-namespace:Exercise.ViewModel"
       xmlns:pb="clr-namespace:Base.PushBinding;assembly=Base"
       xmlns:cv="clr-namespace:Base.Mvvm.Converter;assembly=Base"
+      xmlns:mu="clr-namespace:Panuon.UI;assembly=Panuon.UI"
       xmlns:tb="clr-namespace:Base.TitleBar;assembly=Base"
       mc:Ignorable="d" 
       x:Name="Page"
@@ -27,10 +28,14 @@
         <cv:NullVisibleConverter x:Key="NullVisibleConverter" />
         <local:DuplexFaceConverter x:Key="DuplexFaceConverter" />
         <local:PaperOverlayConverter x:Key="PaperOverlayConverter" />
+        <mu:PUButton x:Key="Return" VerticalAlignment="Center" HorizontalAlignment="Center"
+                     Content="返回"
+                     Command="{Binding ReturnCommand}"
+                     CommandParameter="{Binding Source={x:Reference Page}}" />
     </Page.Resources>
 
     <tb:TitleBarManager.Buttons>
-        <tb:TitleButton Name="Discard" />
+        <tb:TitleButton Name="Return" Content="{StaticResource Return}" />
     </tb:TitleBarManager.Buttons>
 
 

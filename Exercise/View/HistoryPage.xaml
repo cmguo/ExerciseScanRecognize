@@ -3,7 +3,6 @@
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-      xmlns:local="clr-namespace:Exercise.View"
       xmlns:vm="clr-namespace:Exercise.ViewModel"
       xmlns:mu="clr-namespace:Panuon.UI;assembly=Panuon.UI"
       xmlns:tb="clr-namespace:Base.TitleBar;assembly=Base"
@@ -16,7 +15,16 @@
     <Page.Resources>
         <cv:MultiValueConverter x:Key="MultiValueConverter" />
         <vm:HistoryViewModel x:Key="ViewModel" />
+        <mu:PUButton x:Key="Return" VerticalAlignment="Center" HorizontalAlignment="Center"
+                     Content="返回"
+                     Command="{Binding ReturnCommand}"
+                     CommandParameter="{Binding Source={x:Reference Page}}" />
     </Page.Resources>
+
+
+    <tb:TitleBarManager.Buttons>
+        <tb:TitleButton Name="Return" Content="{StaticResource Return}" />
+    </tb:TitleBarManager.Buttons>
 
     <Grid>
         <Grid.RowDefinitions>

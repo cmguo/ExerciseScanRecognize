@@ -218,6 +218,8 @@ namespace Exercise.Model
             savePath = path;
             foreach (Page p in data.Pages)
             {
+                if (p.PageName != null)
+                    p.PagePath = savePath + "\\" + p.PageName;
                 if (p.PaperCode == PageCode)
                     p.MetaData = exerciseData.Pages[p.PageIndex];
                 Pages.Add(p);
@@ -240,7 +242,8 @@ namespace Exercise.Model
             int n1 = fileName.LastIndexOf('_') + 1;
             int n2 = fileName.LastIndexOf(".");
             int index = Int32.Parse(fileName.Substring(n1, n2 - n1));
-            Page page = new Page() { ScanBatch = scanBatch, ScanIndex = index, PagePath = fileName };
+            Page page = new Page() { ScanBatch = scanBatch, ScanIndex = index, PagePath = fileName,
+                PageName = fileName.Substring(fileName.LastIndexOf('\\') + 1) };
             Page page1 = null;
             lock (mutex)
             {
@@ -358,9 +361,9 @@ namespace Exercise.Model
                 answerData.RedressedImgBytes = null;
                 MD5 md5 = new MD5CryptoServiceProvider();
                 byte[] output = md5.ComputeHash(page.PageData);
-                page.Md5Name = BitConverter.ToString(output).Replace("-", "").ToLower() + ".jpg";
+                page.PageName = BitConverter.ToString(output).Replace("-", "").ToLower() + ".jpg";
                 File.Delete(page.PagePath);
-                page.PagePath = savePath + "\\" + page.Md5Name;
+                page.PagePath = savePath + "\\" + page.PageName;
                 FileStream fs = new FileStream(page.PagePath, FileMode.Create, FileAccess.Write);
                 using (fs) { new MemoryStream(page.PageData).CopyTo(fs); }
                 page.PageData = null;

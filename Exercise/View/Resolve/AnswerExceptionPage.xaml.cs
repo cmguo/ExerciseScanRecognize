@@ -15,6 +15,8 @@ namespace Exercise.View.Resolve
     /// </summary>
     internal class AnswerExceptionViewModel : ViewModelBase
     {
+        public IList<Question> Questions { get; set; }
+
         private Question _SelectedQuestion;
         public Question SelectedQuestion
         {
@@ -23,6 +25,17 @@ namespace Exercise.View.Resolve
             {
                 _SelectedQuestion = value;
                 RaisePropertyChanged("SelectedQuestion");
+            }
+        }
+
+        private IList<string> _Answers;
+        public IList<string> Answers
+        {
+            get => _Answers;
+            set
+            {
+                _Answers = value;
+                RaisePropertyChanged("Answers");
             }
         }
 
@@ -36,6 +49,7 @@ namespace Exercise.View.Resolve
                 RaisePropertyChanged("SelectedAnswer");
             }
         }
+
     }
 
     public partial class AnswerExceptionPage : Page
@@ -44,7 +58,6 @@ namespace Exercise.View.Resolve
         private AnswerExceptionViewModel viewModel;
         private ExceptionType type;
         private PageData data;
-        private IList<Question> answerExceptions;
 
         public AnswerExceptionPage()
         {
@@ -60,54 +73,35 @@ namespace Exercise.View.Resolve
             Exception ex = DataContext as Exception;
             type = ex.Type;
             data = ex.Page.MetaData;
-            answerExceptions = type == ExceptionType.AnswerException 
+            viewModel.Questions = type == ExceptionType.AnswerException 
                 ? ex.Page.Answer.AnswerExceptions : ex.Page.Answer.CorrectionExceptions;
-            foreach (var ae in answerExceptions)
-            {
-                Button bt = qi.LoadContent() as Button;
-                bt.DataContext = ae;
-                questions.Children.Add(bt);
-            }
-            viewModel.SelectedQuestion = answerExceptions[0];
+            viewModel.SelectedQuestion = viewModel.Questions[0];
             if (type == ExceptionType.AnswerException)
+            {
                 correct.Visibility = Visibility.Collapsed;
+            }
             else
+            {
                 answers.Visibility = Visibility.Collapsed;
-            FillScores();
+                FillScores();
+            }
         }
 
         private void FillAnswers(Question question)
         {
-            DataTemplate ai = FindResource("AnswerItem") as DataTemplate;
             PageData.Question qe = data.AreaInfo.SelectMany(a => a.QuestionInfo)
                 .Where(q => q.QuestionId == question.QuestionId).First();
-            answers.Children.Clear();
-            foreach (string ae in qe.ItemInfo[0].Value.Split(','))
-            {
-                Button bt = ai.LoadContent() as Button;
-                bt.DataContext = ae;
-                answers.Children.Add(bt);
-            }
-            Button bt2 = ai.LoadContent() as Button;
-            bt2.DataContext = null;
-            answers.Children.Add(bt2);
+            viewModel.Answers = qe.ItemInfo[0].Value.Split(',').Concat(new string[] { null }).ToList();
         }
 
         private void FillScores()
         {
-            DataTemplate ai = FindResource("AnswerItem") as DataTemplate;
+            List<string> answers = new List<string>();
             for (int i = 1; i < 10; ++i)
-            {
-                Button bt = ai.LoadContent() as Button;
-                bt.DataContext = i.ToString();
-                numbers.Children.Add(bt);
-            }
-            Button bt1 = ai.LoadContent() as Button;
-            bt1.DataContext = "0";
-            numbers.Children.Add(bt1);
-            Button bt2 = ai.LoadContent() as Button;
-            bt2.DataContext = "<-删除";
-            numbers.Children.Add(bt2);
+                answers.Add(i.ToString());
+            answers.Add("0");
+            answers.Add("<=删除");
+            viewModel.Answers = answers;
         }
 
         private void Question_Click(object sender, RoutedEventArgs e)
@@ -123,12 +117,12 @@ namespace Exercise.View.Resolve
             }
             else
             {
-                int n = numbers.Children.IndexOf(sender as UIElement);
-                if (n < 10)
+                string n = (string)(sender as FrameworkElement).DataContext;
+                if (n.Length == 1)
                 {
-                    viewModel.SelectedAnswer += (string) (sender as FrameworkElement).DataContext;
+                    viewModel.SelectedAnswer += n;
                 }
-                else if (n == 10)
+                else
                 {
                     viewModel.SelectedAnswer = viewModel.SelectedAnswer.Substring(0, viewModel.SelectedAnswer.Length - 1);
                 }
@@ -149,10 +143,10 @@ namespace Exercise.View.Resolve
                 return true;
             });
             viewModel.SelectedQuestion.HasException = false;
-            int n = answerExceptions.IndexOf(viewModel.SelectedQuestion);
-            if (++n < answerExceptions.Count)
+            int n = viewModel.Questions.IndexOf(viewModel.SelectedQuestion);
+            if (++n < viewModel.Questions.Count)
             {
-                viewModel.SelectedQuestion = answerExceptions[n];
+                viewModel.SelectedQuestion = viewModel.Questions[n];
             }
             else
             {

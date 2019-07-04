@@ -29,7 +29,7 @@
             </Button>
         </DataTemplate>
         <DataTemplate x:Key="AnswerItem">
-            <Button BorderThickness="2" Click="Answer_Click">
+            <Button BorderThickness="2" Click="Answer_Click" MinWidth="30" Height="30">
                 <Button.BorderBrush>
                     <MultiBinding Converter="{StaticResource SelectionConverter}">
                         <Binding Path="SelectedAnswer" Source="{StaticResource ViewModel}" />
@@ -43,19 +43,43 @@
     
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="*" />
-            <RowDefinition Height="*" />
+            <RowDefinition />
+            <RowDefinition />
             <RowDefinition />
         </Grid.RowDefinitions>
-        <WrapPanel Grid.Row="0" x:Name="questions" Orientation="Horizontal" />
-        <WrapPanel Grid.Row="1" x:Name="answers" Orientation="Horizontal" />
+        <ListView Grid.Row="0" BorderThickness="0" 
+                  ItemsSource="{Binding Questions, Source={StaticResource ViewModel}}"
+                  ItemTemplate="{StaticResource QuestionItem}">
+            <ListView.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <WrapPanel IsItemsHost="True" Orientation="Horizontal" Width="300" />
+                </ItemsPanelTemplate>
+            </ListView.ItemsPanel>
+        </ListView>
+        <ListView Grid.Row="1" x:Name="answers" BorderThickness="0" 
+                  ItemsSource="{Binding Answers, Source={StaticResource ViewModel}}"
+                  ItemTemplate="{StaticResource AnswerItem}">
+            <ListView.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <WrapPanel IsItemsHost="True" Orientation="Horizontal" />
+                </ItemsPanelTemplate>
+            </ListView.ItemsPanel>
+        </ListView>
         <StackPanel Grid.Row="1" x:Name="correct" Orientation="Vertical">
             <TextBlock Text="本题得分为："/>
             <StackPanel Orientation="Horizontal">
                 <TextBox Text="{Binding SelectedAnswer, Source={StaticResource ViewModel}}" Width="60" />
                 <TextBlock Text="分"/>
             </StackPanel>
-            <WrapPanel Grid.Row="1" x:Name="numbers" Orientation="Horizontal" />
+            <ListView Grid.Row="0" BorderThickness="0"  Width="210"
+                  ItemsSource="{Binding Answers, Source={StaticResource ViewModel}}"
+                  ItemTemplate="{StaticResource AnswerItem}">
+                <ListView.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <WrapPanel IsItemsHost="True" Orientation="Horizontal" Width="200" />
+                    </ItemsPanelTemplate>
+                </ListView.ItemsPanel>
+            </ListView>
             <TextBlock Text="请为本题打分" Foreground="Red" 
                        Visibility="{Binding SelectedAnswer, Source={StaticResource ViewModel}, Converter={StaticResource NullVisibleConverter}}"/>
         </StackPanel>

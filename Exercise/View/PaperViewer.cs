@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -88,15 +89,22 @@ namespace Exercise.View
                 image.ImageSource = paper = null;
                 return;
             }
-            paper = new BitmapImage();
-            paper.BeginInit();
-            paper.CacheOption = BitmapCacheOption.OnLoad;
-            paper.UriSource = new Uri(uri);
-            paper.EndInit();
-            image.ImageSource = paper;
-            image.Rect = new Rect(0, 0, paper.Width, paper.Height);
-            Scale = 1.0;
-            Adjust();
+            try
+            {
+                paper = new BitmapImage();
+                paper.BeginInit();
+                paper.CacheOption = BitmapCacheOption.OnLoad;
+                paper.UriSource = new Uri(uri);
+                paper.EndInit();
+                image.ImageSource = paper;
+                image.Rect = new Rect(0, 0, paper.Width, paper.Height);
+                Scale = 1.0;
+                Adjust();
+            }
+            catch (Exception e)
+            {
+                Debug.WriteLine(e);
+            }
         }
 
         private void SetOverlay(Geometry g)

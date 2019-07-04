@@ -5,6 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:tal="clr-namespace:Panuon.UI;assembly=Panuon.UI"
         mc:Ignorable="d"
+        Width="1200" Height="700"
         NavButtonVisibility="Visible"
         NavbarBackground="Gray"
         WindowStyle="None">

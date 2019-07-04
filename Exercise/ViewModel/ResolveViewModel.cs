@@ -1,5 +1,6 @@
 ﻿using Base.Mvvm;
 using Exercise.Model;
+using Exercise.View;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using TalBase.View;
@@ -67,6 +68,8 @@ namespace Exercise.ViewModel
         public RelayCommand IgnoreListCommand { get; set; }
         public RelayCommand RemovePageListCommand { get; set; }
 
+        public RelayCommand ReturnCommand { get; set; }
+
         #endregion
 
         private ExerciseModel exerciseModel = ExerciseModel.Instance;
@@ -83,10 +86,17 @@ namespace Exercise.ViewModel
             RemovePageListCommand = new RelayCommand((e) => exerciseModel.Resolve(SelectedExceptionList, ResolveType.RemovePage));
             Exceptions = exerciseModel.Exceptions;
             Exceptions.CollectionChanged += Exceptions_CollectionChanged;
+            ReturnCommand = new RelayCommand((o) => Return(o));
             foreach (ExceptionList el in Exceptions)
             {
                 el.Exceptions.CollectionChanged += Exceptions_CollectionChanged;
             }
+        }
+
+        public void InitSelection()
+        {
+            if (Exceptions.Count > 0)
+                Selection = Exceptions[0].Exceptions[0];
         }
 
         private void Rescan(object obj)
@@ -151,6 +161,11 @@ namespace Exercise.ViewModel
                         Selection = el[n];
                 }
             }
+        }
+
+        private void Return(object obj)
+        {
+            (obj as System.Windows.Controls.Page).NavigationService.Navigate(new SummaryPage());
         }
 
     }

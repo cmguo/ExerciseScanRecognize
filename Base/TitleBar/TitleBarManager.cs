@@ -56,14 +56,20 @@ namespace Base.TitleBar
         }
 
         public static DependencyProperty GlobalButtonsProperty =
-            DependencyProperty.RegisterAttached("GlobalButtons",
+            DependencyProperty.RegisterAttached("GlobalButtonsInternal",
                                                 typeof(TitleButtonCollection),
                                                 typeof(TitleBarManager),
                                                 new UIPropertyMetadata(null, GlobalButtonsChanged));
 
         public static TitleButtonCollection GetGlobalButtons(DependencyObject obj)
         {
-            return (TitleButtonCollection)obj.GetValue(GlobalButtonsProperty);
+            TitleButtonCollection buttons =(TitleButtonCollection)obj.GetValue(GlobalButtonsProperty);
+            if (buttons == null)
+            {
+                buttons = new TitleButtonCollection();
+                SetGlobalButtons(obj, buttons);
+            }
+            return buttons;
         }
 
         public static void SetGlobalButtons(DependencyObject obj, TitleButtonCollection value)

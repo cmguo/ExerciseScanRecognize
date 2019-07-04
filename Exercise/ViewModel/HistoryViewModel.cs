@@ -1,6 +1,7 @@
 ﻿using Base.Mvvm;
 using Exercise.Model;
 using Exercise.View;
+using System;
 using System.Collections.ObjectModel;
 using System.Threading.Tasks;
 using TalBase.ViewModel;
@@ -20,6 +21,7 @@ namespace Exercise.ViewModel
         public RelayCommand DiscardCommand { get; private set; }
 
         public RelayCommand LoadMoreCommand { get; private set; }
+        public RelayCommand ReturnCommand { get; private set; }
 
         private HistoryModel historyModel = HistoryModel.Instance;
 
@@ -28,14 +30,21 @@ namespace Exercise.ViewModel
             SummaryCommand = new RelayCommand((o) => Summary(o));
             DiscardCommand = new RelayCommand((o) => historyModel.Remove(o as Record));
             LoadMoreCommand = new RelayCommand((o) => historyModel.LoadMore());
+            ReturnCommand = new RelayCommand((o) => Return(o));
             new RelayCommand((o) => historyModel.Load()).Execute(null);
         }
 
-        private async Task Summary(object o)
+        private async Task Summary(object obj)
         {
-            object[] args = o as object[];
+            object[] args = obj as object[];
             await ExerciseModel.Instance.Load((args[1] as Record).LocalPath);
             (args[0] as System.Windows.Controls.Page).NavigationService.Navigate(new SummaryPage());
         }
+
+        private void Return(object obj)
+        {
+            (obj as System.Windows.Controls.Page).NavigationService.Navigate(new HomePage());
+        }
+
     }
 }

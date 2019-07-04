@@ -77,7 +77,7 @@ namespace Exercise.Model
             LocalRecords.Clear();
             Records.Clear();
             await LoadLocal();
-            await LoadMore();
+            //await LoadMore();
         }
 
         private async Task LoadLocal()

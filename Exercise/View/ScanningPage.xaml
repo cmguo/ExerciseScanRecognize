@@ -34,12 +34,6 @@
         <local:PaperOverlayConverter x:Key="PaperOverlayConverter" />
     </Page.Resources>
 
-    <tb:TitleBarManager.GlobalButtons>
-        <tb:TitleButtonCollection>
-            <tb:TitleButton Name="Discard" Content="{StaticResource Discard}" />
-        </tb:TitleButtonCollection>
-    </tb:TitleBarManager.GlobalButtons>
-
     <tb:TitleBarManager.Commands>
         <tb:TitleCommand Name="Close" Command="{Binding CloseCommand}" />
     </tb:TitleBarManager.Commands>

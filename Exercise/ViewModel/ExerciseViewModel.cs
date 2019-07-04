@@ -1,6 +1,7 @@
 ﻿using Base.Misc;
 using Base.Mvvm;
 using Exercise.Model;
+using Exercise.Service;
 using Exercise.View;
 using MyToolkit.Collections;
 using Panuon.UI;
@@ -21,7 +22,8 @@ namespace Exercise.ViewModel
         {
             public string ClassName { get; set; }
             public int StudentCount { get; set; }
-            public int ResultCount { get; set; }
+            public IList<StudentInfo> Result { get; set; }
+            public IList<StudentInfo> Miss { get; set; }
         }
 
         #region Properties
@@ -60,8 +62,8 @@ namespace Exercise.ViewModel
             {
                 ClassName = c.ClassName,
                 StudentCount = c.Students.Count(),
-                ResultCount = c.Students.Where(
-                    s => s.AnswerPages != null && s.AnswerPages.Any(p => p != null && p.PagePath != null)).Count(),
+                Result = c.Students.Where(s => s.AnswerPages != null).ToList(),
+                Miss = c.Students.Where(s => s.AnswerPages == null).ToList(),
             }).ToList();
         }
 

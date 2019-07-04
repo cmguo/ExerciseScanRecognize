@@ -18,8 +18,9 @@ namespace Exercise.Model
         public int ScanIndex { get; set; }
         [JsonIgnore]
         public byte[] PageData { get; set; } // 算法会调整
+        [JsonIgnore]
         public String PagePath { get; set; }
-        public String Md5Name { get; set; }
+        public String PageName { get; set; }
 
         [JsonConverter(typeof(ExceptionJsonConverter))]
         public Exception Exception { get; set; }

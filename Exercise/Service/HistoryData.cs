@@ -1,35 +1,54 @@
-﻿using Exercise.Model;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using TalBase.Model;
 
 namespace Exercise.Service
 {
 
-    public class HistoryData
+    public partial class HistoryData
     {
-        public int TotalCount { get; set; }
-        public int Start { get; set; }
-        public List<Record> Records { get; set; }
+        public long TotalCount { get; set; }
+        public Record[] SubmitRecordList { get; set; }
 
 
-        public class ClassDetail
+        public partial class Range
         {
-            public string ClassName { get; set; }
-            public int ResultCount { get; set; }
+            public int Page { get; set; }
+            public int Size { get; set; }
         }
 
-        public class Record
+        public partial class Record : ModelBase
         {
+            public int HomeworkId { get; set; }
+            private string _Name;
+            public string Name
+            {
+                get => _Name;
+                set { _Name = value; RaisePropertyChanged("Name"); }
+            }
+            public long ScanDate { get; set; }
             [JsonIgnore]
-            public string LocalPath { get; set; }
-            public string ExerciseName { get; set; }
-            public string DateTime { get; set; }
-            public IList<ClassDetail> ClassDetails { get; set; }
+            public DateTime DataTime => new DateTime(ScanDate);
+            [JsonIgnore]
+            public string LocalPath { get; internal set; }
+            public IList<ClassDetail> DetailList { get; set; }
         }
+
+        public partial class ClassDetail
+        {
+            public string Name { get; set; }
+            public string ClassId { get; set; }
+            public IList<StudentDetail> SubmitStudentList{ get; set; }
+            public IList<StudentDetail> LostStudentList { get; set; }
+        }
+
+        public partial class StudentDetail
+        {
+            public string Name { get; set; }
+            public string TalNo { get; set; }
+        }
+
     }
 
 }

@@ -54,7 +54,7 @@ namespace Exercise.ViewModel
 
         private async void Close(object obj)
         {
-            int result = PopupDialog.Show("扫描结果上传中，退出后，扫描结果将放弃，确认退出吗？", 0, "退出", "取消");
+            int result = PopupDialog.Show(obj as UIElement, "扫描结果上传中，退出后，扫描结果将放弃，确认退出吗？", 0, "退出", "取消");
             if (result == 0)
             {
                 await submitModel.Cancel(Task);

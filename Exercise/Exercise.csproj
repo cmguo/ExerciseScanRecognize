@@ -96,6 +96,9 @@
     <Compile Include="ViewModel\ResolveViewModel.cs" />
     <Compile Include="ViewModel\HistoryViewModel.cs" />
     <Compile Include="ViewModel\SubmitViewModel.cs" />
+    <Compile Include="View\DetailWindow.xaml.cs">
+      <DependentUpon>DetailWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="View\ErrorMessageBox.cs" />
     <Compile Include="View\HistoryPage.xaml.cs">
       <DependentUpon>HistoryPage.xaml</DependentUpon>
@@ -103,7 +106,7 @@
     <Compile Include="View\PaperOverlayConverter.cs" />
     <Compile Include="View\PaperViewer.cs" />
     <Compile Include="View\Resolve\FalseVisibleConverter.cs" />
-    <Compile Include="View\Resolve\SelectionConverter.cs" />
+    <Compile Include="View\SelectionConverter.cs" />
     <Compile Include="View\SubmitPage.xaml.cs">
       <DependentUpon>SubmitPage.xaml</DependentUpon>
     </Compile>
@@ -155,6 +158,10 @@
   </ItemGroup>
   <ItemGroup>
     <Page Include="Themes\Generic.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="View\DetailWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>

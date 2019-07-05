@@ -23,7 +23,7 @@
         <resolve:ExceptionListConverter x:Key="ExceptionListConverter" />
         <resolve:ExceptionConverter x:Key="ExceptionConverter" />
         <resolve:ExceptionPageConverter x:Key="ExceptionPageConverter" />
-        <resolve:SelectionConverter x:Key="SelectionConverter" Unselected="White" />
+        <local:SelectionConverter x:Key="SelectionConverter" Unselected="White" />
         <cv:NonNullVisibleConverter x:Key="NonNullVisibleConverter" />
         <cv:NullVisibleConverter x:Key="NullVisibleConverter" />
         <local:DuplexFaceConverter x:Key="DuplexFaceConverter" />
@@ -65,7 +65,7 @@
                     </HierarchicalDataTemplate>
                 </TreeView.ItemTemplate>
             </TreeView>
-            <StackPanel Orientation="Vertical" DockPanel.Dock="Right" Background="Gray"  Width="200">
+            <StackPanel Orientation="Vertical" DockPanel.Dock="Right" Width="250">
                 <TextBlock Text="{Binding SelectedException, Converter={StaticResource ExceptionConverter}, 
                     ConverterParameter=Title}" TextWrapping="Wrap" />
                 <Frame Content="{Binding SelectedException, Converter={StaticResource ExceptionPageConverter}}"/>

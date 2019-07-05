@@ -63,6 +63,7 @@
     <Compile Include="Service\NothingJsonConverter.cs" />
     <Compile Include="Utils\Utils.cs" />
     <Compile Include="ViewModel\ViewModelBase.cs" />
+    <Compile Include="View\ErrorMessageBox.cs" />
     <Compile Include="View\PopupDialog.xaml.cs">
       <DependentUpon>PopupDialog.xaml</DependentUpon>
     </Compile>

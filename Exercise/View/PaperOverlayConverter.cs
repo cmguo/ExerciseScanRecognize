@@ -32,7 +32,7 @@ namespace Exercise.View
             if ((string)parameter == "Result")
             {
                 var items = page.Answer.AreaInfo.SelectMany(a => a.QuestionInfo.SelectMany(q => q.ItemInfo));
-                locations = items.SelectMany(i => i.AnalyzeResult.Select(r => r.ValueLocation));
+                locations = items.Where(i => i.AnalyzeResult != null).SelectMany(i => i.AnalyzeResult.Select(r => r.ValueLocation));
             }
             else if ((string)parameter == "AnswerException")
             {

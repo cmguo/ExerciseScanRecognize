@@ -7,6 +7,8 @@ using static Exercise.Model.ExerciseModel;
 using System.Collections.Generic;
 using Base.Misc;
 using Exercise.Algorithm;
+using System;
+using Exception = Exercise.Model.ExerciseModel.Exception;
 
 namespace Exercise.View.Resolve
 {
@@ -15,7 +17,16 @@ namespace Exercise.View.Resolve
     /// </summary>
     internal class AnswerExceptionViewModel : ViewModelBase
     {
-        public IList<Question> Questions { get; set; }
+        private IList<Question> _Questions;
+        public IList<Question> Questions
+        {
+            get => _Questions;
+            set
+            {
+                _Questions = value;
+                RaisePropertyChanged("Questions");
+            }
+        }
 
         private Question _SelectedQuestion;
         public Question SelectedQuestion
@@ -124,7 +135,8 @@ namespace Exercise.View.Resolve
                 }
                 else
                 {
-                    viewModel.SelectedAnswer = viewModel.SelectedAnswer.Substring(0, viewModel.SelectedAnswer.Length - 1);
+                    if (viewModel.SelectedAnswer.Length > 0)
+                        viewModel.SelectedAnswer = viewModel.SelectedAnswer.Substring(0, viewModel.SelectedAnswer.Length - 1);
                 }
             }
         }
@@ -134,10 +146,9 @@ namespace Exercise.View.Resolve
             viewModel.SelectedQuestion.ItemInfo.All(i =>
             {
                 i.StatusOfItem = -1;
-                i.AnalyzeResult = null;
+                i.AnalyzeResult = new List<Result>();
                 if (viewModel.SelectedAnswer != null && viewModel.SelectedAnswer != "")
                 {
-                    i.AnalyzeResult = new List<Result>();
                     i.AnalyzeResult.Add(new Result() { Value = viewModel.SelectedAnswer });
                 }
                 return true;
@@ -159,10 +170,19 @@ namespace Exercise.View.Resolve
         {
             if (e.PropertyName == "SelectedQuestion")
             {
+                string answer = String.Join(",", viewModel.SelectedQuestion.ItemInfo
+                    .Where(i => i.AnalyzeResult != null)
+                    .SelectMany(i => i.AnalyzeResult.Select(r => r.Value))
+                    .Where(v => v != null));
                 if (type == ExceptionType.AnswerException)
+                {
                     FillAnswers(viewModel.SelectedQuestion);
-                else
-                    viewModel.SelectedAnswer = "";
+                    if (answer.Length == 0)
+                        answer = null;
+                    else if (answer.Length == 1)
+                        answer = viewModel.Answers.Where(a => answer.Equals(a)).First();
+                }
+                viewModel.SelectedAnswer = answer;
             }
         }
 

@@ -1,4 +1,5 @@
-﻿using Base.Mvvm.Converter;
+﻿using Base.Misc;
+using Base.Mvvm.Converter;
 using Panuon.UI;
 using System.Windows;
 using System.Windows.Media;
@@ -90,6 +91,26 @@ namespace TalBase.View
         public static int Show(string msg, string icon, FrameworkElement body, int def, params string[] buttons)
         {
             return new PopupDialog(buttons) { Message = msg, Image = icon, Body = body, Default = def }.Popup();
+        }
+
+        public static int Show(UIElement owner, string msg, int def, params string[] buttons)
+        {
+            return new PopupDialog(buttons) { Owner = UITreeHelper.GetParentOfType<Window>(owner), Message = msg, Default = def }.Popup();
+        }
+
+        public static int Show(UIElement owner, string msg, string icon, int def, params string[] buttons)
+        {
+            return new PopupDialog(buttons) { Owner = UITreeHelper.GetParentOfType<Window>(owner), Message = msg, Image = icon, Default = def }.Popup();
+        }
+
+        public static int Show(UIElement owner, string msg, FrameworkElement body, int def, params string[] buttons)
+        {
+            return new PopupDialog(buttons) { Owner = UITreeHelper.GetParentOfType<Window>(owner), Message = msg, Body = body, Default = def }.Popup();
+        }
+
+        public static int Show(UIElement owner, string msg, string icon, FrameworkElement body, int def, params string[] buttons)
+        {
+            return new PopupDialog(buttons) { Owner = UITreeHelper.GetParentOfType<Window>(owner), Message = msg, Image = icon, Body = body, Default = def }.Popup();
         }
     }
 }

@@ -1,4 +1,5 @@
-﻿using Base.Mvvm.Converter;
+﻿using Base.Misc;
+using Base.Mvvm.Converter;
 using Exercise.ViewModel;
 using System.Windows;
 using System.Windows.Controls;
@@ -37,15 +38,11 @@ namespace Exercise.View
         private void PUButton_Click(object sender, RoutedEventArgs e)
         {
             SummaryViewModel vm = DataContext as SummaryViewModel;
-            Window win = new Window()
+            Window win = new DetailWindow()
             {
+                Owner = UITreeHelper.GetParentOfType<Window>(this),
                 Title = vm.ExerciseName + "扫描详情",
                 DataContext = vm.ClassDetails,
-                Content = FindResource("ClassDetails"),
-                ShowInTaskbar = false,
-                Width = 650, Height = 600,
-                WindowStyle = WindowStyle.SingleBorderWindow, 
-                ResizeMode = ResizeMode.NoResize
             };
             win.ShowDialog();
         }

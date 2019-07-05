@@ -12,18 +12,16 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
 using TalBase.View;
-using static Exercise.Model.ExerciseModel;
+using static Exercise.Service.HistoryData;
 
 namespace Exercise.ViewModel
 {
     public class ExerciseViewModel : ScanViewModel
     {
-        public class ClassDetail
+        public class ClassDetail : HistoryData.ClassDetail
         {
-            public string ClassName { get; set; }
             public int StudentCount { get; set; }
-            public IList<StudentInfo> Result { get; set; }
-            public IList<StudentInfo> Miss { get; set; }
+            public IList<StudentDetail> Result => SubmitStudentList;
         }
 
         #region Properties
@@ -60,10 +58,12 @@ namespace Exercise.ViewModel
             StudentCount = exerciseModel.PageStudents.Where(s => s.AnswerPages.Any(p => p != null && p.PagePath != null)).Count();
             ClassDetails = schoolModel.Classes.Select(c => new ClassDetail()
             {
-                ClassName = c.ClassName,
+                Name = c.ClassName,
                 StudentCount = c.Students.Count(),
-                Result = c.Students.Where(s => s.AnswerPages != null).ToList(),
-                Miss = c.Students.Where(s => s.AnswerPages == null).ToList(),
+                SubmitStudentList = c.Students.Where(s => s.AnswerPages != null)
+                    .Select(s => new StudentDetail() { Name = s.Name, TalNo = s.TalNo }).ToList(),
+                LostStudentList = c.Students.Where(s => s.AnswerPages == null)
+                    .Select(s => new StudentDetail() { Name = s.Name, TalNo = s.TalNo }).ToList(),
             }).ToList();
         }
 
@@ -94,7 +94,7 @@ namespace Exercise.ViewModel
         protected async Task Discard(object obj)
         {
             bool paused = await scanModel.PauseScan();
-            int result = PopupDialog.Show("放弃后，本次扫描结果将作废，确认放弃吗？", 0, "放弃本次扫描", "取消");
+            int result = PopupDialog.Show(obj as UIElement, "放弃后，本次扫描结果将作废，确认放弃吗？", 0, "放弃本次扫描", "取消");
             if (result == 0)
             {
                 await scanModel.CancelScan();

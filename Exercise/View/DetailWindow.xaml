@@ -1,0 +1,61 @@
+﻿<Window x:Class="Exercise.View.DetailWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Exercise.View"
+        mc:Ignorable="d"
+        ShowInTaskbar = "false"
+        Width = "680" Height = "600"
+        WindowStyle = "SingleBorderWindow"
+        WindowStartupLocation="CenterOwner"
+        ResizeMode = "NoResize">
+    
+    <Window.Resources>
+        <ControlTemplate x:Key="StudentList">
+            <ListView ItemsSource="{Binding}" BorderThickness="0" Padding="0">
+                <ListView.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <WrapPanel IsItemsHost="True" Orientation="Horizontal" Width="600" />
+                    </ItemsPanelTemplate>
+                </ListView.ItemsPanel>
+                <ListView.ItemTemplate>
+                    <DataTemplate>
+                        <Border BorderThickness="2" BorderBrush="Black" Height="30" Width="90">
+                            <TextBlock Text="{Binding Name}" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                        </Border>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
+        </ControlTemplate>
+
+        <DataTemplate x:Key="ClassDetail">
+            <StackPanel Orientation="Vertical" HorizontalAlignment="Stretch">
+                <TextBlock Text="{Binding Name}"/>
+
+                <Grid Margin="20">
+                    <Grid.RowDefinitions>
+                        <RowDefinition />
+                        <RowDefinition />
+                    </Grid.RowDefinitions>
+                    <StackPanel Orientation="Vertical" DataContext="{Binding SubmitStudentList}">
+                        <Border Height="30">
+                            <TextBlock Text="{Binding Count, StringFormat=已回收 {0}人}" VerticalAlignment="Center" />
+                        </Border>
+                        <Thumb Template="{StaticResource StudentList}" />
+                    </StackPanel>
+                    <StackPanel Grid.Row="1" Orientation="Vertical" DataContext="{Binding LostStudentList}">
+                        <Border Height="30">
+                            <TextBlock Text="{Binding Count, StringFormat=未回收 {0}人}" VerticalAlignment="Center" />
+                        </Border>
+                        <Thumb Template="{StaticResource StudentList}" />
+                    </StackPanel>
+                </Grid>
+            </StackPanel>
+        </DataTemplate>
+    </Window.Resources>
+            
+    <Grid>
+        <ListView ItemsSource="{Binding}" ItemTemplate="{StaticResource ClassDetail}" IsHitTestVisible="False" />
+    </Grid>
+</Window>

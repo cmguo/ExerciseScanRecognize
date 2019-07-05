@@ -1,10 +1,14 @@
 ﻿using Base.Mvvm;
 using Exercise.Model;
 using Exercise.View;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Threading.Tasks;
+using System.Windows;
 using TalBase.View;
 using static Exercise.Model.ExerciseModel;
+using Exception = Exercise.Model.ExerciseModel.Exception;
 
 namespace Exercise.ViewModel
 {
@@ -78,12 +82,12 @@ namespace Exercise.ViewModel
         public ResolveViewModel()
         {
             RescanCommand = new RelayCommand((e) => Rescan(e));
-            IgnoreCommand = new RelayCommand((e) => exerciseModel.Resolve(SelectedException, ResolveType.Ignore));
-            RemovePageCommand = new RelayCommand((e) => exerciseModel.Resolve(SelectedException, ResolveType.RemovePage));
-            RemoveStudentCommand = new RelayCommand((e) => exerciseModel.Resolve(SelectedException, ResolveType.RemoveStudent));
-            ResolveCommand = new RelayCommand((e) => exerciseModel.Resolve(SelectedException, ResolveType.Resolve));
-            IgnoreListCommand = new RelayCommand((e) => exerciseModel.Resolve(SelectedExceptionList, ResolveType.Ignore));
-            RemovePageListCommand = new RelayCommand((e) => exerciseModel.Resolve(SelectedExceptionList, ResolveType.RemovePage));
+            IgnoreCommand = new RelayCommand((e) => Resolve(e, SelectedException, ResolveType.Ignore));
+            RemovePageCommand = new RelayCommand((e) => Resolve(e, SelectedException, ResolveType.RemovePage));
+            RemoveStudentCommand = new RelayCommand((e) => Resolve(e, SelectedException, ResolveType.RemoveStudent));
+            ResolveCommand = new RelayCommand((e) => Resolve(e, SelectedException, ResolveType.Resolve));
+            IgnoreListCommand = new RelayCommand((e) => Resolve(e, SelectedExceptionList, ResolveType.Ignore));
+            RemovePageListCommand = new RelayCommand((e) => Resolve(e, SelectedExceptionList, ResolveType.RemovePage));
             Exceptions = exerciseModel.Exceptions;
             Exceptions.CollectionChanged += Exceptions_CollectionChanged;
             ReturnCommand = new RelayCommand((o) => Return(o));
@@ -99,14 +103,31 @@ namespace Exercise.ViewModel
                 Selection = Exceptions[0].Exceptions[0];
         }
 
-        private void Rescan(object obj)
+        private async Task Rescan(object obj)
         {
             while (!scanModel.FeederLoaded)
             {
-                PopupDialog.Show("扫描仪里面没有纸张，请添加试卷。", 0, "确定");
+                PopupDialog.Show(obj as UIElement, "扫描仪里面没有纸张，请添加试卷。", 0, "确定");
             }
-            exerciseModel.ScanOne(SelectedException);
+            await exerciseModel.ScanOne(SelectedException);
+            if (Exceptions.Count == 0)
+                (obj as System.Windows.Controls.Page).NavigationService.Navigate(new SummaryPage());
         }
+
+        private void Resolve(object obj, ExerciseModel.Exception exception, ResolveType type)
+        {
+            exerciseModel.Resolve(exception, type);
+            if (Exceptions.Count == 0)
+                (obj as System.Windows.Controls.Page).NavigationService.Navigate(new SummaryPage());
+        }
+
+        private void Resolve(object obj, ExerciseModel.ExceptionList list, ResolveType type)
+        {
+            exerciseModel.Resolve(list, type);
+            if (Exceptions.Count == 0)
+                (obj as System.Windows.Controls.Page).NavigationService.Navigate(new SummaryPage());
+        }
+
 
         private void Exceptions_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
         {
@@ -163,8 +184,9 @@ namespace Exercise.ViewModel
             }
         }
 
-        private void Return(object obj)
+        private async Task Return(object obj)
         {
+            await exerciseModel.CancelScanOne();
             (obj as System.Windows.Controls.Page).NavigationService.Navigate(new SummaryPage());
         }
 

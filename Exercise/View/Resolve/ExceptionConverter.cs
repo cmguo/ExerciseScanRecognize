@@ -32,7 +32,7 @@ namespace Exercise.View.Resolve
                     case ExceptionType.NoStudentCode:
                         return String.Format("试卷{2} （{0}-{1}页）", page.PageIndex + 1, page.PageIndex + 2, ex.Index);
                     case ExceptionType.AnalyzeException:
-                        return String.Format("{0} {1} （{2}-{3}页）", page.Student.TalNo, page.Student.Name, page.PageIndex + 1, page.PageIndex + 2);
+                        return String.Format("{0} {1} （第{2}页）", page.Student.TalNo, page.Student.Name, page.PageIndex + 1);
                     case ExceptionType.AnswerException:
                     case ExceptionType.CorrectionException:
                         return String.Format("{0} {1} （第{2}页）", page.Student.TalNo, page.Student.Name, page.PageIndex + 1);

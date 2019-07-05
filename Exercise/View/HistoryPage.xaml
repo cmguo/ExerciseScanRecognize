@@ -4,6 +4,7 @@
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
       xmlns:vm="clr-namespace:Exercise.ViewModel"
+      xmlns:local="clr-namespace:Exercise.View"
       xmlns:mu="clr-namespace:Panuon.UI;assembly=Panuon.UI"
       xmlns:tb="clr-namespace:Base.TitleBar;assembly=Base"
       xmlns:cv="clr-namespace:Base.Mvvm.Converter;assembly=Base"
@@ -19,6 +20,8 @@
                      Content="返回"
                      Command="{Binding ReturnCommand}"
                      CommandParameter="{Binding Source={x:Reference Page}}" />
+        <local:HistroyDetailConverter x:Key="HistroyDetailConverter" />
+        <local:SelectionConverter x:Key="SelectionConverter" Unselected="Transparent" />
     </Page.Resources>
 
 
@@ -28,10 +31,15 @@
 
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition/>
-            <RowDefinition/>
+            <RowDefinition Height="40"/>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="40"/>
         </Grid.RowDefinitions>
-        <ListView Grid.Row="0" ItemsSource="{Binding LocalRecords}">
+
+        <TextBlock Grid.Row="0" FontSize="30" Text="扫描记录管理"/>
+        
+        <ListView Grid.Row="1" ItemsSource="{Binding LocalRecords}">
             <ListView.ItemTemplate>
                 <DataTemplate>
                     <DockPanel>
@@ -40,14 +48,14 @@
                             <TextBlock>
                                 <TextBlock.Text>
                                     <MultiBinding StringFormat="异常退出待处理：{0}，扫描时间：{1}">
-                                        <Binding Path="ExerciseName"/>
-                                        <Binding Path="DateTime"/>
+                                        <Binding Path="Name"/>
+                                        <Binding Path="ScanDate"/>
                                     </MultiBinding>
                                 </TextBlock.Text>
                             </TextBlock>
                         </StackPanel>
                         <StackPanel DockPanel.Dock="Right" Orientation="Horizontal">
-                            <Button Content="查看扫描结果" 
+                            <Button Content="查看扫描结果"  Background="Transparent" BorderThickness="0"
                                     Command="{Binding SummaryCommand, Source={StaticResource ViewModel}}">
                                 <Button.CommandParameter>
                                     <MultiBinding Converter="{StaticResource MultiValueConverter}">
@@ -56,7 +64,7 @@
                                     </MultiBinding>
                                 </Button.CommandParameter>
                             </Button>
-                            <Button Content="放弃本次扫描" 
+                            <Button Content="放弃本次扫描"  Background="Transparent" BorderThickness="0"
                                     Command="{Binding DiscardCommand, Source={StaticResource ViewModel}}"
                                     CommandParameter="{Binding}" />
                         </StackPanel>
@@ -65,20 +73,66 @@
                 </DataTemplate>
             </ListView.ItemTemplate>
         </ListView>
-        <DataGrid Grid.Row="1"  AutoGenerateColumns="False" ItemsSource="{Binding Records}" IsReadOnly="True">
+        
+        <DataGrid Grid.Row="2" x:Name="dataGrid" AutoGenerateColumns="False" 
+                  ItemsSource="{Binding Records}"
+                  RowHeaderWidth="0" ColumnHeaderHeight="50"
+                  GridLinesVisibility="None"
+                  BorderThickness="0" RowHeight="40">
+            <DataGrid.RowStyle>
+                <Style TargetType="DataGridRow">
+                    <Setter Property="BorderThickness" Value="0,0,0,1"/>
+                </Style>
+            </DataGrid.RowStyle>
             <DataGrid.CellStyle>
                 <Style TargetType="DataGridCell">
-                    <Setter Property="HorizontalAlignment" Value="Center"/>
                     <Setter Property="VerticalAlignment" Value="Center"/>
                     <Setter Property="FontStyle" Value="Normal"/>
                 </Style>
             </DataGrid.CellStyle>
             <DataGrid.Columns>
-                <DataGridTextColumn Header="试卷名称" FontSize="14" Width="140"/>
-                <DataGridTextColumn Header="扫描统计" FontSize="14" Width="100"/>
-                <DataGridTextColumn Header="扫描时间" FontSize="14" Width="100"/>
-                <DataGridTextColumn Header="操作" FontSize="14" Width="100"/>
+                <DataGridTextColumn Header="试卷名称" Binding="{Binding Name}" FontSize="14" Width="140"/>
+                <DataGridTextColumn Header="扫描统计" Binding="{Binding DetailList, Converter={StaticResource HistroyDetailConverter}}" FontSize="14" Width="300"/>
+                <DataGridTextColumn Header="扫描时间" Binding="{Binding DataTime, StringFormat={}{0:yyyy.MM.dd - hh:mm}, Mode=OneWay}" FontSize="14" Width="140"/>
+                <DataGridTemplateColumn Header="操作" Width="150">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <StackPanel DockPanel.Dock="Right" Orientation="Horizontal">
+                                <Button Content="查看扫描详情" Click="ButtonDetail_Click" Background="Transparent" BorderThickness="0"/>
+                                <TextBlock Text="|" />
+                                <Button Content="重命名" Click="ButtonRename_Click" Background="Transparent" BorderThickness="0" />
+                            </StackPanel>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
             </DataGrid.Columns>
         </DataGrid>
+
+        <ListView Grid.Row="3" ItemsSource="{Binding Pages, ElementName=Page}" 
+                  BorderThickness="0" Padding="0" HorizontalAlignment="Center">
+            <ListView.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <WrapPanel IsItemsHost="True" Orientation="Horizontal" />
+                </ItemsPanelTemplate>
+            </ListView.ItemsPanel>
+            <ListBox.ItemContainerStyle>
+                <Style TargetType="{x:Type ListBoxItem}">
+                    <Setter Property="Focusable" Value="False"/>
+                </Style>
+            </ListBox.ItemContainerStyle>
+            <ListView.ItemTemplate>
+                <DataTemplate>
+                    <Button BorderThickness="0" Content="{Binding}" Click="ButtonPage_Click">
+                        <Button.Background>
+                            <MultiBinding Converter="{StaticResource SelectionConverter}">
+                                <Binding Path="PageIndex" ElementName="Page" />
+                                <Binding />
+                            </MultiBinding>
+                        </Button.Background>
+                    </Button>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+        </ListView>
+
     </Grid>
 </Page>

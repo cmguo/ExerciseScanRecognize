@@ -40,6 +40,15 @@ namespace Exercise.View
             {
                 tvi.IsSelected = true;
             }
+            if (item is Exception)
+            {
+                Exception ex = item as Exception;
+                if (ex.Type == ExceptionType.AnalyzeException && ex.Page.Answer != null)
+                {
+                    ButtonFace2_Click(this, null);
+                    return;
+                }
+            }
             ButtonFace1_Click(this, null);
         }
 

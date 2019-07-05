@@ -16,8 +16,6 @@
     </Page.DataContext>
 
     <Page.Resources>
-        <Button x:Key="Discard" Content="放弃本次扫描" 
-                Command="{Binding DiscardCommand}" />
         <DataGrid x:Key="ClassDetail" AutoGenerateColumns="False" ItemsSource="{Binding ClassDetails}"
                                Margin="0,20,0,0"  RowHeaderWidth="0" ColumnHeaderHeight="50"
                                GridLinesVisibility="Horizontal"
@@ -39,7 +37,7 @@
     </tb:TitleBarManager.Commands>
 
     <tb:TitleBarManager.Buttons>
-        <tb:TitleButton Name="Discard" Content="{StaticResource Discard}" />
+        <tb:TitleButton Name="Discard" />
     </tb:TitleBarManager.Buttons>
 
     <Grid>
@@ -47,7 +45,7 @@
             <ColumnDefinition Width="*" />
             <ColumnDefinition Width="auto" />
         </Grid.ColumnDefinitions>
-        <Border Background="Black" Margin="20,20,0,20">
+        <Border Background="Black" Margin="20,20,0,20" BorderBrush="Blue" BorderThickness="2">
             <local:PaperViewer Paper="{Binding LastPage.PagePath}" 
                                Overlay="{Binding LastPage, Converter={StaticResource PaperOverlayConverter}, ConverterParameter=Result}"/>
         </Border>

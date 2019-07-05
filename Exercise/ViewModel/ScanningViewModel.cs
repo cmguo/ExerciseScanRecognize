@@ -71,7 +71,7 @@ namespace Exercise.ViewModel
             System.Windows.Controls.Page page = obj as System.Windows.Controls.Page;
             FrameworkElement element = page.Resources["ClassDetail"] as FrameworkElement;
             element.DataContext = this;
-            int result = PopupDialog.Show("扫描仪中还有试卷待扫描，确认结束扫描并查看结果吗？", element, 0, "查看结果", "继续扫描");
+            int result = PopupDialog.Show(obj as UIElement, "扫描仪中还有试卷待扫描，确认结束扫描并查看结果吗？", element, 0, "查看结果", "继续扫描");
             if (result == 0)
             {
                 await scanModel.CancelScan();
@@ -96,19 +96,23 @@ namespace Exercise.ViewModel
                 msg = "当前试卷二维码无法识别，请检查试卷后重试";
             else if (Error == 2)
                 msg = "数据连接异常，请联系服务人员";
-            int result = PopupDialog.Show(msg, 0, "确定");
-            if (result == 1)
+            while (true)
             {
-                await scanModel.CancelScan();
-                exerciseModel.Discard();
-                (obj as System.Windows.Controls.Page).NavigationService.Navigate(new HomePage());
-            }
-            else
-            {
-                if (isScanning)
-                    scanModel.ResumeScan();
+                int result = PopupDialog.Show(obj as UIElement, msg, 0, "确定");
+                if (result == 1)
+                {
+                    await scanModel.CancelScan();
+                    exerciseModel.Discard();
+                    (obj as System.Windows.Controls.Page).NavigationService.Navigate(new HomePage());
+                    break;
+                }
                 else
-                    base.Continue(obj);
+                {
+                    if (isScanning)
+                        scanModel.ResumeScan();
+                    else if (base.Continue(obj))
+                        break;
+                }
             }
         }
 
@@ -118,20 +122,25 @@ namespace Exercise.ViewModel
             System.Windows.Controls.Page page = obj as System.Windows.Controls.Page;
             FrameworkElement element = page.Resources["ClassDetail"] as FrameworkElement;
             element.DataContext = this;
-            int result = PopupDialog.Show("扫描仪已无试卷，请添加试卷继续扫描。若已全部扫描，可查看扫描结果。", element, 0, "查看结果", "继续扫描");
-            if (result == 0)
+            while (true)
             {
-                if (scanModel.PageCode == null || exerciseModel.ExerciseData == null)
+                int result = PopupDialog.Show(obj as UIElement, "扫描仪已无试卷，请添加试卷继续扫描。若已全部扫描，可查看扫描结果。", element, 0, "查看结果", "继续扫描");
+                if (result == 0)
                 {
-                    await OnError(obj);
-                    return;
+                    if (scanModel.PageCode == null || exerciseModel.ExerciseData == null)
+                    {
+                        await OnError(obj);
+                        break;
+                    }
+                    await exerciseModel.MakeResult();
+                    page.NavigationService.Navigate(new SummaryPage());
+                    break;
                 }
-                await exerciseModel.MakeResult();
-                page.NavigationService.Navigate(new SummaryPage());
-            }
-            else
-            {
-                base.Continue(obj);
+                else
+                {
+                    if (base.Continue(obj))
+                        break;
+                }
             }
         }
 

@@ -21,46 +21,6 @@
         <resolve:ExceptionListConverter x:Key="ExceptionListConverter" />
         <local:HasExceptionConverter x:Key="HasExceptionConverter" />
         <local:NoExceptionConverter x:Key="NoExceptionConverter" />
-        <ControlTemplate x:Key="StudentList">
-            <ListView ItemsSource="{Binding}" BorderThickness="0" Padding="0">
-                <ListView.ItemsPanel>
-                    <ItemsPanelTemplate>
-                        <WrapPanel IsItemsHost="True" Orientation="Horizontal" Width="590" />
-                    </ItemsPanelTemplate>
-                </ListView.ItemsPanel>
-                <ListView.ItemTemplate>
-                    <DataTemplate>
-                        <Border BorderThickness="2" BorderBrush="Black" Height="30" Width="90">
-                            <TextBlock Text="{Binding Name}" VerticalAlignment="Center" HorizontalAlignment="Center"/>
-                        </Border>
-                    </DataTemplate>
-                </ListView.ItemTemplate>
-            </ListView>
-        </ControlTemplate>
-        <DataTemplate x:Key="ClassDetail">
-            <StackPanel Orientation="Vertical" HorizontalAlignment="Stretch">
-                <TextBlock Text="{Binding ClassName}"/>
-                <Grid Margin="20">
-                    <Grid.RowDefinitions>
-                        <RowDefinition />
-                        <RowDefinition />
-                    </Grid.RowDefinitions>
-                    <StackPanel Orientation="Vertical" DataContext="{Binding Result}">
-                        <Border Height="30">
-                            <TextBlock Text="{Binding Count, StringFormat=已回收 {0}人}" VerticalAlignment="Center" />
-                        </Border>
-                        <Thumb Template="{StaticResource StudentList}" />
-                    </StackPanel>
-                    <StackPanel Grid.Row="1" Orientation="Vertical" DataContext="{Binding Miss}">
-                        <Border Height="30">
-                            <TextBlock Text="{Binding Count, StringFormat=未回收 {0}人}" VerticalAlignment="Center" />
-                        </Border>
-                        <Thumb Template="{StaticResource StudentList}" />
-                    </StackPanel>
-                </Grid>
-            </StackPanel>
-        </DataTemplate>
-        <ListView x:Key="ClassDetails" ItemsSource="{Binding}" ItemTemplate="{StaticResource ClassDetail}" IsHitTestVisible="False" />
     </Page.Resources>
 
     <tb:TitleBarManager.Buttons>
@@ -152,14 +112,23 @@
                     </StackPanel>
                     <DataGrid  Grid.Row="3" Grid.Column="0" AutoGenerateColumns="False" ItemsSource="{Binding ClassDetails}"
                                Margin="0,20,0,0"  RowHeaderWidth="0" ColumnHeaderHeight="50"
-                               GridLinesVisibility="Horizontal"
-                               BorderThickness="0,0,0,0"
-                               HorizontalGridLinesBrush="Gray"
-                               IsReadOnly="True"
-                               >
-
+                               GridLinesVisibility="None"
+                               BorderThickness="0"
+                               RowHeight="40" IsReadOnly="True" >
+                        <DataGrid.RowStyle>
+                            <Style TargetType="DataGridRow">
+                                <Setter Property="IsHitTestVisible" Value="False"/>
+                                <Setter Property="BorderThickness" Value="0,0,0,1"/>
+                            </Style>
+                        </DataGrid.RowStyle>
+                        <DataGrid.CellStyle>
+                            <Style TargetType="DataGridCell">
+                                <Setter Property="VerticalAlignment" Value="Center"/>
+                                <Setter Property="FontStyle" Value="Normal"/>
+                            </Style>
+                        </DataGrid.CellStyle>
                         <DataGrid.Columns>
-                            <DataGridTextColumn Header="班级" Binding="{Binding ClassName}" FontSize="14" Width="120"/>
+                            <DataGridTextColumn Header="班级" Binding="{Binding Name}" FontSize="14" Width="120"/>
                             <DataGridTextColumn Header="回收试卷（份）" Binding="{Binding Result.Count}" FontSize="14" Width="90" />
                             <DataGridTextColumn Header="总人数（人）" Binding="{Binding StudentCount}" FontSize="14" Width="90" />
                         </DataGrid.Columns>
@@ -169,14 +138,16 @@
                             Visibility="{Binding ExceptionCount, Converter={StaticResource HasExceptionConverter}}">
                     <TextBlock Grid.Row="2" Grid.Column="1" Text="{Binding ExceptionCount, StringFormat=共存在{0}项异常}" FontSize="14" Margin="0,60,0,20"/>
                     <DataGrid  Grid.Row="2" Grid.Column="1" AutoGenerateColumns="False" ItemsSource="{Binding Exceptions}"
-                            RowHeaderWidth="0"  ColumnHeaderHeight="50" BorderThickness="0,0,0,0" GridLinesVisibility="Horizontal"
-                               HorizontalGridLinesBrush="Gray"
-                               RowHeight="30"
-                               IsReadOnly="True"
-                               >
+                               RowHeaderWidth="0" ColumnHeaderHeight="50" BorderThickness="0" GridLinesVisibility="None"
+                               RowHeight="40" IsReadOnly="True">
+                        <DataGrid.RowStyle>
+                            <Style TargetType="DataGridRow">
+                                <Setter Property="IsHitTestVisible" Value="False"/>
+                                <Setter Property="BorderThickness" Value="0,0,0,1"/>
+                            </Style>
+                        </DataGrid.RowStyle>
                         <DataGrid.CellStyle>
                             <Style TargetType="DataGridCell">
-                                <Setter Property="HorizontalAlignment" Value="Center"/>
                                 <Setter Property="VerticalAlignment" Value="Center"/>
                                 <Setter Property="FontStyle" Value="Normal"/>
                             </Style>

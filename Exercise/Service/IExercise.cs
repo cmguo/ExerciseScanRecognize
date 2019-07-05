@@ -17,7 +17,7 @@ namespace Exercise.Service
         Task<SchoolData> getAllClass();
 
         [Get("/getAnswersheetData")]
-        Task<ExerciseData> GetExercise([Query("paperId")] string paperId);
+        Task<ExerciseData> GetExercise(string paperId);
 
         [Post("/getTempHomeWorkIdTempId")]
         Task<StringData> GetSubmitId(SubmitPrepare prepare);
@@ -31,7 +31,10 @@ namespace Exercise.Service
         [Post("/batchGeneratePresignedUrl")]
         Task<Dictionary<string, string>> GeneratePresignedUrls(GenUriData names);
 
-        [Get("/batchGeneratePresignedUrl")]
-        Task<HistoryData> getRecords(int page);
+        [Post("/getScanList")]
+        Task<HistoryData> getRecords(HistoryData.Range range);
+
+        [Post("/updateRecord")]
+        Task<Nothing> updateRecord(HistoryData.Record record);
     }
 }

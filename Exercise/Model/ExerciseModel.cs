@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using TalBase.Model;
 
@@ -30,8 +31,8 @@ namespace Exercise.Model
         public enum ExceptionType : int
         {
             None = 0,
-            NoPageCode, 
-            PageCodeMissMatch, 
+            NoPageCode,
+            PageCodeMissMatch,
             NoStudentCode, // StudentCodeMissMatch,
             AnalyzeException,
             AnswerException,
@@ -41,11 +42,18 @@ namespace Exercise.Model
 
         public enum ResolveType : int
         {
-            Ignore, 
-            RemovePage, 
+            Ignore,
+            RemovePage,
             RemoveStudent,
             Resolve
             //RemoveDuplexPage
+        }
+
+        public enum RemoveType : int
+        {
+            SinglePage,
+            DuplexPage,
+            Student,
         }
 
         public class Exception
@@ -109,7 +117,7 @@ namespace Exercise.Model
             string path = SavePath;
             Clear();
             if (path != null)
-                Directory.Delete(path, true);
+                historyModel.Remove(path);
         }
 
         public async Task NewTask()
@@ -187,9 +195,33 @@ namespace Exercise.Model
             SavePath = null;
         }
 
-        public void ScanOne(Exception ex)
+        public Task ScanOne(Exception ex)
         {
-            targetException = ex;
+            lock (Exceptions)
+            {
+                targetException = ex;
+                scanModel.Scan(1);
+            }
+            return Task.Run(() =>
+            {
+                lock (Exceptions)
+                {
+                    while (targetException != null)
+                    {
+                        Monitor.Wait(Exceptions);
+                    }
+                }
+            });
+        }
+
+        public async Task CancelScanOne()
+        {
+            await scanModel.CancelScan();
+            lock (Exceptions)
+            {
+                targetException = null;
+                Monitor.PulseAll(Exceptions);
+            }
         }
 
         public void Resolve(Exception ex, ResolveType type)
@@ -206,7 +238,8 @@ namespace Exercise.Model
                     AddPage(ex.Page);
                 return;
             }
-            RemovePage(ex.Page, type);
+            RemovePage(ex.Page, type == ResolveType.RemoveStudent
+                ? RemoveType.Student : RemoveType.SinglePage);
         }
 
         public void Resolve(ExceptionList el, ResolveType type)
@@ -232,6 +265,7 @@ namespace Exercise.Model
                 if (targetException != null)
                 {
                     ReplacePage(e.NewItems[0] as Page);
+                    targetException = null;
                     return;
                 }
                 foreach (Page page in e.NewItems)
@@ -261,55 +295,63 @@ namespace Exercise.Model
 
         private void AddPage(Page page)
         {
-            ExceptionType type = ExceptionType.None;
-            if (page.PaperCode == null)
-                type = ExceptionType.NoPageCode;
-            else if (page.PaperCode != scanModel.PageCode)
-                type = ExceptionType.PageCodeMissMatch;
-            else if (page.StudentCode == null 
-                || (page.Student = schoolModel.GetStudent(page.StudentCode)) == null)
-                type = ExceptionType.NoStudentCode;
+            ExceptionType type = CalcExcetionType(page);
             if (type != ExceptionType.None)
             {
                 AddException(type, page);
-                return;
             }
-            if (page.Another != null)
-                page.Another.Student = page.Student;
-            if (page.Student.AnswerPages == null)
+            if (page.Student != null)
             {
-                page.Student.AnswerPages = new List<Page>(emptyPages);
-                PageStudents.Add(page.Student);
+                if (page.Another != null)
+                    page.Another.Student = page.Student;
+                if (page.Student.AnswerPages == null)
+                {
+                    page.Student.AnswerPages = new List<Page>(emptyPages);
+                    PageStudents.Add(page.Student);
+                }
+                int pageIndex = page.PageIndex / 2;
+                Page old = page.Student.AnswerPages[pageIndex];
+                page.Student.AnswerPages[pageIndex] = page;
+                if (old != null && old != page)
+                {
+                    old.Student = null;
+                    RemovePage(old, RemoveType.DuplexPage);
+                }
             }
-            int pageIndex = page.PageIndex / 2;
-            Page old = page.Student.AnswerPages[pageIndex];
-            page.Student.AnswerPages[pageIndex] = page;
-            if (old != null && old != page)
-            {
-                old.Student = null;
-                RemovePage(old, ResolveType.RemovePage);
-            }
-            if (page.Answer == null)
-            {
-                AddException(ExceptionType.AnalyzeException, page);
-            }
-            else
+            if (page.Answer != null)
             {
                 if (page.Answer.AnswerExceptions != null)
                     AddException(ExceptionType.AnswerException, page);
                 if (page.Answer.CorrectionExceptions != null)
                     AddException(ExceptionType.CorrectionException, page);
-                if (page.Another != null)
-                {
-                    if (page.Another.Answer.AnswerExceptions != null)
-                        AddException(ExceptionType.AnswerException, page.Another);
-                    if (page.Another.Answer.CorrectionExceptions != null)
-                        AddException(ExceptionType.CorrectionException, page.Another);
-                }
+            }
+            if (page.Another != null && page.Another.Answer != null)
+            {
+                if (page.Another.Answer.AnswerExceptions != null)
+                    AddException(ExceptionType.AnswerException, page.Another);
+                if (page.Another.Answer.CorrectionExceptions != null)
+                    AddException(ExceptionType.CorrectionException, page.Another);
             }
         }
 
-        public void RemovePage(Page page, ResolveType type)
+        private ExceptionType CalcExcetionType(Page page)
+        {
+            ExceptionType type = ExceptionType.None;
+            if (page.StudentCode != null)
+                page.Student = schoolModel.GetStudent(page.StudentCode);
+            if (page.PaperCode == null)
+                type = ExceptionType.NoPageCode;
+            else if (page.PaperCode != scanModel.PageCode)
+                type = ExceptionType.PageCodeMissMatch;
+            else if (page.Answer == null
+                || (page.Another != null && page.Another.Answer == null))
+                type = ExceptionType.AnalyzeException;
+            else if (page.Student == null)
+                type = ExceptionType.NoStudentCode;
+            return type;
+        }
+
+        public void RemovePage(Page page, RemoveType type)
         {
             // 如果 Student 为 Null，肯定是 type = DuplexPage
             if (page.Student == null)
@@ -317,7 +359,7 @@ namespace Exercise.Model
                 RemovePage(page);
                 return;
             }
-            if (type == ResolveType.RemoveStudent)
+            if (type == RemoveType.Student)
             {
                 PageStudents.Remove(page.Student);
                 IList<Page> pages = page.Student.AnswerPages;
@@ -335,7 +377,7 @@ namespace Exercise.Model
             if (page.Student.AnswerPages[pageIndex] == page)
             {
                 page.Student.AnswerPages[pageIndex] = sEmptyPage;
-                if (/*type != ResolveType.RemoveDuplexPage && */page.Another != null)
+                if (type != RemoveType.DuplexPage && page.Another != null)
                 {
                     page.Student.AnswerPages[pageIndex] = page.Another;
                     page.Another = null;
@@ -350,25 +392,37 @@ namespace Exercise.Model
 
         private void ReplacePage(Page page)
         {
-            bool replace = false;
-            switch (targetException.Type)
+            ExceptionType type = CalcExcetionType(page);
+            if (type == ExceptionType.NoPageCode
+                || type == ExceptionType.PageCodeMissMatch)
+                return;
+            if (targetException.Page.StudentCode != null
+                && page.StudentCode != targetException.Page.StudentCode)
+                return;
+            if (type == ExceptionType.AnalyzeException)
             {
-                case ExceptionType.NoPageCode:
-                case ExceptionType.PageCodeMissMatch:
-                    replace = page.PaperCode == scanModel.PageCode;
-                    break;
-                case ExceptionType.NoStudentCode:
-                    break;
-                case ExceptionType.AnalyzeException:
-                    replace = page.StudentCode == targetException.Page.StudentCode && page.Answer != null;
-                    break;
+                if (targetException.Page.Answer != null
+                    && page.Another != null && page.Another.Answer != null)
+                {
+                    Page page1 = targetException.Page;
+                    Page page2 = page1.Another;
+                    page1.Another = page.Another;
+                    page.Another = page2;
+                    targetException.Page = page;
+                    page = page1;
+                }
+                else if (page.Answer != null && targetException.Page.Another != null
+                    && targetException.Page.Another.Answer != null)
+                {
+                    Page page1 = targetException.Page;
+                    Page page2 = page1.Another;
+                    page1.Another = page.Another;
+                    page.Another = page2;
+                }
             }
-            if (replace)
-            {
+            if (targetException.Page.Student == null)
                 RemovePage(targetException.Page);
-                targetException = null;
-                AddPage(page);
-            }
+            AddPage(page);
         }
 
         private void RemovePage(Page page)

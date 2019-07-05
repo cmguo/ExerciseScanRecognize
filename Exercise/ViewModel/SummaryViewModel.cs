@@ -44,10 +44,12 @@ namespace Exercise.ViewModel
             (obj as System.Windows.Controls.Page).NavigationService.Navigate(page);
         }
 
-        protected override void Continue(object obj)
+        protected override bool Continue(object obj)
         {
-            base.Continue(obj);
-            (obj as System.Windows.Controls.Page).NavigationService.Navigate(new ScanningPage());
+            bool result = base.Continue(obj);
+            if (result)
+                (obj as System.Windows.Controls.Page).NavigationService.Navigate(new ScanningPage());
+            return result;
         }
 
     }

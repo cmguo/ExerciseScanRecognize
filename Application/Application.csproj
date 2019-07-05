@@ -177,9 +177,6 @@
     <None Include="Libraries\jni4net.j-0.8.8.0.jar" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="COPYING.txt" />
-  </ItemGroup>
-  <ItemGroup>
     <ProjectReference Include="..\Account\Account.csproj">
       <Project>{7df8007b-9234-4414-8dfe-5fe07c9a970b}</Project>
       <Name>Account</Name>
@@ -206,9 +203,6 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="COPYING.LESSER.txt" />
-  </ItemGroup>
-  <ItemGroup>
     <None Include="Libraries\answer-sheet-analyze-sdk.j4n.jar" />
   </ItemGroup>
   <ItemGroup>
@@ -226,7 +220,25 @@
       <Install>false</Install>
     </BootstrapperPackage>
   </ItemGroup>
+  <ItemGroup>
+    <Resource Include="COPYING.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="COPYING.LESSER.txt" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PrepareForRunDependsOn>$(PrepareForRunDependsOn);MyCopyFilesToOutputDirectory</PrepareForRunDependsOn>
+  </PropertyGroup>
+  <Target Name="MyCopyFilesToOutputDirectory">
+    <Copy SourceFiles="@(None)" DestinationFolder="$(OutDir)" />
+  </Target>
+  <PropertyGroup>
+    <PrepareForRunDependsOn>$(PrepareForRunDependsOn);MyCopyFilesToOutputDirectory</PrepareForRunDependsOn>
+  </PropertyGroup>
+  <Target Name="MyCopyFilesToOutputDirectory">
+    <Copy SourceFiles="@(None)" DestinationFolder="$(OutDir)" />
+  </Target>
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>
       <ErrorText>这台计算机上缺少此项目引用的 NuGet 程序包。使用“NuGet 程序包还原”可下载这些程序包。有关更多信息，请参见 http://go.microsoft.com/fwlink/?LinkID=322105。缺少的文件是 {0}。</ErrorText>
@@ -238,18 +250,6 @@
     <Error Condition="!Exists('..\packages\CefSharp.Wpf.73.1.130\build\CefSharp.Wpf.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\CefSharp.Wpf.73.1.130\build\CefSharp.Wpf.props'))" />
     <Error Condition="!Exists('..\packages\CefSharp.Wpf.73.1.130\build\CefSharp.Wpf.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\CefSharp.Wpf.73.1.130\build\CefSharp.Wpf.targets'))" />
     <Error Condition="!Exists('..\packages\Refit.4.7.9\build\net461\refit.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Refit.4.7.9\build\net461\refit.targets'))" />
-  </Target>
-  <PropertyGroup>
-    <PrepareForRunDependsOn>$(PrepareForRunDependsOn);MyCopyFilesToOutputDirectory</PrepareForRunDependsOn>
-  </PropertyGroup>
-  <Target Name="MyCopyFilesToOutputDirectory">
-    <Copy SourceFiles="@(None)" DestinationFolder="$(OutDir)" />
-  </Target>
-  <PropertyGroup>
-    <PrepareForRunDependsOn>$(PrepareForRunDependsOn);MyCopyFilesToOutputDirectory</PrepareForRunDependsOn>
-  </PropertyGroup>
-  <Target Name="MyCopyFilesToOutputDirectory">
-    <Copy SourceFiles="@(None)" DestinationFolder="$(OutDir)" />
   </Target>
   <Import Project="..\packages\CefSharp.Common.73.1.130\build\CefSharp.Common.targets" Condition="Exists('..\packages\CefSharp.Common.73.1.130\build\CefSharp.Common.targets')" />
   <Import Project="..\packages\CefSharp.Wpf.73.1.130\build\CefSharp.Wpf.targets" Condition="Exists('..\packages\CefSharp.Wpf.73.1.130\build\CefSharp.Wpf.targets')" />

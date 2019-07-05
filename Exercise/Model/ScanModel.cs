@@ -59,12 +59,12 @@ namespace Exercise.Model
             {
                 if (_IsScannig == value)
                     return;
-                _IsScannig = value;
-                RaisePropertyChanged("IsScanning");
                 lock (mutex)
                 {
+                    _IsScannig = value;
                     Monitor.PulseAll(mutex);
                 }
+                RaisePropertyChanged("IsScanning");
             }
         }
 
@@ -76,12 +76,12 @@ namespace Exercise.Model
             {
                 if (_IsPaused == value)
                     return;
-                _IsPaused = value;
-                RaisePropertyChanged("IsPaused");
                 lock (mutex)
                 {
+                    _IsPaused = value;
                     Monitor.PulseAll(mutex);
                 }
+                RaisePropertyChanged("IsPaused");
             }
         }
 
@@ -93,8 +93,13 @@ namespace Exercise.Model
             {
                 if (_IsCompleted == value)
                     return;
-                _IsCompleted = value;
-                RaisePropertyChanged("IsCompleted");
+                lock (mutex)
+                {
+                    _IsCompleted = value;
+                    Monitor.PulseAll(mutex);
+                }
+                if (!cancel)
+                    RaisePropertyChanged("IsCompleted");
             }
         }
 
@@ -106,6 +111,7 @@ namespace Exercise.Model
         private string savePath;
         private int scanBatch = 0;
         private int scanIndex = 0;
+        private bool cancel = false;
         private Page lastPage;
         private ExerciseData exerciseData;
 
@@ -130,6 +136,7 @@ namespace Exercise.Model
             IsScanning = true;
             IsPaused = false;
             IsCompleted = false;
+            cancel = false;
             ++scanBatch;
             scanIndex = 0;
             try
@@ -166,12 +173,13 @@ namespace Exercise.Model
 
         public Task CancelScan()
         {
+            cancel = true;
             scanDevice.CancelScan();
             return Task.Run(() =>
             {
                 lock (mutex)
                 {
-                    while (IsScanning)
+                    while (IsScanning && !IsCompleted)
                         Monitor.Wait(mutex);
                 }
             });
@@ -219,9 +227,15 @@ namespace Exercise.Model
             foreach (Page p in data.Pages)
             {
                 if (p.PageName != null)
+                {
                     p.PagePath = savePath + "\\" + p.PageName;
+                }
+                if (p.Another != null && p.Another.PageName != null)
+                    p.Another.PagePath = savePath + "\\" + p.Another.PageName;
                 if (p.PaperCode == PageCode)
                     p.MetaData = exerciseData.Pages[p.PageIndex];
+                if (p.Another != null && p.Another.PaperCode == PageCode)
+                    p.Another.MetaData = exerciseData.Pages[p.Another.PageIndex];
                 Pages.Add(p);
             }
         }

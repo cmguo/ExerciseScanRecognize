@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Media;
 
 namespace Base.Misc
@@ -41,6 +42,27 @@ namespace Base.Misc
                 e = LogicalTreeHelper.GetParent(e);
             }
             return e;
+        }
+
+        public static T GetChildOfType<T>(DependencyObject parent) where T : DependencyObject
+        {
+            T child = null;
+            int numVisuals = VisualTreeHelper.GetChildrenCount(parent);
+            for (int i = 0; i < numVisuals; i++)
+            {
+                DependencyObject v = VisualTreeHelper.GetChild(parent, i);
+                child = v as T;
+                if (child == null)
+                {
+                    child = GetChildOfType<T>(v);
+                }
+                if (child != null)
+                {
+                    break;
+                }
+            }
+            return child;
+
         }
 
         public static T GetParentOfType<T>(DependencyObject child) where T : DependencyObject

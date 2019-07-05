@@ -35,7 +35,7 @@ namespace Exercise.Algorithm
         [OnDeserialized]
         internal void OnDeserialized(StreamingContext context)
         {
-            AreaInfo.SelectMany(a => a.QuestionInfo).All(q => { q.HasException = q.ItemInfo.Any(i => i.StatusOfItem != 0); return true; });
+            AreaInfo.SelectMany(a => a.QuestionInfo).All(q => { q.HasException = q.ItemInfo.Any(i => i.StatusOfItem > 0); return true; });
             AnswerExceptions = AreaInfo.Where(a => a.AreaType == AreaType.SingleChoice)
                 .SelectMany(a => a.QuestionInfo.Where(q => q.HasException)).ToList();
             if (AnswerExceptions.Count == 0)

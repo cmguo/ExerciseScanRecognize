@@ -1,14 +1,9 @@
 ﻿using Base.Mvvm;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Net.Http;
 using System.Windows;
-using System.Windows.Controls;
-using TalBase.View;
 
-namespace Exercise.View
+namespace TalBase.View
 {
     public class ErrorMessageBox
     {
@@ -22,13 +17,20 @@ namespace Exercise.View
         {
             if (e.Parameter is UIElement)
             {
-                PopupDialog.Show(e.Parameter as UIElement, e.Exception.Message, 0, "确定");
+                PopupDialog.Show(e.Parameter as UIElement, GetMessage(e.Exception), 0, "确定");
             }
             else
             {
-                PopupDialog.Show(e.Exception.Message, 0, "确定");
+                PopupDialog.Show(GetMessage(e.Exception), 0, "确定");
             }
             e.IsHandled = true;
+        }
+
+        private static string GetMessage(Exception e)
+        {
+            if (e is HttpRequestException)
+                return "网络异常，" + e.Message;
+            return e.Message;
         }
     }
 }

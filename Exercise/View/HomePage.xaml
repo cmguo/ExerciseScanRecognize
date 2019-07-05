@@ -17,11 +17,17 @@
     </Page.DataContext>
     
     <Page.Resources>
-        <mu:PUButton x:Key="Histroy" VerticalAlignment="Center" HorizontalAlignment="Center"
+        <Button x:Key="Histroy" VerticalAlignment="Center" HorizontalAlignment="Center"
                      Content="试卷扫描记录管理"
                      Command="{Binding HistroyCommand}"
                      CommandParameter="{Binding Source={x:Reference Page}}" />
+        <Button x:Key="Discard" Content="放弃本次扫描" 
+                Command="{Binding DiscardCommand}" />
     </Page.Resources>
+
+    <tb:TitleBarManager.GlobalButtons>
+        <tb:TitleButton Name="Discard" Content="{StaticResource Discard}" />
+    </tb:TitleBarManager.GlobalButtons>
 
     <tb:TitleBarManager.Buttons>
         <tb:TitleButton Name="Account" />

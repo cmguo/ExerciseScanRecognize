@@ -22,7 +22,8 @@ namespace Base.Mvvm
                 IsHandled = false;
             }
 
-            public Exception Exception { get; private set; }
+            public Object Parameter { get; internal set; }
+            public Exception Exception { get; internal set; }
             public bool IsHandled { get; set; }
         }
 
@@ -103,7 +104,7 @@ namespace Base.Mvvm
             catch (Exception e)
             {
                 Debug.WriteLine(e);
-                ActionExceptionEventArgs e1 = new ActionExceptionEventArgs(e);
+                ActionExceptionEventArgs e1 = new ActionExceptionEventArgs(e) { Parameter = parameter };
                 ActionException?.Invoke(this, e1);
                 executing = false;
                 CommandManager.InvalidateRequerySuggested();

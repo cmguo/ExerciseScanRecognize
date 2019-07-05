@@ -151,6 +151,7 @@ namespace Exercise.Model
             {
                 StringData data = await service.GetSubmitId(task.Prepare);
                 sdata.HomeworkId = data.Value;
+                await JsonPersistent.Save(task.Path + "\\submit.json", task);
             }
             await SubmitInfo(task, sdata);
             await SubmitImages(task);
@@ -177,6 +178,7 @@ namespace Exercise.Model
                 }
                 if (i > 0)
                     sdata.Data = list.Skip(i).ToList();
+                sdata.Finished = true;
                 await service.Submit(sdata);
                 i = list.Count;
                 ++task.Finish;

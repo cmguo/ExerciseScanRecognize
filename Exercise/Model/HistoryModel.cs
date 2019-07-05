@@ -32,18 +32,16 @@ namespace Exercise.Model
 
         public ObservableCollection<Record> LocalRecords { get; private set; }
 
-        public ObservableCollection<Record> Records { get; private set; }
+        public ICollection<Record>[] Records { get; private set; }
 
         private static readonly string ROOT_PATH = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
+        private static readonly int PAGE_SIZE = 10;
 
         private IExercise service;
-
-        private int page = 0;
 
         public HistoryModel()
         {
             LocalRecords = new ObservableCollection<Record>();
-            Records = new ObservableCollection<Record>();
             service = Services.Get<IExercise>();
         }
 
@@ -57,13 +55,16 @@ namespace Exercise.Model
 
         public async Task Save(string path)
         {
-            List<ClassDetail> classes = SchoolModel.Instance.Classes.Select(c => new ClassDetail()
-            {
-                ClassName = c.ClassName,
-                ResultCount = c.Students.Where(s => s.AnswerPages != null && s.AnswerPages.Any(p => p.StudentCode != null)).Count(),
-            }).ToList();
-            Record record = new Record() { ExerciseName = ExerciseModel.Instance.ExerciseData.Title, ClassDetails = classes };
+            Record record = new Record() { Name = ExerciseModel.Instance.ExerciseData.Title };
             await JsonPersistent.Save(path + "\\record.json", record);
+        }
+
+        public void Remove(string path)
+        {
+            Record record = LocalRecords.Where(r => r.LocalPath == path).FirstOrDefault();
+            if (record != null)
+                LocalRecords.Remove(record);
+            Directory.Delete(path, true);
         }
 
         public void Remove(Record record)
@@ -75,9 +76,8 @@ namespace Exercise.Model
         public async Task Load()
         {
             LocalRecords.Clear();
-            Records.Clear();
             await LoadLocal();
-            //await LoadMore();
+            await LoadMore(0);
         }
 
         private async Task LoadLocal()
@@ -114,13 +114,28 @@ namespace Exercise.Model
             }
         }
 
-        public async Task LoadMore()
+        public async Task LoadMore(int page)
         {
-            HistoryData records = await service.getRecords(page);
-            ++page;
-            foreach (Record r in records.Records)
-                Records.Add(r);
+            if (Records != null && page < Records.Length)
+                return;
+            HistoryData records = await service.getRecords(new HistoryData.Range() { Page = page + 1, Size = PAGE_SIZE });
+            if (Records == null)
+                Records = new ICollection<Record>[(records.TotalCount + PAGE_SIZE - 1) / PAGE_SIZE];
+            Records[0] = records.SubmitRecordList;
+            RaisePropertyChanged("Records");
         }
 
+        public async Task ModifyRecord(Record record, string old)
+        {
+            try
+            {
+                await service.updateRecord(new Record() { HomeworkId = record.HomeworkId, Name = record.Name });
+            }
+            catch (Exception e)
+            {
+                record.Name = old;
+                throw e;
+            }
+        }
     }
 }

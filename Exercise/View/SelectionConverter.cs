@@ -3,7 +3,7 @@ using System.Globalization;
 using System.Windows.Data;
 using System.Windows.Media;
 
-namespace Exercise.View.Resolve
+namespace Exercise.View
 {
 
     [ValueConversion(typeof(object), typeof(Brush))]

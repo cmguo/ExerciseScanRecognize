@@ -3,7 +3,9 @@
 *.jpg
 *.pdf
 *.zip
+*.pfx
 .*
+*.Designer.cs
 obj/
 bin/
 Debug/

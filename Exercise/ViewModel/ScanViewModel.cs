@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using TalBase.ViewModel;
 using Panuon.UI;
 using TalBase.View;
+using System.Windows;
 
 namespace Exercise.ViewModel
 {
@@ -71,13 +72,17 @@ namespace Exercise.ViewModel
             await scanModel.CancelScan();
         }
 
-        protected virtual void Continue(object obj)
+        protected virtual bool Continue(object obj)
         {
-            while (!scanModel.FeederLoaded)
+            int result = 0;
+            while (result == 0 && !scanModel.FeederLoaded)
             {
-                PopupDialog.Show("扫描仪里面没有纸张，请添加试卷。", 0, "确定");
+                result = PopupDialog.Show(obj as UIElement, "扫描仪里面没有纸张，请添加试卷。", 0, "确定", "取消");
             }
+            if (result != 0)
+                return false;
             scanModel.Scan();
+            return true;
         }
 
         #endregion

@@ -116,13 +116,13 @@
                 </ItemsPanelTemplate>
             </ListView.ItemsPanel>
             <ListBox.ItemContainerStyle>
-                <Style TargetType="{x:Type ListBoxItem}">
+                <Style TargetType="{x:Type ListViewItem}">
                     <Setter Property="Focusable" Value="False"/>
                 </Style>
             </ListBox.ItemContainerStyle>
             <ListView.ItemTemplate>
                 <DataTemplate>
-                    <Button BorderThickness="0" Content="{Binding}" Click="ButtonPage_Click">
+                    <Button BorderThickness="0" Content="{Binding}" Width="30" Height="30" Click="ButtonPage_Click">
                         <Button.Background>
                             <MultiBinding Converter="{StaticResource SelectionConverter}">
                                 <Binding Path="PageIndex" ElementName="Page" />

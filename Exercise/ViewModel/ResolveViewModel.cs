@@ -97,6 +97,16 @@ namespace Exercise.ViewModel
             }
         }
 
+        public override void Release()
+        {
+            base.Release();
+            Exceptions.CollectionChanged -= Exceptions_CollectionChanged;
+            foreach (ExceptionList el in Exceptions)
+            {
+                el.Exceptions.CollectionChanged -= Exceptions_CollectionChanged;
+            }
+        }
+
         public void InitSelection()
         {
             if (Exceptions.Count > 0)

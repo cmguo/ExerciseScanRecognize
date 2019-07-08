@@ -80,6 +80,12 @@ namespace Exercise.ViewModel
             PageIndex = 0;
         }
 
+        public override void Release()
+        {
+            base.Release();
+            historyModel.PropertyChanged -= HistoryModel_PropertyChanged;
+        }
+
         private async Task Summary(object obj)
         {
             object[] args = obj as object[];

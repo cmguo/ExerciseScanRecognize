@@ -57,7 +57,7 @@
                 </ItemsPanelTemplate>
             </ListView.ItemsPanel>
             <ListBox.ItemContainerStyle>
-                <Style TargetType="{x:Type ListBoxItem}">
+                <Style TargetType="{x:Type ListViewItem}">
                     <Setter Property="Focusable" Value="False"/>
                 </Style>
             </ListBox.ItemContainerStyle>
@@ -71,7 +71,7 @@
                 </ItemsPanelTemplate>
             </ListView.ItemsPanel>
             <ListBox.ItemContainerStyle>
-                <Style TargetType="{x:Type ListBoxItem}">
+                <Style TargetType="{x:Type ListViewItem}">
                     <Setter Property="Focusable" Value="False"/>
                 </Style>
             </ListBox.ItemContainerStyle>
@@ -91,7 +91,7 @@
                     </ItemsPanelTemplate>
                 </ListView.ItemsPanel>
                 <ListBox.ItemContainerStyle>
-                    <Style TargetType="{x:Type ListBoxItem}">
+                    <Style TargetType="{x:Type ListViewItem}">
                         <Setter Property="Focusable" Value="False"/>
                     </Style>
                 </ListBox.ItemContainerStyle>

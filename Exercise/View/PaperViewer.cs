@@ -23,6 +23,18 @@ namespace Exercise.View
             DependencyProperty.Register("Scale", typeof(double), typeof(PaperViewer),
                 new PropertyMetadata(1.0, (o, e) => (o as PaperViewer).SetScale((double)e.NewValue)));
 
+        public static readonly DependencyProperty ScaleModeProperty =
+            DependencyProperty.Register("ScaleMode", typeof(ScaleModes), typeof(PaperViewer),
+                new PropertyMetadata(ScaleModes.Manual, (o, e) => (o as PaperViewer).SetScaleMode((ScaleModes)e.NewValue)));
+
+        public enum ScaleModes
+        {
+            Manual, 
+            Full,
+            Ratio, 
+            Clip
+        }
+
         public Uri Paper
         {
             get => GetValue(PaperProperty) as Uri;
@@ -35,13 +47,19 @@ namespace Exercise.View
             set => SetValue(OverlayProperty, value);
         }
 
-        public double Scale
+        public ScaleModes ScaleMode
+        {
+            get => (ScaleModes) GetValue(ScaleModeProperty);
+            set => SetValue(ScaleModeProperty, value);
+        }
+
+         public double Scale
         {
             get => (double) GetValue(ScaleProperty);
             set => SetValue(ScaleProperty, value);
         }
 
-        public Brush OverlayBrush
+       public Brush OverlayBrush
         {
             get => geometry.Brush;
             set => geometry.Brush = value;
@@ -98,7 +116,7 @@ namespace Exercise.View
                 paper.EndInit();
                 image.ImageSource = paper;
                 image.Rect = new Rect(0, 0, paper.Width, paper.Height);
-                Scale = 1.0;
+                AdjustMode();
                 Adjust();
             }
             catch (Exception e)
@@ -112,14 +130,41 @@ namespace Exercise.View
             geometry.Geometry = g;
         }
 
+        private void SetScaleMode(ScaleModes newValue)
+        {
+            AdjustMode();
+        }
+
         private void SetScale(double v)
         {
             Adjust();
         }
 
+        private void AdjustMode()
+        {
+            if (RenderSize.Width <= 0 || RenderSize.Height <= 0)
+                return;
+            if (paper == null)
+                return;
+            double s = (RenderSize.Width * paper.Height) / (RenderSize.Height * paper.Width);
+            switch (ScaleMode)
+            {
+                case ScaleModes.Manual:
+                    break;
+                case ScaleModes.Full:
+                    break;
+                case ScaleModes.Ratio:
+                    Scale = s > 1 ? 1 / s : s;
+                    break;
+                case ScaleModes.Clip:
+                    Scale = 1;
+                    break;
+            }
+        }
+
         private void Adjust()
         {
-            if (this.RenderSize.Width <= 0 || this.RenderSize.Height <= 0)
+            if (RenderSize.Width <= 0 || RenderSize.Height <= 0)
                 return;
             if (paper == null)
                 return;

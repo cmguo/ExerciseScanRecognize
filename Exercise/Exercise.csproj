@@ -99,7 +99,6 @@
     <Compile Include="View\DetailWindow.xaml.cs">
       <DependentUpon>DetailWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="View\ErrorMessageBox.cs" />
     <Compile Include="View\HistoryPage.xaml.cs">
       <DependentUpon>HistoryPage.xaml</DependentUpon>
     </Compile>

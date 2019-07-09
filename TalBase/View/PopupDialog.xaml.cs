@@ -2,6 +2,7 @@
 using Base.Mvvm.Converter;
 using Panuon.UI;
 using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Media;
 
 namespace TalBase.View
@@ -21,6 +22,7 @@ namespace TalBase.View
     public partial class PopupDialog : Window
     {
 
+        public string Caption { get; set; }
         public string Image { get; set; }
         public string Message { get; set; }
         public FrameworkElement Body { set; get; }
@@ -52,8 +54,10 @@ namespace TalBase.View
                 result = 0;
             else if (sender == btn1)
                 result = 1;
-            else
+            else if (sender == btn2)
                 result = 2;
+            else
+                result = -1;
             if (Body != null)
                 body.Children.Remove(Body);
             Close();
@@ -61,56 +65,61 @@ namespace TalBase.View
 
         public int Popup()
         {
+            Button dft = null;
             if (Default == 0)
-                btn0.Background = Brushes.Blue;
+                dft = btn0;
             else if (Default == 1)
-                btn1.Background = Brushes.Blue;
+                dft = btn1;
             else if (Default == 2)
-                btn2.Background = Brushes.Blue;
+                dft = btn2;
+            if (dft != null)
+            {
+                dft.Focus();
+            }
             if (Body != null)
                 body.Children.Add(Body);
             ShowDialog();
             return result;
         }
 
-        public static int Show(string msg, int def, params string[] buttons)
+        public static int Show(string title, string msg, int def, params string[] buttons)
         {
-            return new PopupDialog(buttons) { Message = msg, Default = def }.Popup();
+            return new PopupDialog(buttons) { Caption = title, Message = msg, Default = def }.Popup();
         }
 
-        public static int Show(string msg, string icon, int def, params string[] buttons)
+        public static int Show(string title, string msg, string icon, int def, params string[] buttons)
         {
-            return new PopupDialog(buttons) { Message = msg, Image = icon, Default = def }.Popup();
+            return new PopupDialog(buttons) { Caption = title, Message = msg, Image = icon, Default = def }.Popup();
         }
 
-        public static int Show(string msg, FrameworkElement body, int def, params string[] buttons)
+        public static int Show(string title, string msg, FrameworkElement body, int def, params string[] buttons)
         {
-            return new PopupDialog(buttons) { Message = msg, Body = body, Default = def }.Popup();
+            return new PopupDialog(buttons) { Caption = title, Message = msg, Body = body, Default = def }.Popup();
         }
 
-        public static int Show(string msg, string icon, FrameworkElement body, int def, params string[] buttons)
+        public static int Show(string title, string msg, string icon, FrameworkElement body, int def, params string[] buttons)
         {
-            return new PopupDialog(buttons) { Message = msg, Image = icon, Body = body, Default = def }.Popup();
+            return new PopupDialog(buttons) { Caption = title, Message = msg, Image = icon, Body = body, Default = def }.Popup();
         }
 
-        public static int Show(UIElement owner, string msg, int def, params string[] buttons)
+        public static int Show(UIElement owner, string title, string msg, int def, params string[] buttons)
         {
-            return new PopupDialog(buttons) { Owner = UITreeHelper.GetParentOfType<Window>(owner), Message = msg, Default = def }.Popup();
+            return new PopupDialog(buttons) { Owner = UITreeHelper.GetParentOfType<Window>(owner), Caption = title, Message = msg, Default = def }.Popup();
         }
 
-        public static int Show(UIElement owner, string msg, string icon, int def, params string[] buttons)
+        public static int Show(UIElement owner, string title, string msg, string icon, int def, params string[] buttons)
         {
-            return new PopupDialog(buttons) { Owner = UITreeHelper.GetParentOfType<Window>(owner), Message = msg, Image = icon, Default = def }.Popup();
+            return new PopupDialog(buttons) { Owner = UITreeHelper.GetParentOfType<Window>(owner), Caption = title, Message = msg, Image = icon, Default = def }.Popup();
         }
 
-        public static int Show(UIElement owner, string msg, FrameworkElement body, int def, params string[] buttons)
+        public static int Show(UIElement owner, string title, string msg, FrameworkElement body, int def, params string[] buttons)
         {
-            return new PopupDialog(buttons) { Owner = UITreeHelper.GetParentOfType<Window>(owner), Message = msg, Body = body, Default = def }.Popup();
+            return new PopupDialog(buttons) { Owner = UITreeHelper.GetParentOfType<Window>(owner), Caption = title, Message = msg, Body = body, Default = def }.Popup();
         }
 
-        public static int Show(UIElement owner, string msg, string icon, FrameworkElement body, int def, params string[] buttons)
+        public static int Show(UIElement owner, string title, string msg, string icon, FrameworkElement body, int def, params string[] buttons)
         {
-            return new PopupDialog(buttons) { Owner = UITreeHelper.GetParentOfType<Window>(owner), Message = msg, Image = icon, Body = body, Default = def }.Popup();
+            return new PopupDialog(buttons) { Owner = UITreeHelper.GetParentOfType<Window>(owner), Caption = title, Message = msg, Image = icon, Body = body, Default = def }.Popup();
         }
     }
 }

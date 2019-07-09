@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using Base.Misc;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using TalBase.Model;
@@ -29,7 +30,7 @@ namespace Exercise.Service
             }
             public long ScanDate { get; set; }
             [JsonIgnore]
-            public DateTime DataTime => new DateTime(ScanDate);
+            public DateTime DataTime => SystemUtil.DateTimeFromTimestamp(ScanDate);
             [JsonIgnore]
             public string LocalPath { get; internal set; }
             public IList<ClassDetail> DetailList { get; set; }

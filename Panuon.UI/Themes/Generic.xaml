@@ -1650,6 +1650,7 @@
                                             CornerRadius="{Binding BorderCornerRadius,RelativeSource={RelativeSource AncestorType=Button}}" />
                                 </Border>
                                 <Border x:Name="bdrHoverCover"
+                                        BorderThickness="{TemplateBinding BorderThickness}"
                                         Background="{Binding CoverBrush,RelativeSource={RelativeSource AncestorType=Button}}"
                                         CornerRadius="{Binding BorderCornerRadius,RelativeSource={RelativeSource AncestorType=Button}}"
                                         Opacity="0"></Border>

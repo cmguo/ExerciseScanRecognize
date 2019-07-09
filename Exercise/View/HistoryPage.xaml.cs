@@ -38,31 +38,40 @@ namespace Exercise.View
             Pages = new ObservableCollection<string>();
             InitializeComponent();
             DataContext = FindResource("ViewModel");
-            (DataContext as HistoryViewModel).PropertyChanged += HistoryPage_PropertyChanged;
             dataGrid.CellEditEnding += DataGrid_CellEditEnding;
             dataGrid.SelectedCellsChanged += DataGrid_SelectedCellsChanged;
+            HistoryViewModel vm = (DataContext as HistoryViewModel);
+            vm.PropertyChanged += HistoryPage_PropertyChanged;
+            if (vm.PageCount > 0)
+                UpdatePageCount();
         }
 
         private void HistoryPage_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
         {
             if (e.PropertyName == "PageCount")
             {
-                HistoryViewModel vm = (DataContext as HistoryViewModel);
-                pageStart = 1;
-                if (vm.PageCount <= 5)
-                {
-                    for (int i = 1; i <= vm.PageCount; ++i)
-                        Pages.Add(i.ToString());
-                    pageEnd = vm.PageCount;
-                }
-                else
-                {
-                    Pages.Add("<");
-                    for (int i = 1; i <= 5; ++i)
-                        Pages.Add(i.ToString());
-                    Pages.Add(">");
-                    pageEnd = 5;
-                }
+                UpdatePageCount();
+            }
+        }
+
+        private void UpdatePageCount()
+        {
+            HistoryViewModel vm = (DataContext as HistoryViewModel);
+            pageStart = 1;
+            if (vm.PageCount <= 5)
+            {
+                for (int i = 1; i <= vm.PageCount; ++i)
+                    Pages.Add(i.ToString());
+                pageEnd = vm.PageCount;
+                PageIndex = Pages[0];
+            }
+            else
+            {
+                Pages.Add("<");
+                for (int i = 1; i <= 5; ++i)
+                    Pages.Add(i.ToString());
+                Pages.Add(">");
+                pageEnd = 5;
                 PageIndex = Pages[1];
             }
         }

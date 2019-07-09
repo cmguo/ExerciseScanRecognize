@@ -8,20 +8,26 @@
       xmlns:mu="clr-namespace:Panuon.UI;assembly=Panuon.UI"
       xmlns:tb="clr-namespace:Base.TitleBar;assembly=Base"
       xmlns:cv="clr-namespace:Base.Mvvm.Converter;assembly=Base"
+      xmlns:tal="clr-namespace:TalBase.View;assembly=TalBase"
       mc:Ignorable="d"
       x:Name="Page"
       d:DesignHeight="450" d:DesignWidth="800"
       Title="HomePage">
 
     <Page.Resources>
-        <cv:MultiValueConverter x:Key="MultiValueConverter" />
-        <vm:HistoryViewModel x:Key="ViewModel" />
-        <mu:PUButton x:Key="Return" VerticalAlignment="Center" HorizontalAlignment="Center"
-                     Content="返回"
-                     Command="{Binding ReturnCommand}"
-                     CommandParameter="{Binding Source={x:Reference Page}}" />
-        <local:HistroyDetailConverter x:Key="HistroyDetailConverter" />
-        <local:SelectionConverter x:Key="SelectionConverter" Unselected="Transparent" />
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="pack://application:,,,/TalBase;component/Themes/Button.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+            <cv:MultiValueConverter x:Key="MultiValueConverter" />
+            <vm:HistoryViewModel x:Key="ViewModel" />
+            <tal:TalButton x:Key="Return" VerticalAlignment="Center" HorizontalAlignment="Center"
+                         Content="返回"
+                         Command="{Binding ReturnCommand}"
+                         CommandParameter="{Binding Source={x:Reference Page}}" />
+            <local:HistroyDetailConverter x:Key="HistroyDetailConverter" />
+            <local:SelectionConverter x:Key="SelectionConverter" Unselected="Transparent" />
+        </ResourceDictionary>
     </Page.Resources>
 
 
@@ -38,8 +44,8 @@
         </Grid.RowDefinitions>
 
         <TextBlock Grid.Row="0" FontSize="30" Text="扫描记录管理"/>
-        
-        <ListView Grid.Row="1" ItemsSource="{Binding LocalRecords}">
+
+        <ListView Grid.Row="1" ItemsSource="{Binding LocalRecords}" HorizontalContentAlignment="Stretch">
             <ListView.ItemTemplate>
                 <DataTemplate>
                     <DockPanel>
@@ -68,7 +74,7 @@
                                     Command="{Binding DiscardCommand, Source={StaticResource ViewModel}}"
                                     CommandParameter="{Binding}" />
                         </StackPanel>
-                        <TextBlock/>
+                        <Border/>
                     </DockPanel>
                 </DataTemplate>
             </ListView.ItemTemplate>

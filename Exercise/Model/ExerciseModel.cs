@@ -79,6 +79,7 @@ namespace Exercise.Model
         public string SavePath { get; private set; }
         public ObservableCollection<ExceptionList> Exceptions { get; private set; }
         public ObservableCollection<Page> PageDropped { get; private set; }
+
         public ExerciseData ExerciseData { get; private set; }
         public ObservableCollection<StudentInfo> PageStudents { get; private set; }
 
@@ -128,15 +129,30 @@ namespace Exercise.Model
             await schoolModel.Refresh();
         }
 
+        internal void FillAll()
+        {
+            Page l = PageStudents.First().AnswerPages.Where(p => p != null).First();
+            schoolModel.GetLostPageStudents(s => {
+                s.AnswerPages = new List<Page>(emptyPages);
+                PageStudents.Add(s);
+            });
+            foreach (StudentInfo s in PageStudents)
+            {
+                for (int i = 0; i < s.AnswerPages.Count; ++i)
+                {
+                    if (s.AnswerPages[i] == null)
+                    {
+                        s.AnswerPages[i] = l;
+                    }
+                }
+            }
+            Exceptions.Clear();
+        }
+
         public async Task MakeResult()
         {
             if (ExerciseData == null)
                 throw new NullReferenceException("没有有效试卷信息");
-            // No need
-            //schoolModel.GetLostPageStudents(s => {
-            //    s.AnswerPages = new List<Page>(emptyPages);
-            //    PageStudents.Add(s);
-            //});
             foreach (StudentInfo s in PageStudents)
             {
                 for (int i = 0; i < s.AnswerPages.Count; ++i)
@@ -179,6 +195,7 @@ namespace Exercise.Model
                 emptyPages.Add(null);
             scanModel.SetExerciseData(ExerciseData);
             await scanModel.Load(path);
+            exerciseId = scanModel.PageCode;
             SavePath = path;
         }
 
@@ -186,6 +203,7 @@ namespace Exercise.Model
         {
             exerciseId = null;
             emptyPages = null;
+            targetException = null;
             ExerciseData = null;
             PageStudents.Clear();
             Exceptions.Clear();
@@ -317,20 +335,20 @@ namespace Exercise.Model
                     old.Student = null;
                     RemovePage(old, RemoveType.DuplexPage);
                 }
-            }
-            if (page.Answer != null)
-            {
-                if (page.Answer.AnswerExceptions != null)
-                    AddException(ExceptionType.AnswerException, page);
-                if (page.Answer.CorrectionExceptions != null)
-                    AddException(ExceptionType.CorrectionException, page);
-            }
-            if (page.Another != null && page.Another.Answer != null)
-            {
-                if (page.Another.Answer.AnswerExceptions != null)
-                    AddException(ExceptionType.AnswerException, page.Another);
-                if (page.Another.Answer.CorrectionExceptions != null)
-                    AddException(ExceptionType.CorrectionException, page.Another);
+                if (page.Answer != null)
+                {
+                    if (page.Answer.AnswerExceptions != null)
+                        AddException(ExceptionType.AnswerException, page);
+                    if (page.Answer.CorrectionExceptions != null)
+                        AddException(ExceptionType.CorrectionException, page);
+                }
+                if (page.Another != null && page.Another.Answer != null)
+                {
+                    if (page.Another.Answer.AnswerExceptions != null)
+                        AddException(ExceptionType.AnswerException, page.Another);
+                    if (page.Another.Answer.CorrectionExceptions != null)
+                        AddException(ExceptionType.CorrectionException, page.Another);
+                }
             }
         }
 
@@ -497,6 +515,7 @@ namespace Exercise.Model
             Exception ex = list.Exceptions.FirstOrDefault(e => e.Page == page);
             if (ex == null) return;
             list.Exceptions.Remove(ex);
+            ex.Page = null;
             if (list.Exceptions.Count == 0)
                 Exceptions.Remove(list);
         }

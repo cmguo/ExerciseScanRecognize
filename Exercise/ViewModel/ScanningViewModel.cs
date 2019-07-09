@@ -49,6 +49,8 @@ namespace Exercise.ViewModel
             exerciseModel.PropertyChanged += ExerciseModel_PropertyChanged;
             CloseMessage = "当前仍有扫描任务进行中，" + CloseMessage;
             StudentSumary = exerciseModel.PageStudents.Count;
+            if (exerciseModel.ExerciseData != null)
+                ExercisePageCount = exerciseModel.ExerciseData.Pages.Count;
         }
 
         public override void Release()
@@ -68,10 +70,11 @@ namespace Exercise.ViewModel
                 (obj as System.Windows.Controls.Page).NavigationService.Navigate(new SummaryPage());
                 return;
             }
+            Update();
             System.Windows.Controls.Page page = obj as System.Windows.Controls.Page;
             FrameworkElement element = page.Resources["ClassDetail"] as FrameworkElement;
             element.DataContext = this;
-            int result = PopupDialog.Show(obj as UIElement, "扫描仪中还有试卷待扫描，确认结束扫描并查看结果吗？", element, 0, "查看结果", "继续扫描");
+            int result = PopupDialog.Show(obj as UIElement, "TODO", "扫描仪中还有试卷待扫描，确认结束扫描并查看结果吗？", element, 0, "查看结果", "继续扫描");
             if (result == 0)
             {
                 await scanModel.CancelScan();
@@ -86,9 +89,7 @@ namespace Exercise.ViewModel
 
         private async Task OnError(object obj)
         {
-            bool isScanning = IsScanning;
-            if (isScanning)
-                await scanModel.PauseScan();
+            bool isScanning = await scanModel.PauseScan();
             string msg = null;
             if (Error == 0)
                 msg = "当前试卷二维码无法识别，不能查看结果";
@@ -98,20 +99,13 @@ namespace Exercise.ViewModel
                 msg = "数据连接异常，请联系服务人员";
             while (true)
             {
-                int result = PopupDialog.Show(obj as UIElement, msg, 0, "确定");
-                if (result == 1)
+                int result = PopupDialog.Show(obj as UIElement, "TODO", msg, 0, "确定");
+                if (result == 0)
                 {
                     await scanModel.CancelScan();
                     exerciseModel.Discard();
                     (obj as System.Windows.Controls.Page).NavigationService.Navigate(new HomePage());
                     break;
-                }
-                else
-                {
-                    if (isScanning)
-                        scanModel.ResumeScan();
-                    else if (base.Continue(obj))
-                        break;
                 }
             }
         }
@@ -124,7 +118,16 @@ namespace Exercise.ViewModel
             element.DataContext = this;
             while (true)
             {
-                int result = PopupDialog.Show(obj as UIElement, "扫描仪已无试卷，请添加试卷继续扫描。若已全部扫描，可查看扫描结果。", element, 0, "查看结果", "继续扫描");
+                int result = -1;
+                if (scanModel.Error != null)
+                {
+                    result = PopupDialog.Show(obj as UIElement, "TODO", "扫描仪发生异常，无法说明。请检查后重试。", 1, "查看结果", "继续扫描");
+                }
+                else
+                {
+                    result = PopupDialog.Show(obj as UIElement, "TODO",
+                        "扫描仪已无试卷，请添加试卷继续扫描。若已全部扫描，可查看扫描结果。", element, 0, "查看结果", "继续扫描");
+                }
                 if (result == 0)
                 {
                     if (scanModel.PageCode == null || exerciseModel.ExerciseData == null)

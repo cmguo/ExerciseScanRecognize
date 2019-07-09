@@ -65,6 +65,8 @@ namespace Exercise.ViewModel
                 LostStudentList = c.Students.Where(s => s.AnswerPages == null)
                     .Select(s => new StudentDetail() { Name = s.Name, TalNo = s.TalNo }).ToList(),
             }).ToList();
+            RaisePropertyChanged("StudentCount");
+            RaisePropertyChanged("ClassDetails");
         }
 
         public override void Release()
@@ -77,7 +79,7 @@ namespace Exercise.ViewModel
         protected virtual async Task Close(object obj)
         {
             bool paused = await scanModel.PauseScan();
-            int result = PopupDialog.Show(CloseMessage, 1, "退出", "取消");
+            int result = PopupDialog.Show("确认退出", CloseMessage, 1, "退出", "取消");
             if (result == 0)
             {
                 await scanModel.CancelScan();
@@ -94,7 +96,7 @@ namespace Exercise.ViewModel
         protected async Task Discard(object obj)
         {
             bool paused = await scanModel.PauseScan();
-            int result = PopupDialog.Show(obj as UIElement, "放弃后，本次扫描结果将作废，确认放弃吗？", 0, "放弃本次扫描", "取消");
+            int result = PopupDialog.Show(obj as UIElement, "确认放弃本次扫描", "放弃后，本次扫描结果将作废，确认放弃吗？", 0, "放弃本次扫描", "取消");
             if (result == 0)
             {
                 await scanModel.CancelScan();

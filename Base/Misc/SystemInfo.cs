@@ -8,7 +8,7 @@ namespace Base.Misc
 {
     class SystemInfo
     {
-        public static string ComputerName = System.Environment.GetEnvironmentVariable("ComputerName");
+        public static string ComputerName = Environment.GetEnvironmentVariable("ComputerName");
 
         public static string[] LocalIpAddresses
         {

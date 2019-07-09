@@ -77,6 +77,8 @@ namespace Exercise.ViewModel
             ReturnCommand = new RelayCommand((o) => Return(o));
             new RelayCommand((o) => historyModel.Load()).Execute(null);
             historyModel.PropertyChanged += HistoryModel_PropertyChanged;
+            if (historyModel.Records != null)
+                PageCount = historyModel.Records.Length;
             PageIndex = 0;
         }
 
@@ -109,9 +111,12 @@ namespace Exercise.ViewModel
         {
             if (e.PropertyName == "Records")
             {
-                if (historyModel.Records != null && PageIndex < historyModel.Records.Length)
-                    Records = historyModel.Records[PageIndex];
-                PageCount = historyModel.Records.Length;
+                if (historyModel.Records != null)
+                {
+                    if (PageIndex < historyModel.Records.Length)
+                        Records = historyModel.Records[PageIndex];
+                    PageCount = historyModel.Records.Length;
+                }
             }
         }
 

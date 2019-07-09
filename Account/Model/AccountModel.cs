@@ -4,12 +4,13 @@ using Refit;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Net.Http;
 using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Controls;
 using System.Windows.Threading;
 using TalBase.Model;
+using TalBase.Service;
 
 namespace Account.Model
 {
@@ -28,6 +29,8 @@ namespace Account.Model
                 return s_instance;
             }
         }
+
+        public Exception Error { get; private set; }
 
         public string ServiceUri { get; private set; }
 
@@ -73,32 +76,60 @@ namespace Account.Model
 
         public async Task Login()
         {
+            Error = null;
             if (LoginData.AuthenticationType == LoginData.LOGIN_BY_PASSWORD)
             {
                 MD5 md5 = new MD5CryptoServiceProvider();
                 byte[] output = md5.ComputeHash(Encoding.UTF8.GetBytes(LoginData.Password));
                 LoginData.Password = BitConverter.ToString(output).Replace("-", "").ToLower();
             }
-            Account = await service.Login(LoginData);
+            try
+            {
+                Account = await service.Login(LoginData);
+            }
+            catch (Exception e)
+            {
+                Error = e;
+                throw e;
+            }
             RaisePropertyChanged("Account");
             LoginData.Password = null;
             LoginData.AuthenticationType = LoginData.LOGIN_BY_TICKET;
             timer.Start();
+            RelayCommand.ActionException += RelayCommand_ActionException;
+            BackgroudWork.WorkException += RelayCommand_ActionException;
         }
 
         public async Task Logout()
         {
             LogoutData logout = new LogoutData() { Ticket = Account.Ticket };
             await service.Logout(logout);
+            Clear();
+        }
+
+        public void Clear()
+        {
             Account = new AccountData();
             LoginData.AuthenticationType = LoginData.LOGIN_BY_PASSWORD;
             RaisePropertyChanged("Account");
             timer.Stop();
+            RelayCommand.ActionException -= RelayCommand_ActionException;
+            BackgroudWork.WorkException -= RelayCommand_ActionException;
         }
 
         private void Timer_Tick(object sender, EventArgs e)
         {
             BackgroudWork.Execute(() => Login());
+        }
+
+        private void RelayCommand_ActionException(object sender, RelayCommand.ActionExceptionEventArgs e)
+        {
+            if (e.Exception is ServiceException && ((e.Exception as ServiceException).Status >= LoginData.LOGIN_OUT_FIRST
+                && (e.Exception as ServiceException).Status < LoginData.LOGIN_OUT_LAST))
+            {
+                Error = e.Exception;
+                Clear();
+            }
         }
 
     }

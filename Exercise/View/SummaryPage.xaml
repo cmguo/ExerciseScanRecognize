@@ -8,6 +8,7 @@
       xmlns:vm="clr-namespace:Exercise.ViewModel"
       xmlns:mu="clr-namespace:Panuon.UI;assembly=Panuon.UI"
       xmlns:tb="clr-namespace:Base.TitleBar;assembly=Base"
+      xmlns:tal="clr-namespace:TalBase.View;assembly=TalBase"
       mc:Ignorable="d" 
       x:Name="Page"
       d:DesignHeight="450" d:DesignWidth="800"
@@ -18,9 +19,14 @@
     </Page.DataContext>
 
     <Page.Resources>
-        <resolve:ExceptionListConverter x:Key="ExceptionListConverter" />
-        <local:HasExceptionConverter x:Key="HasExceptionConverter" />
-        <local:NoExceptionConverter x:Key="NoExceptionConverter" />
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="pack://application:,,,/TalBase;component/Themes/Button.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+            <resolve:ExceptionListConverter x:Key="ExceptionListConverter" />
+            <local:HasExceptionConverter x:Key="HasExceptionConverter" />
+            <local:NoExceptionConverter x:Key="NoExceptionConverter" />
+        </ResourceDictionary>
     </Page.Resources>
 
     <tb:TitleBarManager.Buttons>
@@ -60,38 +66,29 @@
                                Text="{Binding StudentCount, StringFormat=本次扫描共收回{0}份试卷。无异常。}"/>
                 </StackPanel>
 
-                <mu:PUButton Command="{Binding ContinueCommand}" 
+                <tal:TalButton Command="{Binding ContinueCommand}" 
                     CommandParameter="{Binding ElementName=Page}" 
                     Content="继续扫描" VerticalAlignment="Center" 
                              FontSize="16"
                     Grid.Column="3"
-                             Background="White"
-                             Foreground="Black"
                         Margin="0,0,5,0"
-                             BorderCornerRadius="3"
                              Padding="0,10,0,10"
                         />
-                <mu:PUButton Command="{Binding ResolveCommand}" 
+                <tal:TalButton Command="{Binding ResolveCommand}" 
                              CommandParameter="{Binding ElementName=Page}" 
                              Content="处理异常" VerticalAlignment="Center" 
                              Visibility="{Binding ExceptionCount, Converter={StaticResource HasExceptionConverter}}"
                              Grid.Column="4"
-                             FontSize="16"
-                             BorderCornerRadius="3"
-                             Background="Blue"
-                             Foreground="White"
+                             IsDefault="True"
                              Margin="10,0,5,0"
                              Padding="0,10,0,10"
                         />
-                <mu:PUButton Command="{Binding SubmitCommand}"
+                <tal:TalButton Command="{Binding ResolveCommand}" 
                              CommandParameter="{Binding ElementName=Page}" 
                              Visibility="{Binding ExceptionCount, Converter={StaticResource NoExceptionConverter}}"
                              Content="上传扫描结果" VerticalAlignment="Center"
-                             BorderCornerRadius="3"
                              Grid.Column="4"
-                             Foreground="Black"
-                             Background="White"
-                             FontSize="16"
+                             IsDefault="True"
                              Margin="10,0,20,0"
                              Padding="0,10,0,10"
                         />
@@ -111,7 +108,7 @@
                         <mu:PUButton Content="查看详情" Click="PUButton_Click" />
                     </StackPanel>
                     <DataGrid  Grid.Row="3" Grid.Column="0" AutoGenerateColumns="False" ItemsSource="{Binding ClassDetails}"
-                               Margin="0,20,0,0"  RowHeaderWidth="0" ColumnHeaderHeight="50"
+                               Margin="0,20,0,0"  RowHeaderWidth="0" ColumnHeaderHeight="50" MaxHeight="400"
                                GridLinesVisibility="None"
                                BorderThickness="0"
                                RowHeight="40" IsReadOnly="True" >

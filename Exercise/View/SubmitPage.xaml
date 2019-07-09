@@ -6,6 +6,7 @@
       xmlns:local="clr-namespace:Exercise.View"
       xmlns:vm="clr-namespace:Exercise.ViewModel"
       xmlns:tb="clr-namespace:Base.TitleBar;assembly=Base"
+      xmlns:tal="clr-namespace:TalBase.View;assembly=TalBase"
       mc:Ignorable="d" 
       d:DesignHeight="450" d:DesignWidth="800"
       Title="HomePage">
@@ -15,10 +16,15 @@
     </Page.DataContext>
 
     <Page.Resources>
-        <local:RetryConverter x:Key="RetryConverter" />
-        <local:ReturnConverter x:Key="ReturnConverter" />
-        <local:SubmittingConverter x:Key="SubmittingConverter" />
-        <local:CompletedConverter x:Key="CompletedConverter" />
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="pack://application:,,,/TalBase;component/Themes/Button.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+            <local:RetryConverter x:Key="RetryConverter" />
+            <local:ReturnConverter x:Key="ReturnConverter" />
+            <local:SubmittingConverter x:Key="SubmittingConverter" />
+            <local:CompletedConverter x:Key="CompletedConverter" />
+        </ResourceDictionary>
     </Page.Resources>
 
     <tb:TitleBarManager.Commands>
@@ -53,10 +59,10 @@
                 <TextBlock Text="本次扫描结果已经保存，后续可在“扫描记录管理”中重新上传" />
             </StackPanel>
             <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Orientation="Horizontal">
-                <Button Command="{Binding RetryCommand}"
+                <tal:TalButton Command="{Binding RetryCommand}" IsDefault="True"
                     CommandParameter="{Binding RelativeSource={RelativeSource AncestorType={x:Type Page}}}" 
                     Content="重新上传" Visibility="{Binding Task.Status, Converter={StaticResource RetryConverter}}" />
-                <Button Command="{Binding ReturnCommand}"
+                <tal:TalButton Command="{Binding ReturnCommand}"
                     CommandParameter="{Binding RelativeSource={RelativeSource AncestorType={x:Type Page}}}" 
                     Content="返回首页" Visibility="{Binding Task.Status, Converter={StaticResource ReturnConverter}}" />
             </StackPanel>

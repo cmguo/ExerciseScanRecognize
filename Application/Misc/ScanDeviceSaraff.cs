@@ -116,6 +116,7 @@ namespace Application.Misc
         public event EventHandler<ScanEvent> OnImage;
         public event EventHandler<ScanEvent> GetFileName;
         public event EventHandler<ScanEvent> ScanPaused;
+        public event EventHandler<ScanEvent> ScanError;
         public event EventHandler<ScanEvent> ScanCompleted;
 
         private Window window;
@@ -269,7 +270,12 @@ namespace Application.Misc
 
         private void Twain32_AcquireError(object sender, Twain32.AcquireErrorEventArgs e)
         {
-            Debug.WriteLine("Twain32_AcquireError");
+            Debug.WriteLine("Twain32_AcquireError " + e.Exception.Message);
+            if (ScanError != null)
+            {
+                window.Dispatcher.Invoke(() =>
+                    ScanError(this, new ScanEvent() { Error = e.Exception }));
+            }
             if (ScanCompleted != null)
             {
                 window.Dispatcher.Invoke(() =>

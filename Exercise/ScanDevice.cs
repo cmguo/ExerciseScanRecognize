@@ -9,6 +9,7 @@ namespace Exercise
     public class ScanEvent
     {
         public string FileName { get; set; }
+        public Exception Error { get; set; }
     }
 
     public interface IScanDevice
@@ -18,9 +19,11 @@ namespace Exercise
 
         event EventHandler<ScanEvent> GetFileName;
 
-        event EventHandler<ScanEvent> ScanCompleted;
-
         event EventHandler<ScanEvent> ScanPaused;
+
+        event EventHandler<ScanEvent> ScanError;
+
+        event EventHandler<ScanEvent> ScanCompleted;
 
         string[] SourceList { get; }
 

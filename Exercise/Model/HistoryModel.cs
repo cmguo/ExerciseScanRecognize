@@ -43,6 +43,7 @@ namespace Exercise.Model
         {
             LocalRecords = new ObservableCollection<Record>();
             service = Services.Get<IExercise>();
+            Directory.CreateDirectory(ROOT_PATH);
         }
 
         public string NewSavePath()
@@ -55,7 +56,7 @@ namespace Exercise.Model
 
         public async Task Save(string path)
         {
-            Record record = new Record() { Name = ExerciseModel.Instance.ExerciseData.Title };
+            Record record = new Record() { Name = ExerciseModel.Instance.ExerciseData.Title, ScanDate = new DateTime().Timestamp() };
             await JsonPersistent.Save(path + "\\record.json", record);
         }
 
@@ -114,14 +115,26 @@ namespace Exercise.Model
             }
         }
 
+        private static readonly ICollection<Record> empty = new List<Record>();
+
         public async Task LoadMore(int page)
         {
-            if (Records != null && page < Records.Length)
-                return;
+            if (Records != null)
+            {
+                if (page >= Records.Length)
+                    return;
+                if (Records[page] != null)
+                    return;
+                Records[page] = empty;
+            }
+            else
+            {
+                Records = new ICollection<Record>[0];
+            }
             HistoryData records = await service.getRecords(new HistoryData.Range() { Page = page + 1, Size = PAGE_SIZE });
-            if (Records == null)
+            if (Records == null || Records.Length == 0)
                 Records = new ICollection<Record>[(records.TotalCount + PAGE_SIZE - 1) / PAGE_SIZE];
-            Records[0] = records.SubmitRecordList;
+            Records[page] = records.SubmitRecordList;
             RaisePropertyChanged("Records");
         }
 

@@ -60,6 +60,10 @@ namespace Exercise.Model
             public SubmitData Submit { get; set; }
             public IList<string> PageNames { get; set; }
 
+            internal async Task Save()
+            {
+                await JsonPersistent.Save(Path + "\\submit.json", this);
+            }
         }
 
         public Dictionary<string, SubmitTask> SubmitTasks { get; private set; }
@@ -84,7 +88,7 @@ namespace Exercise.Model
             int total = (data.Count + SUBIT_BATCH_SIZE - 1) / SUBIT_BATCH_SIZE + names.Count + 1;
             SubmitTask task = new SubmitTask() { Path = path, Status = TaskStatus.Wait, Total = total, Prepare = prepare, Submit = sdata, PageNames = names };
             SubmitTasks[path] = task;
-            await JsonPersistent.Save(path + "\\submit.json", task);
+            await task.Save();
         }
 
         public async Task Submit(string path)
@@ -101,7 +105,7 @@ namespace Exercise.Model
         public async Task Cancel(SubmitTask task)
         {
             task.Status = TaskStatus.Cancel;
-            await JsonPersistent.Save(task.Path + "\\submit.json", task);
+            await task.Save();
         }
 
         public async Task Submit(SubmitTask task)
@@ -114,7 +118,7 @@ namespace Exercise.Model
             catch (Exception e)
             {
                 task.Status = TaskStatus.Failed;
-                await JsonPersistent.Save(task.Path + "\\submit.json", task);
+                await task.Save();
                 throw e;
             }
         }
@@ -175,6 +179,8 @@ namespace Exercise.Model
                     sdata.Data = list.Skip(i).Take(SUBIT_BATCH_SIZE).ToList();
                     await service.Submit(sdata);
                     ++task.Finish;
+                    if (task.Finish % 5 == 0)
+                        await task.Save();
                 }
                 if (i > 0)
                     sdata.Data = list.Skip(i).ToList();
@@ -212,6 +218,8 @@ namespace Exercise.Model
                 }
                 pageNames.RemoveAt(0);
                 ++task.Finish;
+                if (task.Finish % 5 == 0)
+                    await task.Save();
             }
         }
 

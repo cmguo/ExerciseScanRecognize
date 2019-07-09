@@ -8,6 +8,10 @@ namespace Account.Service
         public static readonly int LOGIN_BY_PASSWORD = 1;
         public static readonly int LOGIN_BY_TICKET = 2;
 
+        public static readonly int LOGIN_OUT_FIRST = 5000001;
+        public static readonly int LOGIN_OUT_OF_TIME = 5000001;
+        public static readonly int LOGIN_OUT_LAST = 5000010;
+
         public long AuthenticationType { get; set; }
         public string LoginName { get; set; }
         public string Password { get; set; }

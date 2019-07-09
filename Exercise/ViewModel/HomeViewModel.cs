@@ -54,7 +54,7 @@ namespace Exercise.ViewModel
             catch (Exception e)
             {
                 Debug.WriteLine(e.ToString());
-                PopupDialog.Show(obj as UIElement, "扫描仪未连接，请检查后重试。", 0, "确定");
+                PopupDialog.Show(obj as UIElement, "TODO", "扫描仪未连接，请检查后重试。", 0, "确定");
                 return;
             }
             await exerciseModel.NewTask();

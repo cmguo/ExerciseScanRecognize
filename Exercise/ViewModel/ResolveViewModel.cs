@@ -117,9 +117,14 @@ namespace Exercise.ViewModel
         {
             while (!scanModel.FeederLoaded)
             {
-                PopupDialog.Show(obj as UIElement, "扫描仪里面没有纸张，请添加试卷。", 0, "确定");
+                PopupDialog.Show(obj as UIElement, "TODO", "扫描仪里面没有纸张，请添加试卷。", 0, "确定");
             }
-            await exerciseModel.ScanOne(SelectedException);
+            Exception ex = SelectedException;
+            await exerciseModel.ScanOne(ex);
+            if (ex.Page != null)
+            {
+                PopupDialog.Show(obj as UIElement, "TODO", "仍有异常。", 0, "确定");
+            }
             if (Exceptions.Count == 0)
                 (obj as System.Windows.Controls.Page).NavigationService.Navigate(new SummaryPage());
         }
@@ -138,6 +143,11 @@ namespace Exercise.ViewModel
                 (obj as System.Windows.Controls.Page).NavigationService.Navigate(new SummaryPage());
         }
 
+        private async Task Return(object obj)
+        {
+            await exerciseModel.CancelScanOne();
+            (obj as System.Windows.Controls.Page).NavigationService.Navigate(new SummaryPage());
+        }
 
         private void Exceptions_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
         {
@@ -192,12 +202,6 @@ namespace Exercise.ViewModel
                         Selection = el[n];
                 }
             }
-        }
-
-        private async Task Return(object obj)
-        {
-            await exerciseModel.CancelScanOne();
-            (obj as System.Windows.Controls.Page).NavigationService.Navigate(new SummaryPage());
         }
 
     }

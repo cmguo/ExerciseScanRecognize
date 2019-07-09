@@ -3,13 +3,15 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:tb="clr-namespace:TalBase.View"
         xmlns:local="clr-namespace:TalBase.View"
+        xmlns:svgc="http://sharpvectors.codeplex.com/svgc/"
         mc:Ignorable="d"
-        MinWidth="350"
-        MaxWidth="500"
-        SizeToContent="WidthAndHeight"
         WindowStartupLocation="CenterScreen"
         ShowInTaskbar="False"
+        AllowsTransparency="True"
+        Background="#99000000"
+        Width="1200" Height="700"
         Title="PopupDialog" ResizeMode="NoResize" WindowStyle="None">
     
     <Window.Resources>
@@ -20,35 +22,39 @@
             <local:ContentVisiableConverter x:Key="ContentVisiableConverter" />
         </ResourceDictionary>
     </Window.Resources>
-    
-    <Grid Background="Gray">
-        <Border BorderThickness="3" BorderBrush="Bisque" />
-        <StackPanel Orientation="Vertical" Margin="30">
-            <StackPanel Orientation="Horizontal">
-                <Image Source="{Binding Image}" Width="20" Height="20" VerticalAlignment="Top" />
-                <StackPanel x:Name="body" Width="350" Orientation="Vertical">
-                    <TextBlock FontSize="20" TextWrapping="Wrap" Text="{Binding Message}" />
+
+    <Grid MinWidth="458" MaxWidth="500" Height="206">
+        <Border CornerRadius="10" BorderBrush="#0a2d4a66" BorderThickness="1" Background="White" />
+        <Grid Margin="33,29,32,37">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="16" />
+                <RowDefinition Height="*" />
+                <RowDefinition Height="32" />
+            </Grid.RowDefinitions>
+            <Grid Grid.Row="0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="16" />
+                </Grid.ColumnDefinitions>
+                <TextBlock FontSize="16" TextWrapping="Wrap" Text="{Binding Caption}" HorizontalAlignment="Stretch" />
+                <Button Grid.Column="1" x:Name="close" Width="16" Height="16" Background="Transparent" BorderThickness="0" Click="Btn_Click">
+                    <svgc:SvgViewbox Source="Icons/关闭/粗.svg"/>
+                </Button>
+            </Grid>
+            <StackPanel Grid.Row="1" Orientation="Horizontal" Margin="0, 24, 0, 24">
+                <svgc:SvgViewbox Source="/Icons/Warn/24.svg" Width="24" Height="24" VerticalAlignment="Top" />
+                <StackPanel x:Name="body" Width="350" Orientation="Vertical" Margin="16, 0, 0, 0">
+                    <TextBlock FontSize="14" TextWrapping="Wrap" Text="{Binding Message}" />
                 </StackPanel>
             </StackPanel>
-            <Border Padding="0,20,0,0">
-                <StackPanel Orientation="Horizontal" FlowDirection="RightToLeft">
-                    <StackPanel.Resources>
-                        <Style TargetType="{x:Type Button}">
-                            <Setter Property="Margin" Value="20,0,0,0"/>
-                            <Setter Property="FontSize" Value="20"/>
-                        </Style>
-                    </StackPanel.Resources>
-                    <Button x:Name="btn2" Width="100" Height="30" Content="{Binding Button2}" 
-                            Template = "{StaticResource ButtonTemplate}" 
-                            Visibility="{Binding Button2, Converter={StaticResource ContentVisiableConverter}}" />
-                    <Button x:Name="btn1" Width="100" Height="30" Content="{Binding Button1}" 
-                            Template = "{StaticResource ButtonTemplate}" 
-                            Visibility="{Binding Button1, Converter={StaticResource ContentVisiableConverter}}" />
-                    <Button x:Name="btn0" Width="100" Height="30" Content="{Binding Button0}" 
-                            Template = "{StaticResource ButtonTemplate}" 
-                            Visibility="{Binding Button0, Converter={StaticResource ContentVisiableConverter}}" />
-                </StackPanel>
-            </Border>
-        </StackPanel>
+            <StackPanel Grid.Row="2" Orientation="Horizontal" FlowDirection="RightToLeft">
+                <tb:TalButton x:Name="btn2" Content="{Binding Button2}" Margin="0,0,16,0"
+                    Visibility="{Binding Button2, Converter={StaticResource ContentVisiableConverter}}" />
+                <tb:TalButton x:Name="btn1" Content="{Binding Button1}" Margin="0,0,16,0"
+                    Visibility="{Binding Button1, Converter={StaticResource ContentVisiableConverter}}" />
+                <tb:TalButton x:Name="btn0" Content="{Binding Button0}" Margin="0,0,16,0"
+                    Visibility="{Binding Button0, Converter={StaticResource ContentVisiableConverter}}" />
+            </StackPanel>
+        </Grid>
     </Grid>
 </Window>

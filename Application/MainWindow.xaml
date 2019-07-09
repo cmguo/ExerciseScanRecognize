@@ -10,6 +10,15 @@
         WindowStartupLocation="CenterScreen"
         NavbarBackground="Gray"
         WindowStyle="None">
+
+    <Window.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="pack://application:,,,/TalBase;component/Themes/Button.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </Window.Resources>
+    
     <Grid x:Name="body">
         <Frame Name="frmMain" NavigationUIVisibility="Hidden" Source="pack://application:,,,/Account;component/View/AccountPage.xaml"/>
     </Grid>

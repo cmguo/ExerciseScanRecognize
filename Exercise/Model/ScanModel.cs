@@ -103,6 +103,17 @@ namespace Exercise.Model
             }
         }
 
+        private Exception _Error;
+        public Exception Error
+        {
+            get { return _Error; }
+            set
+            {
+                _Error = value;
+                RaisePropertyChanged("Error");
+            }
+        }
+
         private IScanDevice scanDevice = ScanDevice.Instance;
         private Algorithm.Algorithm algorithm = new Algorithm.Algorithm();
 
@@ -111,6 +122,7 @@ namespace Exercise.Model
         private string savePath;
         private int scanBatch = 0;
         private int scanIndex = 0;
+        private int readIndex = 0;
         private bool cancel = false;
         private Page lastPage;
         private ExerciseData exerciseData;
@@ -120,8 +132,9 @@ namespace Exercise.Model
             Pages = new ObservableCollection<Page>();
             scanDevice.OnImage += ScanDevice_OnImage;
             scanDevice.GetFileName += ScanDevice_GetFileName;
-            scanDevice.ScanPaused += ScanDevice_ScanPaused; ;
-            scanDevice.ScanCompleted += ScanDevice_ScanCompleted; ;
+            scanDevice.ScanPaused += ScanDevice_ScanPaused;
+            scanDevice.ScanError += ScanDevice_ScanError;
+            scanDevice.ScanCompleted += ScanDevice_ScanCompleted;
         }
 
         public void SetSavePath(string path)
@@ -133,12 +146,15 @@ namespace Exercise.Model
         {
             if (IsScanning)
                 return;
+            Debug.WriteLine("Scan");
             IsScanning = true;
             IsPaused = false;
             IsCompleted = false;
+            Error = null;
             cancel = false;
             ++scanBatch;
             scanIndex = 0;
+            readIndex = 0;
             try
             {
                 scanDevice.DuplexEnabled = true;
@@ -153,6 +169,7 @@ namespace Exercise.Model
 
         public async Task<bool> PauseScan()
         {
+            Debug.WriteLine("PauseScan");
             scanDevice.PauseScan();
             await Task.Run(() =>
             {
@@ -167,12 +184,14 @@ namespace Exercise.Model
 
         public void ResumeScan()
         {
+            Debug.WriteLine("ResumeScan");
             IsPaused = false;
             scanDevice.ResumeScan();
         }
 
         public Task CancelScan()
         {
+            Debug.WriteLine("CancelScan");
             cancel = true;
             scanDevice.CancelScan();
             return Task.Run(() =>
@@ -274,7 +293,7 @@ namespace Exercise.Model
             Page[] pages = new Page[] { page1, page2 };
             await Task.Factory.StartNew(() => ScanTwoPage(pages));
             Pages.Add(pages[0]);
-            if (index + 1 == scanIndex)
+            if (index + 1 == readIndex)
                 IsCompleted = true;
         }
 
@@ -401,17 +420,28 @@ namespace Exercise.Model
 
         private void ScanDevice_OnImage(object sender, ScanEvent e)
         {
+            ++readIndex;
             BackgroudWork.Execute(() => AddImage(e.FileName));
         }
 
         private void ScanDevice_ScanPaused(object sender, ScanEvent e)
         {
+            Debug.WriteLine("ScanDevice_ScanPaused");
             IsPaused = true;
+        }
+
+        private void ScanDevice_ScanError(object sender, ScanEvent e)
+        {
+            Debug.WriteLine("ScanDevice_ScanError");
+            Error = e.Error;
         }
 
         private void ScanDevice_ScanCompleted(object sender, ScanEvent e)
         {
+            Debug.WriteLine("ScanDevice_ScanCompleted");
             IsScanning = false;
+            if (0 == readIndex)
+                IsCompleted = true;
         }
 
     }

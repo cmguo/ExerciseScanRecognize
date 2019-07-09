@@ -4,9 +4,10 @@
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
       xmlns:local="clr-namespace:Account"
-      xmlns:mu="clr-namespace:Panuon.UI;assembly=Panuon.UI"
       xmlns:vm="clr-namespace:Account.ViewModel"
+      xmlns:mu="clr-namespace:Panuon.UI;assembly=Panuon.UI"
       xmlns:tb="clr-namespace:Base.TitleBar;assembly=Base"
+      xmlns:tal="clr-namespace:TalBase.View;assembly=TalBase"
       xmlns:cv="clr-namespace:Base.Mvvm.Converter;assembly=Base"
       mc:Ignorable="d"
       x:Name="Page"
@@ -19,13 +20,18 @@
     </Page.DataContext>
 
     <Page.Resources>
-        <Button x:Key="Logout" Content="{Binding Account.SchoolName}"
-                Command="{Binding LogoutCommand}">
-            <Button.DataContext>
-                <vm:AccountViewModel />
-            </Button.DataContext>
-        </Button>
-        <cv:NonNullTrueConverter x:Key="NonNullTrueConverter" />
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="pack://application:,,,/TalBase;component/Themes/Button.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+            <tal:TalButton x:Key="Logout" Content="{Binding Account.SchoolName}"
+                Command="{Binding LogoutCommand}" VerticalAlignment="Center" >
+                <Button.DataContext>
+                    <vm:AccountViewModel />
+                </Button.DataContext>
+            </tal:TalButton>
+            <cv:NonNullTrueConverter x:Key="NonNullTrueConverter" />
+        </ResourceDictionary>
     </Page.Resources>
     
     <tb:TitleBarManager.GlobalButtons>
@@ -34,7 +40,7 @@
         </tb:TitleButtonCollection>
     </tb:TitleBarManager.GlobalButtons>
 
-    <Grid HorizontalAlignment="Center" VerticalAlignment="Center" Background="LightBlue">
+    <Grid HorizontalAlignment="Center" VerticalAlignment="Center">
         <Grid.ColumnDefinitions>
             <ColumnDefinition/>
             <ColumnDefinition/>
@@ -53,10 +59,10 @@
         <TextBlock Text="Password" Grid.Row="2" Margin="3"/>
         <mu:PUPasswordBox x:Name="txtPassword" Password="{Binding LoginData.Password, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Column="1" Grid.Row="2" Margin="3" Width="100" Height="20" HorizontalAlignment="Left"   VerticalAlignment="Center"
                            Watermark="输入密码" IsShowPwdButtonShow="True" BorderCornerRadius="2"/>
-        <mu:PUButton Command="{Binding LoginCommand}" 
-                CommandParameter="{Binding ElementName=Page}" 
-                BorderCornerRadius="3" IsEnabled="{Binding LoginData.Password, Converter={StaticResource NonNullTrueConverter}}"
-                Content="Log in" Grid.Row="3" Grid.Column="1" Margin="3" Height="20"/>
+        <tal:TalButton Grid.Row="3" Grid.Column="1" Content="登录" IsDefault="True"
+                       Command="{Binding LoginCommand}" CommandParameter="{Binding ElementName=Page}" 
+                       IsEnabled="{Binding LoginData.Password, Converter={StaticResource NonNullTrueConverter}}"
+                        />
         <ComboBox Grid.Row="3" ItemsSource="{Binding ServiceUris}" SelectedIndex="{Binding SelectedServiceUri}" />
     </Grid>
 </Page>

@@ -2,6 +2,7 @@
 using Base.Service;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
@@ -32,6 +33,7 @@ namespace Account.Service
                 uri = request.RequestUri.ToString().Replace(oldUrl, uri);
                 request.RequestUri = new Uri(uri);
             }
+            Debug.WriteLine(request.RequestUri);
             HttpResponseMessage resp = await base.SendAsync(request, cancellationToken).ConfigureAwait(false);
             if (resp.StatusCode.CompareTo(HttpStatusCode.Ambiguous) >= 0)
                 throw new HttpResponseException(resp.StatusCode, resp.ReasonPhrase);

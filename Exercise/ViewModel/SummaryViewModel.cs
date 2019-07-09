@@ -1,6 +1,7 @@
 ﻿using Base.Mvvm;
 using Exercise.Model;
 using Exercise.View;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
@@ -52,5 +53,12 @@ namespace Exercise.ViewModel
             return result;
         }
 
+        internal void FillAll()
+        {
+            exerciseModel.FillAll();
+            ExceptionCount = exerciseModel.Exceptions.SelectMany(el => el.Exceptions).Count();
+            RaisePropertyChanged("ExceptionCount");
+            Update();
+        }
     }
 }

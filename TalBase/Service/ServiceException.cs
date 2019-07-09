@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace TalBase.Service
 {
-    class ServiceException : Exception
+    public class ServiceException : Exception
     {
 
         public int Status { get; private set; }

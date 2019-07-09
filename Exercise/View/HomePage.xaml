@@ -6,6 +6,7 @@
       xmlns:local="clr-namespace:Exercise.View"
       xmlns:vm="clr-namespace:Exercise.ViewModel"
       xmlns:mu="clr-namespace:Panuon.UI;assembly=Panuon.UI"
+      xmlns:tal="clr-namespace:TalBase.View;assembly=TalBase"
       xmlns:tb="clr-namespace:Base.TitleBar;assembly=Base"
       mc:Ignorable="d"
       x:Name="Page"
@@ -17,12 +18,17 @@
     </Page.DataContext>
     
     <Page.Resources>
-        <Button x:Key="Histroy" VerticalAlignment="Center" HorizontalAlignment="Center"
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="pack://application:,,,/TalBase;component/Themes/Button.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+            <tal:TalButton x:Key="Histroy" VerticalAlignment="Center"
                      Content="试卷扫描记录管理"
                      Command="{Binding HistroyCommand}"
                      CommandParameter="{Binding Source={x:Reference Page}}" />
-        <Button x:Key="Discard" Content="放弃本次扫描" 
-                Command="{Binding DiscardCommand}" />
+            <tal:TalButton x:Key="Discard" Content="放弃本次扫描" 
+                    Command="{Binding DiscardCommand}" />
+        </ResourceDictionary>
     </Page.Resources>
 
     <tb:TitleBarManager.GlobalButtons>
@@ -37,17 +43,8 @@
     <Grid>
         <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Orientation="Vertical">
             <ComboBox ItemsSource="{Binding SourceList}" SelectedIndex="{Binding SourceIndex}" />
-            <mu:PUButton Command="{Binding StartCommand}" 
-                         Height="50"
-                         Width="300"
-                         FontSize="20"
-                    CommandParameter="{Binding ElementName=Page}" 
-                    BorderCornerRadius="3"
-                         ButtonStyle="Hollow"
-                         CoverBrush="Blue"
-                         BorderBrush="Blue"
-                         
-                    Content="开始扫描" />
+            <tal:TalButton Content="开始扫描" IsDefault="True"
+                           Command="{Binding StartCommand}" CommandParameter="{Binding ElementName=Page}" />
         </StackPanel>
     </Grid>
 </Page>

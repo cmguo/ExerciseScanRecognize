@@ -3,18 +3,19 @@ using Account.Service;
 using Base.Mvvm;
 using System;
 using System.Threading.Tasks;
-using System.Windows;
 using System.Windows.Navigation;
 using TalBase.ViewModel;
-using Panuon.UI;
 using System.Windows.Controls;
 using TalBase.Utils;
 using System.Collections.Generic;
+using TalBase.View;
 
 namespace Account.ViewModel
 {
     public class AccountViewModel : ViewModelBase
     {
+        private static NavigationService navigation;
+
         public ICollection<string> ServiceUris => accountModel.ServiceUris.Keys;
 
         public int SelectedServiceUri
@@ -47,6 +48,11 @@ namespace Account.ViewModel
                 await AccountModel.Instance.Login();
                 (obj as Page).NavigationService.Navigate(new Uri(Configuration.StartupPage));
             }
+            if (navigation == null)
+            {
+                navigation = (obj as Page).NavigationService;
+                accountModel.PropertyChanged += AccountModel_PropertyChanged_Static;
+            }
         }
 
         private async Task DoLogout(object obj)
@@ -58,6 +64,14 @@ namespace Account.ViewModel
         private void AccountModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
         {
             RaisePropertyChanged(e.PropertyName);
+        }
+
+        private static void AccountModel_PropertyChanged_Static(object sender, System.ComponentModel.PropertyChangedEventArgs e)
+        {
+            if (e.PropertyName == "Account" && AccountModel.Instance.Error != null)
+            {
+                navigation.Navigate(new AccountPage());
+            }
         }
 
     }

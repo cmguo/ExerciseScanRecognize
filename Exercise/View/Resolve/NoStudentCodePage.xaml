@@ -40,7 +40,7 @@
                 </DataTemplate>
             </ComboBox.ItemTemplate>
         </ComboBox>
-        <Button Grid.Row="2" Content="确认" Click="Confirm_Click"
+        <Button Grid.Row="2" Content="确认" Click="Confirm_Click" IsDefault="True"
                 IsEnabled="{Binding SelectedItem, ElementName=studentList, Converter={StaticResource NonNullTrueConverter}}" />
     </Grid>
 </Page>

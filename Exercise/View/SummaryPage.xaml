@@ -6,7 +6,6 @@
       xmlns:local="clr-namespace:Exercise.View"
       xmlns:resolve="clr-namespace:Exercise.View.Resolve"
       xmlns:vm="clr-namespace:Exercise.ViewModel"
-      xmlns:mu="clr-namespace:Panuon.UI;assembly=Panuon.UI"
       xmlns:tb="clr-namespace:Base.TitleBar;assembly=Base"
       xmlns:tal="clr-namespace:TalBase.View;assembly=TalBase"
       xmlns:svgc="http://sharpvectors.codeplex.com/svgc/"
@@ -30,6 +29,41 @@
             <Style TargetType="TextBlock">
                 <Setter Property="Foreground" Value="#FF2D4A66" />
             </Style>
+            <Style TargetType="DataGrid">
+                <Setter Property="AutoGenerateColumns" Value="False"/>
+                <Setter Property="RowHeaderWidth" Value="0"/>
+                <Setter Property="Background" Value="White"/>
+                <Setter Property="ColumnHeaderHeight" Value="48"/>
+                <Setter Property="BorderThickness" Value="0" />
+                <Setter Property="GridLinesVisibility" Value="None" />
+                <Setter Property="RowHeight" Value="49" />
+                <Setter Property="IsReadOnly" Value="True"/>
+                <Setter Property="ColumnHeaderStyle">
+                    <Setter.Value>
+                        <Style TargetType="DataGridColumnHeader">
+                            <Setter Property="Padding" Value="32, 0, 0, 0" />
+                            <Setter Property="Background" Value="#FFF4F8FE" />
+                        </Style>
+                    </Setter.Value>
+                </Setter>
+                <Setter Property="RowStyle">
+                    <Setter.Value>
+                        <Style TargetType="DataGridRow">
+                            <Setter Property="IsHitTestVisible" Value="False"/>
+                            <Setter Property="BorderBrush" Value="#FFEBEEF5"/>
+                            <Setter Property="BorderThickness" Value="0,0,0,1"/>
+                        </Style>
+                    </Setter.Value>
+                </Setter>
+                <Setter Property="CellStyle">
+                    <Setter.Value>
+                        <Style TargetType="DataGridCell">
+                            <Setter Property="Margin" Value="32, 0, 0, 0" />
+                            <Setter Property="VerticalAlignment" Value="Center"/>
+                        </Style>
+                    </Setter.Value>
+                </Setter>
+            </Style>
         </ResourceDictionary>
     </Page.Resources>
 
@@ -41,13 +75,13 @@
         <tb:TitleCommand Name="Close" Command="{Binding CloseCommand}" />
     </tb:TitleBarManager.Commands>
 
-    <Grid Background="Gray" >
+    <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="140" />
             <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
-        <Grid Grid.Row="0">
+        <Grid Grid.Row="0"  Background="White">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="Auto"/>
                 <ColumnDefinition Width="*"/>
@@ -85,14 +119,14 @@
                     <ColumnDefinition Width="24"/>
                     <ColumnDefinition Width="Auto"/>
                 </Grid.ColumnDefinitions>
-                <tal:TalButton Grid.Column="0" Content="继续扫描" 
-                               Command="{Binding ContinueCommand}" CommandParameter="{Binding ElementName=Page}" />
-                <tal:TalButton Grid.Column="2" Content="处理异常" IsDefault="True" 
+                <tal:TalButton Grid.Column="0" Content="处理异常" IsDefault="True" ButtonSize="Large"
                                Command="{Binding ResolveCommand}" CommandParameter="{Binding ElementName=Page}" 
                                Visibility="{Binding ExceptionCount, Converter={StaticResource HasExceptionConverter}}" />
-                <tal:TalButton Grid.Column="2" Content="上传扫描结果" IsDefault="True"
+                <tal:TalButton Grid.Column="0" Content="上传扫描结果" IsDefault="True" ButtonSize="Large"
                                Command="{Binding ResolveCommand}" CommandParameter="{Binding ElementName=Page}" 
                                Visibility="{Binding ExceptionCount, Converter={StaticResource NoExceptionConverter}}" />
+                <tal:TalButton Grid.Column="2" Content="继续扫描"  ButtonSize="Large"
+                               Command="{Binding ContinueCommand}" CommandParameter="{Binding ElementName=Page}" />
             </Grid>
         </Grid>
 
@@ -122,30 +156,14 @@
                             <ColumnDefinition Width="*"/>
                             <ColumnDefinition Width="Auto"/>
                         </Grid.ColumnDefinitions>
-                        <TextBlock Grid.Column="0" Text="{Binding StudentCount, StringFormat=共收回{0}份试卷}" />
+                        <TextBlock Grid.Column="0" Text="{Binding StudentCount, StringFormat=共收回{0}份试卷}" VerticalAlignment="Center" />
                         <tal:TalButton Grid.Column="1" Content="查看详情" Click="PUButton_Click" VerticalAlignment="Center" />
                     </Grid>
-                    <DataGrid Grid.Row="1" AutoGenerateColumns="False" ItemsSource="{Binding ClassDetails}"
-                                RowHeaderWidth="0" ColumnHeaderHeight="50" 
-                                GridLinesVisibility="None"
-                                BorderThickness="0" Margin="26, 0, 26, 10"
-                                RowHeight="40" IsReadOnly="True" >
-                        <DataGrid.RowStyle>
-                            <Style TargetType="DataGridRow">
-                                <Setter Property="IsHitTestVisible" Value="False"/>
-                                <Setter Property="BorderThickness" Value="0,0,0,1"/>
-                            </Style>
-                        </DataGrid.RowStyle>
-                        <DataGrid.CellStyle>
-                            <Style TargetType="DataGridCell">
-                                <Setter Property="VerticalAlignment" Value="Center"/>
-                                <Setter Property="FontStyle" Value="Normal"/>
-                            </Style>
-                        </DataGrid.CellStyle>
+                    <DataGrid Grid.Row="1" Margin="26, 0, 26, 0" ItemsSource="{Binding ClassDetails}">
                         <DataGrid.Columns>
-                            <DataGridTextColumn Header="班级" Binding="{Binding Name}" FontSize="14" Width="120"/>
-                            <DataGridTextColumn Header="回收试卷（份）" Binding="{Binding Result.Count}" FontSize="14" Width="90" />
-                            <DataGridTextColumn Header="总人数（人）" Binding="{Binding StudentCount}" FontSize="14" Width="90" />
+                            <DataGridTextColumn Header="班级" Width="196" Binding="{Binding Name}"/>
+                            <DataGridTextColumn Header="回收试卷（份）" Width="160" Binding="{Binding Result.Count}" />
+                            <DataGridTextColumn Header="人数（人）" Width="*" Binding="{Binding StudentCount}" />
                         </DataGrid.Columns>
                     </DataGrid>
                 </Grid>
@@ -158,29 +176,9 @@
                         <RowDefinition Height="*" />
                     </Grid.RowDefinitions>
                     <StackPanel Grid.Row="0" Margin="30,0,30,0" Height="80" Orientation="Horizontal">
-                        <TextBlock Grid.Column="1" Text="{Binding ExceptionCount, StringFormat=共存在{0}项异常}" VerticalAlignment="Center"/>
+                        <TextBlock Grid.Column="1" Foreground="#FFFE9400" Text="{Binding ExceptionCount, StringFormat=共存在{0}项异常}" VerticalAlignment="Center"/>
                     </StackPanel>
-                    <DataGrid Grid.Row="1" AutoGenerateColumns="False" ItemsSource="{Binding Exceptions}"
-                                ColumnHeaderHeight="48" BorderThickness="0" GridLinesVisibility="None"
-                                RowHeight="49" IsReadOnly="True">
-                        <DataGrid.ColumnHeaderStyle>
-                            <Style TargetType="DataGridColumnHeader">
-                                <Setter Property="Margin" Value="32, 0, 0, 0" />
-                                <Setter Property="Margin" Value="32, 0, 0, 0" />
-                            </Style>
-                        </DataGrid.ColumnHeaderStyle>
-                        <DataGrid.RowStyle>
-                            <Style TargetType="DataGridRow">
-                                <Setter Property="IsHitTestVisible" Value="False"/>
-                                <Setter Property="BorderThickness" Value="0,0,0,1"/>
-                            </Style>
-                        </DataGrid.RowStyle>
-                        <DataGrid.CellStyle>
-                            <Style TargetType="DataGridCell">
-                                <Setter Property="VerticalAlignment" Value="Center"/>
-                                <Setter Property="FontStyle" Value="Normal"/>
-                            </Style>
-                        </DataGrid.CellStyle>
+                    <DataGrid Grid.Row="1" Margin="26, 0, 26, 0" ItemsSource="{Binding Exceptions}" >
                         <DataGrid.Columns>
                             <DataGridTextColumn Header="异常项" Width="283" 
                                                 Binding="{Binding Converter={StaticResource ExceptionListConverter}, ConverterParameter=Tree}" />

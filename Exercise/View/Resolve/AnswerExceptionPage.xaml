@@ -6,40 +6,46 @@
       xmlns:resolve="clr-namespace:Exercise.View.Resolve"
       xmlns:local="clr-namespace:Exercise.View"
       xmlns:cv="clr-namespace:Base.Mvvm.Converter;assembly=Base"
+      xmlns:tal="clr-namespace:TalBase.View;assembly=TalBase"
       mc:Ignorable="d" 
       d:DesignHeight="450" d:DesignWidth="800"
       Title="AnswerExceptionPage">
 
     <Page.Resources>
-        <local:SelectionConverter x:Key="SelectionConverter" />
-        <resolve:AnswerExceptionViewModel x:Key="ViewModel" />
-        <resolve:FalseVisibleConverter x:Key="FalseVisibleConverter" />
-        <cv:NullVisibleConverter x:Key="NullVisibleConverter" />
-        <DataTemplate x:Key="QuestionItem">
-            <Button BorderThickness="2" Click="Question_Click" MinWidth="30" Height="30">
-                <Button.BorderBrush>
-                    <MultiBinding Converter="{StaticResource SelectionConverter}">
-                        <Binding Path="SelectedQuestion" Source="{StaticResource ViewModel}" />
-                        <Binding />
-                    </MultiBinding>
-                </Button.BorderBrush>
-                <Grid>
-                    <TextBlock Text="{Binding QuestionId}" Foreground="{Binding BorderBrush, RelativeSource={RelativeSource AncestorType=Button}}" Margin="5" />
-                    <Image Visibility="{Binding HasException, Converter={StaticResource FalseVisibleConverter}}" HorizontalAlignment="Left" VerticalAlignment="Bottom" />
-                </Grid>
-            </Button>
-        </DataTemplate>
-        <DataTemplate x:Key="AnswerItem">
-            <Button BorderThickness="2" Click="Answer_Click" MinWidth="30" Height="30">
-                <Button.BorderBrush>
-                    <MultiBinding Converter="{StaticResource SelectionConverter}">
-                        <Binding Path="SelectedAnswer" Source="{StaticResource ViewModel}" />
-                        <Binding />
-                    </MultiBinding>
-                </Button.BorderBrush>
-                <TextBlock Text="{Binding TargetNullValue=未作答}" Foreground="{Binding BorderBrush, RelativeSource={RelativeSource AncestorType=Button}}" />
-            </Button>
-        </DataTemplate>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="pack://application:,,,/TalBase;component/Themes/Button.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+            <local:SelectionConverter x:Key="SelectionConverter" />
+            <resolve:AnswerExceptionViewModel x:Key="ViewModel" />
+            <resolve:FalseVisibleConverter x:Key="FalseVisibleConverter" />
+            <cv:NullVisibleConverter x:Key="NullVisibleConverter" />
+            <DataTemplate x:Key="QuestionItem">
+                <Button BorderThickness="2" Click="Question_Click" MinWidth="30" Height="30">
+                    <Button.BorderBrush>
+                        <MultiBinding Converter="{StaticResource SelectionConverter}">
+                            <Binding Path="SelectedQuestion" Source="{StaticResource ViewModel}" />
+                            <Binding />
+                        </MultiBinding>
+                    </Button.BorderBrush>
+                    <Grid>
+                        <TextBlock Text="{Binding QuestionId}" Foreground="{Binding BorderBrush, RelativeSource={RelativeSource AncestorType=Button}}" Margin="5" />
+                        <Image Visibility="{Binding HasException, Converter={StaticResource FalseVisibleConverter}}" HorizontalAlignment="Left" VerticalAlignment="Bottom" />
+                    </Grid>
+                </Button>
+            </DataTemplate>
+            <DataTemplate x:Key="AnswerItem">
+                <Button BorderThickness="2" Click="Answer_Click" MinWidth="30" Height="30">
+                    <Button.BorderBrush>
+                        <MultiBinding Converter="{StaticResource SelectionConverter}">
+                            <Binding Path="SelectedAnswer" Source="{StaticResource ViewModel}" />
+                            <Binding />
+                        </MultiBinding>
+                    </Button.BorderBrush>
+                    <TextBlock Text="{Binding TargetNullValue=未作答}" Foreground="{Binding BorderBrush, RelativeSource={RelativeSource AncestorType=Button}}" />
+                </Button>
+            </DataTemplate>
+        </ResourceDictionary>
     </Page.Resources>
     
     <Grid>
@@ -99,6 +105,6 @@
             <TextBlock Text="请为本题打分" Foreground="Red" 
                        Visibility="{Binding SelectedAnswer, Source={StaticResource ViewModel}, Converter={StaticResource NullVisibleConverter}}"/>
         </StackPanel>
-        <Button Grid.Row="2" Content="确认" Click="Confirm_Click" />
+        <tal:TalButton Grid.Row="2" Content="确认" Click="Confirm_Click" />
     </Grid>
 </Page>

@@ -93,6 +93,12 @@ namespace Exercise.View
             brush.Drawing = group;
             Background = brush;
             SizeChanged += PaperViewer_SizeChanged;
+            IsVisibleChanged += PaperViewer_IsVisibleChanged;
+        }
+
+        private void PaperViewer_IsVisibleChanged(object sender, DependencyPropertyChangedEventArgs e)
+        {
+            Adjust();
         }
 
         private void PaperViewer_SizeChanged(object sender, SizeChangedEventArgs e)

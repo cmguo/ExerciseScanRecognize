@@ -35,7 +35,7 @@ namespace Exercise.View.Resolve
                         if (page.Student != null)
                             return String.Format("{0} {1} （第{2}页）", page.Student.TalNo, page.Student.Name, page.PageIndex + 1);
                         else
-                            return String.Format("试卷{2} （{0}-{1}页）", page.PageIndex + 1, page.PageIndex + 2, ex.Index);
+                            return String.Format("未识别学生{2} （{0}-{1}页）", page.PageIndex + 1, page.PageIndex + 2, ex.Index);
                     case ExceptionType.AnswerException:
                     case ExceptionType.CorrectionException:
                         return String.Format("{0} {1} （第{2}页）", page.Student.TalNo, page.Student.Name, page.PageIndex + 1);
@@ -55,8 +55,11 @@ namespace Exercise.View.Resolve
                     case ExceptionType.NoStudentCode:
                         return "该试卷所属的学生是？";
                     case ExceptionType.AnalyzeException:
-                        return String.Format("{0}{1}试卷无法识别，存在以下异常，请放入此试卷重新扫描。（请勿放入他人试卷）",
-                            page.Student.TalNo, page.Student.Name);
+                        if (page.Student != null)
+                            return String.Format("{0}{1}试卷无法识别，存在以下异常，请放入此试卷重新扫描。（请勿放入他人试卷）",
+                                page.Student.TalNo, page.Student.Name);
+                        else
+                            return String.Format("此份试卷无法识别，存在以下异常，请放入此试卷重新扫描。（请勿放入他人试卷）");
                     case ExceptionType.AnswerException:
                         return String.Format("{0}{1} （第{2}页），以下题号存在作答识别异常，请确认识别结果。",
                             page.Student.TalNo, page.Student.Name, page.PageIndex + 1);
@@ -87,6 +90,10 @@ namespace Exercise.View.Resolve
                     case ExceptionType.PageCodeMissMatch:
                         return "扫描此份试卷";
                     case ExceptionType.AnalyzeException:
+                        if (page.Student != null)
+                            return String.Format("扫描{0}的试卷", page.Student.Name);
+                        else
+                            return "扫描此份试卷";
                     case ExceptionType.PageLost:
                         return String.Format("扫描{0}的试卷", page.Student.Name);
                     default:

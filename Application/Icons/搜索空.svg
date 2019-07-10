@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="80px" height="91px" viewBox="0 0 80 91" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 55.2 (78181) - https://sketchapp.com -->
+    <title>icon/搜索空</title>
+    <desc>Created with Sketch.</desc>
+    <defs>
+        <linearGradient x1="50%" y1="-6.17667876%" x2="50%" y2="103.346518%" id="linearGradient-1">
+            <stop stop-color="#C4D9ED" offset="0%"></stop>
+            <stop stop-color="#CFE0F1" offset="11.3095105%"></stop>
+            <stop stop-color="#F2F9FF" offset="100%"></stop>
+        </linearGradient>
+        <linearGradient x1="50%" y1="-237.275927%" x2="50%" y2="430.527779%" id="linearGradient-2">
+            <stop stop-color="#EFF5FC" offset="0%"></stop>
+            <stop stop-color="#FFFFFF" offset="100%"></stop>
+        </linearGradient>
+        <linearGradient x1="137.36568%" y1="143.418477%" x2="14.4497805%" y2="7.3246737%" id="linearGradient-3">
+            <stop stop-color="#CEDFF0" offset="0%"></stop>
+            <stop stop-color="#B6D0EB" offset="100%"></stop>
+        </linearGradient>
+        <linearGradient x1="140.523222%" y1="143.418477%" x2="13.1649359%" y2="7.3246737%" id="linearGradient-4">
+            <stop stop-color="#BED2E7" offset="0%"></stop>
+            <stop stop-color="#B6D0EB" offset="100%"></stop>
+        </linearGradient>
+        <linearGradient x1="50%" y1="-20.2659406%" x2="50%" y2="100%" id="linearGradient-5">
+            <stop stop-color="#F3F9FF" offset="0%"></stop>
+            <stop stop-color="#EBF3FC" offset="100%"></stop>
+        </linearGradient>
+    </defs>
+    <g id="icon/搜索空" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="搜索空">
+            <path d="M67,7 C67,3.13400675 69.9101491,0 73.5,0 C77.0898509,0 80,3.13400675 80,7 L67,7 Z" id="合并形状" fill="#AFC8E1"></path>
+            <path d="M3,0 L74,0 C72.3276836,0 71.4915254,2.02629689 71.4915254,6.07889068 C71.4915254,33.6507799 71.4915254,60.9578129 71.4915254,87.9999897 C71.4915357,89.6568496 70.1483853,91 68.4915254,91 L3,91 C1.34314575,91 8.29660816e-15,89.6568542 0,88 L0,3 C-2.02906125e-16,1.34314575 1.34314575,3.04359188e-16 3,0 Z" id="矩形-copy-7" fill="url(#linearGradient-1)"></path>
+            <path d="M13.5,20 L59.5,20 C60.8807119,20 62,21.1192881 62,22.5 C62,23.8807119 60.8807119,25 59.5,25 L13.5,25 C12.1192881,25 11,23.8807119 11,22.5 C11,21.1192881 12.1192881,20 13.5,20 Z M13.5,33 L59.5,33 C60.8807119,33 62,34.1192881 62,35.5 C62,36.8807119 60.8807119,38 59.5,38 L13.5,38 C12.1192881,38 11,36.8807119 11,35.5 C11,34.1192881 12.1192881,33 13.5,33 Z M13.5,47 L32.5,47 C33.8807119,47 35,48.1192881 35,49.5 C35,50.8807119 33.8807119,52 32.5,52 L13.5,52 C12.1192881,52 11,50.8807119 11,49.5 C11,48.1192881 12.1192881,47 13.5,47 Z" id="形状结合" fill="url(#linearGradient-2)"></path>
+            <g id="分组-5" transform="translate(46.000000, 55.000000)">
+                <path d="M24.5048708,21.7067768 L32.3074433,29.8086473 C33.2408568,30.7778655 33.2408568,32.3116594 32.3074433,33.2808776 C31.4181468,34.2042865 29.9486586,34.2319401 29.0252497,33.3426436 C29.0042754,33.3224442 28.9836831,33.3018518 28.9634836,33.2808776 L21.1609111,25.179007 C20.2274977,24.2097888 20.2274977,22.6759949 21.1609111,21.7067768 C22.0502077,20.7833678 23.5196958,20.7557142 24.4431048,21.6450107 C24.464079,21.6652102 24.4846713,21.6858025 24.5048708,21.7067768 Z" id="矩形" fill="url(#linearGradient-3)"></path>
+                <ellipse id="椭圆形" fill="url(#linearGradient-4)" cx="13.7848101" cy="14.0617284" rx="13.7848101" ry="14.0617284"></ellipse>
+                <ellipse id="椭圆形-copy" fill="url(#linearGradient-5)" cx="13.9936709" cy="14.2716049" rx="10.6518987" ry="10.9135802"></ellipse>
+            </g>
+        </g>
+    </g>
+</svg>

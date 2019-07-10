@@ -13,7 +13,7 @@
       xmlns:tal="clr-namespace:TalBase.View;assembly=TalBase"
       mc:Ignorable="d" 
       x:Name="Page"
-      d:DesignHeight="450" d:DesignWidth="800"
+      d:DesignHeight="652" d:DesignWidth="1200"
       Title="HomePage">
 
     <Page.DataContext>
@@ -50,28 +50,56 @@
     </tb:TitleBarManager.Commands>
 
     <Grid>
-        <DockPanel>
-            <TreeView x:Name="treeView" ItemsSource="{Binding Exceptions}" DockPanel.Dock="Left" Width="200" >
-                <pb:PushBindingManager.PushBindings>
-                    <pb:PushBinding TargetProperty="SelectedItem" Path="Selection"/>
-                </pb:PushBindingManager.PushBindings>
-                <TreeView.ItemContainerStyle>
-                    <Style TargetType="{x:Type TreeViewItem}">
-                        <Setter Property="IsExpanded" Value="True"/>
-                    </Style>
-                </TreeView.ItemContainerStyle>
-                <TreeView.ItemTemplate>
-                    <HierarchicalDataTemplate ItemsSource="{Binding Exceptions}">
-                        <TextBlock Text="{Binding Converter={StaticResource ExceptionListConverter}, ConverterParameter=Tree}"/>
-                        <HierarchicalDataTemplate.ItemTemplate>
-                            <DataTemplate>
-                                <TextBlock Text="{Binding Converter={StaticResource ExceptionConverter}, ConverterParameter=Tree}" />
-                            </DataTemplate>
-                        </HierarchicalDataTemplate.ItemTemplate>
-                    </HierarchicalDataTemplate>
-                </TreeView.ItemTemplate>
-            </TreeView>
-            <StackPanel Orientation="Vertical" DockPanel.Dock="Right" Width="250">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="255" />
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="279" />
+        </Grid.ColumnDefinitions>
+
+        <TreeView Grid.Column="0" x:Name="treeView" ItemsSource="{Binding Exceptions}">
+            <pb:PushBindingManager.PushBindings>
+                <pb:PushBinding TargetProperty="SelectedItem" Path="Selection"/>
+            </pb:PushBindingManager.PushBindings>
+            <TreeView.ItemContainerStyle>
+                <Style TargetType="{x:Type TreeViewItem}">
+                    <Setter Property="IsExpanded" Value="True"/>
+                </Style>
+            </TreeView.ItemContainerStyle>
+            <TreeView.ItemTemplate>
+                <HierarchicalDataTemplate ItemsSource="{Binding Exceptions}">
+                    <TextBlock Text="{Binding Converter={StaticResource ExceptionListConverter}, ConverterParameter=Tree}"/>
+                    <HierarchicalDataTemplate.ItemTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="{Binding Converter={StaticResource ExceptionConverter}, ConverterParameter=Tree}" />
+                        </DataTemplate>
+                    </HierarchicalDataTemplate.ItemTemplate>
+                </HierarchicalDataTemplate>
+            </TreeView.ItemTemplate>
+        </TreeView>
+        
+        <Border Grid.Column="1" BorderThickness="1, 0, 1, 0" BorderBrush="#FF2D4A66">
+            <Grid>
+                <TextBlock Text="{Binding SelectedException, StringFormat={}{0} 试卷缺失, 
+                    Converter={StaticResource ExceptionConverter}, ConverterParameter=Tree}" 
+                            HorizontalAlignment="Center" VerticalAlignment="Center"
+                            Visibility="{Binding SelectedException.Page.PagePath, Converter={StaticResource NullVisibleConverter}}"/>
+                <local:PaperViewer x:Name="paper1" Paper="{Binding SelectedException.Page.PagePath}" Scale="0.666666"
+                                    Overlay="{Binding SelectedException, Converter={StaticResource PaperOverlayConverter}}"/>
+                <local:PaperViewer x:Name="paper2" Paper="{Binding SelectedException.Page.Another.PagePath}"  Scale="0.666666"/>
+                <StackPanel Margin="0, 14, 0, 0" Orientation="Horizontal" VerticalAlignment="Top" HorizontalAlignment="Center"
+                            Visibility="{Binding SelectedException, Converter={StaticResource DuplexFaceConverter}}">
+                    <tal:TalButton x:Name="face1" Click="ButtonFace1_Click" Content="正面"/>
+                    <tal:TalButton x:Name="face2" Click="ButtonFace2_Click" Content="反面"/>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal" VerticalAlignment="Top" HorizontalAlignment="Right"
+                            Visibility="{Binding SelectedException.Page.PagePath, Converter={StaticResource NonNullVisibleConverter}, FallbackValue=Hidden}">
+                    <Button Click="ButtonInc_Click" Content="+"/>
+                    <Button Click="ButtonDec_Click" Content="-"/>
+                </StackPanel>
+            </Grid>
+        </Border>
+        
+        <StackPanel Grid.Column="2" Orientation="Vertical" DockPanel.Dock="Right" Width="250">
                 <TextBlock Text="{Binding SelectedException, Converter={StaticResource ExceptionConverter}, 
                     ConverterParameter=Title}" TextWrapping="Wrap" />
                 <Frame Content="{Binding SelectedException, Converter={StaticResource ExceptionPageConverter}}"/>
@@ -119,27 +147,6 @@
                                 ConverterParameter=RemovePage}" />
                 </StackPanel>
             </StackPanel>
-            <Border BorderThickness="2" BorderBrush="Blue" Background="Gray">
-                <Grid>
-                    <TextBlock Text="{Binding SelectedException, StringFormat={}{0} 试卷缺失, 
-                        Converter={StaticResource ExceptionConverter}, ConverterParameter=Tree}" 
-                               HorizontalAlignment="Center" VerticalAlignment="Center"
-                               Visibility="{Binding SelectedException.Page.PagePath, Converter={StaticResource NullVisibleConverter}}"/>
-                    <local:PaperViewer x:Name="paper1" Paper="{Binding SelectedException.Page.PagePath}"
-                                       Overlay="{Binding SelectedException, Converter={StaticResource PaperOverlayConverter}}"/>
-                    <local:PaperViewer x:Name="paper2" Paper="{Binding SelectedException.Page.Another.PagePath}"/>
-                    <StackPanel Orientation="Horizontal" VerticalAlignment="Top" HorizontalAlignment="Center"
-                                Visibility="{Binding SelectedException, Converter={StaticResource DuplexFaceConverter}}">
-                        <tal:TalButton x:Name="face1" Click="ButtonFace1_Click" Content="正面"/>
-                        <tal:TalButton x:Name="face2" Click="ButtonFace2_Click" Content="反面"/>
-                    </StackPanel>
-                    <StackPanel Orientation="Horizontal" VerticalAlignment="Top" HorizontalAlignment="Right"
-                                Visibility="{Binding SelectedException.Page.PagePath, Converter={StaticResource NonNullVisibleConverter}, FallbackValue=Hidden}">
-                        <Button Click="ButtonInc_Click" Content="+"/>
-                        <Button Click="ButtonDec_Click" Content="-"/>
-                    </StackPanel>
-                </Grid>
-            </Border>
-        </DockPanel>
+        
     </Grid>
 </Page>

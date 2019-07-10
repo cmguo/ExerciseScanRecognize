@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="16px" height="16px" viewBox="0 0 16 16" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 55.2 (78181) - https://sketchapp.com -->
+    <title>icon/清除</title>
+    <desc>Created with Sketch.</desc>
+    <g id="icon/清除" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <path d="M3,3 L15,3 L15,12 L3,12 L-1.8189894e-12,7.5 L3,3 Z M3.53518376,4 L1.20185043,7.5 L3.53518376,11 L14,11 L14,4 L3.53518376,4 Z" id="矩形" fill="#4C84FF" fill-rule="nonzero"></path>
+        <path d="M8.5,6 L8.5,5 L8,5.5 L9,5.5 L8.5,5 L8.5,6 Z M10,7.5 L11,7.5 L10.5,7 L10.5,8 L11,7.5 L10,7.5 Z M8.5,9 L8.5,10 L9,9.5 L8,9.5 L8.5,10 L8.5,9 Z M7,7.5 L6,7.5 L6.5,8 L6.5,7 L6,7.5 L7,7.5 Z" id="形状结合" stroke="#4C84FF" transform="translate(8.500000, 7.500000) rotate(-315.000000) translate(-8.500000, -7.500000) "></path>
+    </g>
+</svg>

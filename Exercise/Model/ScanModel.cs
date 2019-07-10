@@ -218,8 +218,8 @@ namespace Exercise.Model
             int index = Pages.IndexOf(page);
             File.Delete(page.PagePath);
             page.PagePath = null;
-            if (index >= 0)
-                Pages[index] = page.Another;
+            //if (index >= 0)
+            //    Pages[index] = page.Another;
         }
 
         public class PersistData

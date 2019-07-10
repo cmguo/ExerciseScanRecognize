@@ -9,6 +9,7 @@
         NavButtonVisibility="Visible"
         WindowStartupLocation="CenterScreen"
         NavbarBackground="Gray"
+              NavbarHeight="48"
         WindowStyle="None">
 
     <Window.Resources>
@@ -20,7 +21,8 @@
     </Window.Resources>
     
     <Grid x:Name="body">
-        <Frame Name="frmMain" NavigationUIVisibility="Hidden" Source="pack://application:,,,/Account;component/View/AccountPage.xaml"/>
+        <Frame Name="frmMain" NavigationUIVisibility="Hidden" Background="#FFF2F6FC"
+               Source="pack://application:,,,/Account;component/View/AccountPage.xaml"/>
     </Grid>
 </tal:PUWindow>
     <!--Source="pack://application:,,,/Exercise;component/View/ScanPage.xaml"-->

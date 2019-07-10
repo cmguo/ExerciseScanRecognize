@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <svg width="24px" height="24px" viewBox="0 0 24 24" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
     <!-- Generator: Sketch 55.2 (78181) - https://sketchapp.com -->
-    <title>icon/warn/24</title>
+    <title>icon/警告/24</title>
     <desc>Created with Sketch.</desc>
-    <g id="icon_warn_24" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+    <g id="icon/警告/24" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
         <circle id="Oval" fill="#FE9400" cx="12" cy="12" r="12"></circle>
         <path d="M12,6 C12.7782669,6 13.4091768,6.63090996 13.4091768,7.40917683 C13.4091768,7.43849893 13.4082616,7.46781388 13.4064326,7.49707887 L13.0623783,13.0019474 C13.0273156,13.5629504 12.5620976,14 12,14 C11.4379024,14 10.9726844,13.5629504 10.9376217,13.0019474 L10.5935674,7.49707887 C10.5450205,6.72032761 11.1353467,6.05129122 11.912098,6.00274426 C11.941363,6.0009152 11.9706779,6 12,6 Z M12,19 C11.1715729,19 10.5,18.3284271 10.5,17.5 C10.5,16.6715729 11.1715729,16 12,16 C12.8284271,16 13.5,16.6715729 13.5,17.5 C13.5,18.3284271 12.8284271,19 12,19 Z" id="形状结合" fill="#FFFFFF"></path>
     </g>

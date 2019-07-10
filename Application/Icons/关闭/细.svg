@@ -4,6 +4,6 @@
     <title>icon/关闭/细</title>
     <desc>Created with Sketch.</desc>
     <g id="icon/关闭/细" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-        <path d="M8.5,7.5 L15,7.5 L15,8.5 L8.5,8.5 L8.5,15 L7.5,15 L7.5,8.5 L1,8.5 L1,7.5 L7.5,7.5 L7.5,1 L8.5,1 L8.5,7.5 Z" id="形状结合" fill="#FFFFFF" transform="translate(8.000000, 8.000000) rotate(-315.000000) translate(-8.000000, -8.000000) "></path>
+        <path d="M8.5,7.5 L15,7.5 L15,9.5 L8.5,9.5 L8.5,16 L6.5,16 L6.5,9.5 L0,9.5 L0,7.5 L6.5,7.5 L6.5,1 L8.5,1 L8.5,7.5 Z" id="形状结合" fill="#FFFFFF" transform="translate(7.500000, 8.500000) rotate(-315.000000) translate(-7.500000, -8.500000) "></path>
     </g>
 </svg>

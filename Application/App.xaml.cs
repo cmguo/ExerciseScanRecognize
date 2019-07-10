@@ -19,7 +19,7 @@ namespace Application
 
         private void CurrentDomain_UnhandledException(object sender, UnhandledExceptionEventArgs e)
         {
-            Debug.WriteLine(e);
+            Debug.WriteLine(e.ExceptionObject);
         }
     }
 }

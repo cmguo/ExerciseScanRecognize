@@ -84,6 +84,7 @@ namespace Application
                         continue;
                     if (b.Content.DataContext == null)
                         b.Content.DataContext = page.DataContext;
+                    b.Content.VerticalAlignment = VerticalAlignment.Center;
                     Button button = b.Content as Button;
                     if (button != null && button.CommandParameter == null)
                         button.CommandParameter = page;

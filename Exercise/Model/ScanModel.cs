@@ -215,8 +215,11 @@ namespace Exercise.Model
 
         public void ReleasePage(Page page)
         {
+            int index = Pages.IndexOf(page);
             File.Delete(page.PagePath);
             page.PagePath = null;
+            if (index >= 0)
+                Pages[index] = page.Another;
         }
 
         public class PersistData

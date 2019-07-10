@@ -30,7 +30,7 @@
         </ControlTemplate>
 
         <DataTemplate x:Key="ClassDetail">
-            <StackPanel Orientation="Vertical" HorizontalAlignment="Stretch">
+            <StackPanel Orientation="Vertical" HorizontalAlignment="Stretch" IsHitTestVisible="False" >
                 <TextBlock Text="{Binding Name}"/>
 
                 <Grid Margin="20">
@@ -56,6 +56,6 @@
     </Window.Resources>
             
     <Grid>
-        <ListView ItemsSource="{Binding}" ItemTemplate="{StaticResource ClassDetail}" IsHitTestVisible="False" />
+        <ListView ItemsSource="{Binding}" ItemTemplate="{StaticResource ClassDetail}" />
     </Grid>
 </Window>

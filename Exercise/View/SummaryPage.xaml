@@ -9,9 +9,10 @@
       xmlns:mu="clr-namespace:Panuon.UI;assembly=Panuon.UI"
       xmlns:tb="clr-namespace:Base.TitleBar;assembly=Base"
       xmlns:tal="clr-namespace:TalBase.View;assembly=TalBase"
+      xmlns:svgc="http://sharpvectors.codeplex.com/svgc/"
       mc:Ignorable="d" 
       x:Name="Page"
-      d:DesignHeight="450" d:DesignWidth="800"
+      d:DesignHeight="652" d:DesignWidth="1200"
       Title="HomePage">
 
     <Page.DataContext>
@@ -26,6 +27,9 @@
             <resolve:ExceptionListConverter x:Key="ExceptionListConverter" />
             <local:HasExceptionConverter x:Key="HasExceptionConverter" />
             <local:NoExceptionConverter x:Key="NoExceptionConverter" />
+            <Style TargetType="TextBlock">
+                <Setter Property="Foreground" Value="#FF2D4A66" />
+            </Style>
         </ResourceDictionary>
     </Page.Resources>
 
@@ -37,81 +41,95 @@
         <tb:TitleCommand Name="Close" Command="{Binding CloseCommand}" />
     </tb:TitleBarManager.Commands>
 
-    <Grid>
-        <StackPanel Orientation="Vertical">
-            <Grid Height="100" Background="LightGray">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition/>
-                    <ColumnDefinition/>
-                    <ColumnDefinition/>
-                    <ColumnDefinition/>
-                    <ColumnDefinition/>
-                </Grid.ColumnDefinitions>
-                <StackPanel HorizontalAlignment="Stretch" VerticalAlignment="Center" Orientation="Vertical" 
-                            Grid.ColumnSpan="3" Margin="30,0,0,0">
-                    <TextBlock Text="{Binding ExerciseName, StringFormat=《{0}》}" FontSize="16" 
-                               Margin="0,0,0,10" TextWrapping="WrapWithOverflow"
-                               />
-                    <TextBlock FontSize="20" 
-                               Visibility="{Binding ExceptionCount, Converter={StaticResource HasExceptionConverter}}">
-                        <TextBlock.Text>
-                            <MultiBinding StringFormat="本次扫描共收回{0}份试卷。存在{1}项异常。">
-                                <Binding Path="StudentCount" />
-                                <Binding Path="ExceptionCount" />
-                            </MultiBinding>
-                        </TextBlock.Text>
-                    </TextBlock>
-                    <TextBlock FontSize="20" 
-                               Visibility="{Binding ExceptionCount, Converter={StaticResource NoExceptionConverter}}"
-                               Text="{Binding StudentCount, StringFormat=本次扫描共收回{0}份试卷。无异常。}"/>
-                </StackPanel>
-
-                <tal:TalButton Command="{Binding ContinueCommand}" 
-                    CommandParameter="{Binding ElementName=Page}" 
-                    Content="继续扫描" VerticalAlignment="Center" 
-                             FontSize="16"
-                    Grid.Column="3"
-                        Margin="0,0,5,0"
-                             Padding="0,10,0,10"
-                        />
-                <tal:TalButton Command="{Binding ResolveCommand}" 
-                             CommandParameter="{Binding ElementName=Page}" 
-                             Content="处理异常" VerticalAlignment="Center" 
-                             Visibility="{Binding ExceptionCount, Converter={StaticResource HasExceptionConverter}}"
-                             Grid.Column="4"
-                             IsDefault="True"
-                             Margin="10,0,5,0"
-                             Padding="0,10,0,10"
-                        />
-                <tal:TalButton Command="{Binding ResolveCommand}" 
-                             CommandParameter="{Binding ElementName=Page}" 
-                             Visibility="{Binding ExceptionCount, Converter={StaticResource NoExceptionConverter}}"
-                             Content="上传扫描结果" VerticalAlignment="Center"
-                             Grid.Column="4"
-                             IsDefault="True"
-                             Margin="10,0,20,0"
-                             Padding="0,10,0,10"
-                        />
-            </Grid>
-            <Grid Margin="20,0,20,0">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition/>
-                    <ColumnDefinition/>
-                </Grid.ColumnDefinitions>
-           
-                <StackPanel  VerticalAlignment="Center" Orientation="Vertical" HorizontalAlignment="Left">
-                    <TextBlock Text="试卷扫描详情" Margin="0,20,0,0" FontSize="16"/>
-                    <StackPanel Orientation="Horizontal">
-                        <TextBlock Grid.Row="2" Grid.Column="0" Text="{Binding StudentCount, StringFormat=共收回{0}份试卷}" 
-                               FontSize="14"
-                               Margin="0,20,0,0"/>
-                        <mu:PUButton Content="查看详情" Click="PUButton_Click" />
+    <Grid Background="Gray" >
+        <Grid.RowDefinitions>
+            <RowDefinition Height="140" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+        <Grid Grid.Row="0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+            <svgc:SvgViewbox Grid.Column="0" Source="/Icons/试卷扫描.svg" Width="83" Height="86" Margin="62, 25, 30, 29" />
+            <StackPanel Grid.Column="1" HorizontalAlignment="Stretch" VerticalAlignment="Center" Orientation="Vertical" 
+                        Grid.ColumnSpan="3" Margin="30,0,0,0">
+                <TextBlock Text="{Binding ExerciseName, StringFormat=《{0}》}"
+                           FontSize="14" Foreground="#FF7F8E99"
+                           Margin="0,0,0,8" TextWrapping="WrapWithOverflow" />
+                <StackPanel Orientation="Horizontal">
+                    <StackPanel.Resources>
+                        <Style TargetType="TextBlock">
+                            <Setter Property="FontSize" Value="24" />
+                        </Style>
+                    </StackPanel.Resources>
+                    <TextBlock Text="本次扫描共收回" />
+                    <TextBlock Text="{Binding StudentCount}" Foreground="#FFFFAA07" />
+                    <TextBlock Text="份试卷。" />
+                    <StackPanel Orientation="Horizontal"
+                                Visibility="{Binding ExceptionCount, Converter={StaticResource HasExceptionConverter}}">
+                        <TextBlock Text="存在" />
+                        <TextBlock Text="{Binding ExceptionCount}" Foreground="#FFFFAA07" />
+                        <TextBlock Text="项异常。" />
                     </StackPanel>
-                    <DataGrid  Grid.Row="3" Grid.Column="0" AutoGenerateColumns="False" ItemsSource="{Binding ClassDetails}"
-                               Margin="0,20,0,0"  RowHeaderWidth="0" ColumnHeaderHeight="50" MaxHeight="400"
-                               GridLinesVisibility="None"
-                               BorderThickness="0"
-                               RowHeight="40" IsReadOnly="True" >
+                    <TextBlock Text="无异常。"
+                               Visibility="{Binding ExceptionCount, Converter={StaticResource HasExceptionConverter}}" />
+                </StackPanel>
+            </StackPanel>
+
+            <Grid Grid.Column="2" Margin="64, 0, 64, 0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="24"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+                <tal:TalButton Grid.Column="0" Content="继续扫描" 
+                               Command="{Binding ContinueCommand}" CommandParameter="{Binding ElementName=Page}" />
+                <tal:TalButton Grid.Column="2" Content="处理异常" IsDefault="True" 
+                               Command="{Binding ResolveCommand}" CommandParameter="{Binding ElementName=Page}" 
+                               Visibility="{Binding ExceptionCount, Converter={StaticResource HasExceptionConverter}}" />
+                <tal:TalButton Grid.Column="2" Content="上传扫描结果" IsDefault="True"
+                               Command="{Binding ResolveCommand}" CommandParameter="{Binding ElementName=Page}" 
+                               Visibility="{Binding ExceptionCount, Converter={StaticResource NoExceptionConverter}}" />
+            </Grid>
+        </Grid>
+
+        <TextBlock Grid.Row="1" Text="试卷扫描详情" Margin="24,24,0,12" FontSize="16"/>
+
+        <Grid Grid.Row="2" Margin="22,2,22,26" >
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="576"/>
+                <ColumnDefinition Width="12"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+
+            <Grid.Resources>
+                <Style TargetType="TextBlock">
+                    <Setter Property="FontSize" Value="14" />
+                </Style>
+            </Grid.Resources>
+
+            <Border Grid.Column="0" CornerRadius="4" Background="White">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="*" />
+                    </Grid.RowDefinitions>
+                    <Grid Grid.Row="0" Margin="30,0,30,0" Height="80">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Grid.Column="0" Text="{Binding StudentCount, StringFormat=共收回{0}份试卷}" />
+                        <tal:TalButton Grid.Column="1" Content="查看详情" Click="PUButton_Click" VerticalAlignment="Center" />
+                    </Grid>
+                    <DataGrid Grid.Row="1" AutoGenerateColumns="False" ItemsSource="{Binding ClassDetails}"
+                                RowHeaderWidth="0" ColumnHeaderHeight="50" 
+                                GridLinesVisibility="None"
+                                BorderThickness="0" Margin="26, 0, 26, 10"
+                                RowHeight="40" IsReadOnly="True" >
                         <DataGrid.RowStyle>
                             <Style TargetType="DataGridRow">
                                 <Setter Property="IsHitTestVisible" Value="False"/>
@@ -130,13 +148,27 @@
                             <DataGridTextColumn Header="总人数（人）" Binding="{Binding StudentCount}" FontSize="14" Width="90" />
                         </DataGrid.Columns>
                     </DataGrid>
-                </StackPanel>
-                <StackPanel HorizontalAlignment="Left" VerticalAlignment="Center" Orientation="Vertical" Grid.Column="1"
-                            Visibility="{Binding ExceptionCount, Converter={StaticResource HasExceptionConverter}}">
-                    <TextBlock Grid.Row="2" Grid.Column="1" Text="{Binding ExceptionCount, StringFormat=共存在{0}项异常}" FontSize="14" Margin="0,60,0,20"/>
-                    <DataGrid  Grid.Row="2" Grid.Column="1" AutoGenerateColumns="False" ItemsSource="{Binding Exceptions}"
-                               RowHeaderWidth="0" ColumnHeaderHeight="50" BorderThickness="0" GridLinesVisibility="None"
-                               RowHeight="40" IsReadOnly="True">
+                </Grid>
+            </Border>
+
+            <Border Grid.Column="2" CornerRadius="4" Background="White">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="*" />
+                    </Grid.RowDefinitions>
+                    <StackPanel Grid.Row="0" Margin="30,0,30,0" Height="80" Orientation="Horizontal">
+                        <TextBlock Grid.Column="1" Text="{Binding ExceptionCount, StringFormat=共存在{0}项异常}" VerticalAlignment="Center"/>
+                    </StackPanel>
+                    <DataGrid Grid.Row="1" AutoGenerateColumns="False" ItemsSource="{Binding Exceptions}"
+                                ColumnHeaderHeight="48" BorderThickness="0" GridLinesVisibility="None"
+                                RowHeight="49" IsReadOnly="True">
+                        <DataGrid.ColumnHeaderStyle>
+                            <Style TargetType="DataGridColumnHeader">
+                                <Setter Property="Margin" Value="32, 0, 0, 0" />
+                                <Setter Property="Margin" Value="32, 0, 0, 0" />
+                            </Style>
+                        </DataGrid.ColumnHeaderStyle>
                         <DataGrid.RowStyle>
                             <Style TargetType="DataGridRow">
                                 <Setter Property="IsHitTestVisible" Value="False"/>
@@ -150,12 +182,16 @@
                             </Style>
                         </DataGrid.CellStyle>
                         <DataGrid.Columns>
-                            <DataGridTextColumn Header="异常项" Binding="{Binding Converter={StaticResource ExceptionListConverter}, ConverterParameter=Tree}" FontSize="14" Width="140"/>
-                            <DataGridTextColumn Header="回收试卷" Binding="{Binding Exceptions.Count}" FontSize="14" Width="100"/>
+                            <DataGridTextColumn Header="异常项" Width="283" 
+                                                Binding="{Binding Converter={StaticResource ExceptionListConverter}, ConverterParameter=Tree}" />
+                            <DataGridTextColumn Header="回收试卷（份）" Width="*" 
+                                                Binding="{Binding Exceptions.Count}" />
                         </DataGrid.Columns>
                     </DataGrid>
-                </StackPanel>
+                </Grid>
+            </Border>
+            
         </Grid>
-        </StackPanel>
+        
     </Grid>
 </Page>

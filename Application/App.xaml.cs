@@ -1,4 +1,6 @@
 ﻿using Application.Misc;
+using System;
+using System.Diagnostics;
 using TalBase.View;
 
 namespace Application
@@ -12,6 +14,12 @@ namespace Application
         {
             ErrorMessageBox.Init();
             Jni.Init();
+            AppDomain.CurrentDomain.UnhandledException += CurrentDomain_UnhandledException;
+        }
+
+        private void CurrentDomain_UnhandledException(object sender, UnhandledExceptionEventArgs e)
+        {
+            Debug.WriteLine(e);
         }
     }
 }

@@ -9,6 +9,7 @@ using Base.Misc;
 using Exercise.Algorithm;
 using System;
 using Exception = Exercise.Model.ExerciseModel.Exception;
+using TalBase.View;
 
 namespace Exercise.View.Resolve
 {
@@ -61,6 +62,7 @@ namespace Exercise.View.Resolve
             }
         }
 
+        public IList<string> Scores { get; internal set; }
     }
 
     public partial class AnswerExceptionPage : Page
@@ -103,6 +105,14 @@ namespace Exercise.View.Resolve
             PageData.Question qe = data.AreaInfo.SelectMany(a => a.QuestionInfo)
                 .Where(q => q.QuestionId == question.QuestionId).First();
             viewModel.Answers = qe.ItemInfo[0].Value.Split(',').Concat(new string[] { null }).ToList();
+            viewModel.Scores = viewModel.Answers;
+        }
+
+        private void FillScores(Question question)
+        {
+            PageData.Question qe = data.AreaInfo.SelectMany(a => a.QuestionInfo)
+                .Where(q => q.QuestionId == question.QuestionId).First();
+            viewModel.Scores = qe.ItemInfo[0].Value.Split(',').ToList();
         }
 
         private void FillScores()
@@ -143,6 +153,11 @@ namespace Exercise.View.Resolve
 
         private void Confirm_Click(object sender, RoutedEventArgs e)
         {
+            if (!viewModel.Scores.Contains(viewModel.SelectedAnswer))
+            {
+                PopupDialog.Show(this, "TODO", "输入值不在有效范围中", 0, "确定");
+                return;
+            }
             viewModel.SelectedQuestion.ItemInfo.All(i =>
             {
                 i.StatusOfItem = -1;
@@ -181,6 +196,10 @@ namespace Exercise.View.Resolve
                         answer = null;
                     else if (answer.Length == 1)
                         answer = viewModel.Answers.Where(a => answer.Equals(a)).First();
+                }
+                else
+                {
+                    FillScores(viewModel.SelectedQuestion);
                 }
                 viewModel.SelectedAnswer = answer;
             }

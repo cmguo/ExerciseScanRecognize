@@ -28,11 +28,14 @@ namespace Exercise.View.Resolve
                 {
                     case ExceptionType.NoPageCode:
                     case ExceptionType.PageCodeMissMatch:
-                        return "试卷" + ex.Index;
+                        return "未识别试卷" + ex.Index;
                     case ExceptionType.NoStudentCode:
                         return String.Format("试卷{2} （{0}-{1}页）", page.PageIndex + 1, page.PageIndex + 2, ex.Index);
                     case ExceptionType.AnalyzeException:
-                        return String.Format("{0} {1} （第{2}页）", page.Student.TalNo, page.Student.Name, page.PageIndex + 1);
+                        if (page.Student != null)
+                            return String.Format("{0} {1} （第{2}页）", page.Student.TalNo, page.Student.Name, page.PageIndex + 1);
+                        else
+                            return String.Format("试卷{2} （{0}-{1}页）", page.PageIndex + 1, page.PageIndex + 2, ex.Index);
                     case ExceptionType.AnswerException:
                     case ExceptionType.CorrectionException:
                         return String.Format("{0} {1} （第{2}页）", page.Student.TalNo, page.Student.Name, page.PageIndex + 1);

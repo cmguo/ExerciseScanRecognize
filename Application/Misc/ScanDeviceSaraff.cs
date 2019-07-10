@@ -175,7 +175,7 @@ namespace Application.Misc
                 cancel = false;
                 pause = false;
             }
-            twain32.Capabilities.XferCount.Set(count);
+            twain32.Capabilities.XferCount.Set(count <= 0 ? (short) -1 : (short) (count * 2));
             twain32.Acquire();
         }
 

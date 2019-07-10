@@ -33,11 +33,11 @@ namespace Exercise.Model
             None = 0,
             NoPageCode,
             PageCodeMissMatch,
-            NoStudentCode, // StudentCodeMissMatch,
             AnalyzeException,
+            NoStudentCode, // StudentCodeMissMatch,
+            PageLost,
             AnswerException,
             CorrectionException,
-            PageLost,
         }
 
         public enum ResolveType : int
@@ -155,15 +155,7 @@ namespace Exercise.Model
                 throw new NullReferenceException("没有有效试卷信息");
             foreach (StudentInfo s in PageStudents)
             {
-                for (int i = 0; i < s.AnswerPages.Count; ++i)
-                {
-                    if (s.AnswerPages[i] == null)
-                    {
-                        Page p = new Page() { PageIndex = i * 2, Student = s };
-                        s.AnswerPages[i] = p;
-                        AddException(ExceptionType.PageLost, p);
-                    }
-                }
+                AddException(s);
             }
             await Save();
         }
@@ -248,22 +240,54 @@ namespace Exercise.Model
                 || type == ResolveType.Resolve)
             {
                 if (ex.Type == ExceptionType.AnswerException)
+                {
+                    ex.Page.Answer.AnswerExceptions.All(q =>
+                    {
+                        q.ItemInfo.All(i =>
+                        {
+                            if (i.StatusOfItem > 0)
+                                i.StatusOfItem = -2;
+                            return true;
+                        });
+                        return true;
+                    });
                     ex.Page.Answer.AnswerExceptions = null;
+                }
                 else if (ex.Type == ExceptionType.CorrectionException)
+                {
+                    ex.Page.Answer.CorrectionExceptions.All(q =>
+                    {
+                        q.ItemInfo.All(i =>
+                        {
+                            if (i.StatusOfItem > 0)
+                                i.StatusOfItem = -2;
+                            return true;
+                        });
+                        return true;
+                    });
                     ex.Page.Answer.CorrectionExceptions = null;
+                }
                 RemoveException(ex.Type, ex.Page);
                 if (ex.Type == ExceptionType.NoStudentCode)
+                {
                     AddPage(ex.Page);
-                return;
+                    AddException(ex.Page.Student);
+                }
             }
-            RemovePage(ex.Page, type == ResolveType.RemoveStudent
-                ? RemoveType.Student : RemoveType.SinglePage);
+            else if (type == ResolveType.RemoveStudent)
+            {
+                RemovePage(ex.Page, RemoveType.Student);
+            }
+            else
+            {
+                RemovePage(ex.Page, RemoveType.SinglePage);
+            }
         }
 
         public void Resolve(ExceptionList el, ResolveType type)
         {
-            foreach (Exception ex in el.Exceptions)
-                Resolve(ex, type);
+            while (el.Exceptions.Count > 0)
+                Resolve(el.Exceptions[0], type);
         }
 
         private void ScanModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
@@ -283,7 +307,11 @@ namespace Exercise.Model
                 if (targetException != null)
                 {
                     ReplacePage(e.NewItems[0] as Page);
-                    targetException = null;
+                    lock (Exceptions)
+                    {
+                        targetException = null;
+                        Monitor.PulseAll(Exceptions);
+                    }
                     return;
                 }
                 foreach (Page page in e.NewItems)
@@ -496,6 +524,19 @@ namespace Exercise.Model
             else if (type == ExceptionType.NoStudentCode)
             {
                 item.Index = list.Exceptions.Count();
+            }
+        }
+
+        private void AddException(StudentInfo s)
+        {
+            for (int i = 0; i < s.AnswerPages.Count; ++i)
+            {
+                if (s.AnswerPages[i] == null)
+                {
+                    Page p = new Page() { PageIndex = i * 2, Student = s };
+                    s.AnswerPages[i] = p;
+                    AddException(ExceptionType.PageLost, p);
+                }
             }
         }
 

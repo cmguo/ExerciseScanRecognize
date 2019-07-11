@@ -257,40 +257,84 @@
     <Resource Include="COPYING.LESSER.txt" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Icons\back.svg" />
-    <Content Include="Icons\下箭头\disabled.svg" />
-    <Content Include="Icons\下箭头\normal.svg" />
-    <Content Include="Icons\下箭头\pressed.svg" />
-    <Content Include="Icons\作答识别异常.svg" />
+    <Content Include="Icons\back.svg">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Icons\下箭头\disabled.svg">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Icons\下箭头\normal.svg">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Icons\下箭头\pressed.svg">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Icons\作答识别异常.svg">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="Icons\关闭\粗.svg">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Icons\关闭\细.svg">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Icons\完成\16.svg" />
-    <Content Include="Icons\异常.svg" />
-    <Content Include="Icons\待认领的试卷.svg" />
-    <Content Include="Icons\批改识别异常.svg" />
-    <Content Include="Icons\搜索空.svg" />
+    <Content Include="Icons\完成\16.svg">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Icons\异常.svg">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Icons\待认领的试卷.svg">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Icons\批改识别异常.svg">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Icons\搜索空.svg">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="Icons\收起.svg">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Icons\放大\正常.svg" />
-    <Content Include="Icons\放大\禁灰.svg" />
-    <Content Include="Icons\无法识别的试卷.svg" />
-    <Content Include="Icons\更多.svg" />
-    <Content Include="Icons\清除.svg" />
-    <Content Include="Icons\缩小\正常.svg" />
-    <Content Include="Icons\缩小\禁灰.svg" />
-    <Content Include="Icons\缺失的学生试卷.svg" />
-    <Content Include="Icons\警告\16.svg" />
-    <Content Include="Icons\警告\24.svg" />
+    <Content Include="Icons\放大\正常.svg">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Icons\放大\禁灰.svg">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Icons\无法识别的试卷.svg">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Icons\更多.svg">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Icons\清除.svg">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Icons\缩小\正常.svg">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Icons\缩小\禁灰.svg">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Icons\缺失的学生试卷.svg">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Icons\警告\16.svg">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Icons\警告\24.svg">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="Icons\试卷扫描.svg">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Icons\错误\16.svg" />
-    <Content Include="Icons\首页.svg" />
+    <Content Include="Icons\错误\16.svg">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Icons\首页.svg">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

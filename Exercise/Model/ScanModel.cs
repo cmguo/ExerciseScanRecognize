@@ -31,6 +31,7 @@ namespace Exercise.Model
         }
 
         public ObservableCollection<Page> Pages { get; private set; }
+        public ObservableCollection<Page> PageDropped { get; private set; }
 
         public string[] SourceList
         {
@@ -121,6 +122,7 @@ namespace Exercise.Model
 
         private string savePath;
         private int scanBatch = 0;
+        private int totalIndex = 0;
         private int scanIndex = 0;
         private int readIndex = 0;
         private bool cancel = false;
@@ -130,6 +132,7 @@ namespace Exercise.Model
         public ScanModel()
         {
             Pages = new ObservableCollection<Page>();
+            PageDropped = new ObservableCollection<Page>();
             scanDevice.OnImage += ScanDevice_OnImage;
             scanDevice.GetFileName += ScanDevice_GetFileName;
             scanDevice.ScanPaused += ScanDevice_ScanPaused;
@@ -215,11 +218,20 @@ namespace Exercise.Model
 
         public void ReleasePage(Page page)
         {
-            int index = Pages.IndexOf(page);
             File.Delete(page.PagePath);
             page.PagePath = null;
-            //if (index >= 0)
-            //    Pages[index] = page.Another;
+            if (page.TotalIndex < Pages.Count)
+            {
+                Page p = Pages[page.TotalIndex];
+                if (p.Another == page)
+                    p.Another = null;
+                else if (p != page)
+                    throw new InvalidOperationException(
+                        "Page at " + page.TotalIndex + " not match " + p.TotalIndex);
+                else if (IsCompleted)
+                    Pages[page.TotalIndex] = p.Another;
+            }
+            PageDropped.Add(page);
         }
 
         public class PersistData
@@ -244,6 +256,7 @@ namespace Exercise.Model
         {
             PersistData data = await JsonPersistent.Load<PersistData>(path + "\\scan.json");
             PageCode = data.PageCode;
+            totalIndex = data.Pages.Count;
             scanBatch = data.ScanBatch;
             savePath = path;
             foreach (Page p in data.Pages)
@@ -264,12 +277,14 @@ namespace Exercise.Model
 
         public void Clear()
         {
+            totalIndex = 0;
             scanBatch = 0;
             scanIndex = 0;
             savePath = null;
             lastPage = null;
             PageCode = null;
             RaisePropertyChanged("PageCode");
+            PageDropped.Clear();
             Pages.Clear();
         }
 
@@ -295,7 +310,27 @@ namespace Exercise.Model
             Page page2 = page;
             Page[] pages = new Page[] { page1, page2 };
             await Task.Factory.StartNew(() => ScanTwoPage(pages));
+            pages[0].TotalIndex = totalIndex;
+            pages[1].TotalIndex = totalIndex;
+            if (pages[0].Another == null)
+                ReleasePage(pages[1]);
+            int drop = PageDropped.Count;
             Pages.Add(pages[0]);
+            ++totalIndex;
+            while (drop < PageDropped.Count)
+            {
+                Page p1 = PageDropped[drop++];
+                Page p2 = Pages[p1.TotalIndex];
+                if (p2 == null)
+                    continue;
+                else if (p2 == p1)
+                    Pages[p1.TotalIndex] = p1.Another;
+                else if (p2.Another == p1)
+                    p2.Another = null;
+                else if (p2.Another != null) // may already handled
+                    throw new InvalidOperationException(
+                        "Page at " + p1.TotalIndex + " not match " + p2.TotalIndex);
+            }
             if (index + 1 == readIndex)
                 IsCompleted = true;
         }
@@ -345,7 +380,6 @@ namespace Exercise.Model
                     else
                     {
                         pages[0].Another = null;
-                        ReleasePage(pages[1]);
                     }
                 }
             }

@@ -14,8 +14,10 @@ namespace Exercise.Model
 {
     public class Page
     {
+        public int TotalIndex { get; set; }
         public int ScanBatch { get; set; }
         public int ScanIndex { get; set; }
+
         [JsonIgnore]
         public byte[] PageData { get; set; } // 算法会调整
         [JsonIgnore]
@@ -35,5 +37,25 @@ namespace Exercise.Model
 
         [JsonIgnore]
         public StudentInfo Student { get; set; }
+
+        public void Swap(Page o)
+        {
+            int i = TotalIndex;
+            TotalIndex = o.TotalIndex;
+            o.TotalIndex = i;
+            string s = PageName;
+            PageName = o.PageName;
+            o.PageName = s;
+            s = PagePath;
+            PagePath = o.PagePath;
+            o.PagePath = s;
+            Exception e = Exception;
+            Exception = o.Exception;
+            o.Exception = e;
+            AnswerData a = Answer;
+            Answer = o.Answer;
+            o.Answer = a;
+        }
+
     }
 }

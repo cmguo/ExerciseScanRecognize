@@ -5,6 +5,7 @@ using Exercise.Service;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Collections.Specialized;
 using System.IO;
 using System.Linq;
 using System.Threading;
@@ -78,7 +79,6 @@ namespace Exercise.Model
 
         public string SavePath { get; private set; }
         public ObservableCollection<ExceptionList> Exceptions { get; private set; }
-        public ObservableCollection<Page> PageDropped { get; private set; }
 
         public ExerciseData ExerciseData { get; private set; }
         public ObservableCollection<StudentInfo> PageStudents { get; private set; }
@@ -99,7 +99,6 @@ namespace Exercise.Model
             scanModel.PropertyChanged += ScanModel_PropertyChanged;
             service = Services.Get<IExercise>();
             Exceptions = new ObservableCollection<ExceptionList>();
-            PageDropped = new ObservableCollection<Page>();
             PageStudents = new ObservableCollection<StudentInfo>();
             /* Test
             ExerciseData = new ExerciseData() { Title = "三角函数" };
@@ -199,7 +198,6 @@ namespace Exercise.Model
             ExerciseData = null;
             PageStudents.Clear();
             Exceptions.Clear();
-            PageDropped.Clear();
             schoolModel.Clear();
             scanModel.Clear();
             SavePath = null;
@@ -302,7 +300,7 @@ namespace Exercise.Model
 
         private void Pages_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
         {
-            if (e.NewItems != null)
+            if (e.Action == NotifyCollectionChangedAction.Add)
             {
                 if (targetException != null)
                 {
@@ -360,8 +358,7 @@ namespace Exercise.Model
                 page.Student.AnswerPages[pageIndex] = page;
                 if (old != null && old != page)
                 {
-                    old.Student = null;
-                    RemovePage(old, RemoveType.DuplexPage);
+                    ReleasePage(old, RemoveType.DuplexPage);
                 }
                 if (page.Answer != null)
                 {
@@ -402,7 +399,7 @@ namespace Exercise.Model
             // 如果 Student 为 Null，肯定是 type = DuplexPage
             if (page.Student == null)
             {
-                RemovePage(page);
+                ReleasePage(page, RemoveType.DuplexPage);
                 return;
             }
             if (type == RemoveType.Student)
@@ -414,7 +411,7 @@ namespace Exercise.Model
                 {
                     if (pages[i] != null)
                     {
-                        RemovePage(pages[i]);
+                        ReleasePage(pages[i], RemoveType.DuplexPage);
                     }
                 }
                 return;
@@ -426,14 +423,9 @@ namespace Exercise.Model
                 if (type != RemoveType.DuplexPage && page.Another != null)
                 {
                     page.Student.AnswerPages[pageIndex] = page.Another;
-                    page.Another = null;
                 }
             }
-            else if (page.Student.AnswerPages[pageIndex].Another == page)
-            {
-                page.Student.AnswerPages[pageIndex].Another = null;
-            }
-            RemovePage(page);
+            ReleasePage(page, type);
         }
 
         private void ReplacePage(Page page)
@@ -442,51 +434,45 @@ namespace Exercise.Model
             if (type == ExceptionType.NoPageCode
                 || type == ExceptionType.PageCodeMissMatch)
                 return;
-            if (targetException.Page.StudentCode != null
-                && page.StudentCode != targetException.Page.StudentCode)
+            if (targetException.Page.PageIndex != page.PageIndex 
+                || (targetException.Page.StudentCode != null
+                && page.StudentCode != targetException.Page.StudentCode))
                 return;
             if (type == ExceptionType.AnalyzeException)
             {
                 if (targetException.Page.Answer != null
                     && page.Another != null && page.Another.Answer != null)
                 {
-                    Page page1 = targetException.Page;
-                    Page page2 = page1.Another;
-                    page1.Another = page.Another;
-                    page.Another = page2;
-                    targetException.Page = page;
-                    page = page1;
+                    page.Swap(targetException.Page);
                 }
                 else if (page.Answer != null && targetException.Page.Another != null
                     && targetException.Page.Another.Answer != null)
                 {
-                    Page page1 = targetException.Page;
-                    Page page2 = page1.Another;
-                    page1.Another = page.Another;
-                    page.Another = page2;
+                    page.Another.Swap(targetException.Page.Another);
+                }
+                else
+                {
+                    return;
                 }
             }
             if (targetException.Page.Student == null)
-                RemovePage(targetException.Page);
+                RemovePage(targetException.Page, RemoveType.DuplexPage);
             AddPage(page);
         }
 
-        private void RemovePage(Page page)
+        private void ReleasePage(Page page, RemoveType type)
         {
             RemoveException(ExceptionType.None, page);
             page.Student = null;
-            PageDropped.Add(page);
             if (page.PagePath != null)
             {
                 scanModel.ReleasePage(page);
             }
-            if (page.Another != null)
+            if (page.Another != null && type == RemoveType.DuplexPage)
             {
                 RemoveException(ExceptionType.None, page.Another);
                 page.Another.Student = null;
-                PageDropped.Add(page.Another);
                 scanModel.ReleasePage(page.Another);
-                page.Another = null;
             }
         }
 

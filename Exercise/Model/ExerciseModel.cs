@@ -188,6 +188,10 @@ namespace Exercise.Model
             await scanModel.Load(path);
             exerciseId = scanModel.PageCode;
             SavePath = path;
+            foreach (StudentInfo s in PageStudents)
+            {
+                AddException(s);
+            }
         }
 
         public void Clear()
@@ -313,7 +317,10 @@ namespace Exercise.Model
                     return;
                 }
                 foreach (Page page in e.NewItems)
-                    AddPage(page);
+                {
+                    if (page != null)
+                        AddPage(page);
+                }
             }
         }
 

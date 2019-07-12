@@ -3,6 +3,7 @@ using Newtonsoft.Json.Linq;
 using System.Collections.Generic;
 using System.Runtime.Serialization;
 using System.Linq;
+using TalBase.Model;
 
 namespace Exercise.Algorithm
 {
@@ -71,7 +72,7 @@ namespace Exercise.Algorithm
                  = new Dictionary<string, JToken>();
         }
 
-        public class Question
+        public class Question : ModelBase
         {
             public string QuestionId { get; set; }
             public PagingInfo PagingInfo { get; set; }
@@ -79,7 +80,13 @@ namespace Exercise.Algorithm
             public IList<Item> ItemInfo { get; set; }
 
             [JsonIgnore]
-            public bool HasException { get; set; }
+            private bool _HasException;
+            [JsonIgnore]
+            public bool HasException
+            {
+                get => _HasException;
+                set { _HasException = value; RaisePropertyChanged("HasException"); }
+            }
 
             [JsonExtensionData]
             private IDictionary<string, JToken> _additionalData

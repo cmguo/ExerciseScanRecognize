@@ -3,7 +3,7 @@
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-      xmlns:local="clr-namespace:Exercise.View"
+      xmlns:svgc="http://sharpvectors.codeplex.com/svgc/"
       xmlns:resolve="clr-namespace:Exercise.View.Resolve"
       mc:Ignorable="d" 
       d:DesignHeight="450" d:DesignWidth="800"
@@ -14,9 +14,10 @@
     </Page.Resources>
 
     <Grid>
-        <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Orientation="Vertical">
-            <TextBlock Text="{Binding Converter={StaticResource ExceptionConverter}, 
-                ConverterParameter=Message, StringFormat=- {0}}" TextWrapping="Wrap" />
+        <StackPanel HorizontalAlignment="Left" VerticalAlignment="Center" Orientation="Horizontal">
+            <Image Width="16" Height="16"  Margin="0, 0, 8, 0" Source="{svgc:SvgImage Source=/Icons/异常.svg}" />
+            <TextBlock FontSize="14" Foreground="#FF2D4A66" TextWrapping="Wrap"
+                       Text="{Binding Converter={StaticResource ExceptionConverter}, ConverterParameter=Message}" />
         </StackPanel>
     </Grid>
 </Page>

@@ -4,7 +4,6 @@
     <title>icon/back</title>
     <desc>Created with Sketch.</desc>
     <g id="icon/back" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-        <rect id="矩形" fill="#FFFFFF" x="4" y="11" width="18" height="2"></rect>
-        <path d="M6,15 L14,15 L14,17 L4,17 L4,15 L4,7 L6,7 L6,15 Z" id="形状结合" fill="#FFFFFF" transform="translate(9.000000, 12.000000) rotate(-315.000000) translate(-9.000000, -12.000000) "></path>
+        <path d="M6.82842712,11 L21.0710678,11 L21.0710678,13 L6.82842712,13 L11.4852814,17.6568542 L10.0710678,19.0710678 L3,12 L4.41421356,10.5857864 L10.0710678,4.92893219 L11.4852814,6.34314575 L6.82842712,11 Z" id="形状结合" fill="#FFFFFF"></path>
     </g>
 </svg>

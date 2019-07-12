@@ -73,13 +73,10 @@ namespace Exercise.View
             vm.ResolveCommand.Execute(this);
         }
 
-        private PaperViewer viewer;
-
         private void ButtonFace1_Click(object sender, RoutedEventArgs e)
         {
             face1.Background = Brushes.Blue;
             face2.Background = Brushes.White;
-            viewer = paper1;
             paper1.Visibility = Visibility.Visible;
             paper2.Visibility = Visibility.Collapsed;
         }
@@ -88,25 +85,27 @@ namespace Exercise.View
         {
             face1.Background = Brushes.White;
             face2.Background = Brushes.Blue;
-            viewer = paper2;
             paper1.Visibility = Visibility.Collapsed;
             paper2.Visibility = Visibility.Visible;
         }
 
         private void ButtonInc_Click(object sender, RoutedEventArgs e)
         {
-            viewer.Scale *= 1.5;
+            paper1.Scale *= 1.5;
+            paper2.Scale *= 1.5;
         }
 
         private void ButtonDec_Click(object sender, RoutedEventArgs e)
         {
-            viewer.Scale /= 1.5;
+            paper1.Scale /= 1.5;
+            paper2.Scale /= 1.5;
         }
     }
 
     [ValueConversion(typeof(object), typeof(Visibility))]
     internal class DuplexFaceConverter : IValueConverter
     {
+
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
             Exception ex = value as Exception;

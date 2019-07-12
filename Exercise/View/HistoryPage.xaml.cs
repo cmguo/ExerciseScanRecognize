@@ -39,7 +39,6 @@ namespace Exercise.View
             InitializeComponent();
             DataContext = FindResource("ViewModel");
             dataGrid.CellEditEnding += DataGrid_CellEditEnding;
-            dataGrid.SelectedCellsChanged += DataGrid_SelectedCellsChanged;
             HistoryViewModel vm = (DataContext as HistoryViewModel);
             vm.PropertyChanged += HistoryPage_PropertyChanged;
             if (vm.PageCount > 0)
@@ -132,17 +131,12 @@ namespace Exercise.View
             }
         }
 
-        private void DataGrid_SelectedCellsChanged(object sender, SelectedCellsChangedEventArgs e)
-        {
-            dataGrid.UnselectAll();
-        }
-
         private void DataGrid_CellEditEnding(object sender, DataGridCellEditEndingEventArgs e)
         {
             Record record = e.Row.DataContext as Record;
             HistoryViewModel vm = DataContext as HistoryViewModel;
             string old = record.Name;
-            record.Name = (e.EditingElement as TextBox).Text;
+            record.Name = UITreeHelper.GetChildOfType<TextBox>(e.EditingElement).Text;
             BackgroudWork.Execute(() => vm.ModifyRecordName(record, old));
         }
 

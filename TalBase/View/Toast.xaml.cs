@@ -12,17 +12,15 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
-using Base.Mvvm.Converter;
-using Panuon.UI;
 
-namespace Account
+namespace TalBase.View
 {
     /// <summary>
-    /// PageAccount.xaml 的交互逻辑
+    /// Toast.xaml 的交互逻辑
     /// </summary>
-    public partial class AccountPage : Page
+    public partial class Toast : UserControl
     {
-        public AccountPage()
+        public Toast()
         {
             InitializeComponent();
         }

@@ -7,6 +7,7 @@
       xmlns:resolve="clr-namespace:Exercise.View.Resolve"
       xmlns:vm="clr-namespace:Exercise.ViewModel"
       xmlns:tb="clr-namespace:Base.TitleBar;assembly=Base"
+      xmlns:cv="clr-namespace:Base.Mvvm.Converter;assembly=Base"
       xmlns:tal="clr-namespace:TalBase.View;assembly=TalBase"
       xmlns:svgc="http://sharpvectors.codeplex.com/svgc/"
       mc:Ignorable="d" 
@@ -24,7 +25,10 @@
                 <ResourceDictionary Source="pack://application:,,,/TalBase;component/Themes/Button.xaml" />
             </ResourceDictionary.MergedDictionaries>
             <resolve:ExceptionListConverter x:Key="ExceptionListConverter" />
+            <cv:BooleanObjectConverter x:Key="IconConverter" TrueValue="/Icons/PaperScanFail.png" 
+                                       FalseValue="/Icons/PaperScanOk.png" />
             <local:HasExceptionConverter x:Key="HasExceptionConverter" />
+            <cv:NonNullVisibleConverter x:Key="VisibilityConverter" />
             <local:NoExceptionConverter x:Key="NoExceptionConverter" />
             <Style TargetType="TextBlock">
                 <Setter Property="Foreground" Value="#FF2D4A66" />
@@ -81,13 +85,17 @@
             <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
+        
         <Grid Grid.Row="0"  Background="White">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="Auto"/>
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="Auto"/>
             </Grid.ColumnDefinitions>
-            <svgc:SvgViewbox Grid.Column="0" Source="/Icons/试卷扫描.svg" Width="83" Height="86" Margin="62, 25, 30, 29" />
+
+            <Image Grid.Column="0" Width="83" Height="86" Margin="62, 25, 30, 29"
+                   Source="{Binding ExceptionCount, Converter={StaticResource IconConverter}}" />
+            
             <StackPanel Grid.Column="1" HorizontalAlignment="Stretch" VerticalAlignment="Center" Orientation="Vertical" 
                         Grid.ColumnSpan="3" Margin="30,0,0,0">
                 <TextBlock Text="{Binding ExerciseName, StringFormat=《{0}》}"
@@ -109,7 +117,7 @@
                         <TextBlock Text="项异常。" />
                     </StackPanel>
                     <TextBlock Text="无异常。"
-                               Visibility="{Binding ExceptionCount, Converter={StaticResource HasExceptionConverter}}" />
+                               Visibility="{Binding ExceptionCount, Converter={StaticResource NoExceptionConverter}}" />
                 </StackPanel>
             </StackPanel>
 
@@ -123,7 +131,7 @@
                                Command="{Binding ResolveCommand}" CommandParameter="{Binding ElementName=Page}" 
                                Visibility="{Binding ExceptionCount, Converter={StaticResource HasExceptionConverter}}" />
                 <tal:TalButton Grid.Column="0" Content="上传扫描结果" IsDefault="True" ButtonSize="Large"
-                               Command="{Binding ResolveCommand}" CommandParameter="{Binding ElementName=Page}" 
+                               Command="{Binding SubmitCommand}" CommandParameter="{Binding ElementName=Page}" 
                                Visibility="{Binding ExceptionCount, Converter={StaticResource NoExceptionConverter}}" />
                 <tal:TalButton Grid.Column="2" Content="继续扫描"  ButtonSize="Large"
                                Command="{Binding ContinueCommand}" CommandParameter="{Binding ElementName=Page}" />
@@ -132,20 +140,36 @@
 
         <TextBlock Grid.Row="1" Text="试卷扫描详情" Margin="24,24,0,12" FontSize="16"/>
 
-        <Grid Grid.Row="2" Margin="22,2,22,26" >
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="576"/>
-                <ColumnDefinition Width="12"/>
-                <ColumnDefinition Width="*"/>
-            </Grid.ColumnDefinitions>
+        <DockPanel Grid.Row="2" Margin="22,2,22,26" >
 
-            <Grid.Resources>
+            <DockPanel.Resources>
                 <Style TargetType="TextBlock">
                     <Setter Property="FontSize" Value="14" />
                 </Style>
-            </Grid.Resources>
+            </DockPanel.Resources>
 
-            <Border Grid.Column="0" CornerRadius="4" Background="White">
+            <Border Grid.Column="2" CornerRadius="4" Background="White" Margin="12, 0, 0, 0" Width="576" DockPanel.Dock="Right"
+                    Visibility="{Binding ExceptionCount, Converter={StaticResource VisibilityConverter}}">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="*" />
+                    </Grid.RowDefinitions>
+                    <StackPanel Grid.Row="0" Margin="30,0,30,0" Height="80" Orientation="Horizontal">
+                        <TextBlock Grid.Column="1" Foreground="#FFFE9400" Text="{Binding ExceptionCount, StringFormat=共存在{0}项异常}" VerticalAlignment="Center"/>
+                    </StackPanel>
+                    <DataGrid Grid.Row="1" Margin="26, 0, 26, 0" ItemsSource="{Binding Exceptions}" >
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="异常项" Width="283" 
+                                                Binding="{Binding Converter={StaticResource ExceptionListConverter}, ConverterParameter=Tree}" />
+                            <DataGridTextColumn Header="回收试卷（份）" Width="*" 
+                                                Binding="{Binding Exceptions.Count}" />
+                        </DataGrid.Columns>
+                    </DataGrid>
+                </Grid>
+            </Border>
+
+            <Border CornerRadius="4" Background="White" HorizontalAlignment="Stretch">
                 <Grid>
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto" />
@@ -169,27 +193,7 @@
                 </Grid>
             </Border>
 
-            <Border Grid.Column="2" CornerRadius="4" Background="White">
-                <Grid>
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="Auto" />
-                        <RowDefinition Height="*" />
-                    </Grid.RowDefinitions>
-                    <StackPanel Grid.Row="0" Margin="30,0,30,0" Height="80" Orientation="Horizontal">
-                        <TextBlock Grid.Column="1" Foreground="#FFFE9400" Text="{Binding ExceptionCount, StringFormat=共存在{0}项异常}" VerticalAlignment="Center"/>
-                    </StackPanel>
-                    <DataGrid Grid.Row="1" Margin="26, 0, 26, 0" ItemsSource="{Binding Exceptions}" >
-                        <DataGrid.Columns>
-                            <DataGridTextColumn Header="异常项" Width="283" 
-                                                Binding="{Binding Converter={StaticResource ExceptionListConverter}, ConverterParameter=Tree}" />
-                            <DataGridTextColumn Header="回收试卷（份）" Width="*" 
-                                                Binding="{Binding Exceptions.Count}" />
-                        </DataGrid.Columns>
-                    </DataGrid>
-                </Grid>
-            </Border>
-            
-        </Grid>
+        </DockPanel>
         
     </Grid>
 </Page>

@@ -2,7 +2,7 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:local="clr-namespace:TalBase.View">
     
-    <Style TargetType="local:TalButton">
+    <Style x:Key="DefaultTalButtonStyle" TargetType="local:TalButton">
         <Setter Property="Height" Value="32"/>
         <Setter Property="Padding" Value="20, 0, 20, 0"/>
         <Setter Property="FontSize" Value="14"/>
@@ -40,10 +40,10 @@
             <MultiTrigger>
                 <MultiTrigger.Conditions>
                     <Condition Property="IsDefault" Value="True"></Condition>
-                    <Condition Property="IsPressed" Value="False"></Condition>
+                    <Condition Property="IsFocused" Value="False"></Condition>
                 </MultiTrigger.Conditions>
-                <Setter Property="Background" Value="#FF4C84FF"/>
-                <Setter Property="CoverBrush" Value="#ff739FFF"/>
+                <Setter Property="Background" Value="Red"/>
+                <Setter Property="CoverBrush" Value="Blue"/>
             </MultiTrigger>
             <MultiTrigger>
                 <MultiTrigger.Conditions>
@@ -68,4 +68,7 @@
             </Trigger>
         </Style.Triggers>
     </Style>
+
+    <Style TargetType="local:TalButton" BasedOn="{StaticResource DefaultTalButtonStyle}"/>
+    
 </ResourceDictionary>

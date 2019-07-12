@@ -1,6 +1,7 @@
 ﻿using Base.Misc;
 using Base.Mvvm;
 using Exercise.Algorithm;
+using Exercise.Scanning;
 using Exercise.Service;
 using System;
 using System.Collections.Generic;
@@ -10,6 +11,7 @@ using System.IO;
 using System.Security.Cryptography;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Windows;
 using TalBase.Model;
 
 namespace Exercise.Model
@@ -115,7 +117,7 @@ namespace Exercise.Model
             }
         }
 
-        private IScanDevice scanDevice = ScanDevice.Instance;
+        private IScanDevice scanDevice = new ScanDeviceSaraff(Application.Current.MainWindow);
         private Algorithm.Algorithm algorithm = new Algorithm.Algorithm();
 
         private object mutex = new object();
@@ -261,6 +263,11 @@ namespace Exercise.Model
             savePath = path;
             foreach (Page p in data.Pages)
             {
+                if (p == null)
+                {
+                    Pages.Add(p);
+                    continue;
+                }
                 if (p.PageName != null)
                 {
                     p.PagePath = savePath + "\\" + p.PageName;

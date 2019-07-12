@@ -3,8 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 
-namespace Exercise
+namespace Exercise.Scanning
 {
     public class ScanEvent
     {
@@ -49,11 +50,6 @@ namespace Exercise
         void ResumeScan();
 
         void Close();
-    }
-
-    public class ScanDevice
-    {
-        public static IScanDevice Instance { get; set; }
     }
 
 }

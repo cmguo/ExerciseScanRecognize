@@ -8,17 +8,16 @@ namespace Base.TitleBar
         #region Dependency Properties
 
         public static DependencyProperty NameProperty =
-            DependencyProperty.Register("Name",
-                                        typeof(string),
-                                        typeof(TitleButton));
+            DependencyProperty.Register("Name", typeof(string), typeof(TitleButton));
         public static DependencyProperty ContentProperty =
-            DependencyProperty.Register("Content",
-                                        typeof(FrameworkElement),
-                                        typeof(TitleButton));
+            DependencyProperty.Register("Content", typeof(FrameworkElement), typeof(TitleButton));
+        public static DependencyProperty DockProperty =
+            DependencyProperty.Register("Dock", typeof(Docks), typeof(TitleButton));
 
-        public Dock? GetDock()
+        public enum Docks
         {
-            return (Dock) Content.GetValue(DockPanel.DockProperty);
+            Left, 
+            Right
         }
 
         #endregion // Dependency Properties
@@ -38,6 +37,12 @@ namespace Base.TitleBar
             get { return GetValue(NameProperty) as string; }
             set { SetValue(NameProperty, value); }
         }
+        public Docks? Dock
+        {
+            get { return (Docks?) GetValue(DockProperty); }
+            set { SetValue(DockProperty, value); }
+        }
+
         public FrameworkElement Content
         {
             get { return GetValue(ContentProperty) as FrameworkElement; }

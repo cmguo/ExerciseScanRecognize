@@ -7,8 +7,9 @@
       xmlns:local="clr-namespace:Exercise.View"
       xmlns:cv="clr-namespace:Base.Mvvm.Converter;assembly=Base"
       xmlns:tal="clr-namespace:TalBase.View;assembly=TalBase"
+      xmlns:svgc="http://sharpvectors.codeplex.com/svgc/"
       mc:Ignorable="d" 
-      d:DesignHeight="450" d:DesignWidth="800"
+      d:DesignHeight="200" d:DesignWidth="231"
       Title="AnswerExceptionPage">
 
     <Page.Resources>
@@ -16,33 +17,48 @@
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="pack://application:,,,/TalBase;component/Themes/Button.xaml" />
             </ResourceDictionary.MergedDictionaries>
-            <local:SelectionConverter x:Key="SelectionConverter" />
+            <local:SelectionConverter x:Key="BorderSelectionConverter" Selected="#FF2D4A66" Unselected="#FFCAD3DD" />
+            <cv:BooleanBrushConverter x:Key="BackgroundConverter" TrueValue="Transparent" FalseValue="#FF10D900" />
+            <local:SelectionConverter x:Key="BackgroundConverter2" Selected="#FF4C84FF" Unselected="#FFE5EFFE" />
+            <cv:BooleanBrushConverter x:Key="ForegroundConverter" TrueValue="#FF2D4A66" FalseValue="White" />
+            <local:SelectionConverter x:Key="ForegroundConverter2" Selected="White" Unselected="#FF4C84FF" />
             <resolve:AnswerExceptionViewModel x:Key="ViewModel" />
             <resolve:FalseVisibleConverter x:Key="FalseVisibleConverter" />
+            <resolve:ExceptionConverter x:Key="ExceptionConverter" />
             <cv:NullVisibleConverter x:Key="NullVisibleConverter" />
             <DataTemplate x:Key="QuestionItem">
-                <Button BorderThickness="2" Click="Question_Click" MinWidth="30" Height="30">
+                <Button BorderThickness="2" Click="Question_Click" MinWidth="32" Height="32">
                     <Button.BorderBrush>
-                        <MultiBinding Converter="{StaticResource SelectionConverter}">
+                        <MultiBinding Converter="{StaticResource BorderSelectionConverter}">
                             <Binding Path="SelectedQuestion" Source="{StaticResource ViewModel}" />
                             <Binding />
                         </MultiBinding>
                     </Button.BorderBrush>
-                    <Grid>
-                        <TextBlock Text="{Binding QuestionId}" Foreground="{Binding BorderBrush, RelativeSource={RelativeSource AncestorType=Button}}" Margin="5" />
-                        <Image Visibility="{Binding HasException, Converter={StaticResource FalseVisibleConverter}}" HorizontalAlignment="Left" VerticalAlignment="Bottom" />
-                    </Grid>
+                    <Button.Background>
+                        <Binding Path="HasException" Converter="{StaticResource BackgroundConverter}" />
+                    </Button.Background>
+                    <TextBlock FontSize="14" Text="{Binding QuestionId}" 
+                               Foreground="{Binding HasException, Converter={StaticResource ForegroundConverter}}" />
                 </Button>
             </DataTemplate>
             <DataTemplate x:Key="AnswerItem">
-                <Button BorderThickness="2" Click="Answer_Click" MinWidth="30" Height="30">
-                    <Button.BorderBrush>
-                        <MultiBinding Converter="{StaticResource SelectionConverter}">
-                            <Binding Path="SelectedAnswer" Source="{StaticResource ViewModel}" />
-                            <Binding />
-                        </MultiBinding>
-                    </Button.BorderBrush>
-                    <TextBlock Text="{Binding TargetNullValue=未作答}" Foreground="{Binding BorderBrush, RelativeSource={RelativeSource AncestorType=Button}}" />
+                <Button BorderThickness="0" Click="Answer_Click" Background="Transparent">
+                    <Border CornerRadius="2" MinWidth="32" Height="32" BorderThickness="0">
+                        <Border.Background>
+                            <MultiBinding Converter="{StaticResource BackgroundConverter2}">
+                                <Binding Path="SelectedAnswer" Source="{StaticResource ViewModel}" />
+                                <Binding />
+                            </MultiBinding>
+                        </Border.Background>
+                        <TextBlock Text="{Binding TargetNullValue=未作答}" Margin="9" HorizontalAlignment="Center" VerticalAlignment="Center">
+                            <TextBlock.Foreground>
+                                <MultiBinding Converter="{StaticResource ForegroundConverter2}">
+                                    <Binding Path="SelectedAnswer" Source="{StaticResource ViewModel}" />
+                                    <Binding />
+                                </MultiBinding>
+                            </TextBlock.Foreground>
+                        </TextBlock>
+                    </Border>
                 </Button>
             </DataTemplate>
         </ResourceDictionary>
@@ -53,8 +69,10 @@
             <RowDefinition />
             <RowDefinition />
             <RowDefinition />
+            <RowDefinition />
         </Grid.RowDefinitions>
-        <ListView Grid.Row="0" BorderThickness="0" 
+        
+        <ListView Grid.Row="0" BorderThickness="0" Background="Transparent"
                   ItemsSource="{Binding Questions, Source={StaticResource ViewModel}}"
                   ItemTemplate="{StaticResource QuestionItem}">
             <ListView.ItemsPanel>
@@ -65,46 +83,82 @@
             <ListBox.ItemContainerStyle>
                 <Style TargetType="{x:Type ListViewItem}">
                     <Setter Property="Focusable" Value="False"/>
+                    <Setter Property="Template">
+                        <Setter.Value>
+                            <ControlTemplate TargetType="ListViewItem">
+                                <Border Padding="0, 0, 8, 0" Width="40" >
+                                    <ContentPresenter />
+                                </Border>
+                            </ControlTemplate>
+                        </Setter.Value>
+                    </Setter>
                 </Style>
             </ListBox.ItemContainerStyle>
         </ListView>
-        <ListView Grid.Row="1" x:Name="answers" BorderThickness="0" 
+        
+        <TextBlock Grid.Row="1" FontSize="12" Foreground="#FF2D4A66" Margin="0, 24, 0, 0" 
+                   Text="{Binding Converter={StaticResource ExceptionConverter}, ConverterParameter=Message}"/>
+        
+        <ListView Grid.Row="2" x:Name="answers" BorderThickness="0"  Margin="0, 14, 0, 24" Background="Transparent"
+                  ScrollViewer.HorizontalScrollBarVisibility="Disabled"
                   ItemsSource="{Binding Answers, Source={StaticResource ViewModel}}"
                   ItemTemplate="{StaticResource AnswerItem}">
             <ListView.ItemsPanel>
                 <ItemsPanelTemplate>
-                    <WrapPanel IsItemsHost="True" Orientation="Horizontal" />
+                    <StackPanel IsItemsHost="True" Orientation="Horizontal" />
                 </ItemsPanelTemplate>
             </ListView.ItemsPanel>
             <ListBox.ItemContainerStyle>
                 <Style TargetType="{x:Type ListViewItem}">
                     <Setter Property="Focusable" Value="False"/>
+                    <Setter Property="Template">
+                        <Setter.Value>
+                            <ControlTemplate TargetType="ListViewItem">
+                                <Border Padding="0, 0, 8, 0" Width="64">
+                                    <ContentPresenter />
+                                </Border>
+                            </ControlTemplate>
+                        </Setter.Value>
+                    </Setter>
                 </Style>
             </ListBox.ItemContainerStyle>
         </ListView>
-        <StackPanel Grid.Row="1" x:Name="correct" Orientation="Vertical" Margin="20">
-            <TextBlock Text="本题得分为："/>
+
+        <StackPanel Grid.Row="2" x:Name="correct" Orientation="Vertical" Margin="0, 14, 0, 0">
             <StackPanel Orientation="Horizontal">
-                <TextBox Text="{Binding SelectedAnswer, Source={StaticResource ViewModel}}" Width="60" />
-                <TextBlock Text="分"/>
+                <TextBox Text="{Binding SelectedAnswer, Source={StaticResource ViewModel}}" 
+                         Width="72" Height="32" FontSize="14" Foreground="#FF2D4A66" VerticalContentAlignment="Center" />
+                <TextBlock Text="分" FontSize="14" Foreground="#FF2D4A66" VerticalAlignment="Center" Margin="8, 0, 0, 0"/>
             </StackPanel>
-            <ListView Grid.Row="0" BorderThickness="0"  Width="130" HorizontalAlignment="Left"
+            <ListView Grid.Row="0" BorderThickness="0" HorizontalAlignment="Left" Margin="0, 14, 0, 0" Background="Transparent"
                   ItemsSource="{Binding Answers, Source={StaticResource ViewModel}}"
                   ItemTemplate="{StaticResource AnswerItem}">
                 <ListView.ItemsPanel>
                     <ItemsPanelTemplate>
-                        <WrapPanel IsItemsHost="True" Orientation="Horizontal" Width="120" />
+                        <WrapPanel IsItemsHost="True" Orientation="Horizontal" Width="130" />
                     </ItemsPanelTemplate>
                 </ListView.ItemsPanel>
                 <ListBox.ItemContainerStyle>
                     <Style TargetType="{x:Type ListViewItem}">
                         <Setter Property="Focusable" Value="False"/>
+                        <Setter Property="Template">
+                            <Setter.Value>
+                                <ControlTemplate TargetType="ListViewItem">
+                                    <Border Padding="0, 0, 8, 8">
+                                        <ContentPresenter />
+                                    </Border>
+                                </ControlTemplate>
+                            </Setter.Value>
+                        </Setter>
                     </Style>
                 </ListBox.ItemContainerStyle>
             </ListView>
-            <TextBlock Text="请为本题打分" Foreground="Red" 
+            <StackPanel Grid.Row="2" Margin="0, -4, 0, 4" Orientation="Horizontal">
+                <Image Width="12" Height="12" Source="{svgc:SvgImage Source=/Icons/bad.svg}" />
+                <TextBlock Margin="4, 0, 0, 0" FontSize="11" Foreground="#ffff6767"  Text="请为本题打分"
                        Visibility="{Binding SelectedAnswer, Source={StaticResource ViewModel}, Converter={StaticResource NullVisibleConverter}}"/>
+            </StackPanel>
         </StackPanel>
-        <tal:TalButton Grid.Row="2" Content="确认" Click="Confirm_Click" />
+        <tal:TalButton Grid.Row="3" IsDefault="True" Content="确认" Click="Confirm_Click"/>
     </Grid>
 </Page>

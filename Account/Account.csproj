@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
@@ -40,6 +40,30 @@
     <Reference Include="Refit">
       <HintPath>..\packages\Refit.4.7.9\lib\net461\Refit.dll</HintPath>
     </Reference>
+    <Reference Include="SharpVectors.Converters.Wpf">
+      <HintPath>..\Application\Libraries\SharpVectors\SharpVectors.Converters.Wpf.dll</HintPath>
+    </Reference>
+    <Reference Include="SharpVectors.Core">
+      <HintPath>..\Application\Libraries\SharpVectors\SharpVectors.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="SharpVectors.Css">
+      <HintPath>..\Application\Libraries\SharpVectors\SharpVectors.Css.dll</HintPath>
+    </Reference>
+    <Reference Include="SharpVectors.Dom">
+      <HintPath>..\Application\Libraries\SharpVectors\SharpVectors.Dom.dll</HintPath>
+    </Reference>
+    <Reference Include="SharpVectors.Model">
+      <HintPath>..\Application\Libraries\SharpVectors\SharpVectors.Model.dll</HintPath>
+    </Reference>
+    <Reference Include="SharpVectors.Rendering.Gdi">
+      <HintPath>..\Application\Libraries\SharpVectors\SharpVectors.Rendering.Gdi.dll</HintPath>
+    </Reference>
+    <Reference Include="SharpVectors.Rendering.Wpf">
+      <HintPath>..\Application\Libraries\SharpVectors\SharpVectors.Rendering.Wpf.dll</HintPath>
+    </Reference>
+    <Reference Include="SharpVectors.Runtime.Wpf">
+      <HintPath>..\Application\Libraries\SharpVectors\SharpVectors.Runtime.Wpf.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xaml" />
@@ -61,8 +85,8 @@
     <Compile Include="Service\LogoutData.cs" />
     <Compile Include="Service\LoginData.cs" />
     <Compile Include="ViewModel\AccountViewModel.cs" />
-    <Compile Include="View\AccountPage.xaml.cs">
-      <DependentUpon>AccountPage.xaml</DependentUpon>
+    <Compile Include="View\AccountWindow.xaml.cs">
+      <DependentUpon>AccountWindow.xaml</DependentUpon>
     </Compile>
   </ItemGroup>
   <ItemGroup>
@@ -80,7 +104,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Page Include="View\AccountPage.xaml">
+    <Page Include="View\AccountWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>

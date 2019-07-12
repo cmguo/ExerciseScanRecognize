@@ -129,11 +129,14 @@ namespace Exercise.ViewModel
                 (obj as System.Windows.Controls.Page).NavigationService.Navigate(new SummaryPage());
         }
 
-        private void Resolve(object obj, ExerciseModel.Exception exception, ResolveType type)
+        private async Task Resolve(object obj, ExerciseModel.Exception exception, ResolveType type)
         {
             exerciseModel.Resolve(exception, type);
             if (Exceptions.Count == 0)
+            {
+                await exerciseModel.Save();
                 (obj as System.Windows.Controls.Page).NavigationService.Navigate(new SummaryPage());
+            }
         }
 
         private void Resolve(object obj, ExerciseModel.ExceptionList list, ResolveType type)

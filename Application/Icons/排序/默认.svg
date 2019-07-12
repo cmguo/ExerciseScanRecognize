@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="16px" height="16px" viewBox="0 0 16 16" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 55.2 (78181) - https://sketchapp.com -->
+    <title>icon/排序/默认</title>
+    <desc>Created with Sketch.</desc>
+    <g id="icon/排序/默认" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" opacity="0.25">
+        <polygon id="icon_down" fill="#2D4A66" points="11.6309914 9 8.21033046 12.4206609 4.78966954 9 4 9.78966954 8.21033046 14 12.4206609 9.78966954"></polygon>
+        <polygon id="icon_down备份" fill="#2D4A66" transform="translate(8.210330, 4.500000) scale(1, -1) translate(-8.210330, -4.500000) " points="11.6309914 2 8.21033046 5.42066091 4.78966954 2 4 2.78966954 8.21033046 7 12.4206609 2.78966954"></polygon>
+    </g>
+</svg>

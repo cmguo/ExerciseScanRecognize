@@ -10,6 +10,7 @@ namespace Exercise.View
         internal RetryConverter()
         {
             VisibleValues = new object[] { TaskStatus.Failed };
+            HiddenValues = new object[0];
         }
     }
 
@@ -18,6 +19,7 @@ namespace Exercise.View
         internal ReturnConverter()
         {
             VisibleValues = new object[] { TaskStatus.Failed, TaskStatus.Completed };
+            HiddenValues = new object[0];
         }
     }
 
@@ -26,6 +28,7 @@ namespace Exercise.View
         internal SubmittingConverter()
         {
             VisibleValues = new object[] { TaskStatus.Submiting };
+            HiddenValues = new object[0];
         }
     }
 

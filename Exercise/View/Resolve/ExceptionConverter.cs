@@ -51,15 +51,15 @@ namespace Exercise.View.Resolve
                 {
                     case ExceptionType.NoPageCode:
                     case ExceptionType.PageCodeMissMatch:
-                        return "此份试卷无法识别，存在以下异常，请放入此试卷重新扫描。（请勿放入他人试卷）";
+                        return "此份试卷无法识别，存在以下异常，请放入此试卷重新扫描。";
                     case ExceptionType.NoStudentCode:
                         return "该试卷所属的学生是？";
                     case ExceptionType.AnalyzeException:
                         if (page.Student != null)
-                            return String.Format("{0}{1}试卷无法识别，存在以下异常，请放入此试卷重新扫描。（请勿放入他人试卷）",
+                            return String.Format("{0}{1}试卷无法识别，存在以下异常，请放入此试卷重新扫描。",
                                 page.Student.TalNo, page.Student.Name);
                         else
-                            return String.Format("此份试卷无法识别，存在以下异常，请放入此试卷重新扫描。（请勿放入他人试卷）");
+                            return String.Format("此份试卷无法识别，存在以下异常，请放入此试卷重新扫描。");
                     case ExceptionType.AnswerException:
                         return String.Format("{0}{1} （第{2}页），以下题号存在作答识别异常，请确认识别结果。",
                             page.Student.TalNo, page.Student.Name, page.PageIndex + 1);
@@ -67,7 +67,7 @@ namespace Exercise.View.Resolve
                         return String.Format("{0}{1} （第{2}页），以下题号存在批改识别异常，请确认得分。",
                             page.Student.TalNo, page.Student.Name, page.PageIndex + 1);
                     case ExceptionType.PageLost:
-                        return String.Format("{0} {1} （{2}-{3}页）缺失，请放入其试卷重新扫描。（请勿放入他人试卷）",
+                        return String.Format("{0} {1} （{2}-{3}页）缺失，请放入其试卷重新扫描。",
                             page.Student.TalNo, page.Student.Name, page.PageIndex + 1, page.PageIndex + 2);
                     default:
                         return null;
@@ -75,7 +75,11 @@ namespace Exercise.View.Resolve
             }
             else if ((string)parameter == "Message")
             {
-                if (page.Exception != null)
+                if (ex.Type == ExceptionType.AnswerException)
+                    return "本题的识别结果为：";
+                else if (ex.Type == ExceptionType.CorrectionException)
+                    return "本题的得分为：";
+                else if (page.Exception != null)
                     return page.Exception.Message;
                 else if (ex.Type == ExceptionType.PageCodeMissMatch)
                     return "该试卷非本校试卷";

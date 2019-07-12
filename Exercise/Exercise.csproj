@@ -108,7 +108,8 @@
     <Compile Include="Model\ExerciseModel.cs" />
     <Compile Include="Model\ScanModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="ScanDevice.cs" />
+    <Compile Include="Scanner\ScanDevice.cs" />
+    <Compile Include="Scanner\ScanDeviceSaraff.cs" />
     <Compile Include="Service\GenUriData.cs" />
     <Compile Include="Service\HistoryData.cs" />
     <Compile Include="Service\SubmitComplete.cs" />
@@ -129,6 +130,10 @@
     <Compile Include="View\DetailWindow.xaml.cs">
       <DependentUpon>DetailWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="View\MainWindow.xaml.cs">
+      <DependentUpon>MainWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\SubmitConverter.cs" />
     <Compile Include="View\HistoryPage.xaml.cs">
       <DependentUpon>HistoryPage.xaml</DependentUpon>
     </Compile>
@@ -180,6 +185,10 @@
       <Project>{72b3698e-1784-4101-99ae-fc7b8f48e96d}</Project>
       <Name>Panuon.UI</Name>
     </ProjectReference>
+    <ProjectReference Include="..\submodule\Saraff.Twain.NET\Saraff.Twain.csproj">
+      <Project>{658f9851-4d1c-4d57-904e-f9d7da7f24fc}</Project>
+      <Name>Saraff.Twain</Name>
+    </ProjectReference>
     <ProjectReference Include="..\TalBase\TalBase.csproj">
       <Project>{ce4a2da6-a065-4f02-8ae1-b788e57aef09}</Project>
       <Name>TalBase</Name>
@@ -195,6 +204,10 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="View\HistoryPage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="View\MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>

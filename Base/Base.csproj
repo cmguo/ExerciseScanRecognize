@@ -63,11 +63,14 @@
     <Compile Include="Misc\SystemUtil.cs" />
     <Compile Include="Misc\UITreeHelper.cs" />
     <Compile Include="Mvvm\BackgroudWork.cs" />
-    <Compile Include="Mvvm\Converter\MultiValueConverter.cs" />
     <Compile Include="Mvvm\Converter\BoolConverter.cs" />
+    <Compile Include="Mvvm\Converter\BooleanObjectConverter.cs" />
+    <Compile Include="Mvvm\Converter\MultiValueConverter.cs" />
+    <Compile Include="Mvvm\Converter\BooleanConverter.cs" />
     <Compile Include="Mvvm\Converter\NonNullTrueConverter.cs" />
     <Compile Include="Mvvm\Converter\NullVisibleConverter.cs" />
     <Compile Include="Mvvm\Converter\NonNullVisibleConverter.cs" />
+    <Compile Include="Mvvm\Converter\BooleanBrushConverter.cs" />
     <Compile Include="Mvvm\Converter\VisibilityConverter.cs" />
     <Compile Include="Mvvm\ObservableCollections.cs" />
     <Compile Include="Mvvm\RelayCommand.cs" />

@@ -5,6 +5,7 @@
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
       xmlns:cv="clr-namespace:Base.Mvvm.Converter;assembly=Base"
       xmlns:tal="clr-namespace:TalBase.View;assembly=TalBase"
+      xmlns:svgc="http://sharpvectors.codeplex.com/svgc/"
       mc:Ignorable="d" 
       d:DesignHeight="450" d:DesignWidth="800"
       Title="HomePage">
@@ -23,15 +24,17 @@
             <RowDefinition />
             <RowDefinition />
             <RowDefinition />
+            <RowDefinition />
         </Grid.RowDefinitions>
         <ComboBox Grid.Row="0" x:Name="classList" ItemsSource="{Binding Classes}">
             <ComboBox.ItemTemplate>
                 <DataTemplate>
-                    <TextBlock Text="{Binding ClassName}" />
+                    <TextBlock FontSize="14" Foreground="#FF2D4A66" Text="{Binding ClassName}" />
                 </DataTemplate>
             </ComboBox.ItemTemplate>
         </ComboBox>
-        <ComboBox Grid.Row="1" x:Name="studentList" ItemsSource="{Binding SelectedValue.Students, ElementName=classList}" 
+        <ComboBox Grid.Row="1" x:Name="studentList" Margin="0, 14, 0, 0"
+                  ItemsSource="{Binding SelectedValue.Students, ElementName=classList}" 
                    SelectedValuePath="TalNo" SelectedValue="{Binding Page.StudentCode}">
             <ComboBox.ItemTemplate>
                 <DataTemplate>
@@ -46,7 +49,11 @@
                 </DataTemplate>
             </ComboBox.ItemTemplate>
         </ComboBox>
-        <tal:TalButton Grid.Row="2" Content="确认" Click="Confirm_Click" IsDefault="True"
+        <StackPanel Grid.Row="2" Margin="0, 9, 0 ,0" Orientation="Horizontal">
+            <Image Width="12" Height="12" Source="{svgc:SvgImage Source=/Icons/bad.svg}" />
+            <TextBlock Margin="4, 0, 0, 0" FontSize="11" Foreground="#ffff6767" />
+        </StackPanel>
+        <tal:TalButton Grid.Row="3" Margin="0, 4, 0 ,0" Content="确认" Click="Confirm_Click" IsDefault="True"
                 IsEnabled="{Binding SelectedItem, ElementName=studentList, Converter={StaticResource NonNullTrueConverter}}" />
     </Grid>
 </Page>

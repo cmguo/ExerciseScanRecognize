@@ -8,9 +8,9 @@
       xmlns:vm="clr-namespace:Exercise.ViewModel"
       xmlns:pb="clr-namespace:Base.PushBinding;assembly=Base"
       xmlns:cv="clr-namespace:Base.Mvvm.Converter;assembly=Base"
-      xmlns:mu="clr-namespace:Panuon.UI;assembly=Panuon.UI"
       xmlns:tb="clr-namespace:Base.TitleBar;assembly=Base"
       xmlns:tal="clr-namespace:TalBase.View;assembly=TalBase"
+      xmlns:svgc="http://sharpvectors.codeplex.com/svgc/"
       mc:Ignorable="d" 
       x:Name="Page"
       d:DesignHeight="652" d:DesignWidth="1200"
@@ -33,10 +33,10 @@
             <cv:NullVisibleConverter x:Key="NullVisibleConverter" />
             <local:DuplexFaceConverter x:Key="DuplexFaceConverter" />
             <local:PaperOverlayConverter x:Key="PaperOverlayConverter" />
-            <tal:TalButton x:Key="Return" VerticalAlignment="Center" HorizontalAlignment="Center"
-                         Content="返回"
+            <tal:TalButton x:Key="Return" Content="返回" Style="{StaticResource DefaultTalButtonStyle}"
                          Command="{Binding ReturnCommand}"
                          CommandParameter="{Binding Source={x:Reference Page}}" />
+            
         </ResourceDictionary>
     </Page.Resources>
 
@@ -67,10 +67,16 @@
             </TreeView.ItemContainerStyle>
             <TreeView.ItemTemplate>
                 <HierarchicalDataTemplate ItemsSource="{Binding Exceptions}">
-                    <TextBlock Text="{Binding Converter={StaticResource ExceptionListConverter}, ConverterParameter=Tree}"/>
+                    <StackPanel Orientation="Horizontal" Margin="0, 15, 0, 15" >
+                        <svgc:SvgViewbox Width="8" Height="8" Margin="0, 0, 8, 0"
+                               Source="{Binding Converter={StaticResource ExceptionListConverter}, ConverterParameter=Image}" />
+                        <TextBlock FontSize="14" Foreground="#FF2D4A66" 
+                                   Text="{Binding Converter={StaticResource ExceptionListConverter}, ConverterParameter=Tree}"/>
+                    </StackPanel>
                     <HierarchicalDataTemplate.ItemTemplate>
                         <DataTemplate>
-                            <TextBlock Text="{Binding Converter={StaticResource ExceptionConverter}, ConverterParameter=Tree}" />
+                            <TextBlock FontSize="14" Foreground="#FF2D4A66" Margin="0, 9, 0, 9" 
+                                       Text="{Binding Converter={StaticResource ExceptionConverter}, ConverterParameter=Tree}" />
                         </DataTemplate>
                     </HierarchicalDataTemplate.ItemTemplate>
                 </HierarchicalDataTemplate>
@@ -91,62 +97,100 @@
                     <tal:TalButton x:Name="face1" Click="ButtonFace1_Click" Content="正面"/>
                     <tal:TalButton x:Name="face2" Click="ButtonFace2_Click" Content="反面"/>
                 </StackPanel>
-                <StackPanel Orientation="Horizontal" VerticalAlignment="Top" HorizontalAlignment="Right"
+                <StackPanel Orientation="Horizontal" VerticalAlignment="Top" HorizontalAlignment="Right" Margin="0, 24, 84, 0"
                             Visibility="{Binding SelectedException.Page.PagePath, Converter={StaticResource NonNullVisibleConverter}, FallbackValue=Hidden}">
-                    <Button Click="ButtonInc_Click" Content="+"/>
-                    <Button Click="ButtonDec_Click" Content="-"/>
+                    <StackPanel.Resources>
+                        <Style TargetType="Button">
+                            <Setter Property="Width" Value="31"/>
+                            <Setter Property="Height" Value="31"/>
+                            <Setter Property="Background" Value="Transparent"/>
+                            <Setter Property="BorderThickness" Value="0"/>
+                            <Setter Property="Template">
+                                <Setter.Value>
+                                    <ControlTemplate TargetType="Button">
+                                        <Image Source="{TemplateBinding Content}" />
+                                    </ControlTemplate>
+                                </Setter.Value>
+                            </Setter>
+                        </Style>
+                    </StackPanel.Resources>
+                    <Button Click="ButtonInc_Click" Content="{svgc:SvgImage Source=/Icons/放大/正常.svg}" />
+                    <Button Click="ButtonDec_Click" Content="{svgc:SvgImage Source=/Icons/缩小/正常.svg}" Margin="8, 0, 0, 0"/>
                 </StackPanel>
             </Grid>
         </Border>
-        
-        <StackPanel Grid.Column="2" Orientation="Vertical" DockPanel.Dock="Right" Width="250">
-                <TextBlock Text="{Binding SelectedException, Converter={StaticResource ExceptionConverter}, 
-                    ConverterParameter=Title}" TextWrapping="Wrap" />
-                <Frame Content="{Binding SelectedException, Converter={StaticResource ExceptionPageConverter}}"/>
-                <StackPanel Orientation="Vertical">
-                    <tal:TalButton Command="{Binding RescanCommand}" 
-                            CommandParameter="{Binding ElementName=Page}" 
-                            IsDefault="True"
-                            Visibility="{Binding Content, RelativeSource={RelativeSource Self}, Converter={StaticResource NonNullVisibleConverter}}"
-                            Content="{Binding SelectedException, Converter={StaticResource ExceptionConverter}, 
-                                ConverterParameter=Rescan}" />
-                    <tal:TalButton Command="{Binding RemovePageCommand}" 
-                            CommandParameter="{Binding ElementName=Page}" 
-                            Visibility="{Binding Content, RelativeSource={RelativeSource Self}, Converter={StaticResource NonNullVisibleConverter}}"
-                            Content="{Binding SelectedException, Converter={StaticResource ExceptionConverter}, 
-                                ConverterParameter=RemovePage}" />
-                    <tal:TalButton Command="{Binding IgnoreCommand}" 
-                            CommandParameter="{Binding ElementName=Page}" 
-                            Visibility="{Binding Content, RelativeSource={RelativeSource Self}, Converter={StaticResource NonNullVisibleConverter}}"
-                            Content="{Binding SelectedException, Converter={StaticResource ExceptionConverter}, 
-                                ConverterParameter=Ignore}" />
-                    <tal:TalButton Command="{Binding RemoveStudentCommand}" 
-                            CommandParameter="{Binding ElementName=Page}" 
-                            Content="丢弃改生试卷" Visibility="{Binding SelectedException.Page.Student, 
-                                Converter={StaticResource NonNullVisibleConverter}, FallbackValue=Collapsed}" />
-                </StackPanel>
-                <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Orientation="Vertical" 
-                            Visibility="{Binding Text, ElementName=ListTitle, Converter={StaticResource NonNullVisibleConverter}}">
-                    <TextBlock x:Name="ListTitle" Text="{Binding SelectedExceptionList, Converter={StaticResource ExceptionListConverter}, 
-                            ConverterParameter=Title}" TextWrapping="Wrap" />
-                    <ListView ItemsSource="{Binding SelectedExceptionList.Exceptions}">
-                        <ListView.ItemTemplate>
-                            <DataTemplate>
-                                <TextBlock Text="{Binding Converter={StaticResource ExceptionConverter}, ConverterParameter=Tree}" />
-                            </DataTemplate>
-                        </ListView.ItemTemplate>
-                    </ListView>
-                    <tal:TalButton Command="{Binding IgnoreListCommand}" 
-                            CommandParameter="{Binding ElementName=Page}" 
-                            Visibility="{Binding Content, RelativeSource={RelativeSource Self}, Converter={StaticResource NonNullVisibleConverter}}"
-                            Content="{Binding SelectedExceptionList, Converter={StaticResource ExceptionListConverter}, 
-                                ConverterParameter=Ignore}" />
-                    <tal:TalButton Command="{Binding RemovePageListCommand}" 
-                            CommandParameter="{Binding ElementName=Page}" 
-                            Content="{Binding SelectedExceptionList, Converter={StaticResource ExceptionListConverter}, 
-                                ConverterParameter=RemovePage}" />
-                </StackPanel>
+
+        <StackPanel Margin="24, 32, 24, 32" Grid.Column="2" Orientation="Vertical">
+            
+            <TextBlock FontSize="12" Foreground="#FF7F8E99"  TextWrapping="Wrap"
+                       Text="{Binding SelectedException, Converter={StaticResource ExceptionConverter}, ConverterParameter=Title}" />
+            <TextBlock FontSize="12" Foreground="#FF7F8E99" Text="（请勿放入他人试卷）"
+                       DataContext="{Binding SelectedException, Converter={StaticResource ExceptionConverter}, ConverterParameter=Rescan}"
+                       Visibility="{Binding Converter={StaticResource NonNullVisibleConverter}}"/>
+            
+            <Frame Margin="0, 15, 0, 0" Content="{Binding SelectedException, Converter={StaticResource ExceptionPageConverter}}"/>
+            
+            <StackPanel Orientation="Vertical">
+                <StackPanel.Resources>
+                    <Style TargetType="tal:TalButton" BasedOn="{StaticResource DefaultTalButtonStyle}">
+                        <Setter Property="HorizontalAlignment" Value="Stretch"/>
+                        <Setter Property="Margin" Value="0, 14, 0, 0"/>
+                    </Style>
+                </StackPanel.Resources>
+                <tal:TalButton 
+                    IsDefault="True"
+                    Command="{Binding RescanCommand}" CommandParameter="{Binding ElementName=Page}" 
+                    Visibility="{Binding Content, RelativeSource={RelativeSource Self}, Converter={StaticResource NonNullVisibleConverter}}"
+                    Content="{Binding SelectedException, Converter={StaticResource ExceptionConverter}, ConverterParameter=Rescan}" />
+                <tal:TalButton 
+                    Command="{Binding RemovePageCommand}" CommandParameter="{Binding ElementName=Page}" 
+                    Visibility="{Binding Content, RelativeSource={RelativeSource Self}, Converter={StaticResource NonNullVisibleConverter}}"
+                    Content="{Binding SelectedException, Converter={StaticResource ExceptionConverter}, ConverterParameter=RemovePage}" />
+                <tal:TalButton 
+                    Command="{Binding IgnoreCommand}" CommandParameter="{Binding ElementName=Page}" 
+                    Visibility="{Binding Content, RelativeSource={RelativeSource Self}, Converter={StaticResource NonNullVisibleConverter}}"
+                    Content="{Binding SelectedException, Converter={StaticResource ExceptionConverter}, ConverterParameter=Ignore}" />
+                <tal:TalButton 
+                    Command="{Binding RemoveStudentCommand}" CommandParameter="{Binding ElementName=Page}" 
+                    Content="丢弃改生试卷" 
+                    Visibility="{Binding SelectedException.Page.Student, Converter={StaticResource NonNullVisibleConverter}, FallbackValue=Collapsed}" />
             </StackPanel>
+
+            <StackPanel  Orientation="Vertical" Margin="0, 24, 0, 0"
+                        Visibility="{Binding Text, ElementName=ListTitle, Converter={StaticResource NonNullVisibleConverter}}">
+
+                <StackPanel.Resources>
+                    <Style TargetType="tal:TalButton" BasedOn="{StaticResource DefaultTalButtonStyle}">
+                        <Setter Property="HorizontalAlignment" Value="Stretch"/>
+                        <Setter Property="Margin" Value="0, 14, 0, 0"/>
+                    </Style>
+                </StackPanel.Resources>
+
+                <Canvas Height="1" Background="#FF2D4A66" />
+             
+                <TextBlock x:Name="ListTitle" Margin="0, 24, 0, 0" 
+                           Text="{Binding SelectedExceptionList, Converter={StaticResource ExceptionListConverter}, ConverterParameter=Title}" TextWrapping="Wrap" />
+
+                <ListView Margin="0, 12, 0, 0" BorderThickness="1" BorderBrush="#FFE3E8F0" Height="231"
+                          ItemsSource="{Binding SelectedExceptionList.Exceptions}">
+                    <ListView.ItemTemplate>
+                        <DataTemplate>
+                            <TextBlock Margin="14, 7, 14, 7" FontSize="14" Foreground="#FF2D4A66" Text="{Binding Converter={StaticResource ExceptionConverter}, ConverterParameter=Tree}" />
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
+                </ListView>
+                
+                <tal:TalButton 
+                    Command="{Binding IgnoreListCommand}" CommandParameter="{Binding ElementName=Page}" 
+                    Visibility="{Binding Content, RelativeSource={RelativeSource Self}, Converter={StaticResource NonNullVisibleConverter}}"
+                    Content="{Binding SelectedExceptionList, Converter={StaticResource ExceptionListConverter}, ConverterParameter=Ignore}" />
+                <tal:TalButton 
+                    Command="{Binding RemovePageListCommand}" CommandParameter="{Binding ElementName=Page}" 
+                    Content="{Binding SelectedExceptionList, Converter={StaticResource ExceptionListConverter}, ConverterParameter=RemovePage}" />
+                
+            </StackPanel>
+            
+        </StackPanel>
         
     </Grid>
 </Page>

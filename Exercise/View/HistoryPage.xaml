@@ -18,15 +18,76 @@
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="pack://application:,,,/TalBase;component/Themes/Button.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/TalBase;component/Themes/Hyperlink.xaml" />
             </ResourceDictionary.MergedDictionaries>
             <cv:MultiValueConverter x:Key="MultiValueConverter" />
             <vm:HistoryViewModel x:Key="ViewModel" />
-            <tal:TalButton x:Key="Return" VerticalAlignment="Center" HorizontalAlignment="Center"
-                         Content="返回"
+            <tal:TalButton x:Key="Return" Content="返回" Style="{StaticResource DefaultTalButtonStyle}"
                          Command="{Binding ReturnCommand}"
                          CommandParameter="{Binding Source={x:Reference Page}}" />
             <local:HistroyDetailConverter x:Key="HistroyDetailConverter" />
-            <local:SelectionConverter x:Key="SelectionConverter" Unselected="Transparent" />
+            <local:SelectionConverter x:Key="SelectionConverter" Selected="#FF4C84FF" Unselected="{x:Null}" />
+            <local:SelectionConverter x:Key="ForegroundConverter" Selected="White" Unselected="#FF2D4A66" />
+
+            <Style TargetType="DataGrid">
+                <Setter Property="AutoGenerateColumns" Value="False"/>
+                <Setter Property="RowHeaderWidth" Value="0"/>
+                <Setter Property="Background" Value="White"/>
+                <Setter Property="ColumnHeaderHeight" Value="48"/>
+                <Setter Property="BorderThickness" Value="0" />
+                <Setter Property="GridLinesVisibility" Value="None" />
+                <Setter Property="RowHeight" Value="49" />
+                <Setter Property="ColumnHeaderStyle">
+                    <Setter.Value>
+                        <Style TargetType="DataGridColumnHeader">
+                            <Setter Property="Padding" Value="32, 0, 0, 0" />
+                            <Setter Property="Background" Value="#FFF4F8FE" />
+                            <Setter Property="Foreground" Value="#FF7F8E99" />
+                        </Style>
+                    </Setter.Value>
+                </Setter>
+                <Setter Property="RowStyle">
+                    <Setter.Value>
+                        <Style TargetType="DataGridRow">
+                            <Setter Property="Focusable" Value="False"/>
+                            <Setter Property="BorderBrush" Value="#FFEBEEF5"/>
+                            <Setter Property="BorderThickness" Value="0,0,0,1"/>
+                        </Style>
+                    </Setter.Value>
+                </Setter>
+                <Setter Property="CellStyle">
+                    <Setter.Value>
+                        <Style TargetType="DataGridCell">
+                            <Setter Property="Margin" Value="32, 0, 0, 0" />
+                            <Setter Property="VerticalAlignment" Value="Center"/>
+                            <Setter Property="Foreground" Value="#FF2D4A66"/>
+                            <Setter Property="Background" Value="{x:Null}" />
+                            <Setter Property="BorderBrush" Value="{x:Null}" />
+                            <Style.Triggers>
+                                <Trigger Property="IsSelected" Value="True">
+                                    <Setter Property="Background" Value="{x:Null}" />
+                                    <Setter Property="BorderBrush" Value="{x:Null}" />
+                                </Trigger>
+                            </Style.Triggers>
+                        </Style>
+                    </Setter.Value>
+                </Setter>
+            </Style>
+
+            <Style TargetType="TextBlock">
+                <Setter Property="FontSize" Value="14" />
+            </Style>
+
+            <DataTemplate x:Key="DataTemplate">
+                <TextBlock Text="{Binding Name}" FontSize="14" Foreground="#FF2D4A66"/>
+            </DataTemplate>
+            
+            <DataTemplate x:Key="EditingTemplate">
+                <Border CornerRadius="4" BorderBrush="#FF2D4A66" Width="170" Height="32" BorderThickness="1" HorizontalAlignment="Left" Margin="-3, 0, 0, 0">
+                    <TextBox Text="{Binding Name}" FontSize="14" Foreground="#FF2D4A66" VerticalAlignment="Center" BorderThickness="0"/>
+                </Border>
+            </DataTemplate>
+            
         </ResourceDictionary>
     </Page.Resources>
 
@@ -35,78 +96,84 @@
         <tb:TitleButton Name="Return" Content="{StaticResource Return}" />
     </tb:TitleBarManager.Buttons>
 
-    <Grid>
+    <Grid Margin="18, 20, 18, 16">
         <Grid.RowDefinitions>
-            <RowDefinition Height="40"/>
+            <RowDefinition Height="auto"/>
             <RowDefinition Height="auto"/>
             <RowDefinition Height="*"/>
-            <RowDefinition Height="40"/>
+            <RowDefinition Height="auto"/>
         </Grid.RowDefinitions>
 
-        <TextBlock Grid.Row="0" FontSize="30" Text="扫描记录管理"/>
+        <Border Grid.RowSpan="4" CornerRadius="4" Background="White" />
 
-        <ListView Grid.Row="1" ItemsSource="{Binding LocalRecords}" HorizontalContentAlignment="Stretch">
+        <TextBlock Grid.Row="0" FontSize="16" Foreground="#FF2D4A66" Margin="30, 28, 0, 0" Text="扫描记录管理"/>
+
+        <ListView Grid.Row="1" Margin="30, 16, 30, 0" BorderThickness="0" ItemsSource="{Binding LocalRecords}" HorizontalContentAlignment="Stretch">
+            <ListBox.ItemContainerStyle>
+                <Style TargetType="{x:Type ListViewItem}">
+                    <Setter Property="Focusable" Value="False"/>
+                    <Setter Property="Template">
+                        <Setter.Value>
+                            <ControlTemplate TargetType="ListViewItem">
+                                <Border >
+                                    <ContentPresenter />
+                                </Border>
+                            </ControlTemplate>
+                        </Setter.Value>
+                    </Setter>
+                </Style>
+            </ListBox.ItemContainerStyle>
             <ListView.ItemTemplate>
                 <DataTemplate>
-                    <DockPanel>
-                        <StackPanel DockPanel.Dock="Left" Orientation="Horizontal">
-                            <Image/>
-                            <TextBlock>
-                                <TextBlock.Text>
-                                    <MultiBinding StringFormat="异常退出待处理：{0}，扫描时间：{1}">
-                                        <Binding Path="Name"/>
-                                        <Binding Path="ScanDate"/>
-                                    </MultiBinding>
-                                </TextBlock.Text>
-                            </TextBlock>
-                        </StackPanel>
-                        <StackPanel DockPanel.Dock="Right" Orientation="Horizontal">
-                            <Button Content="查看扫描结果"  Background="Transparent" BorderThickness="0"
-                                    Command="{Binding SummaryCommand, Source={StaticResource ViewModel}}">
-                                <Button.CommandParameter>
-                                    <MultiBinding Converter="{StaticResource MultiValueConverter}">
-                                        <Binding ElementName="Page"/>
-                                        <Binding/>
-                                    </MultiBinding>
-                                </Button.CommandParameter>
-                            </Button>
-                            <Button Content="放弃本次扫描"  Background="Transparent" BorderThickness="0"
-                                    Command="{Binding DiscardCommand, Source={StaticResource ViewModel}}"
-                                    CommandParameter="{Binding}" />
-                        </StackPanel>
-                        <Border/>
-                    </DockPanel>
+                    <Border CornerRadius="4" BorderThickness="1" BorderBrush="#4D4C84FF" Height="48">
+                        <DockPanel Margin="16, 0, 26, 0" >
+                            <StackPanel DockPanel.Dock="Left" Orientation="Horizontal" VerticalAlignment="Center">
+                                <Image Width="16" Height="16" Source="/Icons/信息/16.png"/>
+                                <TextBlock Margin="8, 0, 0, 0" Foreground="#FF2D4A66">
+                                    <TextBlock.Text>
+                                        <MultiBinding StringFormat="异常退出待处理：{0}，扫描时间：{1}">
+                                            <Binding Path="Name"/>
+                                            <Binding Path="ScanDate"/>
+                                        </MultiBinding>
+                                    </TextBlock.Text>
+                                </TextBlock>
+                            </StackPanel>
+                            <StackPanel DockPanel.Dock="Right" Orientation="Horizontal" VerticalAlignment="Center">
+                                <tal:TalHyperlink Content="查看扫描结果"
+                                        Command="{Binding SummaryCommand, Source={StaticResource ViewModel}}">
+                                    <tal:TalHyperlink.CommandParameter>
+                                        <MultiBinding Converter="{StaticResource MultiValueConverter}">
+                                            <Binding ElementName="Page"/>
+                                            <Binding/>
+                                        </MultiBinding>
+                                    </tal:TalHyperlink.CommandParameter>
+                                </tal:TalHyperlink>
+                                <tal:TalHyperlink Content="放弃本次扫描" Margin="16, 0, 0, 0"
+                                        Command="{Binding DiscardCommand, Source={StaticResource ViewModel}}"
+                                        CommandParameter="{Binding}" />
+                            </StackPanel>
+                            <Border/>
+                        </DockPanel>
+                    </Border>
                 </DataTemplate>
             </ListView.ItemTemplate>
         </ListView>
         
-        <DataGrid Grid.Row="2" x:Name="dataGrid" AutoGenerateColumns="False" 
-                  ItemsSource="{Binding Records}"
-                  RowHeaderWidth="0" ColumnHeaderHeight="50"
-                  GridLinesVisibility="None"
-                  BorderThickness="0" RowHeight="40">
-            <DataGrid.RowStyle>
-                <Style TargetType="DataGridRow">
-                    <Setter Property="BorderThickness" Value="0,0,0,1"/>
-                </Style>
-            </DataGrid.RowStyle>
-            <DataGrid.CellStyle>
-                <Style TargetType="DataGridCell">
-                    <Setter Property="VerticalAlignment" Value="Center"/>
-                    <Setter Property="FontStyle" Value="Normal"/>
-                </Style>
-            </DataGrid.CellStyle>
+        <DataGrid Grid.Row="2" x:Name="dataGrid" Margin="30, 16, 30, 0"
+                  ItemsSource="{Binding Records}">
             <DataGrid.Columns>
-                <DataGridTextColumn Header="试卷名称" Binding="{Binding Name}" FontSize="14" Width="140"/>
-                <DataGridTextColumn Header="扫描统计" Binding="{Binding DetailList, Converter={StaticResource HistroyDetailConverter}}" FontSize="14" Width="300"/>
-                <DataGridTextColumn Header="扫描时间" Binding="{Binding DataTime, StringFormat={}{0:yyyy.MM.dd - hh:mm}, Mode=OneWay}" FontSize="14" Width="140"/>
-                <DataGridTemplateColumn Header="操作" Width="150">
+                <DataGridTemplateColumn Header="试卷名称" IsReadOnly="False" Width="230" 
+                                        CellTemplate="{StaticResource DataTemplate}"
+                                        CellEditingTemplate="{StaticResource EditingTemplate}"/>
+                <DataGridTextColumn Header="扫描统计" IsReadOnly="True" Binding="{Binding DetailList, Converter={StaticResource HistroyDetailConverter}}" Width="480"/>
+                <DataGridTextColumn Header="扫描时间" IsReadOnly="True" Binding="{Binding DataTime, StringFormat={}{0:yyyy.MM.dd - hh:mm}, Mode=OneWay}" Width="178"/>
+                <DataGridTemplateColumn Header="操作" Width="*">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <StackPanel DockPanel.Dock="Right" Orientation="Horizontal">
-                                <Button Content="查看扫描详情" Click="ButtonDetail_Click" Background="Transparent" BorderThickness="0"/>
-                                <TextBlock Text="|" />
-                                <Button Content="重命名" Click="ButtonRename_Click" Background="Transparent" BorderThickness="0" />
+                                <tal:TalHyperlink Content="查看扫描详情" Click="ButtonDetail_Click" Background="{x:Null}" BorderThickness="0"/>
+                                <TextBlock Text=" | " />
+                                <tal:TalHyperlink Content="重命名" Click="ButtonRename_Click" Background="{x:Null}" BorderThickness="0" />
                             </StackPanel>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
@@ -115,7 +182,7 @@
         </DataGrid>
 
         <ListView Grid.Row="3" ItemsSource="{Binding Pages, ElementName=Page}" 
-                  BorderThickness="0" Padding="0" HorizontalAlignment="Center">
+                  BorderThickness="0" Padding="0" HorizontalAlignment="Right" Margin="0, 0, 30, 30">
             <ListView.ItemsPanel>
                 <ItemsPanelTemplate>
                     <WrapPanel IsItemsHost="True" Orientation="Horizontal" />
@@ -124,17 +191,36 @@
             <ListBox.ItemContainerStyle>
                 <Style TargetType="{x:Type ListViewItem}">
                     <Setter Property="Focusable" Value="False"/>
+                    <Setter Property="Template">
+                        <Setter.Value>
+                            <ControlTemplate TargetType="ListViewItem">
+                                <Border Padding="4, 0, 4, 0">
+                                    <ContentPresenter />
+                                </Border>
+                            </ControlTemplate>
+                        </Setter.Value>
+                    </Setter>
                 </Style>
             </ListBox.ItemContainerStyle>
             <ListView.ItemTemplate>
                 <DataTemplate>
-                    <Button BorderThickness="0" Content="{Binding}" Width="30" Height="30" Click="ButtonPage_Click">
-                        <Button.Background>
-                            <MultiBinding Converter="{StaticResource SelectionConverter}">
-                                <Binding Path="PageIndex" ElementName="Page" />
-                                <Binding />
-                            </MultiBinding>
-                        </Button.Background>
+                    <Button BorderThickness="1" BorderBrush="{x:Null}" Background="{x:Null}" Click="ButtonPage_Click">
+                        <Border CornerRadius="2" MinWidth="32" Height="32" BorderThickness="1" BorderBrush="#332D4A66">
+                            <Border.Background>
+                                <MultiBinding Converter="{StaticResource SelectionConverter}">
+                                    <Binding Path="PageIndex" ElementName="Page" />
+                                    <Binding />
+                                </MultiBinding>
+                            </Border.Background>
+                            <TextBlock Text="{Binding}" HorizontalAlignment="Center" VerticalAlignment="Center">
+                                <TextBlock.Foreground>
+                                    <MultiBinding Converter="{StaticResource ForegroundConverter}">
+                                        <Binding Path="PageIndex" ElementName="Page" />
+                                        <Binding />
+                                    </MultiBinding>
+                                </TextBlock.Foreground>
+                            </TextBlock>
+                        </Border>
                     </Button>
                 </DataTemplate>
             </ListView.ItemTemplate>

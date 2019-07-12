@@ -51,13 +51,16 @@
             <ColumnDefinition Width="*" />
             <ColumnDefinition Width="auto" />
         </Grid.ColumnDefinitions>
-        <Border Background="Black" Margin="20,20,0,20" BorderBrush="Blue" BorderThickness="2">
-            <local:PaperViewer Paper="{Binding LastPage.PagePath}" ScaleMode="Ratio"
-                               Overlay="{Binding LastPage, Converter={StaticResource PaperOverlayConverter}, ConverterParameter=Result}"/>
-        </Border>
-        <StackPanel Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Center" Orientation="Vertical" Width="200">
-            <TextBlock Text="{Binding LastPage.Student.Name}" HorizontalAlignment="Center"/>
-            <TextBlock HorizontalAlignment="Center">
+        
+        <local:PaperViewer Margin="0,14,0,14" Paper="{Binding LastPage.PagePath}" ScaleMode="Ratio"
+                           Overlay="{Binding LastPage, Converter={StaticResource PaperOverlayConverter}, ConverterParameter=Result}"/>
+        
+        <StackPanel Grid.Column="1" Orientation="Vertical" Width="346" Background="White">
+            
+            <TextBlock Margin="0, 88, 0, 0" FontSize="26" Foreground="#FF2D4A66" HorizontalAlignment="Center"
+                       Text="{Binding LastPage.Student.Name}"/>
+
+            <TextBlock Margin="0, 8, 0, 0" FontSize="14" Foreground="#FF7F8E99" HorizontalAlignment="Center">
                 <TextBlock.Text>
                     <MultiBinding StringFormat="第{0}页/共{1}页">
                         <Binding Path="LastPage.Another.PageIndex" />
@@ -65,30 +68,25 @@
                     </MultiBinding>
                 </TextBlock.Text>
             </TextBlock>
-            <StackPanel Height="100" Background="Yellow" Width="60">
-                <Button x:Name="test" Background="White" Height="2" Width="50">
-                    <Button.Triggers>
-                        <EventTrigger RoutedEvent="Page.Loaded">
-                            <EventTrigger.Actions>
-                                <BeginStoryboard Name="sb2">
-                                    <Storyboard>
-                                        <ThicknessAnimation From="0,20,0,0" To="0,80,0,0"
-                                                            Storyboard.TargetName="test"
-                                                            RepeatBehavior="Forever"
-                                                            Duration="0:0:4"
-                                                            AutoReverse="True"
-                                                            Storyboard.TargetProperty="Margin"
-                                                            />
-                                    </Storyboard>
-                                </BeginStoryboard>
-                            </EventTrigger.Actions>
-                        </EventTrigger>
-                    </Button.Triggers>
-                </Button>
+
+            <Grid Margin="0, 48, 0, 0" Width="120" Height="120">
+                <Image Source="/Icons/PaperScan@2x.png" />
+                <Image Source="/Icons/Scan@2x.png" />
+            </Grid>
+
+            <StackPanel Margin="0, 48, 0, 0" Orientation="Horizontal" HorizontalAlignment="Center">
+                <StackPanel>
+                    <TextBlock FontSize="14" Foreground="#FF7F8E99" Text="已扫描试卷" HorizontalAlignment="Center"/>
+                    <TextBlock FontSize="24" Foreground="#FF2D4A66" Margin="0,8,0,0" HorizontalAlignment="Center" 
+                               Text="{Binding PageCount, StringFormat={}{0}张}"/>
+                </StackPanel>
+                <StackPanel Margin="88,0,0,0" >
+                    <TextBlock FontSize="14" Foreground="#FF7F8E99" Text="已扫描人数" HorizontalAlignment="Center"/>
+                    <TextBlock FontSize="24" Foreground="#FF2D4A66" Margin="0,8,0,0" HorizontalAlignment="Center" 
+                               Text="{Binding StudentSumary, StringFormat={}{0}人}"/>
+                </StackPanel>
             </StackPanel>
-            <TextBlock Text="{Binding PageCount, StringFormat=已扫描{0}张试卷}" HorizontalAlignment="Center" Margin="0,40,0,0"/>
-            <TextBlock Text="{Binding StudentSumary, StringFormat=共计{0}份试卷}" HorizontalAlignment="Center"/>
-            <tal:TalButton IsDefault="True" Content="结束扫描，查看结果" HorizontalAlignment="Center"
+            <tal:TalButton Margin="0,48,0,0" IsDefault="True" Width="230" Height="40" ButtonSize="Large" Content="结束扫描，查看结果" HorizontalAlignment="Center"
                            Command="{Binding EndScanCommand}" CommandParameter="{Binding ElementName=Page}" />
         </StackPanel>
     </Grid>

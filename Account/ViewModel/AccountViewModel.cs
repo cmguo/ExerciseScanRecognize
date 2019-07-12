@@ -9,12 +9,13 @@ using System.Windows.Controls;
 using TalBase.Utils;
 using System.Collections.Generic;
 using TalBase.View;
+using System.Windows;
 
 namespace Account.ViewModel
 {
     public class AccountViewModel : ViewModelBase
     {
-        private static NavigationService navigation;
+        private static Window mainWindow;
 
         public ICollection<string> ServiceUris => accountModel.ServiceUris.Keys;
 
@@ -46,19 +47,26 @@ namespace Account.ViewModel
             if (NetWorkManager.CheckNetWorkAvailable())
             {
                 await AccountModel.Instance.Login();
-                (obj as Page).NavigationService.Navigate(new Uri(Configuration.StartupPage));
-            }
-            if (navigation == null)
-            {
-                navigation = (obj as Page).NavigationService;
-                accountModel.PropertyChanged += AccountModel_PropertyChanged_Static;
+                if (mainWindow == null)
+                {
+                    Uri uri = new Uri(Configuration.StartupWindow);
+                    //uri.Authority
+                    //mainWindow = Activator.CreateInstanceFrom()
+                    //mainWindow.Show();
+                    (obj as Window).Close();
+                    Window window = Application.Current.MainWindow;
+                    if (window != null)
+                        window.Show();
+                }
             }
         }
 
         private async Task DoLogout(object obj)
         {
             await AccountModel.Instance.Logout();
-            (obj as Page).NavigationService.Navigate(new AccountPage());
+            Window window = Application.Current.MainWindow;
+            window.Hide();
+            new AccountWindow().Show();
         }
 
         private void AccountModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
@@ -70,7 +78,7 @@ namespace Account.ViewModel
         {
             if (e.PropertyName == "Account" && AccountModel.Instance.Error != null)
             {
-                navigation.Navigate(new AccountPage());
+                new AccountWindow() { Owner = mainWindow }.Show();
             }
         }
 

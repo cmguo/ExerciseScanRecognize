@@ -4,7 +4,7 @@
     {
         public NonNullVisibleConverter()
         {
-            CollapsedValues = new object[] { null, "" };
+            CollapsedValues = new object[] { null, false, 0, "" };
         }
 
     }

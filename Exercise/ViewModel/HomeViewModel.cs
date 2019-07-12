@@ -14,9 +14,13 @@ namespace Exercise.ViewModel
 {
     public class HomeViewModel : ScanViewModel
     {
-        public string[] SourceList { get; }
+        public string[] SourceList { get; internal set; }
 
-        public int SourceIndex { get => scanModel.SourceIndex; set => scanModel.SourceIndex = value; }
+        public int SourceIndex
+        {
+            get => scanModel.SourceIndex;
+            set { scanModel.SourceIndex = value; }
+        }
 
         #region Commands
 
@@ -32,13 +36,7 @@ namespace Exercise.ViewModel
         {
             StartCommand = new RelayCommand((e) => Start(e));
             HistroyCommand = new RelayCommand((e) => History(e));
-            try
-            {
-                SourceList = scanModel.SourceList;
-            }
-            catch
-            {
-            }
+            SourceList = scanModel.SourceList;
         }
 
         private async Task Start(object obj)

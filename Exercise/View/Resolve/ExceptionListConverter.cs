@@ -38,6 +38,24 @@ namespace Exercise.View.Resolve
                         return null;
                 }
             }
+            if ((string)parameter == "Image")
+            {
+                switch (el.Type)
+                {
+                    case ExceptionType.NoPageCode:
+                        return "/Icons/无法识别的试卷.svg";
+                    case ExceptionType.NoStudentCode:
+                        return "/Icons/待认领的试卷.svg";
+                    case ExceptionType.AnswerException:
+                        return "/Icons/作答识别异常.svg";
+                    case ExceptionType.CorrectionException:
+                        return "/Icons/批改识别异常.svg";
+                    case ExceptionType.PageLost:
+                        return "/Icons/缺失的学生试卷.svg";
+                    default:
+                        return null;
+                }
+            }
             else if ((string)parameter == "Title")
             {
                 switch (el.Type)

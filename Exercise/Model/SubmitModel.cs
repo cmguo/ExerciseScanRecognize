@@ -85,7 +85,7 @@ namespace Exercise.Model
             SubmitData sdata = new SubmitData() { PaperId = exerciseId, Data = data };
             SubmitPrepare prepare = new SubmitPrepare() { PaperId = exerciseId, ClassIdList = classes.Select(c => c.ClassId).ToList() };
             IList<string> names = data.SelectMany(s => s.PageInfo.Select(p => p.ImageName)).ToList();
-            int total = (data.Count + SUBIT_BATCH_SIZE - 1) / SUBIT_BATCH_SIZE + names.Count + 1;
+            int total = (data.Count + SUBIT_BATCH_SIZE - 1) / SUBIT_BATCH_SIZE + 1 + names.Count + 1;
             SubmitTask task = new SubmitTask() { Path = path, Status = TaskStatus.Wait, Total = total, Prepare = prepare, Submit = sdata, PageNames = names };
             SubmitTasks[path] = task;
             await task.Save();

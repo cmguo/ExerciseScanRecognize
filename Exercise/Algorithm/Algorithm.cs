@@ -1,4 +1,5 @@
 ﻿using Base.Misc;
+using Base.Mvvm;
 using Base.Protocol;
 using com.talcloud.paperanalyze.service.answersheet;
 using net.sf.jni4net;
@@ -18,9 +19,12 @@ namespace Exercise.Algorithm
 
         public Algorithm()
         {
-            Bridge.RegisterAssembly(typeof(AnswerSheetAnalyze).Assembly);
-            AnswerSheetAnalyze.init();
-            //Test();
+            BackgroudWork.Execute(() => Task.Run(() =>
+            {
+                Bridge.RegisterAssembly(typeof(AnswerSheetAnalyze).Assembly);
+                AnswerSheetAnalyze.init();
+                //Test();
+            }));
         }
 
         public QRCodeData GetCode(PageRaw page)

@@ -20,10 +20,10 @@
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="pack://application:,,,/TalBase;component/Themes/Button.xaml" />
             </ResourceDictionary.MergedDictionaries>
+            <local:SubmitConverter x:Key="SubmitConverter" />
             <local:RetryConverter x:Key="RetryConverter" />
             <local:ReturnConverter x:Key="ReturnConverter" />
             <local:SubmittingConverter x:Key="SubmittingConverter" />
-            <local:CompletedConverter x:Key="CompletedConverter" />
         </ResourceDictionary>
     </Page.Resources>
 
@@ -32,40 +32,48 @@
     </tb:TitleBarManager.Commands>
 
     <Grid>
-        <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Orientation="Vertical">
-            <TextBlock Text="{Binding ExerciseName, StringFormat=《{0}》}" />
-            <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Orientation="Vertical"
-                       Visibility="{Binding Task.Status, Converter={StaticResource SubmittingConverter}}">
-                <TextBlock Text="扫描结果上传中，请勿关闭客户端..."/>
-                <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Orientation="Horizontal">
-                    <ProgressBar Maximum="{Binding Task.Total, Mode=OneWay}" Value="{Binding Task.Finish, Mode=OneWay}"/>
-                    <TextBlock Text="{Binding Percent, StringFormat={}{0}%}" />
-                </StackPanel>
-            </StackPanel>
-            <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Orientation="Vertical"
-                       Visibility="{Binding Task.Status, Converter={StaticResource CompletedConverter}}">
-                <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Orientation="Horizontal">
-                    <Image />
-                    <TextBlock Text="扫描结果上传成功" />
-                </StackPanel>
-                <TextBlock Text="稍后您可在网页端测试记录页面查看本次扫描结果" />
-            </StackPanel>
-            <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Orientation="Vertical"
-                       Visibility="{Binding Task.Status, Converter={StaticResource RetryConverter}}">
-                <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Orientation="Horizontal">
-                    <Image />
-                    <TextBlock Text="上传失败，网络存在异常，请检查后重新上传" />
-                </StackPanel>
-                <TextBlock Text="本次扫描结果已经保存，后续可在“扫描记录管理”中重新上传" />
-            </StackPanel>
-            <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Orientation="Horizontal">
-                <tal:TalButton Command="{Binding RetryCommand}" IsDefault="True"
-                    CommandParameter="{Binding RelativeSource={RelativeSource AncestorType={x:Type Page}}}" 
-                    Content="重新上传" Visibility="{Binding Task.Status, Converter={StaticResource RetryConverter}}" />
-                <tal:TalButton Command="{Binding ReturnCommand}"
-                    CommandParameter="{Binding RelativeSource={RelativeSource AncestorType={x:Type Page}}}" 
-                    Content="返回首页" Visibility="{Binding Task.Status, Converter={StaticResource ReturnConverter}}" />
-            </StackPanel>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="144" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+
+        <Grid.Resources>
+            <Style TargetType="FrameworkElement">
+                <Setter Property="HorizontalAlignment" Value="Center" />
+            </Style>
+        </Grid.Resources>
+
+        <Image Grid.Row="1" Width="56" Height="56" 
+               Source="{Binding Task.Status, Converter={StaticResource SubmitConverter}, ConverterParameter=Icon}"/>
+
+        <TextBlock Grid.Row="2" Margin="0, 24, 0, 0" FontSize="24" HorizontalAlignment="Center"
+                   Text="{Binding Task.Status, Converter={StaticResource SubmitConverter}, ConverterParameter=Title}"/>
+
+        <TextBlock Grid.Row="3" Margin="0, 8, 0, 0" FontSize="16" Foreground="#FF7F8E99" HorizontalAlignment="Center"
+                   Text="{Binding ExerciseName, StringFormat=《{0}》}" />
+
+        <TextBlock Grid.Row="4" Margin="0, 32, 0, 0" FontSize="14"  HorizontalAlignment="Center" Height="15"
+                   Text="{Binding Task.Status, Converter={StaticResource SubmitConverter}, ConverterParameter=Message}"/>
+
+        <StackPanel Grid.Row="5" Orientation="Horizontal" Margin="0, -12, 0, 0" HorizontalAlignment="Center"
+                Visibility="{Binding Task.Status, Converter={StaticResource SubmittingConverter}}">
+            <ProgressBar VerticalAlignment="Center" Width="280" Height="8"
+                Maximum="{Binding Task.Total, Mode=OneWay}" Value="{Binding Task.Finish, Mode=OneWay}"/>
+            <TextBlock Margin="8, 0, 0, 0" Text="{Binding Percent, StringFormat={}{0}%}" VerticalAlignment="Center" />
         </StackPanel>
+
+        <StackPanel Grid.Row="5" Margin="0, 24, 0, 0" Orientation="Horizontal" HorizontalAlignment="Center">
+            <tal:TalButton Command="{Binding RetryCommand}" IsDefault="True"
+                CommandParameter="{Binding RelativeSource={RelativeSource AncestorType={x:Type Page}}}" 
+                Content="重新上传" Visibility="{Binding Task.Status, Converter={StaticResource RetryConverter}}" />
+            <tal:TalButton Command="{Binding ReturnCommand}"
+                CommandParameter="{Binding RelativeSource={RelativeSource AncestorType={x:Type Page}}}" 
+                Content="返回首页" Visibility="{Binding Task.Status, Converter={StaticResource ReturnConverter}}" />
+        </StackPanel>
+
     </Grid>
 </Page>

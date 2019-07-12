@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="24px" height="24px" viewBox="0 0 24 24" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 55.2 (78181) - https://sketchapp.com -->
+    <title>icon/完成/24</title>
+    <desc>Created with Sketch.</desc>
+    <g id="icon/完成/24" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <path d="M3.48214286,3.53571429 C5.839296,1.17856114 8.67855429,0 12,0 C15.3214457,0 18.1517726,1.16962971 20.4910697,3.50893029 C22.8303703,5.84822743 24,8.67855429 24,12 C24,15.3214457 22.8303703,18.1517726 20.4910697,20.4910697 C18.1517726,22.8303689 15.3214457,24 12,24 C8.67855429,24 5.84822743,22.8303689 3.50893029,20.4910697 C1.16963109,18.1517726 0,15.3214457 0,12 C0,8.67855429 1.16070274,5.85715543 3.48214286,3.53571429 Z" id="路径" fill="#12D900"></path>
+        <path d="M8.67313916,11.5760518 L18,12 L18,14 L7.75,14 L6,14 L7,7 L9,7 L8.67313916,11.5760518 Z" id="Combined-Shape" fill="#FFFFFF" transform="translate(12.000000, 10.500000) rotate(-45.000000) translate(-12.000000, -10.500000) "></path>
+    </g>
+</svg>

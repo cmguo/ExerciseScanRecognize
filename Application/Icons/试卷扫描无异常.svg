@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="83px" height="86px" viewBox="0 0 83 86" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 55.2 (78181) - https://sketchapp.com -->
+    <title>icon/试卷扫描无异常</title>
+    <desc>Created with Sketch.</desc>
+    <defs>
+        <linearGradient x1="50%" y1="0%" x2="164.690476%" y2="149.047223%" id="linearGradient-1">
+            <stop stop-color="#CCFFC7" offset="0%"></stop>
+            <stop stop-color="#71FD64" offset="100%"></stop>
+        </linearGradient>
+        <linearGradient x1="30.7073223%" y1="9.8282045%" x2="97.4058385%" y2="111.740074%" id="linearGradient-2">
+            <stop stop-color="#D1FFCC" offset="0%"></stop>
+            <stop stop-color="#67EAA0" offset="100%"></stop>
+        </linearGradient>
+        <linearGradient x1="50%" y1="0%" x2="50%" y2="100%" id="linearGradient-3">
+            <stop stop-color="#88F1AE" offset="0%"></stop>
+            <stop stop-color="#21E595" offset="100%"></stop>
+        </linearGradient>
+    </defs>
+    <g id="icon/试卷扫描无异常" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g>
+            <g id="矩形" fill-rule="nonzero">
+                <path d="M41.48,82.96 C64.3887714,82.96 82.96,64.3887714 82.96,41.48 C82.96,18.5712286 64.3887714,0 41.48,0 C18.5712286,0 0,18.5712286 0,41.48 C0,64.3887714 18.5712286,82.96 41.48,82.96 Z M41.48,80.96 C19.6757981,80.96 2,63.2842019 2,41.48 C2,19.6757981 19.6757981,2 41.48,2 C63.2842019,2 80.96,19.6757981 80.96,41.48 C80.96,63.2842019 63.2842019,80.96 41.48,80.96 Z" id="椭圆形" fill="url(#linearGradient-1)" opacity="0.299999982"></path>
+                <path d="M41.48,70.88 C57.7171716,70.88 70.88,57.7171716 70.88,41.48 C70.88,25.2428284 57.7171716,12.08 41.48,12.08 C25.2428284,12.08 12.08,25.2428284 12.08,41.48 C12.08,57.7171716 25.2428284,70.88 41.48,70.88 Z M41.48,62.88 C29.6611064,62.88 20.08,53.2988936 20.08,41.48 C20.08,29.6611064 29.6611064,20.08 41.48,20.08 C53.2988936,20.08 62.88,29.6611064 62.88,41.48 C62.88,53.2988936 53.2988936,62.88 41.48,62.88 Z" id="Mask" fill="url(#linearGradient-2)"></path>
+            </g>
+            <circle id="椭圆形" fill-opacity="0.1" fill="#12D900" cx="14.4" cy="6" r="4"></circle>
+            <circle id="椭圆形-copy" fill-opacity="0.2" fill="#12D900" cx="26.34" cy="83.5" r="2.5"></circle>
+            <path d="M34.7930739,39.4283786 C33.8309428,38.4380913 32.2481949,38.4152661 31.2579076,39.3773972 C30.2676202,40.3395283 30.244795,41.9222761 31.2069261,42.9125635 L37.9851525,49.8891513 C38.9698221,50.9026367 40.5981263,50.8992382 41.5785567,49.8816512 L52.8003303,38.2345924 C53.7583192,37.2402974 53.7288874,35.6576586 52.7345924,34.6996697 C51.7402974,33.7416808 50.1576586,33.7711126 49.1996697,34.7654076 L39.7707222,44.5516954 L34.7930739,39.4283786 Z" id="路径-2" fill="url(#linearGradient-3)" fill-rule="nonzero"></path>
+        </g>
+    </g>
+</svg>

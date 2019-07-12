@@ -11,7 +11,7 @@ namespace Account
 
     class Configuration : Base.Misc.Configuration
     {
-        public static string StartupPage = Base.Misc.Configuration.GetByKey("StartupPage");
+        public static string StartupWindow = Base.Misc.Configuration.GetByKey("StartupWindow");
         public static string ServiceUri
         {
             get => Base.Misc.Configuration.GetByKey("ServiceUri");

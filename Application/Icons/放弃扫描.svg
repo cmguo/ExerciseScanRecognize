@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="24px" height="24px" viewBox="0 0 24 24" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 55.2 (78181) - https://sketchapp.com -->
+    <title>icon/放弃扫描</title>
+    <desc>Created with Sketch.</desc>
+    <g id="icon/放弃扫描" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <path d="M10.3106602,3.75 L4.75,9.31066017 L4.75,20.25 L19.25,20.25 L19.25,3.75 L10.3106602,3.75 Z" id="矩形" stroke="#FFFFFF" stroke-width="1.5"></path>
+        <rect id="矩形" fill="#FFFFFF" x="9.6171688" y="4.22847869" width="1.5" height="5"></rect>
+        <polygon id="矩形备份" fill="#FFFFFF" transform="translate(7.686685, 9.402117) rotate(-90.000000) translate(-7.686685, -9.402117) " points="6.93668546 5.97163387 8.43668546 6.64815354 8.43668546 12.8326006 6.93668546 12.8326006"></polygon>
+        <path d="M8.5,13.75 L8.5,14.25 L11.75,14.25 L11.75,17.5 L12.25,17.5 L12.25,14.25 L15.5,14.25 L15.5,13.75 L12.25,13.75 L12.25,10.5 L11.75,10.5 L11.75,13.75 L8.5,13.75 Z" id="形状结合" stroke="#FFFFFF" transform="translate(12.000000, 14.000000) rotate(-315.000000) translate(-12.000000, -14.000000) "></path>
+    </g>
+</svg>

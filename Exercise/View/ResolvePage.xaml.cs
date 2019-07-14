@@ -1,6 +1,8 @@
 ﻿using Exercise.ViewModel;
 using System;
+using System.Collections.Generic;
 using System.Globalization;
+using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
@@ -22,6 +24,21 @@ namespace Exercise.View
             ResolveViewModel vm = DataContext as ResolveViewModel;
             vm.PropertyChanged += Vm_PropertyChanged;
             Loaded += (s, e) => vm.InitSelection();
+            treeView.SelectedItemChanged += TreeView_SelectedItemChanged;
+        }
+
+        private void TreeView_SelectedItemChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
+        {
+            Exception ex = e.NewValue as Exception;
+            if (ex != null)
+            {
+                if (ex.Type == ExceptionType.AnalyzeException && ex.Page.Answer != null)
+                {
+                    ButtonFace2_Click(this, null);
+                    return;
+                }
+                ButtonFace1_Click(this, null);
+            }
         }
 
         private void Vm_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
@@ -29,42 +46,8 @@ namespace Exercise.View
             ResolveViewModel vm = sender as ResolveViewModel;
             if (e.PropertyName == "Selection")
             {
-                Select(vm.Selection);
+                treeView.Select(vm.Selection);
             }
-        }
-
-        private void Select(object item)
-        {
-            var tvi = FindItem(treeView, item);
-            if (tvi != null)
-            {
-                tvi.IsSelected = true;
-            }
-            if (item is Exception)
-            {
-                Exception ex = item as Exception;
-                if (ex.Type == ExceptionType.AnalyzeException && ex.Page.Answer != null)
-                {
-                    ButtonFace2_Click(this, null);
-                    return;
-                }
-            }
-            ButtonFace1_Click(this, null);
-        }
-
-        private TreeViewItem FindItem(ItemsControl container, object item)
-        {
-            var c = container.ItemContainerGenerator.ContainerFromItem(item);
-            if (c != null)
-                return c as TreeViewItem;
-            foreach (var i in container.ItemContainerGenerator.Items)
-            {
-                var cc = container.ItemContainerGenerator.ContainerFromItem(i);
-                c = FindItem(cc as ItemsControl, item);
-                if (c != null)
-                    return c as TreeViewItem;
-            }
-            return null;
         }
 
         internal void Resolve()

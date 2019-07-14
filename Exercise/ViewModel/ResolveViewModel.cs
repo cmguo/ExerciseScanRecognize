@@ -163,47 +163,47 @@ namespace Exercise.ViewModel
                         el.Exceptions.CollectionChanged += Exceptions_CollectionChanged;
                     }
                 }
-                if (e.OldItems != null)
-                {
-                    foreach (ExceptionList el in e.OldItems)
-                    {
-                        el.Exceptions.CollectionChanged -= Exceptions_CollectionChanged;
-                    }
-                    if (e.OldItems.Contains(SelectedExceptionList))
-                    {
-                        int n = e.OldStartingIndex;
-                        if (n >= Exceptions.Count)
-                            n = 0;
-                        if (Exceptions.Count > 0)
-                            Selection = Exceptions[n].Exceptions[0];
-                    }
-                }
+                //if (e.OldItems != null)
+                //{
+                //    foreach (ExceptionList el in e.OldItems)
+                //    {
+                //        el.Exceptions.CollectionChanged -= Exceptions_CollectionChanged;
+                //    }
+                //    if (e.OldItems.Contains(SelectedExceptionList))
+                //    {
+                //        int n = e.OldStartingIndex;
+                //        if (n >= Exceptions.Count)
+                //            n = 0;
+                //        if (Exceptions.Count > 0)
+                //            Selection = Exceptions[n].Exceptions[0];
+                //    }
+                //}
             }
             else
             {
-                Collection<Exception> el = sender as Collection<Exception>;
-                if (e.OldItems != null && e.OldItems.Contains(_SelectedException))
-                {
-                    int n = e.OldStartingIndex;
-                    if (n >= el.Count)
-                    {
-                        int i = 0;
-                        for (; i < Exceptions.Count; ++i)
-                        {
-                            if (Exceptions[i].Exceptions == el)
-                            {
-                                ++i;
-                                break;
-                            }
-                        }
-                        n = 0;
-                        if (i >= Exceptions.Count)
-                            i = 0;
-                        el = Exceptions[i].Exceptions;
-                    }
-                    if (el.Count > 0)
-                        Selection = el[n];
-                }
+                //Collection<Exception> el = sender as Collection<Exception>;
+                //if (e.OldItems != null && e.OldItems.Contains(_SelectedException))
+                //{
+                //    int n = e.OldStartingIndex;
+                //    if (n >= el.Count)
+                //    {
+                //        int i = 0;
+                //        for (; i < Exceptions.Count; ++i)
+                //        {
+                //            if (Exceptions[i].Exceptions == el)
+                //            {
+                //                ++i;
+                //                break;
+                //            }
+                //        }
+                //        n = 0;
+                //        if (i >= Exceptions.Count)
+                //            i = 0;
+                //        el = Exceptions[i].Exceptions;
+                //    }
+                //    if (el.Count > 0)
+                //        Selection = el[n];
+                //}
             }
         }
 

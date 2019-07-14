@@ -19,30 +19,24 @@
       Title="LoginPage">
     
     <Window.Resources>
-        <ResourceDictionary>
-            <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary Source="pack://application:,,,/TalBase;component/Themes/Button.xaml" />
-                <ResourceDictionary Source="pack://application:,,,/TalBase;component/Themes/Button2.xaml" />
-            </ResourceDictionary.MergedDictionaries>
 
-            <vm:AccountViewModel x:Key="ViewModel" />
+        <vm:AccountViewModel x:Key="ViewModel" />
             
-            <tal:TalButton2 x:Key="Logout" Style="{StaticResource DefaultTalButton2Style}" 
-                            DataContext="{StaticResource ViewModel}" Click="Logout_Click" >
-                <StackPanel Orientation="Horizontal">
-                    <TextBlock Text="{Binding Account.SchoolName}" />
-                    <Image Margin="4, 0, 0, 0"  Width="16" Height="16" Source="{svgc:SvgImage /Icons/下箭头/白色.svg}" />
-                </StackPanel>
-            </tal:TalButton2>
+        <tal:TalButton2 x:Key="Logout"
+                        DataContext="{StaticResource ViewModel}" Click="Logout_Click" >
+            <StackPanel Orientation="Horizontal">
+                <TextBlock Text="{Binding Account.SchoolName}" />
+                <Image Margin="4, 0, 0, 0"  Width="16" Height="16" Source="{svgc:SvgImage /Icons/下箭头/白色.svg}" />
+            </StackPanel>
+        </tal:TalButton2>
 
-            <Popup x:Key="LogoutPopup" StaysOpen="False" Placement="Bottom" PlacementTarget="{StaticResource Logout}">
-                <tal:TalButton  Style="{StaticResource DefaultTalButtonStyle}" Content="退出登录" BorderThickness="0"
-                                DataContext="{StaticResource ViewModel}" Command="{Binding LogoutCommand}"/>
-            </Popup>
+        <Popup x:Key="LogoutPopup" StaysOpen="False" Placement="Bottom" PlacementTarget="{StaticResource Logout}">
+            <tal:TalButton Content="退出登录" BorderThickness="0"
+                            DataContext="{StaticResource ViewModel}" Command="{Binding LogoutCommand}"/>
+        </Popup>
             
-            <cv:NonNullTrueConverter x:Key="NonNullTrueConverter" />
+        <cv:NonNullTrueConverter x:Key="NonNullTrueConverter" />
             
-        </ResourceDictionary>
     </Window.Resources>
 
     <tb:TitleBarManager.GlobalButtons>

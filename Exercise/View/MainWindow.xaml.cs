@@ -34,40 +34,9 @@ namespace Excecise
             titleBar.LostMouseCapture += TitleBar_LostMouseCapture;
         }
 
-        private void TitleBar_LostMouseCapture(object sender, MouseEventArgs e)
-        {
-            draging = false;
-        }
-
-        private void TitleBar_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
-        {
-            draging = false;
-            titleBar.ReleaseMouseCapture();
-            e.Handled = true;
-        }
-
-        private void TitleBar_MouseMove(object sender, MouseEventArgs e)
-        {
-            if (!draging)
-                return;
-            Point pt = PointToScreen(e.GetPosition(this));
-            Left += pt.X - dragStart.X;
-            Top += pt.Y - dragStart.Y;
-            dragStart = pt;
-            e.Handled = true;
-        }
-
-        private void TitleBar_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
-        {
-            dragStart = PointToScreen(e.GetPosition(this));
-            draging = true;
-            titleBar.CaptureMouse();
-            e.Handled = true;
-        }
-
         private void MainWindow_Loaded(object sender, RoutedEventArgs e)
         {
-            frmMain.Navigate(new HomePage());
+            frmMain.Navigate(new SummaryPage());
         }
 
         private void FrmMain_Navigating(object sender, NavigatingCancelEventArgs e)
@@ -189,6 +158,36 @@ namespace Excecise
                 return null;
         }
 
+        private void TitleBar_LostMouseCapture(object sender, MouseEventArgs e)
+        {
+            draging = false;
+        }
+
+        private void TitleBar_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
+        {
+            draging = false;
+            titleBar.ReleaseMouseCapture();
+            e.Handled = true;
+        }
+
+        private void TitleBar_MouseMove(object sender, MouseEventArgs e)
+        {
+            if (!draging)
+                return;
+            Point pt = PointToScreen(e.GetPosition(this));
+            Left += pt.X - dragStart.X;
+            Top += pt.Y - dragStart.Y;
+            dragStart = pt;
+            e.Handled = true;
+        }
+
+        private void TitleBar_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            dragStart = PointToScreen(e.GetPosition(this));
+            draging = true;
+            titleBar.CaptureMouse();
+            e.Handled = true;
+        }
 
         private void Mini_Click(object sender, RoutedEventArgs e)
         {

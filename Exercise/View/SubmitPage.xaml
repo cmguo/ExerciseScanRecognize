@@ -16,15 +16,10 @@
     </Page.DataContext>
 
     <Page.Resources>
-        <ResourceDictionary>
-            <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary Source="pack://application:,,,/TalBase;component/Themes/Button.xaml" />
-            </ResourceDictionary.MergedDictionaries>
-            <local:SubmitConverter x:Key="SubmitConverter" />
-            <local:RetryConverter x:Key="RetryConverter" />
-            <local:ReturnConverter x:Key="ReturnConverter" />
-            <local:SubmittingConverter x:Key="SubmittingConverter" />
-        </ResourceDictionary>
+        <local:SubmitConverter x:Key="SubmitConverter" />
+        <local:RetryConverter x:Key="RetryConverter" />
+        <local:ReturnConverter x:Key="ReturnConverter" />
+        <local:SubmittingConverter x:Key="SubmittingConverter" />
     </Page.Resources>
 
     <tb:TitleBarManager.Commands>

@@ -171,6 +171,8 @@
     <Compile Include="View\ScanningPage.xaml.cs">
       <DependentUpon>ScanningPage.xaml</DependentUpon>
     </Compile>
+    <Compile Include="View\TreeViewEx.cs" />
+    <Compile Include="View\TreeViewItemEx.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Account\Account.csproj">
@@ -195,6 +197,10 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Page Include="Themes\DataGrid.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="Themes\Generic.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>

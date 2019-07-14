@@ -17,25 +17,22 @@
     </Page.DataContext>
 
     <Page.Resources>
-        <ResourceDictionary>
-            <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary Source="pack://application:,,,/TalBase;component/Themes/Button.xaml" />
-            </ResourceDictionary.MergedDictionaries>
-            <DataGrid x:Key="ClassDetail" AutoGenerateColumns="False" ItemsSource="{Binding ClassDetails}"
-                               Margin="0,20,0,0"  RowHeaderWidth="0" ColumnHeaderHeight="50"
-                               GridLinesVisibility="Horizontal"
-                               BorderThickness="0,0,0,0"  MaxHeight="200"
-                               HorizontalGridLinesBrush="Gray"
-                               IsReadOnly="True"
-                               >
-                <DataGrid.Columns>
-                    <DataGridTextColumn Header="班级" Binding="{Binding Name}" FontSize="14" Width="120"/>
-                    <DataGridTextColumn Header="回收试卷（份）" Binding="{Binding Result.Count}" FontSize="14" Width="90" />
-                    <DataGridTextColumn Header="总人数（人）" Binding="{Binding StudentCount}" FontSize="14" Width="90" />
-                </DataGrid.Columns>
-            </DataGrid>
-            <local:PaperOverlayConverter x:Key="PaperOverlayConverter" />
-        </ResourceDictionary>
+
+        <DataGrid x:Key="ClassDetail" AutoGenerateColumns="False" ItemsSource="{Binding ClassDetails}"
+                  Margin="0,20,0,0"  RowHeaderWidth="0" ColumnHeaderHeight="50"
+                  GridLinesVisibility="Horizontal"
+                  BorderThickness="0,0,0,0"  MaxHeight="200"
+                  HorizontalGridLinesBrush="Gray"
+                  IsReadOnly="True">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="班级" Binding="{Binding Name}" FontSize="14" Width="120"/>
+                <DataGridTextColumn Header="回收试卷（份）" Binding="{Binding Result.Count}" FontSize="14" Width="90" />
+                <DataGridTextColumn Header="总人数（人）" Binding="{Binding StudentCount}" FontSize="14" Width="90" />
+            </DataGrid.Columns>
+        </DataGrid>
+        
+        <local:PaperOverlayConverter x:Key="PaperOverlayConverter" />
+
     </Page.Resources>
 
     <tb:TitleBarManager.Commands>

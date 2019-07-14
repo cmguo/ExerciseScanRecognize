@@ -257,28 +257,28 @@
     <Content Include="Icons\bad.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Icons\下箭头\disabled.png">
+    <Content Include="Icons\DownArrow\disabled.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Icons\bad.svg">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Icons\下箭头\disabled.svg">
+    <Content Include="Icons\DownArrow\disabled.svg">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Icons\下箭头\normal.png">
+    <Content Include="Icons\DownArrow\normal.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Icons\下箭头\normal.svg">
+    <Content Include="Icons\DownArrow\normal.svg">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Icons\下箭头\pressed.png">
+    <Content Include="Icons\DownArrow\pressed.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Icons\下箭头\pressed.svg">
+    <Content Include="Icons\DownArrow\pressed.svg">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Icons\下箭头\白色.svg">
+    <Content Include="Icons\DownArrow\白色.svg">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Icons\作答识别异常.png">

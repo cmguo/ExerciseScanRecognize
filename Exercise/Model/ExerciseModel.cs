@@ -100,7 +100,7 @@ namespace Exercise.Model
             service = Services.Get<IExercise>();
             Exceptions = new ObservableCollection<ExceptionList>();
             PageStudents = new ObservableCollection<StudentInfo>();
-            /* Test
+            //* Test
             ExerciseData = new ExerciseData() { Title = "三角函数" };
             AddException(ExceptionType.NoPageCode, new Page());
             AddException(ExceptionType.NoStudentCode, new Page());
@@ -109,7 +109,7 @@ namespace Exercise.Model
             AddException(ExceptionType.AnalyzeException, new Page() { Student = student });
             AddException(ExceptionType.AnswerException, new Page() { Student = student });
             AddException(ExceptionType.CorrectionException, new Page() { Student = student });
-            */
+            //*/
         }
 
         public void Discard()
@@ -548,8 +548,8 @@ namespace Exercise.Model
             if (list == null) return;
             Exception ex = list.Exceptions.FirstOrDefault(e => e.Page == page);
             if (ex == null) return;
-            list.Exceptions.Remove(ex);
             ex.Page = null;
+            list.Exceptions.Remove(ex);
             if (list.Exceptions.Count == 0)
                 Exceptions.Remove(list);
         }

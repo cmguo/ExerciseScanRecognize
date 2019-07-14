@@ -21,23 +21,20 @@
     </Page.DataContext>
     
     <Page.Resources>
-        <ResourceDictionary>
-            <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary Source="pack://application:,,,/TalBase;component/Themes/Button.xaml" />
-            </ResourceDictionary.MergedDictionaries>
-            <resolve:ExceptionListConverter x:Key="ExceptionListConverter" />
-            <resolve:ExceptionConverter x:Key="ExceptionConverter" />
-            <resolve:ExceptionPageConverter x:Key="ExceptionPageConverter" />
-            <local:SelectionConverter x:Key="SelectionConverter" Unselected="White" />
-            <cv:NonNullVisibleConverter x:Key="NonNullVisibleConverter" />
-            <cv:NullVisibleConverter x:Key="NullVisibleConverter" />
-            <local:DuplexFaceConverter x:Key="DuplexFaceConverter" />
-            <local:PaperOverlayConverter x:Key="PaperOverlayConverter" />
-            <tal:TalButton x:Key="Return" Content="返回" Style="{StaticResource DefaultTalButtonStyle}"
-                         Command="{Binding ReturnCommand}"
-                         CommandParameter="{Binding Source={x:Reference Page}}" />
+
+        <resolve:ExceptionListConverter x:Key="ExceptionListConverter" />
+        <resolve:ExceptionConverter x:Key="ExceptionConverter" />
+        <resolve:ExceptionPageConverter x:Key="ExceptionPageConverter" />
+        <local:SelectionConverter x:Key="SelectionConverter" Unselected="White" />
+        <cv:NonNullVisibleConverter x:Key="NonNullVisibleConverter" />
+        <cv:NullVisibleConverter x:Key="NullVisibleConverter" />
+        <local:DuplexFaceConverter x:Key="DuplexFaceConverter" />
+        <local:PaperOverlayConverter x:Key="PaperOverlayConverter" />
+        
+        <tal:TalButton x:Key="Return" Content="返回" Focusable="False"
+                        Command="{Binding ReturnCommand}"
+                        CommandParameter="{Binding Source={x:Reference Page}}" />
             
-        </ResourceDictionary>
     </Page.Resources>
 
     <tb:TitleBarManager.Buttons>
@@ -56,7 +53,7 @@
             <ColumnDefinition Width="279" />
         </Grid.ColumnDefinitions>
 
-        <TreeView Grid.Column="0" x:Name="treeView" ItemsSource="{Binding Exceptions}">
+        <local:TreeViewEx Grid.Column="0" x:Name="treeView" ItemsSource="{Binding Exceptions}">
             <pb:PushBindingManager.PushBindings>
                 <pb:PushBinding TargetProperty="SelectedItem" Path="Selection"/>
             </pb:PushBindingManager.PushBindings>
@@ -81,7 +78,7 @@
                     </HierarchicalDataTemplate.ItemTemplate>
                 </HierarchicalDataTemplate>
             </TreeView.ItemTemplate>
-        </TreeView>
+        </local:TreeViewEx>
         
         <Border Grid.Column="1" BorderThickness="1, 0, 1, 0" BorderBrush="#FF2D4A66">
             <Grid>

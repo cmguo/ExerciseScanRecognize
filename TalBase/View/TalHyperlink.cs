@@ -5,5 +5,10 @@ namespace TalBase.View
 {
     public partial class TalHyperlink : ButtonBase
     {
+        public TalHyperlink()
+        {
+            Focusable = false;
+        }
+
     }
 }

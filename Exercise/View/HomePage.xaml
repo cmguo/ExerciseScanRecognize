@@ -19,11 +19,8 @@
     
     <Page.Resources>
         <ResourceDictionary>
-            <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary Source="pack://application:,,,/TalBase;component/Themes/Button.xaml" />
-                <ResourceDictionary Source="pack://application:,,,/TalBase;component/Themes/Button2.xaml" />
-            </ResourceDictionary.MergedDictionaries>
-            <tal:TalButton2 x:Key="Histroy" Style="{StaticResource DefaultTalButton2Style}"
+            
+            <tal:TalButton2 x:Key="Histroy"
                 Command="{Binding HistroyCommand}" Background="{x:Null}"
                 CommandParameter="{Binding Source={x:Reference Page}}">
                 <StackPanel Orientation="Horizontal">
@@ -31,8 +28,10 @@
                     <TextBlock Margin="5, 0, 0, 0" VerticalAlignment="Center" Text="试卷扫描记录管理" />
                 </StackPanel>
             </tal:TalButton2>
-            <tal:TalButton x:Key="Discard" Content="放弃本次扫描" Style="{StaticResource DefaultTalButtonStyle}"
+            
+            <tal:TalButton x:Key="Discard" Content="放弃本次扫描" Focusable="False"
                     Command="{Binding DiscardCommand}" />
+            
         </ResourceDictionary>
     </Page.Resources>
 

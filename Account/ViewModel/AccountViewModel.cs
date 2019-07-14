@@ -15,7 +15,6 @@ namespace Account.ViewModel
 {
     public class AccountViewModel : ViewModelBase
     {
-        private static Window mainWindow;
 
         public ICollection<string> ServiceUris => accountModel.ServiceUris.Keys;
 
@@ -47,17 +46,10 @@ namespace Account.ViewModel
             if (NetWorkManager.CheckNetWorkAvailable())
             {
                 await AccountModel.Instance.Login();
-                if (mainWindow == null)
-                {
-                    Uri uri = new Uri(Configuration.StartupWindow);
-                    //uri.Authority
-                    //mainWindow = Activator.CreateInstanceFrom()
-                    //mainWindow.Show();
-                    (obj as Window).Close();
-                    Window window = Application.Current.MainWindow;
-                    if (window != null)
-                        window.Show();
-                }
+                Window window = Application.Current.MainWindow;
+                if (window != null)
+                    window.Show();
+                (obj as Window).Close();
             }
         }
 
@@ -78,7 +70,7 @@ namespace Account.ViewModel
         {
             if (e.PropertyName == "Account" && AccountModel.Instance.Error != null)
             {
-                new AccountWindow() { Owner = mainWindow }.Show();
+                new AccountWindow() { Owner = Application.Current.MainWindow }.Show();
             }
         }
 

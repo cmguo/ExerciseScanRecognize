@@ -15,65 +15,24 @@
       Title="HomePage">
 
     <Page.Resources>
+
         <ResourceDictionary>
+
             <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary Source="pack://application:,,,/TalBase;component/Themes/Button.xaml" />
-                <ResourceDictionary Source="pack://application:,,,/TalBase;component/Themes/Hyperlink.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/TalBase;component/Themes/Generic.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/Exercise;component/Themes/DataGrid.xaml" />
             </ResourceDictionary.MergedDictionaries>
+
             <cv:MultiValueConverter x:Key="MultiValueConverter" />
             <vm:HistoryViewModel x:Key="ViewModel" />
-            <tal:TalButton x:Key="Return" Content="返回" Style="{StaticResource DefaultTalButtonStyle}"
-                         Command="{Binding ReturnCommand}"
-                         CommandParameter="{Binding Source={x:Reference Page}}" />
             <local:HistroyDetailConverter x:Key="HistroyDetailConverter" />
             <local:SelectionConverter x:Key="SelectionConverter" Selected="#FF4C84FF" Unselected="{x:Null}" />
             <local:SelectionConverter x:Key="ForegroundConverter" Selected="White" Unselected="#FF2D4A66" />
 
-            <Style TargetType="DataGrid">
-                <Setter Property="AutoGenerateColumns" Value="False"/>
-                <Setter Property="RowHeaderWidth" Value="0"/>
-                <Setter Property="Background" Value="White"/>
-                <Setter Property="ColumnHeaderHeight" Value="48"/>
-                <Setter Property="BorderThickness" Value="0" />
-                <Setter Property="GridLinesVisibility" Value="None" />
-                <Setter Property="RowHeight" Value="49" />
-                <Setter Property="ColumnHeaderStyle">
-                    <Setter.Value>
-                        <Style TargetType="DataGridColumnHeader">
-                            <Setter Property="Padding" Value="32, 0, 0, 0" />
-                            <Setter Property="Background" Value="#FFF4F8FE" />
-                            <Setter Property="Foreground" Value="#FF7F8E99" />
-                        </Style>
-                    </Setter.Value>
-                </Setter>
-                <Setter Property="RowStyle">
-                    <Setter.Value>
-                        <Style TargetType="DataGridRow">
-                            <Setter Property="Focusable" Value="False"/>
-                            <Setter Property="BorderBrush" Value="#FFEBEEF5"/>
-                            <Setter Property="BorderThickness" Value="0,0,0,1"/>
-                        </Style>
-                    </Setter.Value>
-                </Setter>
-                <Setter Property="CellStyle">
-                    <Setter.Value>
-                        <Style TargetType="DataGridCell">
-                            <Setter Property="Margin" Value="32, 0, 0, 0" />
-                            <Setter Property="VerticalAlignment" Value="Center"/>
-                            <Setter Property="Foreground" Value="#FF2D4A66"/>
-                            <Setter Property="Background" Value="{x:Null}" />
-                            <Setter Property="BorderBrush" Value="{x:Null}" />
-                            <Style.Triggers>
-                                <Trigger Property="IsSelected" Value="True">
-                                    <Setter Property="Background" Value="{x:Null}" />
-                                    <Setter Property="BorderBrush" Value="{x:Null}" />
-                                </Trigger>
-                            </Style.Triggers>
-                        </Style>
-                    </Setter.Value>
-                </Setter>
-            </Style>
-
+            <tal:TalButton x:Key="Return" Content="返回" Style="{StaticResource DefaultTalButtonStyle}"
+                            Command="{Binding ReturnCommand}"
+                            CommandParameter="{Binding Source={x:Reference Page}}" />
+            
             <Style TargetType="TextBlock">
                 <Setter Property="FontSize" Value="14" />
             </Style>
@@ -81,7 +40,7 @@
             <DataTemplate x:Key="DataTemplate">
                 <TextBlock Text="{Binding Name}" FontSize="14" Foreground="#FF2D4A66"/>
             </DataTemplate>
-            
+
             <DataTemplate x:Key="EditingTemplate">
                 <Border CornerRadius="4" BorderBrush="#FF2D4A66" Width="170" Height="32" BorderThickness="1" HorizontalAlignment="Left" Margin="-3, 0, 0, 0">
                     <TextBox Text="{Binding Name}" FontSize="14" Foreground="#FF2D4A66" VerticalAlignment="Center" BorderThickness="0"/>
@@ -139,7 +98,7 @@
                                 </TextBlock>
                             </StackPanel>
                             <StackPanel DockPanel.Dock="Right" Orientation="Horizontal" VerticalAlignment="Center">
-                                <tal:TalHyperlink Content="查看扫描结果"
+                                <tal:TalHyperlink Content="查看扫描结果" 
                                         Command="{Binding SummaryCommand, Source={StaticResource ViewModel}}">
                                     <tal:TalHyperlink.CommandParameter>
                                         <MultiBinding Converter="{StaticResource MultiValueConverter}">

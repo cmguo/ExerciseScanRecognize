@@ -1,0 +1,12 @@
+<ResourceDictionary 
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="clr-namespace:TalBase.View">
+
+    <ResourceDictionary.MergedDictionaries>
+        <ResourceDictionary Source="pack://application:,,,/TalBase;component/Themes/Button.xaml" />
+        <ResourceDictionary Source="pack://application:,,,/TalBase;component/Themes/Button2.xaml" />
+        <ResourceDictionary Source="pack://application:,,,/TalBase;component/Themes/Hyperlink.xaml" />
+    </ResourceDictionary.MergedDictionaries>
+
+</ResourceDictionary>

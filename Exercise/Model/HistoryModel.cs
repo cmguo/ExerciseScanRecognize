@@ -43,7 +43,7 @@ namespace Exercise.Model
         {
             LocalRecords = new ObservableCollection<Record>();
             service = Services.Get<IExercise>();
-            Directory.CreateDirectory(ROOT_PATH);
+            Directory.CreateDirectory(ROOT_PATH + "\\扫描试卷");
         }
 
         public string NewSavePath()

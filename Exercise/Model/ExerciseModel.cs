@@ -100,7 +100,7 @@ namespace Exercise.Model
             service = Services.Get<IExercise>();
             Exceptions = new ObservableCollection<ExceptionList>();
             PageStudents = new ObservableCollection<StudentInfo>();
-            //* Test
+            /* Test
             ExerciseData = new ExerciseData() { Title = "三角函数" };
             AddException(ExceptionType.NoPageCode, new Page());
             AddException(ExceptionType.NoStudentCode, new Page());

@@ -124,7 +124,6 @@ namespace Exercise.Model
 
         private string savePath;
         private int scanBatch = 0;
-        private int totalIndex = 0;
         private int scanIndex = 0;
         private int readIndex = 0;
         private bool cancel = false;
@@ -159,7 +158,6 @@ namespace Exercise.Model
             cancel = false;
             ++scanBatch;
             scanIndex = 0;
-            readIndex = 0;
             try
             {
                 scanDevice.DuplexEnabled = true;
@@ -258,7 +256,7 @@ namespace Exercise.Model
         {
             PersistData data = await JsonPersistent.Load<PersistData>(path + "\\scan.json");
             PageCode = data.PageCode;
-            totalIndex = data.Pages.Count;
+            readIndex = data.Pages.Count;
             scanBatch = data.ScanBatch;
             savePath = path;
             foreach (Page p in data.Pages)
@@ -284,7 +282,7 @@ namespace Exercise.Model
 
         public void Clear()
         {
-            totalIndex = 0;
+            readIndex = 0;
             scanBatch = 0;
             scanIndex = 0;
             savePath = null;
@@ -317,13 +315,12 @@ namespace Exercise.Model
             Page page2 = page;
             Page[] pages = new Page[] { page1, page2 };
             await Task.Factory.StartNew(() => ScanTwoPage(pages));
-            pages[0].TotalIndex = totalIndex;
-            pages[1].TotalIndex = totalIndex;
+            pages[0].TotalIndex = Pages.Count;
+            pages[1].TotalIndex = Pages.Count;
             if (pages[0].Another == null)
                 ReleasePage(pages[1]);
             int drop = PageDropped.Count;
             Pages.Add(pages[0]);
-            ++totalIndex;
             while (drop < PageDropped.Count)
             {
                 Page p1 = PageDropped[drop++];
@@ -338,7 +335,7 @@ namespace Exercise.Model
                     throw new InvalidOperationException(
                         "Page at " + p1.TotalIndex + " not match " + p2.TotalIndex);
             }
-            if (index + 1 == readIndex)
+            if (Pages.Count * 2 == readIndex)
                 IsCompleted = true;
         }
 
@@ -484,7 +481,7 @@ namespace Exercise.Model
         {
             Debug.WriteLine("ScanDevice_ScanCompleted");
             IsScanning = false;
-            if (0 == readIndex)
+            if (Pages.Count * 2 == readIndex)
                 IsCompleted = true;
         }
 

@@ -35,6 +35,10 @@ namespace Exercise.Service
         [JsonIgnore]
         public IList<Page> AnswerPages { get; set; }
 
+        public override string ToString()
+        {
+            return TalNo + " " + Name;
+        }
 
     }
 }

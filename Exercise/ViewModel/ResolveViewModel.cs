@@ -1,9 +1,11 @@
 ﻿using Base.Mvvm;
 using Exercise.Model;
+using Exercise.Service;
 using Exercise.View;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
 using TalBase.View;
@@ -57,6 +59,35 @@ namespace Exercise.ViewModel
                     SelectedException = null;
                     SelectedExceptionList = value as ExceptionList;
                 }
+            }
+        }
+
+        public IList<ClassInfo> Classes => SchoolModel.Instance.Classes;
+
+        private ClassInfo _SelectedClass;
+        public ClassInfo SelectedClass
+        {
+            get => _SelectedClass;
+            set
+            {
+                _SelectedClass = value;
+                StudentFilter = null;
+            }
+        }
+
+        public IList<StudentInfo> FilteredStudents { get; private set; }
+        private string _StudentFilter;
+        public string StudentFilter
+        {
+            get => _StudentFilter;
+            set
+            {
+                _StudentFilter = value;
+                RaisePropertyChanged("StudentFilter");
+                FilteredStudents = (value == null || value.Length == 0)
+                    ? SelectedClass.Students
+                    : SelectedClass.Students.Where(s => s.TalNo.Contains(value) || s.Name.Contains(value)).ToList();
+                RaisePropertyChanged("FilteredStudents");
             }
         }
 

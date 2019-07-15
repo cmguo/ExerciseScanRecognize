@@ -27,6 +27,8 @@ namespace Exercise.Model
 
         public ObservableCollection<ClassInfo> Classes { get; private set; }
 
+        public IList<ClassInfo> AllClasses { get; private set; }
+
         private IExercise service;
         private SchoolData schoolData;
 

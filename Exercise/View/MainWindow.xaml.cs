@@ -36,7 +36,7 @@ namespace Excecise
 
         private void MainWindow_Loaded(object sender, RoutedEventArgs e)
         {
-            frmMain.Navigate(new SummaryPage());
+            frmMain.Navigate(new HomePage());
         }
 
         private void FrmMain_Navigating(object sender, NavigatingCancelEventArgs e)

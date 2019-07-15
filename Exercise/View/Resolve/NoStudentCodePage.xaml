@@ -5,6 +5,7 @@
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
       xmlns:cv="clr-namespace:Base.Mvvm.Converter;assembly=Base"
       xmlns:tal="clr-namespace:TalBase.View;assembly=TalBase"
+      xmlns:vm="clr-namespace:Exercise.ViewModel"
       xmlns:svgc="http://sharpvectors.codeplex.com/svgc/"
       mc:Ignorable="d" 
       d:DesignHeight="450" d:DesignWidth="800"
@@ -13,6 +14,7 @@
     <Page.Resources>
         <cv:NonNullTrueConverter x:Key="NonNullTrueConverter" />
         <cv:NullVisibleConverter x:Key="NullVisibleConverter" />
+        <vm:SchoolViewModel x:Key="ViewModel" />
     </Page.Resources>
 
     <Grid>
@@ -22,28 +24,16 @@
             <RowDefinition />
             <RowDefinition />
         </Grid.RowDefinitions>
-        <ComboBox Grid.Row="0" x:Name="classList" ItemsSource="{Binding Classes}">
-            <ComboBox.ItemTemplate>
-                <DataTemplate>
-                    <TextBlock FontSize="14" Foreground="#FF2D4A66" Text="{Binding ClassName}" />
-                </DataTemplate>
-            </ComboBox.ItemTemplate>
+        <ComboBox Grid.Row="0" x:Name="classList" DataContext="{StaticResource ViewModel}"
+                  FontSize="14" Foreground="#FF2D4A66" DisplayMemberPath="ClassName"
+                  ItemsSource="{Binding Classes}" SelectedItem="{Binding SelectedClass}">
         </ComboBox>
-        <ComboBox Grid.Row="1" x:Name="studentList" Margin="0, 14, 0, 0"
-                  ItemsSource="{Binding SelectedValue.Students, ElementName=classList}" 
-                   SelectedValuePath="TalNo" SelectedValue="{Binding Page.StudentCode}">
-            <ComboBox.ItemTemplate>
-                <DataTemplate>
-                    <TextBlock>
-                        <TextBlock.Text>
-                            <MultiBinding StringFormat="{}{0} {1}">
-                                <Binding Path="TalNo" />
-                                <Binding Path="Name" />
-                            </MultiBinding>
-                        </TextBlock.Text>
-                    </TextBlock>
-                </DataTemplate>
-            </ComboBox.ItemTemplate>
+        <ComboBox Grid.Row="1" x:Name="studentList" Margin="0, 14, 0, 0" 
+                  IsEditable="True" FontSize="14" Foreground="#FF2D4A66" 
+                  TextBoxBase.TextChanged="StudentList_TextChanged"
+                  Text="{Binding StudentFilter, Source={StaticResource ViewModel}}"
+                  ItemsSource="{Binding FilteredStudents, Source={StaticResource ViewModel}}" 
+                  SelectedValuePath="TalNo" SelectedValue="{Binding Page.StudentCode}">
         </ComboBox>
         <StackPanel Grid.Row="2" Margin="0, 9, 0 ,0" Orientation="Horizontal"
                     Visibility="{Binding SelectedItem, ElementName=studentList, Converter={StaticResource NullVisibleConverter}}" >

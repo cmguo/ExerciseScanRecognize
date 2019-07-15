@@ -120,6 +120,7 @@
     <Compile Include="Service\IExercise.cs" />
     <Compile Include="Service\SchoolData.cs" />
     <Compile Include="ViewModel\HomeViewModel.cs" />
+    <Compile Include="ViewModel\SchoolViewModel.cs" />
     <Compile Include="ViewModel\ScanningViewModel.cs" />
     <Compile Include="ViewModel\ExerciseViewModel.cs" />
     <Compile Include="ViewModel\SummaryViewModel.cs" />

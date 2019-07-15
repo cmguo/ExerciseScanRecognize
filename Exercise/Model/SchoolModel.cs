@@ -47,6 +47,9 @@ namespace Exercise.Model
 
         private void Classify()
         {
+            AllClasses = schoolData.ClassInfoList;
+            Classes.Clear();
+            RaisePropertyChanged("AllClasses");
             foreach (var g in schoolData.StudentInfoList.GroupBy(s => s.ClassId))
             {
                 ClassInfo ci = schoolData.ClassInfoList.FirstOrDefault(c => c.ClassId == g.Key);

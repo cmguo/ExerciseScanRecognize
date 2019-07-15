@@ -112,7 +112,9 @@ namespace Exercise.View.Resolve
         {
             PageData.Question qe = data.AreaInfo.SelectMany(a => a.QuestionInfo)
                 .Where(q => q.QuestionId == question.QuestionId).First();
-            viewModel.Scores = qe.ItemInfo[0].Value.Split(',').ToList();
+            //viewModel.Scores = qe.ItemInfo[0].Value.Split(',').ToList();
+            int total = (int) float.Parse(qe.ItemInfo[0].TotalScore);
+            viewModel.Scores = Enumerable.Range(0, total + 1).Select(v => v.ToString()).ToList();
         }
 
         private void FillScores()

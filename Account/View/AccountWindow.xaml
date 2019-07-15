@@ -20,23 +20,30 @@
     
     <Window.Resources>
 
-        <vm:AccountViewModel x:Key="ViewModel" />
-            
-        <tal:TalButton2 x:Key="Logout"
-                        DataContext="{StaticResource ViewModel}" Click="Logout_Click" >
-            <StackPanel Orientation="Horizontal">
-                <TextBlock Text="{Binding Account.SchoolName}" />
-                <Image Margin="4, 0, 0, 0"  Width="16" Height="16" Source="{svgc:SvgImage /Icons/下箭头/白色.svg}" />
-            </StackPanel>
-        </tal:TalButton2>
+        <ResourceDictionary>
 
-        <Popup x:Key="LogoutPopup" StaysOpen="False" Placement="Bottom" PlacementTarget="{StaticResource Logout}">
-            <tal:TalButton Content="退出登录" BorderThickness="0"
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="pack://application:,,,/TalBase;component/Themes/Generic.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+
+            <vm:AccountViewModel x:Key="ViewModel" />
+
+            <tal:TalButton2 x:Key="Logout"
+                        DataContext="{StaticResource ViewModel}" Click="Logout_Click" >
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Text="{Binding Account.SchoolName}" />
+                    <Image Margin="4, 0, 0, 0"  Width="16" Height="16" Source="{svgc:SvgImage /Icons/下箭头/白色.svg}" />
+                </StackPanel>
+            </tal:TalButton2>
+
+            <Popup x:Key="LogoutPopup" StaysOpen="False" Placement="Bottom" PlacementTarget="{StaticResource Logout}">
+                <tal:TalButton Content="退出登录" BorderThickness="0"
                             DataContext="{StaticResource ViewModel}" Command="{Binding LogoutCommand}"/>
-        </Popup>
-            
-        <cv:NonNullTrueConverter x:Key="NonNullTrueConverter" />
-            
+            </Popup>
+
+            <cv:NonNullTrueConverter x:Key="NonNullTrueConverter" />
+
+        </ResourceDictionary>
     </Window.Resources>
 
     <tb:TitleBarManager.GlobalButtons>
@@ -52,12 +59,12 @@
         <Image Margin="71, 50, 70, 514" Source="{svgc:SvgImage Source=/Images/编组 7.svg}" />
 
         <StackPanel Margin="0, 16, 13, 0" Orientation="Horizontal" FlowDirection="RightToLeft" VerticalAlignment="Top">
-            <Button Margin="0, 0, 12, 0" x:Name="close" Width="16" Height="16" Background="{x:Null}" BorderThickness="0" Click="Close_Click">
+            <tal:TalButton2 Margin="0, 0, 12, 0" x:Name="close" Width="16" Height="16" Click="Close_Click">
                 <svgc:SvgViewbox Source="Icons/关闭/细.svg"/>
-            </Button>
-            <Button x:Name="mini" Width="16" Height="16" Background="{x:Null}" BorderThickness="0" Click="Mini_Click">
+            </tal:TalButton2>
+            <tal:TalButton2 x:Name="mini" Width="16" Height="16" Click="Mini_Click">
                 <svgc:SvgViewbox Source="Icons/收起.svg"/>
-            </Button>
+            </tal:TalButton2>
         </StackPanel>
 
         <Border Margin="0, 150, 0, 0" CornerRadius="10, 10, 0, 0" Background="White">

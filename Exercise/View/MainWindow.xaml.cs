@@ -76,7 +76,7 @@ namespace Excecise
                 RemoveNavButton(b.Content, b.Dock);
                 if (b.Content.DataContext == page.DataContext)
                     b.Content.DataContext = null;
-                Button button = b.Content as Button;
+                ButtonBase button = b.Content as ButtonBase;
                 if (button != null && button.CommandParameter == page)
                     button.CommandParameter = null;
             }
@@ -95,7 +95,7 @@ namespace Excecise
                     if (b.Content.DataContext == null)
                         b.Content.DataContext = page.DataContext;
                     b.Content.VerticalAlignment = VerticalAlignment.Center;
-                    Button button = b.Content as Button;
+                    ButtonBase button = b.Content as ButtonBase;
                     if (button != null && button.CommandParameter == null)
                         button.CommandParameter = page;
                     AppendNavButton(b.Content, b.Dock);

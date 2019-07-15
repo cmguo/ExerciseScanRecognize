@@ -89,7 +89,6 @@ namespace Exercise.Model
         private HistoryModel historyModel = HistoryModel.Instance;
         private IExercise service;
 
-        private string exerciseId;
         private List<Page> emptyPages;
         private Exception targetException;
 
@@ -163,7 +162,7 @@ namespace Exercise.Model
         {
             await Save();
             string path = SavePath;
-            await submitModel.Save(path, exerciseId, schoolModel.Classes, PageStudents);
+            await submitModel.Save(path, scanModel.PageCode, schoolModel.Classes, PageStudents);
             BackgroudWork.Execute(() => submitModel.Submit(path));
         }
 
@@ -186,7 +185,6 @@ namespace Exercise.Model
                 emptyPages.Add(null);
             scanModel.SetExerciseData(ExerciseData);
             await scanModel.Load(path);
-            exerciseId = scanModel.PageCode;
             SavePath = path;
             foreach (StudentInfo s in PageStudents)
             {
@@ -196,7 +194,6 @@ namespace Exercise.Model
 
         public void Clear()
         {
-            exerciseId = null;
             emptyPages = null;
             targetException = null;
             ExerciseData = null;
@@ -238,12 +235,13 @@ namespace Exercise.Model
 
         public void Resolve(Exception ex, ResolveType type)
         {
+            Page oldPage = ex.Page;
             if (type == ResolveType.Ignore
                 || type == ResolveType.Resolve)
             {
                 if (ex.Type == ExceptionType.AnswerException)
                 {
-                    ex.Page.Answer.AnswerExceptions.All(q =>
+                    oldPage.Answer.AnswerExceptions.All(q =>
                     {
                         q.ItemInfo.All(i =>
                         {
@@ -253,11 +251,11 @@ namespace Exercise.Model
                         });
                         return true;
                     });
-                    ex.Page.Answer.AnswerExceptions = null;
+                    oldPage.Answer.AnswerExceptions = null;
                 }
                 else if (ex.Type == ExceptionType.CorrectionException)
                 {
-                    ex.Page.Answer.CorrectionExceptions.All(q =>
+                    oldPage.Answer.CorrectionExceptions.All(q =>
                     {
                         q.ItemInfo.All(i =>
                         {
@@ -267,22 +265,22 @@ namespace Exercise.Model
                         });
                         return true;
                     });
-                    ex.Page.Answer.CorrectionExceptions = null;
+                    oldPage.Answer.CorrectionExceptions = null;
                 }
-                RemoveException(ex.Type, ex.Page);
+                RemoveException(ex.Type, oldPage);
                 if (ex.Type == ExceptionType.NoStudentCode)
                 {
-                    AddPage(ex.Page);
-                    AddException(ex.Page.Student);
+                    AddPage(oldPage);
+                    AddException(oldPage.Student);
                 }
             }
             else if (type == ResolveType.RemoveStudent)
             {
-                RemovePage(ex.Page, RemoveType.Student);
+                RemovePage(oldPage, RemoveType.Student);
             }
             else
             {
-                RemovePage(ex.Page, RemoveType.SinglePage);
+                RemovePage(oldPage, RemoveType.SinglePage);
             }
         }
 
@@ -328,8 +326,7 @@ namespace Exercise.Model
         {
             try
             {
-                exerciseId = scanModel.PageCode;
-                ExerciseData = await service.GetExercise(exerciseId);
+                ExerciseData = await service.GetExercise(scanModel.PageCode);
                 int n = (ExerciseData.Pages.Count + 1) / 2;
                 emptyPages = new List<Page>(n);
                 while (n-- > 0)
@@ -367,6 +364,9 @@ namespace Exercise.Model
                 {
                     ReleasePage(old, RemoveType.DuplexPage);
                 }
+            }
+            if (type == ExceptionType.None)
+            {
                 if (page.Answer != null)
                 {
                     if (page.Answer.AnswerExceptions != null)

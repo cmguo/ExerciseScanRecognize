@@ -6,6 +6,7 @@
     <ResourceDictionary.MergedDictionaries>
         <ResourceDictionary Source="pack://application:,,,/TalBase;component/Themes/Button.xaml" />
         <ResourceDictionary Source="pack://application:,,,/TalBase;component/Themes/Button2.xaml" />
+        <ResourceDictionary Source="pack://application:,,,/TalBase;component/Themes/Button3.xaml" />
         <ResourceDictionary Source="pack://application:,,,/TalBase;component/Themes/Hyperlink.xaml" />
     </ResourceDictionary.MergedDictionaries>
 

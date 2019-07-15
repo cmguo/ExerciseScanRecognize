@@ -9,6 +9,7 @@
       xmlns:tb="clr-namespace:Base.TitleBar;assembly=Base"
       xmlns:cv="clr-namespace:Base.Mvvm.Converter;assembly=Base"
       xmlns:tal="clr-namespace:TalBase.View;assembly=TalBase"
+      xmlns:svgc="http://sharpvectors.codeplex.com/svgc/"
       mc:Ignorable="d"
       x:Name="Page"
       d:DesignHeight="450" d:DesignWidth="800"
@@ -20,7 +21,7 @@
 
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="pack://application:,,,/TalBase;component/Themes/Generic.xaml" />
-                <ResourceDictionary Source="pack://application:,,,/Exercise;component/Themes/DataGrid.xaml" />
+                <ResourceDictionary Source="../Themes/DataGrid.xaml" />
             </ResourceDictionary.MergedDictionaries>
 
             <cv:MultiValueConverter x:Key="MultiValueConverter" />
@@ -29,9 +30,14 @@
             <local:SelectionConverter x:Key="SelectionConverter" Selected="#FF4C84FF" Unselected="{x:Null}" />
             <local:SelectionConverter x:Key="ForegroundConverter" Selected="White" Unselected="#FF2D4A66" />
 
-            <tal:TalButton x:Key="Return" Content="返回" Style="{StaticResource DefaultTalButtonStyle}"
+            <tal:TalButton3 x:Key="Return" 
                             Command="{Binding ReturnCommand}"
-                            CommandParameter="{Binding Source={x:Reference Page}}" />
+                            CommandParameter="{Binding Source={x:Reference Page}}">
+                <StackPanel Orientation="Horizontal">
+                    <Image Width="24" Height="24" VerticalAlignment="Center" Source="{svgc:SvgImage Source=/Icons/back.svg}" />
+                    <TextBlock Margin="5, 0, 0, 0" VerticalAlignment="Center" Text="返回" />
+                </StackPanel>
+            </tal:TalButton3>
             
             <Style TargetType="TextBlock">
                 <Setter Property="FontSize" Value="14" />
@@ -74,7 +80,7 @@
                     <Setter Property="Template">
                         <Setter.Value>
                             <ControlTemplate TargetType="ListViewItem">
-                                <Border >
+                                <Border Padding="0, 0, 0, 8">
                                     <ContentPresenter />
                                 </Border>
                             </ControlTemplate>
@@ -84,10 +90,10 @@
             </ListBox.ItemContainerStyle>
             <ListView.ItemTemplate>
                 <DataTemplate>
-                    <Border CornerRadius="4" BorderThickness="1" BorderBrush="#4D4C84FF" Height="48">
+                    <Border CornerRadius="4" BorderThickness="1" BorderBrush="#4D4C84FF" Height="40" Background="#194C84FF">
                         <DockPanel Margin="16, 0, 26, 0" >
                             <StackPanel DockPanel.Dock="Left" Orientation="Horizontal" VerticalAlignment="Center">
-                                <Image Width="16" Height="16" Source="/Icons/信息/16.png"/>
+                                <Image Width="16" Height="16" Source="/Icons/Info/16.png"/>
                                 <TextBlock Margin="8, 0, 0, 0" Foreground="#FF2D4A66">
                                     <TextBlock.Text>
                                         <MultiBinding StringFormat="异常退出待处理：{0}，扫描时间：{1}">
@@ -118,7 +124,7 @@
             </ListView.ItemTemplate>
         </ListView>
         
-        <DataGrid Grid.Row="2" x:Name="dataGrid" Margin="30, 16, 30, 0"
+        <DataGrid Grid.Row="2" x:Name="dataGrid" Margin="30, 16, 30, 0" Focusable="False"
                   ItemsSource="{Binding Records}">
             <DataGrid.Columns>
                 <DataGridTemplateColumn Header="试卷名称" IsReadOnly="False" Width="230" 

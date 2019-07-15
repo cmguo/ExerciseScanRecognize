@@ -15,7 +15,7 @@ namespace Exercise.ViewModel
 
         #region Properties
 
-        public IList<ClassInfo> Classes => schoolModel.Classes;
+        public IList<ClassInfo> Classes => schoolModel.AllClasses;
 
         private ClassInfo _SelectedClass;
         public ClassInfo SelectedClass
@@ -37,9 +37,10 @@ namespace Exercise.ViewModel
             {
                 _StudentFilter = value;
                 RaisePropertyChanged("StudentFilter");
-                FilteredStudents = (value == null || value.Length == 0)
+                FilteredStudents = SelectedClass == null 
+                    ? null : ((value == null || value.Length == 0)
                     ? SelectedClass.Students
-                    : SelectedClass.Students.Where(s => s.ToString().Contains(value)).ToList();
+                    : SelectedClass.Students.Where(s => s.ToString().Contains(value)).ToList());
                 RaisePropertyChanged("FilteredStudents");
             }
         }

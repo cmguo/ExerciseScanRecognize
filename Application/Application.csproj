@@ -287,9 +287,9 @@
     <Content Include="Icons\作答识别异常.svg">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Resource Include="Icons\信息\16.png" />
+    <Resource Include="Icons\Info\16.png" />
     <Resource Include="Icons\关闭\粗.png" />
-    <Content Include="Icons\信息\16.svg" />
+    <Content Include="Icons\Info\16.svg" />
     <Content Include="Icons\关闭\粗.svg">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>

@@ -37,6 +37,7 @@
                     <Setter Property="Foreground" Value="#FF2D4A66"/>
                     <Setter Property="Background" Value="{x:Null}" />
                     <Setter Property="BorderBrush" Value="{x:Null}" />
+                    <Setter Property="Focusable" Value="{Binding Focusable, RelativeSource={RelativeSource AncestorType=DataGrid}}" />
                     <Style.Triggers>
                         <Trigger Property="IsSelected" Value="True">
                             <Setter Property="Background" Value="{x:Null}" />

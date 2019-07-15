@@ -30,11 +30,16 @@
         <cv:NullVisibleConverter x:Key="NullVisibleConverter" />
         <local:DuplexFaceConverter x:Key="DuplexFaceConverter" />
         <local:PaperOverlayConverter x:Key="PaperOverlayConverter" />
-        
-        <tal:TalButton x:Key="Return" Content="返回" Focusable="False"
-                        Command="{Binding ReturnCommand}"
-                        CommandParameter="{Binding Source={x:Reference Page}}" />
-            
+
+        <tal:TalButton3 x:Key="Return" 
+                            Command="{Binding ReturnCommand}"
+                            CommandParameter="{Binding Source={x:Reference Page}}">
+            <StackPanel Orientation="Horizontal">
+                <Image Width="24" Height="24" VerticalAlignment="Center" Source="{svgc:SvgImage Source=/Icons/back.svg}" />
+                <TextBlock Margin="5, 0, 0, 0" VerticalAlignment="Center" Text="返回" />
+            </StackPanel>
+        </tal:TalButton3>
+
     </Page.Resources>
 
     <tb:TitleBarManager.Buttons>
@@ -125,7 +130,7 @@
                        DataContext="{Binding SelectedException, Converter={StaticResource ExceptionConverter}, ConverterParameter=Rescan}"
                        Visibility="{Binding Converter={StaticResource NonNullVisibleConverter}}"/>
             
-            <Frame Margin="0, 15, 0, 0" Content="{Binding SelectedException, Converter={StaticResource ExceptionPageConverter}}"/>
+            <Frame Margin="0, 15, 0, 0" Content="{Binding SelectedException, Converter={StaticResource ExceptionPageConverter}}" Focusable="False"/>
             
             <StackPanel Orientation="Vertical">
                 <StackPanel.Resources>

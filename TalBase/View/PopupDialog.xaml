@@ -17,7 +17,7 @@
     <Window.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary Source="../Themes/Button.xaml" />
+                <ResourceDictionary Source="../Themes/Generic.xaml" />
             </ResourceDictionary.MergedDictionaries>
             <local:ContentVisiableConverter x:Key="ContentVisiableConverter" />
         </ResourceDictionary>
@@ -37,9 +37,9 @@
                     <ColumnDefinition Width="16" />
                 </Grid.ColumnDefinitions>
                 <TextBlock FontSize="16" TextWrapping="Wrap" Text="{Binding Caption}" HorizontalAlignment="Stretch" />
-                <Button Grid.Column="1" x:Name="close" Width="16" Height="16" Background="Transparent" BorderThickness="0" Click="Btn_Click">
+                <tb:TalButton2 Grid.Column="1" x:Name="close" Width="16" Height="16" Click="Btn_Click">
                     <svgc:SvgViewbox Source="Icons/关闭/粗.svg"/>
-                </Button>
+                </tb:TalButton2>
             </Grid>
             <StackPanel Grid.Row="1" Orientation="Horizontal" Margin="0, 24, 0, 24">
                 <Image Source="{svgc:SvgImage Source=/Icons/警告/24.svg}" Width="24" Height="24" VerticalAlignment="Top" />

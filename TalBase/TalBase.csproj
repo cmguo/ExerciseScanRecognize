@@ -97,6 +97,7 @@
     <Compile Include="View\PopupDialog.xaml.cs">
       <DependentUpon>PopupDialog.xaml</DependentUpon>
     </Compile>
+    <Compile Include="View\TalButton3.cs" />
     <Compile Include="View\TalHyperlink.cs" />
     <Compile Include="View\TalButton2.cs" />
     <Compile Include="View\TalButton.cs" />
@@ -115,6 +116,10 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Page Include="Themes\Button3.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="Themes\Generic.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>

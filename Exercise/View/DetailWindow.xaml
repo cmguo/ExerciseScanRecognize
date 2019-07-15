@@ -3,7 +3,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:Exercise.View"
+        xmlns:tal="clr-namespace:TalBase.View;assembly=TalBase"
         xmlns:svgc="http://sharpvectors.codeplex.com/svgc/"
         mc:Ignorable="d"
         ShowInTaskbar = "false"
@@ -17,55 +17,68 @@
         >
     
     <Window.Resources>
-        <ControlTemplate x:Key="StudentList">
-            <ListView ItemsSource="{Binding}" BorderThickness="0" Padding="0" Background="{x:Null}">
-                <ListView.ItemsPanel>
-                    <ItemsPanelTemplate>
-                        <WrapPanel IsItemsHost="True" Orientation="Horizontal" Width="470" />
-                    </ItemsPanelTemplate>
-                </ListView.ItemsPanel>
-                <ListView.ItemTemplate>
-                    <DataTemplate>
-                        <Border BorderThickness="0" BorderBrush="Black" Height="24">
-                            <TextBlock Margin="0, 10, 24, 0" Text="{Binding Name}" VerticalAlignment="Center"/>
-                        </Border>
-                    </DataTemplate>
-                </ListView.ItemTemplate>
-            </ListView>
-        </ControlTemplate>
+        <ResourceDictionary>
+            
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="pack://application:,,,/TalBase;component/Themes/Generic.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+            
+            <ControlTemplate x:Key="StudentList">
+                <ListView ItemsSource="{Binding}" BorderThickness="0" Padding="0" Background="{x:Null}">
+                    <ListView.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <WrapPanel IsItemsHost="True" Orientation="Horizontal" Width="470" />
+                        </ItemsPanelTemplate>
+                    </ListView.ItemsPanel>
+                    <ListView.ItemContainerStyle>
+                        <Style TargetType="{x:Type ListViewItem}">
+                            <Setter Property="Focusable" Value="False"/>
+                        </Style>
+                    </ListView.ItemContainerStyle>
+                    <ListView.ItemTemplate>
+                        <DataTemplate>
+                            <Border BorderThickness="0" BorderBrush="Black" Height="24">
+                                <TextBlock Margin="0, 10, 24, 0" Text="{Binding Name}" VerticalAlignment="Center"/>
+                            </Border>
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
+                </ListView>
+            </ControlTemplate>
 
-        <DataTemplate x:Key="ClassDetail">
-            <StackPanel Orientation="Vertical" HorizontalAlignment="Stretch" IsHitTestVisible="False">
-                <TextBlock Margin="0, 0, 0, 8" FontSize="14" Foreground="#FF2D4A66" Text="{Binding Name}"/>
+            <ControlTemplate x:Key="ClassDetail" TargetType="ListViewItem">
+                <StackPanel Orientation="Vertical" HorizontalAlignment="Stretch" IsHitTestVisible="False" >
+                    <TextBlock Margin="0, 0, 0, 8" FontSize="14" Foreground="#FF2D4A66" Text="{Binding Name}"/>
 
-                <Border Background="#FFF4F8FE">
-                    <Grid Margin="14, 16, 14, 16" >
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="Auto" />
-                            <RowDefinition Height="8"/>
-                            <RowDefinition Height="Auto" />
-                        </Grid.RowDefinitions>
-                        <StackPanel Grid.Row="0" Margin="0, 0, 0, 4" Orientation="Vertical" DataContext="{Binding SubmitStudentList}">
-                            <StackPanel Height="15" Orientation="Horizontal">
-                                <Ellipse Width="6" Height="6" Fill="#FF12D900" VerticalAlignment="Center" />
-                                <TextBlock Margin="8, 0, 0, 0"  VerticalAlignment="Center"
+                    <Border Background="#FFF4F8FE">
+                        <Grid Margin="14, 16, 14, 16" >
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="8"/>
+                                <RowDefinition Height="Auto" />
+                            </Grid.RowDefinitions>
+                            <StackPanel Grid.Row="0" Margin="0, 0, 0, 4" Orientation="Vertical" DataContext="{Binding SubmitStudentList}">
+                                <StackPanel Height="15" Orientation="Horizontal">
+                                    <Ellipse Width="6" Height="6" Fill="#FF12D900" VerticalAlignment="Center" />
+                                    <TextBlock Margin="8, 0, 0, 0"  VerticalAlignment="Center"
                                            Text="{Binding Count, StringFormat=已回收 {0}人}" />
+                                </StackPanel>
+                                <Thumb Template="{StaticResource StudentList}" />
                             </StackPanel>
-                            <Thumb Template="{StaticResource StudentList}" />
-                        </StackPanel>
-                        <Canvas />
-                        <StackPanel Grid.Row="2" Margin="0, 0, 0, 4" Orientation="Vertical" DataContext="{Binding LostStudentList}">
-                            <StackPanel Height="15" Orientation="Horizontal">
-                                <Ellipse Width="6" Height="6" Fill="#FFFE9400" VerticalAlignment="Center" />
-                                <TextBlock Margin="8, 0, 0, 0"  VerticalAlignment="Center"
+                            <Canvas />
+                            <StackPanel Grid.Row="2" Margin="0, 0, 0, 4" Orientation="Vertical" DataContext="{Binding LostStudentList}">
+                                <StackPanel Height="15" Orientation="Horizontal">
+                                    <Ellipse Width="6" Height="6" Fill="#FFFE9400" VerticalAlignment="Center" />
+                                    <TextBlock Margin="8, 0, 0, 0"  VerticalAlignment="Center"
                                            Text="{Binding Count, StringFormat=未回收 {0}人}" />
+                                </StackPanel>
+                                <Thumb Template="{StaticResource StudentList}" />
                             </StackPanel>
-                            <Thumb Template="{StaticResource StudentList}" />
-                        </StackPanel>
-                    </Grid>
-                </Border>
-            </StackPanel>
-        </DataTemplate>
+                        </Grid>
+                    </Border>
+                </StackPanel>
+            </ControlTemplate>
+
+        </ResourceDictionary>
     </Window.Resources>
 
     <Grid Width = "578" MaxHeight = "498">
@@ -84,14 +97,20 @@
                     <ColumnDefinition Width="16" />
                 </Grid.ColumnDefinitions>
                 <TextBlock FontSize="16" Foreground="#FF2D4A66" Text="{Binding Title, ElementName=Window}" />
-                <Button Grid.Column="1" x:Name="close" Width="16" Height="16" Background="{x:Null}" BorderThickness="0" Click="Close_Click">
+                <tal:TalButton2 Grid.Column="1" x:Name="close" Width="16" Height="16" Click="Close_Click">
                     <svgc:SvgViewbox Source="Icons/关闭/粗.svg"/>
-                </Button>
+                </tal:TalButton2>
             </Grid>
 
             <ListView Grid.Row="1" Margin="0, 24, 0, 0" BorderThickness="0"
-                      ItemsSource="{Binding}" 
-                      ItemTemplate="{StaticResource ClassDetail}" />
+                      ItemsSource="{Binding}" >
+                <ListView.ItemContainerStyle>
+                    <Style TargetType="{x:Type ListViewItem}">
+                        <Setter Property="Focusable" Value="False"/>
+                        <Setter Property="Template" Value="{StaticResource ClassDetail}" />
+                    </Style>
+                </ListView.ItemContainerStyle>
+            </ListView>
         </Grid>
     </Grid>
 </Window>

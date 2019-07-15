@@ -29,7 +29,7 @@
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
 
-        <Frame Grid.Row="1" Name="frmMain" Background="#FFF2F6FC" NavigationUIVisibility="Hidden"/>
+        <Frame Grid.Row="1" Name="frmMain" Background="#FFF2F6FC" NavigationUIVisibility="Hidden" Focusable="False"/>
 
         <Border x:Name="titleBar" Margin="0, 0, 0, -8" Background="#FF2B3346" BorderThickness="0, 0, 0, 8" BorderBrush="#1F001529" Height="48">
             <Grid Margin="28, 0, 28, 0">
@@ -44,11 +44,11 @@
                 <StackPanel Grid.Column="2" Orientation="Horizontal" HorizontalAlignment="Right">
                     <StackPanel x:Name="right"  Orientation="Horizontal"/>
                     <StackPanel Orientation="Horizontal">
-                        <tal:TalButton2 x:Name="mini" Width="16" Height="16" Background="{x:Null}" BorderThickness="0" 
+                        <tal:TalButton2 x:Name="mini" Width="16" Height="16" 
                                 Click="Mini_Click">
                             <svgc:SvgViewbox Source="Icons/收起.svg"/>
                         </tal:TalButton2>
-                        <tal:TalButton2 Margin="12, 0, 0, 0" x:Name="close" Width="16" Height="16" Background="{x:Null}" BorderThickness="0" 
+                        <tal:TalButton2 Margin="12, 0, 0, 0" x:Name="close" Width="16" Height="16" 
                                 Command="ApplicationCommands.Close">
                             <svgc:SvgViewbox Source="Icons/关闭/细.svg"/>
                         </tal:TalButton2>

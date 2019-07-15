@@ -38,7 +38,7 @@
         <StackPanel Grid.Row="2" Margin="0, 9, 0 ,0" Orientation="Horizontal"
                     Visibility="{Binding SelectedItem, ElementName=studentList, Converter={StaticResource NullVisibleConverter}}" >
             <Image Width="12" Height="12" Source="{svgc:SvgImage Source=/Icons/bad.svg}" />
-            <TextBlock Margin="4, 0, 0, 0" FontSize="11" Foreground="#ffff6767" Text="" />
+            <TextBlock Margin="4, 0, 0, 0" FontSize="11" Foreground="#ffff6767" Text="请选择筛选列表中的学生" />
         </StackPanel>
         <tal:TalButton Grid.Row="3" Margin="0, 4, 0 ,0" Content="确认" Click="Confirm_Click" IsDefault="True"
                 IsEnabled="{Binding SelectedItem, ElementName=studentList, Converter={StaticResource NonNullTrueConverter}}" />

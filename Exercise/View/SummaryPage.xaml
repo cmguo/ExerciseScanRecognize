@@ -127,7 +127,8 @@
                     <StackPanel Grid.Row="0" Margin="30,0,30,0" Height="80" Orientation="Horizontal">
                         <TextBlock Grid.Column="1" Foreground="#FFFE9400" Text="{Binding ExceptionCount, StringFormat=共存在{0}项异常}" VerticalAlignment="Center"/>
                     </StackPanel>
-                    <DataGrid Grid.Row="1" Margin="26, 0, 26, 0" ItemsSource="{Binding Exceptions}" IsReadOnly="True" >
+                    <DataGrid Grid.Row="1" Margin="26, 0, 26, 0" ItemsSource="{Binding Exceptions}"
+                              IsReadOnly="True" Focusable="False" >
                         <DataGrid.Columns>
                             <DataGridTextColumn Header="异常项" Width="283" 
                                                 Binding="{Binding Converter={StaticResource ExceptionListConverter}, ConverterParameter=Tree}" />
@@ -152,7 +153,8 @@
                         <TextBlock Grid.Column="0" Text="{Binding StudentCount, StringFormat=共收回{0}份试卷}" VerticalAlignment="Center" />
                         <tal:TalButton Grid.Column="1" Content="查看详情" Click="PUButton_Click" VerticalAlignment="Center" />
                     </Grid>
-                    <DataGrid Grid.Row="1" Margin="26, 0, 26, 0" ItemsSource="{Binding ClassDetails}" IsReadOnly="True">
+                    <DataGrid Grid.Row="1" Margin="26, 0, 26, 0" ItemsSource="{Binding ClassDetails}"
+                              IsReadOnly="True" Focusable="False">
                         <DataGrid.Columns>
                             <DataGridTextColumn Header="班级" Width="196" Binding="{Binding Name}"/>
                             <DataGridTextColumn Header="回收试卷（份）" Width="160" Binding="{Binding Result.Count}" />

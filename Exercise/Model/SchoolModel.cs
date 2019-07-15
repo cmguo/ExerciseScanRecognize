@@ -83,8 +83,15 @@ namespace Exercise.Model
 
         public void GetLostPageStudents(Action<StudentInfo> visitor)
         {
-            foreach (StudentInfo s in Classes.SelectMany(c => c.Students.Where(s => s.AnswerPages == null)))
+            foreach (StudentInfo s in AllClasses.SelectMany(c =>
+            {
+                if (!Classes.Contains(c))
+                    Classes.Add(c);
+                return c.Students.Where(s => s.AnswerPages == null);
+            }))
+            {
                 visitor(s);
+            }
         }
 
         public async Task Save(string path)

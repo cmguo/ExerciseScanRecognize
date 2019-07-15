@@ -32,7 +32,7 @@
                         DataContext="{StaticResource ViewModel}" Click="Logout_Click" >
                 <StackPanel Orientation="Horizontal">
                     <TextBlock Text="{Binding Account.SchoolName}" />
-                    <Image Margin="4, 0, 0, 0"  Width="16" Height="16" Source="{svgc:SvgImage /Icons/下箭头/白色.svg}" />
+                    <Image Margin="4, 0, 0, 0"  Width="16" Height="16" Source="{svgc:SvgImage /Icons/DownArrow/白色.svg}" />
                 </StackPanel>
             </tal:TalButton2>
 
@@ -56,7 +56,7 @@
 
         <Border/>
         <Image Width="440" Height="160" Source="/Images/8.png" VerticalAlignment="Top" HorizontalAlignment="Stretch"/>
-        <Image Margin="71, 50, 70, 514" Source="{svgc:SvgImage Source=/Images/编组 7.svg}" />
+        <Image Margin="0, 50, 0, 0" Source="/Images/logo.png" Width="299" VerticalAlignment="Top" HorizontalAlignment="Center" />
 
         <StackPanel Margin="0, 16, 13, 0" Orientation="Horizontal" FlowDirection="RightToLeft" VerticalAlignment="Top">
             <tal:TalButton2 Margin="0, 0, 12, 0" x:Name="close" Width="16" Height="16" Click="Close_Click">
@@ -84,7 +84,7 @@
                     <StackPanel Orientation="Horizontal">
                         <Image Width="16" Height="16" Margin="16, 0, 0, 0" VerticalAlignment="Center" 
                            Source="{svgc:SvgImage Source=/Icons/用户.svg}"/>
-                        <mu:PUTextBox Margin="16, 0, 16, 0" BorderThickness="0" Watermark="输入用户名" FontSize="18" Foreground="#FF2D4A66" 
+                        <mu:PUTextBox Margin="16, 0, 16, 0" BorderThickness="0" Watermark="请输入用户名" FontSize="18" Foreground="#FF2D4A66" Width="281"
                                   Text="{Binding LoginData.LoginName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
                     </StackPanel>
                 </Border>
@@ -93,7 +93,8 @@
                     <StackPanel Orientation="Horizontal">
                         <Image Width="16" Height="16" Margin="16, 0, 0, 0" VerticalAlignment="Center" 
                            Source="{svgc:SvgImage Source=/Icons/密码.svg}"/>
-                        <mu:PUPasswordBox Margin="16, 0, 16, 0" BorderThickness="0" Watermark="输入密码" FontSize="18" Foreground="#FF2D4A66" IsShowPwdButtonShow="True"
+                        <mu:PUPasswordBox Margin="16, 0, 16, 0" BorderThickness="0" Watermark="请输入密码" FontSize="18" Foreground="#FF2D4A66" Width="281"
+                                          IsShowPwdButtonShow="True"
                                           Password="{Binding LoginData.Password, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
                     </StackPanel>
                 </Border>

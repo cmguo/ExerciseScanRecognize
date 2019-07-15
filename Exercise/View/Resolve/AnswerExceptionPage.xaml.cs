@@ -10,6 +10,7 @@ using Exercise.Algorithm;
 using System;
 using Exception = Exercise.Model.ExerciseModel.Exception;
 using TalBase.View;
+using static Exercise.Model.Page;
 
 namespace Exercise.View.Resolve
 {
@@ -18,8 +19,8 @@ namespace Exercise.View.Resolve
     /// </summary>
     internal class AnswerExceptionViewModel : ViewModelBase
     {
-        private IList<Question> _Questions;
-        public IList<Question> Questions
+        private IList<QuestionException> _Questions;
+        public IList<QuestionException> Questions
         {
             get => _Questions;
             set
@@ -29,8 +30,8 @@ namespace Exercise.View.Resolve
             }
         }
 
-        private Question _SelectedQuestion;
-        public Question SelectedQuestion
+        private QuestionException _SelectedQuestion;
+        public QuestionException SelectedQuestion
         {
             get => _SelectedQuestion;
             set
@@ -87,7 +88,7 @@ namespace Exercise.View.Resolve
             type = ex.Type;
             data = ex.Page.MetaData;
             viewModel.Questions = type == ExceptionType.AnswerException 
-                ? ex.Page.Answer.AnswerExceptions : ex.Page.Answer.CorrectionExceptions;
+                ? ex.Page.AnswerExceptions : ex.Page.CorrectionExceptions;
             viewModel.SelectedQuestion = viewModel.Questions[0];
             if (type == ExceptionType.AnswerException)
             {
@@ -100,20 +101,15 @@ namespace Exercise.View.Resolve
             }
         }
 
-        private void FillAnswers(Question question)
+        private void FillAnswers(QuestionException question)
         {
-            PageData.Question qe = data.AreaInfo.SelectMany(a => a.QuestionInfo)
-                .Where(q => q.QuestionId == question.QuestionId).First();
-            viewModel.Answers = qe.ItemInfo[0].Value.Split(',').Concat(new string[] { null }).ToList();
+            viewModel.Answers = question.Question.ItemInfo[0].Value.Split(',').Concat(new string[] { null }).ToList();
             viewModel.Scores = viewModel.Answers;
         }
 
-        private void FillScores(Question question)
+        private void FillScores(QuestionException question)
         {
-            PageData.Question qe = data.AreaInfo.SelectMany(a => a.QuestionInfo)
-                .Where(q => q.QuestionId == question.QuestionId).First();
-            //viewModel.Scores = qe.ItemInfo[0].Value.Split(',').ToList();
-            int total = (int) float.Parse(qe.ItemInfo[0].TotalScore);
+            int total = (int) float.Parse(question.Question.ItemInfo[0].TotalScore);
             viewModel.Scores = Enumerable.Range(0, total + 1).Select(v => v.ToString()).ToList();
         }
 
@@ -129,7 +125,7 @@ namespace Exercise.View.Resolve
 
         private void Question_Click(object sender, RoutedEventArgs e)
         {
-            viewModel.SelectedQuestion = (sender as FrameworkElement).DataContext as Question;
+            viewModel.SelectedQuestion = (sender as FrameworkElement).DataContext as QuestionException;
         }
 
         private void Answer_Click(object sender, RoutedEventArgs e)
@@ -160,7 +156,7 @@ namespace Exercise.View.Resolve
                 PopupDialog.Show(this, "TODO", "输入值不在有效范围中", 0, "确定");
                 return;
             }
-            viewModel.SelectedQuestion.ItemInfo.All(i =>
+            viewModel.SelectedQuestion.Answer.ItemInfo.All(i =>
             {
                 i.StatusOfItem = -1;
                 i.AnalyzeResult = new List<Result>();
@@ -187,7 +183,7 @@ namespace Exercise.View.Resolve
         {
             if (e.PropertyName == "SelectedQuestion")
             {
-                string answer = String.Join(",", viewModel.SelectedQuestion.ItemInfo
+                string answer = String.Join(",", viewModel.SelectedQuestion.Answer.ItemInfo
                     .Where(i => i.AnalyzeResult != null)
                     .SelectMany(i => i.AnalyzeResult.Select(r => r.Value))
                     .Where(v => v != null));

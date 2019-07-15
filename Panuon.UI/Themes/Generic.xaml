@@ -2568,29 +2568,6 @@
                                             Property="Visibility"
                                             Value="Visible" />
                                 </Trigger>
-                                <Trigger Property="IsFocused"
-                                         Value="True">
-                                    <Trigger.EnterActions>
-                                        <BeginStoryboard>
-                                            <Storyboard>
-                                                <DoubleAnimation To="0.4"
-                                                                 Duration="0:0:0.2"
-                                                                 Storyboard.TargetName="effect"
-                                                                 Storyboard.TargetProperty="Opacity" />
-                                            </Storyboard>
-                                        </BeginStoryboard>
-                                    </Trigger.EnterActions>
-                                    <Trigger.ExitActions>
-                                        <BeginStoryboard>
-                                            <Storyboard>
-                                                <DoubleAnimation To="0"
-                                                                 Duration="0:0:0.2"
-                                                                 Storyboard.TargetName="effect"
-                                                                 Storyboard.TargetProperty="Opacity" />
-                                            </Storyboard>
-                                        </BeginStoryboard>
-                                    </Trigger.ExitActions>
-                                </Trigger>
                                 <Trigger Property="Text"
                                          Value="">
                                     <Setter Property="Visibility"
@@ -2828,6 +2805,7 @@
                                         <local:PUButton x:Name="btnShowPwd"
                                                         ButtonStyle="Link"
                                                         Opacity="0"
+                                                        Focusable="False"
                                                         Visibility="Collapsed"
                                                         FontFamily="{DynamicResource IconFont}"
                                                         Content=""
@@ -2847,29 +2825,6 @@
                                     <Setter TargetName="btnShowPwd"
                                             Property="Visibility"
                                             Value="Visible" />
-                                </Trigger>
-                                <Trigger Property="IsFocused"
-                                         Value="True">
-                                    <Trigger.EnterActions>
-                                        <BeginStoryboard>
-                                            <Storyboard>
-                                                <DoubleAnimation To="0.4"
-                                                                 Duration="0:0:0.2"
-                                                                 Storyboard.TargetName="effect"
-                                                                 Storyboard.TargetProperty="Opacity" />
-                                            </Storyboard>
-                                        </BeginStoryboard>
-                                    </Trigger.EnterActions>
-                                    <Trigger.ExitActions>
-                                        <BeginStoryboard>
-                                            <Storyboard>
-                                                <DoubleAnimation To="0"
-                                                                 Duration="0:0:0.2"
-                                                                 Storyboard.TargetName="effect"
-                                                                 Storyboard.TargetProperty="Opacity" />
-                                            </Storyboard>
-                                        </BeginStoryboard>
-                                    </Trigger.ExitActions>
                                 </Trigger>
                                 <Trigger Property="Text"
                                          Value="">

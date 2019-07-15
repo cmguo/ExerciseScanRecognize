@@ -36,11 +36,11 @@ namespace Exercise.View
             }
             else if ((string)parameter == "AnswerException")
             {
-                locations = page.Answer.AnswerExceptions.SelectMany(q => q.ItemInfo.Select(i => i.ItemLocation));
+                locations = page.AnswerExceptions.SelectMany(q => q.Answer.ItemInfo.Select(i => i.ItemLocation));
             }
             else if ((string)parameter == "CorrectionException")
             {
-                locations = page.Answer.CorrectionExceptions.SelectMany(q => q.ItemInfo.Select(i => i.ItemLocation));
+                locations = page.CorrectionExceptions.SelectMany(q => q.Answer.ItemInfo.Select(i => i.ItemLocation));
             }
             else
             {

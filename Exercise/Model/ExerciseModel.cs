@@ -239,34 +239,7 @@ namespace Exercise.Model
             if (type == ResolveType.Ignore
                 || type == ResolveType.Resolve)
             {
-                if (ex.Type == ExceptionType.AnswerException)
-                {
-                    oldPage.Answer.AnswerExceptions.All(q =>
-                    {
-                        q.ItemInfo.All(i =>
-                        {
-                            if (i.StatusOfItem > 0)
-                                i.StatusOfItem = -2;
-                            return true;
-                        });
-                        return true;
-                    });
-                    oldPage.Answer.AnswerExceptions = null;
-                }
-                else if (ex.Type == ExceptionType.CorrectionException)
-                {
-                    oldPage.Answer.CorrectionExceptions.All(q =>
-                    {
-                        q.ItemInfo.All(i =>
-                        {
-                            if (i.StatusOfItem > 0)
-                                i.StatusOfItem = -2;
-                            return true;
-                        });
-                        return true;
-                    });
-                    oldPage.Answer.CorrectionExceptions = null;
-                }
+                oldPage.ClearException(ex.Type);
                 RemoveException(ex.Type, oldPage);
                 if (ex.Type == ExceptionType.NoStudentCode)
                 {
@@ -369,16 +342,18 @@ namespace Exercise.Model
             {
                 if (page.Answer != null)
                 {
-                    if (page.Answer.AnswerExceptions != null)
+                    page.CalcException();
+                    if (page.AnswerExceptions != null)
                         AddException(ExceptionType.AnswerException, page);
-                    if (page.Answer.CorrectionExceptions != null)
+                    if (page.CorrectionExceptions != null)
                         AddException(ExceptionType.CorrectionException, page);
                 }
                 if (page.Another != null && page.Another.Answer != null)
                 {
-                    if (page.Another.Answer.AnswerExceptions != null)
+                    page.Another.CalcException();
+                    if (page.Another.AnswerExceptions != null)
                         AddException(ExceptionType.AnswerException, page.Another);
-                    if (page.Another.Answer.CorrectionExceptions != null)
+                    if (page.Another.CorrectionExceptions != null)
                         AddException(ExceptionType.CorrectionException, page.Another);
                 }
             }

@@ -31,7 +31,7 @@
 
         <Frame Grid.Row="1" Name="frmMain" Background="#FFF2F6FC" NavigationUIVisibility="Hidden" Focusable="False"/>
 
-        <Border x:Name="titleBar" Margin="0, 0, 0, -8" Background="#FF2B3346" BorderThickness="0, 0, 0, 8" BorderBrush="#1F001529" Height="48">
+        <Border x:Name="titleBar" Background="#FF2B3346" Height="48">
             <Grid Margin="28, 0, 28, 0">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="400" />

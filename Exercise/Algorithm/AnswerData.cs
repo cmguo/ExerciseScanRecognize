@@ -1,9 +1,6 @@
 ﻿using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System.Collections.Generic;
-using System.Runtime.Serialization;
-using System.Linq;
-using TalBase.Model;
 
 namespace Exercise.Algorithm
 {
@@ -26,26 +23,6 @@ namespace Exercise.Algorithm
         //public IList<Marker> AreaMarkers { get; set; }
         public IList<Area> AreaInfo { get; set; }
 
-
-        [JsonIgnore]
-        public IList<Question> AnswerExceptions { get; set; }
-
-        [JsonIgnore]
-        public IList<Question> CorrectionExceptions { get; set; }
-
-        [OnDeserialized]
-        internal void OnDeserialized(StreamingContext context)
-        {
-            AreaInfo.SelectMany(a => a.QuestionInfo).All(q => { q.HasException = q.ItemInfo.Any(i => i.StatusOfItem > 0); return true; });
-            AnswerExceptions = AreaInfo.Where(a => a.AreaType == AreaType.SingleChoice)
-                .SelectMany(a => a.QuestionInfo.Where(q => q.HasException)).ToList();
-            if (AnswerExceptions.Count == 0)
-                AnswerExceptions = null;
-            CorrectionExceptions = AreaInfo.Where(a => a.AreaType == AreaType.Answer)
-                .SelectMany(a => a.QuestionInfo.Where(q => q.HasException)).ToList();
-            if (CorrectionExceptions.Count == 0)
-                CorrectionExceptions = null;
-        }
 
         [JsonExtensionData]
         private IDictionary<string, JToken> _additionalData
@@ -72,21 +49,13 @@ namespace Exercise.Algorithm
                  = new Dictionary<string, JToken>();
         }
 
-        public class Question : ModelBase
+        public class Question
         {
             public string QuestionId { get; set; }
             public PagingInfo PagingInfo { get; set; }
             public Location QuestionLocation { get; set; }
             public IList<Item> ItemInfo { get; set; }
 
-            [JsonIgnore]
-            private bool _HasException;
-            [JsonIgnore]
-            public bool HasException
-            {
-                get => _HasException;
-                set { _HasException = value; RaisePropertyChanged("HasException"); }
-            }
 
             [JsonExtensionData]
             private IDictionary<string, JToken> _additionalData

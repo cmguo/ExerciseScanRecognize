@@ -71,7 +71,9 @@ namespace Exercise.View
                     }
                     if (Items.Count != 0)
                     {
-                        ParentTreeViewItem.SelectNext(this);
+                        TreeViewItemEx parent = ParentTreeViewItem;
+                        if (parent != null)
+                            parent.SelectNext(this);
                         return;
                     }
                 }

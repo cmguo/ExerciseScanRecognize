@@ -58,34 +58,64 @@
             <ColumnDefinition Width="279" />
         </Grid.ColumnDefinitions>
 
-        <local:TreeViewEx Grid.Column="0" x:Name="treeView" ItemsSource="{Binding Exceptions}">
+        <local:TreeViewEx Grid.Column="0" x:Name="treeView" Margin="32, 0, 33, 0" BorderThickness="0" Background="{x:Null}"
+                          ItemsSource="{Binding Exceptions}">
             <pb:PushBindingManager.PushBindings>
                 <pb:PushBinding TargetProperty="SelectedItem" Path="Selection"/>
             </pb:PushBindingManager.PushBindings>
             <TreeView.ItemContainerStyle>
-                <Style TargetType="{x:Type TreeViewItem}">
+                <Style TargetType="TreeViewItem">
                     <Setter Property="IsExpanded" Value="True"/>
+                    <Setter Property="Template">
+                        <Setter.Value>
+                            <ControlTemplate TargetType="TreeViewItem">
+                                <StackPanel x:Name="header">
+                                    <StackPanel Orientation="Horizontal">
+                                        <ContentPresenter ContentSource="Header"/>
+                                        <Expander x:Name="expander" VerticalAlignment="Center" 
+                                                  IsExpanded="{Binding IsExpanded, RelativeSource={RelativeSource AncestorType=TreeViewItem}}">
+                                            <Expander.Header>
+                                                <Image Source="{svgc:SvgImage Source=/Icons/DownArrow/normal.svg}" />
+                                            </Expander.Header>
+                                        </Expander>
+                                    </StackPanel>   
+                                    <ItemsPresenter x:Name="items" Margin="32, 0, 0, 0"/>
+                                </StackPanel>
+                                <ControlTemplate.Triggers>
+                                    <Trigger Property="IsSelected" Value="True">
+                                        <Setter TargetName="header" Property="Background" Value="#FFE5EFFE" />
+                                    </Trigger>
+                                    <Trigger Property="IsExpanded" Value="False">
+                                        <Setter TargetName="items" Property="Visibility" Value="Collapsed" />
+                                    </Trigger>
+                                    <Trigger Property="HasItems" Value="False">
+                                        <Setter TargetName="expander" Property="Visibility" Value="Collapsed" />
+                                    </Trigger>
+                                </ControlTemplate.Triggers>
+                            </ControlTemplate>
+                        </Setter.Value>
+                    </Setter>
                 </Style>
             </TreeView.ItemContainerStyle>
             <TreeView.ItemTemplate>
                 <HierarchicalDataTemplate ItemsSource="{Binding Exceptions}">
-                    <StackPanel Orientation="Horizontal" Margin="0, 15, 0, 15" >
-                        <svgc:SvgViewbox Width="8" Height="8" Margin="0, 0, 8, 0"
+                    <StackPanel Orientation="Horizontal" Margin="0, 15, 0, 15" Width="176" >
+                        <svgc:SvgViewbox Width="16" Height="16" Margin="0, 0, 8, 0"
                                Source="{Binding Converter={StaticResource ExceptionListConverter}, ConverterParameter=Image}" />
-                        <TextBlock FontSize="14" Foreground="#FF2D4A66" 
+                        <TextBlock FontSize="14" Foreground="#FF2D4A66" FontWeight="Bold"
                                    Text="{Binding Converter={StaticResource ExceptionListConverter}, ConverterParameter=Tree}"/>
                     </StackPanel>
                     <HierarchicalDataTemplate.ItemTemplate>
                         <DataTemplate>
-                            <TextBlock FontSize="14" Foreground="#FF2D4A66" Margin="0, 9, 0, 9" 
+                            <TextBlock FontSize="14" Foreground="#FF2D4A66" Margin="0, 9, 0, 9"  Width="156"
                                        Text="{Binding Converter={StaticResource ExceptionConverter}, ConverterParameter=Tree}" />
                         </DataTemplate>
                     </HierarchicalDataTemplate.ItemTemplate>
                 </HierarchicalDataTemplate>
             </TreeView.ItemTemplate>
         </local:TreeViewEx>
-        
-        <Border Grid.Column="1" BorderThickness="1, 0, 1, 0" BorderBrush="#FF2D4A66">
+
+        <Border Grid.Column="1" BorderThickness="1, 0, 1, 0" BorderBrush="#FFE3E8F0">
             <Grid>
                 <TextBlock Text="{Binding SelectedException, StringFormat={}{0} 试卷缺失, 
                     Converter={StaticResource ExceptionConverter}, ConverterParameter=Tree}" 

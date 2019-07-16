@@ -1,8 +1,8 @@
 ﻿using Base.Mvvm;
+using Excecise.View;
 using Exercise.Model;
 using Exercise.Service;
 using Exercise.View;
-using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
@@ -154,7 +154,11 @@ namespace Exercise.ViewModel
             await exerciseModel.ScanOne(ex);
             if (ex.Page != null)
             {
-                PopupDialog.Show(obj as UIElement, "TODO", "仍有异常。", 0, "确定");
+                TalToast.Show("X该试卷仍无法识别，请检查后重新扫描");
+            }
+            else
+            {
+                TalToast.Show("该份试卷的异常已处理完成");
             }
             if (Exceptions.Count == 0)
                 (obj as System.Windows.Controls.Page).NavigationService.Navigate(new SummaryPage());
@@ -162,11 +166,45 @@ namespace Exercise.ViewModel
 
         private async Task Resolve(object obj, ExerciseModel.Exception exception, ResolveType type)
         {
+            string title = null;
+            string message = null;
+            string btn = null;
+            switch (type)
+            {
+                case ResolveType.Ignore:
+                case ResolveType.RemovePage:
+                    title = "忽略异常";
+                    message = "忽略后，该张试卷所有题目作答将无法统计，确认忽略吗？";
+                    btn = "忽略";
+                    break;
+            }
+            if (title != null)
+            {
+                int n = PopupDialog.Show(obj as FrameworkElement, title, message, 0, btn, "取消");
+                if (n == 1)
+                    return;
+            }
             exerciseModel.Resolve(exception, type);
             if (Exceptions.Count == 0)
             {
                 await exerciseModel.Save();
+                TalToast.Show("异常已全部处理完成");
                 (obj as System.Windows.Controls.Page).NavigationService.Navigate(new SummaryPage());
+            }
+            else
+            {
+                string toast = null;
+                switch (type)
+                {
+                    case ResolveType.Ignore:
+                    case ResolveType.RemovePage:
+                        toast = "该份试卷的异常已忽略";
+                        break;
+                    case ResolveType.Resolve:
+                        toast = "该份试卷的异常已忽略";
+                        break;
+                }
+                TalToast.Show(toast);
             }
         }
 
@@ -174,7 +212,10 @@ namespace Exercise.ViewModel
         {
             exerciseModel.Resolve(list, type);
             if (Exceptions.Count == 0)
+            {
+                TalToast.Show("异常已全部处理完成");
                 (obj as System.Windows.Controls.Page).NavigationService.Navigate(new SummaryPage());
+            }
         }
 
         private async Task Return(object obj)

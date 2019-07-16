@@ -42,7 +42,7 @@
                 </tb:TalButton2>
             </Grid>
             <StackPanel Grid.Row="1" Orientation="Horizontal" Margin="0, 24, 0, 24">
-                <Image Source="{svgc:SvgImage Source=/Icons/警告/24.svg}" Width="24" Height="24" VerticalAlignment="Top" />
+                <Image Source="{svgc:SvgImage Source=/Icons/Warn/24.svg}" Width="24" Height="24" VerticalAlignment="Top" />
                 <StackPanel x:Name="body" Width="350" Orientation="Vertical" Margin="16, 0, 0, 0">
                     <TextBlock FontSize="14" TextWrapping="Wrap" Text="{Binding Message}" />
                 </StackPanel>

@@ -1,6 +1,6 @@
 ﻿using Account;
 using Application.Misc;
-using Excecise;
+using Excecise.View;
 using System;
 using System.Diagnostics;
 using System.Windows;

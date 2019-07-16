@@ -96,9 +96,9 @@
                                 <Image Width="16" Height="16" Source="/Icons/Info/16.png"/>
                                 <TextBlock Margin="8, 0, 0, 0" Foreground="#FF2D4A66">
                                     <TextBlock.Text>
-                                        <MultiBinding StringFormat="异常退出待处理：{0}，扫描时间：{1}">
+                                        <MultiBinding StringFormat="异常退出待处理：{0}，扫描时间：{1:yyyy.MM.dd - HH:mm}">
                                             <Binding Path="Name"/>
-                                            <Binding Path="ScanDate"/>
+                                            <Binding Path="DataTime"/>
                                         </MultiBinding>
                                     </TextBlock.Text>
                                 </TextBlock>
@@ -131,7 +131,7 @@
                                         CellTemplate="{StaticResource DataTemplate}"
                                         CellEditingTemplate="{StaticResource EditingTemplate}"/>
                 <DataGridTextColumn Header="扫描统计" IsReadOnly="True" Binding="{Binding DetailList, Converter={StaticResource HistroyDetailConverter}}" Width="480"/>
-                <DataGridTextColumn Header="扫描时间" IsReadOnly="True" Binding="{Binding DataTime, StringFormat={}{0:yyyy.MM.dd - hh:mm}, Mode=OneWay}" Width="178"/>
+                <DataGridTextColumn Header="扫描时间" IsReadOnly="True" Binding="{Binding DataTime, StringFormat={}{0:yyyy.MM.dd - HH:mm}, Mode=OneWay}" Width="178"/>
                 <DataGridTemplateColumn Header="操作" Width="*">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>

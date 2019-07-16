@@ -21,6 +21,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <LangVersion>7.3</LangVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -29,6 +30,7 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <LangVersion>7.3</LangVersion>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Microsoft.VisualBasic" />
@@ -97,6 +99,7 @@
     <Compile Include="View\PopupDialog.xaml.cs">
       <DependentUpon>PopupDialog.xaml</DependentUpon>
     </Compile>
+    <Compile Include="View\TalToast.cs" />
     <Compile Include="View\TalButton3.cs" />
     <Compile Include="View\TalHyperlink.cs" />
     <Compile Include="View\TalButton2.cs" />
@@ -116,6 +119,10 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Page Include="Themes\Toast.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="Themes\Button3.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>

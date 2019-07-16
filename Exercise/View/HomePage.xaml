@@ -50,6 +50,7 @@
     </tb:TitleBarManager.Buttons>
 
     <Grid>
+        <Border Margin="24" CornerRadius="4" Background="White" />
         <Image Margin="0, 152, 0, 0" Width="156" Height="156" Source="/Icons/Scanning@2x.png" VerticalAlignment="Top" />
         <tal:TalButton Margin="0, 348, 0, 0" Content="开始扫描" IsDefault="True" ButtonSize="Large" Width="320" Height="48" VerticalAlignment="Top"
                         Command="{Binding StartCommand}" CommandParameter="{Binding ElementName=Page}" />

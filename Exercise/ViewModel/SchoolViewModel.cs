@@ -39,8 +39,8 @@ namespace Exercise.ViewModel
                 RaisePropertyChanged("StudentFilter");
                 FilteredStudents = SelectedClass == null 
                     ? null : ((value == null || value.Length == 0)
-                    ? SelectedClass.Students
-                    : SelectedClass.Students.Where(s => s.ToString().Contains(value)).ToList());
+                    ? SelectedClass.Students.OrderBy(s => s.ToString()).ToList()
+                    : SelectedClass.Students.Where(s => s.ToString().Contains(value)).OrderBy(s => s.ToString()).ToList());
                 RaisePropertyChanged("FilteredStudents");
             }
         }

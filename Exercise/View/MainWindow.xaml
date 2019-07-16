@@ -1,11 +1,14 @@
-﻿<Window x:Class="Excecise.MainWindow"
+﻿<Window x:Class="Excecise.View.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:tal="clr-namespace:TalBase.View;assembly=TalBase"
+        xmlns:local="clr-namespace:Exercise.View"
         xmlns:svgc="http://sharpvectors.codeplex.com/svgc/"
+        xmlns:cv="clr-namespace:Base.Mvvm.Converter;assembly=Base"
         mc:Ignorable="d"
+        x:Name="window"
         Width="1200" Height="700"
         ResizeMode="NoResize"
         WindowStartupLocation="CenterScreen"
@@ -29,9 +32,7 @@
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
 
-        <Frame Grid.Row="1" Name="frmMain" Background="#FFF2F6FC" NavigationUIVisibility="Hidden" Focusable="False"/>
-
-        <Border x:Name="titleBar" Background="#FF2B3346" Height="48">
+        <Border Grid.Row="0" x:Name="titleBar" Background="#FF2B3346" Height="48">
             <Grid Margin="28, 0, 28, 0">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="400" />
@@ -48,7 +49,7 @@
                                 Click="Mini_Click">
                             <svgc:SvgViewbox Source="Icons/收起.svg"/>
                         </tal:TalButton2>
-                        <tal:TalButton2 Margin="12, 0, 0, 0" x:Name="close" Width="16" Height="16" 
+                        <tal:TalButton2 Margin="20, 0, 0, 0" x:Name="close" Width="16" Height="16" 
                                 Command="ApplicationCommands.Close">
                             <svgc:SvgViewbox Source="Icons/关闭/细.svg"/>
                         </tal:TalButton2>
@@ -56,5 +57,11 @@
                 </StackPanel>
             </Grid>
         </Border>
+        
+        <Frame Grid.Row="1" x:Name="frmMain" Background="#FFF2F6FC" NavigationUIVisibility="Hidden" Focusable="False"/>
+
+        <tal:TalToast Grid.Row="1" Margin="0, 16, 0, 0" VerticalAlignment="Top" HorizontalAlignment="Center"/>
+        
     </Grid>
+
 </Window>

@@ -253,7 +253,10 @@ namespace Exercise.Model
             }
             else
             {
-                RemovePage(oldPage, RemoveType.SinglePage);
+                if (ex.Type == ExceptionType.PageLost)
+                    RemovePage(oldPage, RemoveType.DuplexPage);
+                else
+                    RemovePage(oldPage, RemoveType.SinglePage);
             }
         }
 
@@ -362,7 +365,7 @@ namespace Exercise.Model
         private ExceptionType CalcExcetionType(Page page)
         {
             ExceptionType type = ExceptionType.None;
-            if (page.StudentCode != null)
+            if (page.PaperCode == scanModel.PageCode && page.StudentCode != null)
                 page.Student = schoolModel.GetStudent(page.StudentCode);
             if (page.PaperCode == null)
                 type = ExceptionType.NoPageCode;
@@ -454,7 +457,8 @@ namespace Exercise.Model
             {
                 RemoveException(ExceptionType.None, page.Another);
                 page.Another.Student = null;
-                scanModel.ReleasePage(page.Another);
+                if (page.Another.PagePath != null)
+                    scanModel.ReleasePage(page.Another);
             }
         }
 
@@ -502,6 +506,8 @@ namespace Exercise.Model
                 if (s.AnswerPages[i] == null)
                 {
                     Page p = new Page() { PageIndex = i * 2, Student = s };
+                    if (p.PageIndexPlusOne < ExerciseData.Pages.Count)
+                        p.Another = p;
                     s.AnswerPages[i] = p;
                     AddException(ExceptionType.PageLost, p);
                 }

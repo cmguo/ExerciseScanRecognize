@@ -88,6 +88,12 @@
   <PropertyGroup>
     <SignManifests>true</SignManifests>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'">
+    <LangVersion>7.3</LangVersion>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x64'">
+    <LangVersion>7.3</LangVersion>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="jni4net.n-0.8.8.0">
       <HintPath>Libraries\jni4net.n-0.8.8.0.dll</HintPath>
@@ -300,15 +306,21 @@
     <Content Include="Icons\刷新.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Resource Include="Icons\完成\16.png" />
+    <Content Include="Icons\Finish\16.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="Icons\刷新.svg">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Icons\完成\16.svg">
+    <Content Include="Icons\Finish\16.svg">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Resource Include="Icons\完成\24.png" />
-    <Content Include="Icons\完成\24.svg" />
+    <Content Include="Icons\Finish\24.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Icons\Finish\24.svg">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="Icons\密码.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
@@ -441,12 +453,12 @@
     <Content Include="Icons\缺失的学生试卷.svg">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Resource Include="Icons\警告\16.png" />
-    <Content Include="Icons\警告\16.svg">
+    <Resource Include="Icons\Warn\16.png" />
+    <Content Include="Icons\Warn\16.svg">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Resource Include="Icons\警告\24.png" />
-    <Content Include="Icons\警告\24.svg">
+    <Resource Include="Icons\Warn\24.png" />
+    <Content Include="Icons\Warn\24.svg">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <None Include="Icons\PaperScan%402xpng">
@@ -467,15 +479,15 @@
     <Content Include="Icons\PaperScanOk.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Resource Include="Icons\错误\16.png" />
+    <Resource Include="Icons\Error\16.png" />
     <Content Include="Icons\试卷扫描无异常.svg">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Icons\错误\16.svg">
+    <Content Include="Icons\Error\16.svg">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Resource Include="Icons\错误\24.png" />
-    <Content Include="Icons\错误\24.svg" />
+    <Resource Include="Icons\Error\24.png" />
+    <Content Include="Icons\Error\24.svg" />
     <Content Include="Icons\首页.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>

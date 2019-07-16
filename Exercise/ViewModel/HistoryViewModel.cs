@@ -19,8 +19,8 @@ namespace Exercise.ViewModel
 
         public ObservableCollection<Record> LocalRecords => historyModel.LocalRecords;
 
-        private ICollection<Record> _Records;
-        public ICollection<Record> Records
+        private IList<Record> _Records;
+        public IList<Record> Records
         {
             get => _Records;
             set
@@ -122,7 +122,6 @@ namespace Exercise.ViewModel
 
         public async Task ModifyRecordName(Record record, string old)
         {
-            var records = Records;
             await historyModel.ModifyRecord(record, old);
         }
     }

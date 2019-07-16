@@ -74,14 +74,20 @@ namespace Exercise.View
 
         private void ButtonInc_Click(object sender, RoutedEventArgs e)
         {
-            paper1.Scale *= 1.5;
-            paper2.Scale *= 1.5;
+            if (paper1.Scale < 2)
+            {
+                paper1.Scale *= 1.5;
+                paper2.Scale *= 1.5;
+            }
         }
 
         private void ButtonDec_Click(object sender, RoutedEventArgs e)
         {
-            paper1.Scale /= 1.5;
-            paper2.Scale /= 1.5;
+            if (paper1.Scale > 0.7)
+            {
+                paper1.Scale /= 1.5;
+                paper2.Scale /= 1.5;
+            }
         }
     }
 

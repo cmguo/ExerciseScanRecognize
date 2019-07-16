@@ -114,7 +114,7 @@
                     <Setter Property="Template">
                         <Setter.Value>
                             <ControlTemplate TargetType="ListViewItem">
-                                <Border Padding="0, 0, 8, 0">
+                                <Border Padding="0, 0, 7, 0">
                                     <ContentPresenter />
                                 </Border>
                             </ControlTemplate>

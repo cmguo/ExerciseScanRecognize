@@ -9,12 +9,12 @@ namespace Base.Misc
         public static long Timestamp(this DateTime date)
         {
             TimeSpan diff = date.ToUniversalTime() - origin;
-            return (long) diff.TotalMilliseconds;
+            return (long) diff.TotalSeconds;
         }
 
         public static DateTime DateTimeFromTimestamp(long timestamp)
         {
-            return origin.AddMilliseconds(timestamp);
+            return origin.AddSeconds(timestamp).ToLocalTime();
         }
     }
 }

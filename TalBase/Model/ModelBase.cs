@@ -3,7 +3,7 @@ using System.Windows;
 
 namespace TalBase.Model
 {
-    public class ModelBase : DependencyObject, INotifyPropertyChanged
+    public class ModelBase : INotifyPropertyChanged
     {
         protected void RaisePropertyChanged(string prop)
         {

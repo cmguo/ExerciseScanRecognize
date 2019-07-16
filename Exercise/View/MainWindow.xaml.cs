@@ -3,12 +3,14 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
 using System.Windows.Input;
+using System.Windows.Media;
 using System.Windows.Navigation;
+using System.Windows.Threading;
 using Base.TitleBar;
 using Exercise.View;
 using TalBase.ViewModel;
 
-namespace Excecise
+namespace Excecise.View
 {
     /// <summary>
     /// MainWindow.xaml 的交互逻辑
@@ -63,7 +65,7 @@ namespace Excecise
             lastPage = page;
         }
 
-        public void UnLoadNavButtons(Page page)
+        private void UnLoadNavButtons(Page page)
         {
             TitleButtonCollection buttons = TitleBarManager.GetButtons(page);
             if (buttons == null)
@@ -82,7 +84,7 @@ namespace Excecise
             }
         }
 
-        public void LoadNavButtons(Page page)
+        private void LoadNavButtons(Page page)
         {
             TitleButtonCollection buttons = TitleBarManager.GetButtons(page);
             if (buttons != null)

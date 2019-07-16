@@ -60,7 +60,7 @@
             <TextBlock Margin="0, 8, 0, 0" FontSize="14" Foreground="#FF7F8E99" HorizontalAlignment="Center">
                 <TextBlock.Text>
                     <MultiBinding StringFormat="第{0}页/共{1}页">
-                        <Binding Path="LastPage.Another.PageIndex" />
+                        <Binding Path="LastPage.PageIndexPlusOne" />
                         <Binding Path="ExercisePageCount" />
                     </MultiBinding>
                 </TextBlock.Text>

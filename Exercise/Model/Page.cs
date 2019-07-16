@@ -34,6 +34,9 @@ namespace Exercise.Model
         public Page Another { get; set; }
 
         [JsonIgnore]
+        public int PageIndexPlusOne => PageIndex + 1;
+
+        [JsonIgnore]
         public StudentInfo Student { get; set; }
 
         [JsonIgnore]

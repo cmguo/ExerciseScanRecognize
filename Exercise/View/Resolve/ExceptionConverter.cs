@@ -118,6 +118,7 @@ namespace Exercise.View.Resolve
                     case ExceptionType.PageCodeMissMatch:
                     case ExceptionType.AnalyzeException:
                     case ExceptionType.NoStudentCode:
+                    case ExceptionType.PageLost:
                         return "忽略此异常";
                     default:
                         return null;

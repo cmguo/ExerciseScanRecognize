@@ -22,24 +22,30 @@
     
     <Page.Resources>
 
-        <resolve:ExceptionListConverter x:Key="ExceptionListConverter" />
-        <resolve:ExceptionConverter x:Key="ExceptionConverter" />
-        <resolve:ExceptionPageConverter x:Key="ExceptionPageConverter" />
-        <local:SelectionConverter x:Key="SelectionConverter" Unselected="White" />
-        <cv:NonNullVisibleConverter x:Key="NonNullVisibleConverter" />
-        <cv:NullVisibleConverter x:Key="NullVisibleConverter" />
-        <local:DuplexFaceConverter x:Key="DuplexFaceConverter" />
-        <local:PaperOverlayConverter x:Key="PaperOverlayConverter" />
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="pack://application:,,,/Exercise;component/Themes/TreeView.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/TalBase;component/Themes/Generic.xaml" />
+            </ResourceDictionary.MergedDictionaries>
 
-        <tal:TalButton3 x:Key="Return" 
+            <resolve:ExceptionListConverter x:Key="ExceptionListConverter" />
+            <resolve:ExceptionConverter x:Key="ExceptionConverter" />
+            <resolve:ExceptionPageConverter x:Key="ExceptionPageConverter" />
+            <cv:NonNullVisibleConverter x:Key="NonNullVisibleConverter" />
+            <cv:NullVisibleConverter x:Key="NullVisibleConverter" />
+            <local:DuplexFaceConverter x:Key="DuplexFaceConverter" />
+            <local:PaperOverlayConverter x:Key="PaperOverlayConverter" />
+
+            <tal:TalTouch x:Key="Return" 
                             Command="{Binding ReturnCommand}"
                             CommandParameter="{Binding Source={x:Reference Page}}">
-            <StackPanel Orientation="Horizontal">
-                <Image Width="24" Height="24" VerticalAlignment="Center" Source="{svgc:SvgImage Source=/Icons/back.svg}" />
-                <TextBlock Margin="5, 0, 0, 0" VerticalAlignment="Center" Text="返回" />
-            </StackPanel>
-        </tal:TalButton3>
+                <StackPanel Orientation="Horizontal">
+                    <Image Width="24" Height="24" VerticalAlignment="Center" Source="/Icons/back.png" />
+                    <TextBlock Margin="5, 0, 0, 0" VerticalAlignment="Center" Text="返回" />
+                </StackPanel>
+            </tal:TalTouch>
 
+        </ResourceDictionary>
     </Page.Resources>
 
     <tb:TitleBarManager.Buttons>
@@ -58,45 +64,13 @@
             <ColumnDefinition Width="279" />
         </Grid.ColumnDefinitions>
 
-        <local:TreeViewEx Grid.Column="0" x:Name="treeView" Margin="32, 0, 33, 0" BorderThickness="0" Background="{x:Null}"
-                          ItemsSource="{Binding Exceptions}">
+        <local:TreeViewEx Grid.Column="0" x:Name="treeView" Margin="32, 0, 33, 0" 
+                          BorderThickness="0" Background="{x:Null}"
+                          ItemsSource="{Binding Exceptions}"
+                          ItemContainerStyle="{StaticResource TreeViewItemStyle}">
             <pb:PushBindingManager.PushBindings>
                 <pb:PushBinding TargetProperty="SelectedItem" Path="Selection"/>
             </pb:PushBindingManager.PushBindings>
-            <TreeView.ItemContainerStyle>
-                <Style TargetType="TreeViewItem">
-                    <Setter Property="IsExpanded" Value="True"/>
-                    <Setter Property="Template">
-                        <Setter.Value>
-                            <ControlTemplate TargetType="TreeViewItem">
-                                <StackPanel x:Name="header">
-                                    <StackPanel Orientation="Horizontal">
-                                        <ContentPresenter ContentSource="Header"/>
-                                        <Expander x:Name="expander" VerticalAlignment="Center" 
-                                                  IsExpanded="{Binding IsExpanded, RelativeSource={RelativeSource AncestorType=TreeViewItem}}">
-                                            <Expander.Header>
-                                                <Image Source="{svgc:SvgImage Source=/Icons/DownArrow/normal.svg}" />
-                                            </Expander.Header>
-                                        </Expander>
-                                    </StackPanel>   
-                                    <ItemsPresenter x:Name="items" Margin="32, 0, 0, 0"/>
-                                </StackPanel>
-                                <ControlTemplate.Triggers>
-                                    <Trigger Property="IsSelected" Value="True">
-                                        <Setter TargetName="header" Property="Background" Value="#FFE5EFFE" />
-                                    </Trigger>
-                                    <Trigger Property="IsExpanded" Value="False">
-                                        <Setter TargetName="items" Property="Visibility" Value="Collapsed" />
-                                    </Trigger>
-                                    <Trigger Property="HasItems" Value="False">
-                                        <Setter TargetName="expander" Property="Visibility" Value="Collapsed" />
-                                    </Trigger>
-                                </ControlTemplate.Triggers>
-                            </ControlTemplate>
-                        </Setter.Value>
-                    </Setter>
-                </Style>
-            </TreeView.ItemContainerStyle>
             <TreeView.ItemTemplate>
                 <HierarchicalDataTemplate ItemsSource="{Binding Exceptions}">
                     <StackPanel Orientation="Horizontal" Margin="0, 15, 0, 15" Width="176" >
@@ -124,11 +98,9 @@
                 <local:PaperViewer x:Name="paper1" Paper="{Binding SelectedException.Page.PagePath}" Scale="0.666666"
                                     Overlay="{Binding SelectedException, Converter={StaticResource PaperOverlayConverter}}"/>
                 <local:PaperViewer x:Name="paper2" Paper="{Binding SelectedException.Page.Another.PagePath}"  Scale="0.666666"/>
-                <StackPanel Margin="0, 14, 0, 0" Orientation="Horizontal" VerticalAlignment="Top" HorizontalAlignment="Center"
-                            Visibility="{Binding SelectedException, Converter={StaticResource DuplexFaceConverter}}">
-                    <tal:TalButton x:Name="face1" Click="ButtonFace1_Click" Content="正面"/>
-                    <tal:TalButton x:Name="face2" Click="ButtonFace2_Click" Content="反面"/>
-                </StackPanel>
+                <tal:TalToggle x:Name="face" Margin="0, 24, 0, 0" Title1="正面" Title2="反面" 
+                               VerticalAlignment="Top" HorizontalAlignment="Center"
+                               Unchecked="ButtonFace1_Click" Checked="ButtonFace2_Click"/>
                 <StackPanel Orientation="Horizontal" VerticalAlignment="Top" HorizontalAlignment="Right" Margin="0, 24, 84, 0"
                             Visibility="{Binding SelectedException.Page.PagePath, Converter={StaticResource NonNullVisibleConverter}, FallbackValue=Hidden}">
                     <StackPanel.Resources>

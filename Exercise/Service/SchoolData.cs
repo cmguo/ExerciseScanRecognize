@@ -37,7 +37,7 @@ namespace Exercise.Service
 
         public override string ToString()
         {
-            return TalNo + " " + Name;
+            return StudentNo + " " + Name;
         }
 
     }

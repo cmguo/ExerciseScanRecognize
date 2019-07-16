@@ -88,7 +88,8 @@ namespace Exercise.View
         public PaperViewer()
         {
             group.Children.Add(image);
-            geometry.Pen = new Pen(Brushes.Red, 2);
+            geometry.Pen = new Pen(new SolidColorBrush(Color.FromRgb(253, 113, 42)), 1);
+            geometry.Brush = new SolidColorBrush(Color.FromArgb(12, 253, 113, 42));
             group.Children.Add(geometry);
             brush.Drawing = group;
             Background = brush;

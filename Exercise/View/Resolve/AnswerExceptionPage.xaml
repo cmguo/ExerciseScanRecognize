@@ -5,6 +5,7 @@
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
       xmlns:resolve="clr-namespace:Exercise.View.Resolve"
       xmlns:local="clr-namespace:Exercise.View"
+      xmlns:sys="clr-namespace:System;assembly=mscorlib"
       xmlns:cv="clr-namespace:Base.Mvvm.Converter;assembly=Base"
       xmlns:tal="clr-namespace:TalBase.View;assembly=TalBase"
       xmlns:svgc="http://sharpvectors.codeplex.com/svgc/"
@@ -14,53 +15,27 @@
 
     <Page.Resources>
         <ResourceDictionary>
+            
             <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary Source="pack://application:,,,/TalBase;component/Themes/Button.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/TalBase;component/Themes/Generic.xaml" />
+                <ResourceDictionary Source="../../Themes/ButtonList.xaml" />
             </ResourceDictionary.MergedDictionaries>
-            <local:SelectionConverter x:Key="BorderSelectionConverter" Selected="#FF2D4A66" Unselected="#FFCAD3DD" />
-            <cv:BooleanBrushConverter x:Key="BackgroundConverter" TrueValue="Transparent" FalseValue="#FF10D900" />
-            <local:SelectionConverter x:Key="BackgroundConverter2" Selected="#FF4C84FF" Unselected="#FFE5EFFE" />
-            <cv:BooleanBrushConverter x:Key="ForegroundConverter" TrueValue="#FF2D4A66" FalseValue="White" />
-            <local:SelectionConverter x:Key="ForegroundConverter2" Selected="White" Unselected="#FF4C84FF" />
+            
             <resolve:AnswerExceptionViewModel x:Key="ViewModel" />
-            <resolve:FalseVisibleConverter x:Key="FalseVisibleConverter" />
+            
             <resolve:ExceptionConverter x:Key="ExceptionConverter" />
             <cv:NullVisibleConverter x:Key="NullVisibleConverter" />
+            <cv:ToStringConverter x:Key="ToStringConverter" />
+            
             <DataTemplate x:Key="QuestionItem">
-                <Button BorderThickness="2" Click="Question_Click" MinWidth="32" Height="32">
-                    <Button.BorderBrush>
-                        <MultiBinding Converter="{StaticResource BorderSelectionConverter}">
-                            <Binding Path="SelectedQuestion" Source="{StaticResource ViewModel}" />
-                            <Binding />
-                        </MultiBinding>
-                    </Button.BorderBrush>
-                    <Button.Background>
-                        <Binding Path="HasException" Converter="{StaticResource BackgroundConverter}" />
-                    </Button.Background>
-                    <TextBlock FontSize="14" Margin="7" HorizontalAlignment="Center" VerticalAlignment="Center" Text="{Binding Answer.QuestionId}" 
-                               Foreground="{Binding HasException, Converter={StaticResource ForegroundConverter}}" />
-                </Button>
+                <tal:TalRatio Content="{Binding Answer.QuestionId}" GroupName="Question" />
             </DataTemplate>
+
             <DataTemplate x:Key="AnswerItem">
-                <Button BorderThickness="0" Click="Answer_Click" Background="Transparent">
-                    <Border CornerRadius="2" MinWidth="32" Height="32" BorderThickness="0">
-                        <Border.Background>
-                            <MultiBinding Converter="{StaticResource BackgroundConverter2}">
-                                <Binding Path="SelectedAnswer" Source="{StaticResource ViewModel}" />
-                                <Binding />
-                            </MultiBinding>
-                        </Border.Background>
-                        <TextBlock Text="{Binding TargetNullValue=未作答}" Margin="9" HorizontalAlignment="Center" VerticalAlignment="Center">
-                            <TextBlock.Foreground>
-                                <MultiBinding Converter="{StaticResource ForegroundConverter2}">
-                                    <Binding Path="SelectedAnswer" Source="{StaticResource ViewModel}" />
-                                    <Binding />
-                                </MultiBinding>
-                            </TextBlock.Foreground>
-                        </TextBlock>
-                    </Border>
-                </Button>
+                <tal:TalRatio Content="{Binding TargetNullValue=未作答}" RatioStyle="Solid" GroupName="Answer"
+                              Checked="Answer_Click"/>
             </DataTemplate>
+
         </ResourceDictionary>
     </Page.Resources>
     
@@ -77,23 +52,9 @@
                   ItemTemplate="{StaticResource QuestionItem}">
             <ListView.ItemsPanel>
                 <ItemsPanelTemplate>
-                    <WrapPanel IsItemsHost="True" Orientation="Horizontal" />
+                    <WrapPanel Margin="-8, -8, 0, 0" IsItemsHost="True" Orientation="Horizontal" />
                 </ItemsPanelTemplate>
             </ListView.ItemsPanel>
-            <ListView.ItemContainerStyle>
-                <Style TargetType="{x:Type ListViewItem}">
-                    <Setter Property="Focusable" Value="False"/>
-                    <Setter Property="Template">
-                        <Setter.Value>
-                            <ControlTemplate TargetType="ListViewItem">
-                                <Border Padding="0, 0, 8, 0">
-                                    <ContentPresenter />
-                                </Border>
-                            </ControlTemplate>
-                        </Setter.Value>
-                    </Setter>
-                </Style>
-            </ListView.ItemContainerStyle>
         </ListView>
         
         <TextBlock Grid.Row="1" FontSize="12" Foreground="#FF2D4A66" Margin="0, 24, 0, 0" 
@@ -105,23 +66,9 @@
                   ItemTemplate="{StaticResource AnswerItem}">
             <ListView.ItemsPanel>
                 <ItemsPanelTemplate>
-                    <StackPanel IsItemsHost="True" Orientation="Horizontal" />
+                    <StackPanel Margin="-8, -8, 0, 0" IsItemsHost="True" Orientation="Horizontal" />
                 </ItemsPanelTemplate>
             </ListView.ItemsPanel>
-            <ListBox.ItemContainerStyle>
-                <Style TargetType="{x:Type ListViewItem}">
-                    <Setter Property="Focusable" Value="False"/>
-                    <Setter Property="Template">
-                        <Setter.Value>
-                            <ControlTemplate TargetType="ListViewItem">
-                                <Border Padding="0, 0, 7, 0">
-                                    <ContentPresenter />
-                                </Border>
-                            </ControlTemplate>
-                        </Setter.Value>
-                    </Setter>
-                </Style>
-            </ListBox.ItemContainerStyle>
         </ListView>
 
         <StackPanel Grid.Row="2" x:Name="correct" Orientation="Vertical" Margin="0, 14, 0, 0">
@@ -131,34 +78,37 @@
                 <TextBlock Text="分" FontSize="14" Foreground="#FF2D4A66" VerticalAlignment="Center" Margin="8, 0, 0, 0"/>
             </StackPanel>
             <ListView Grid.Row="0" BorderThickness="0" HorizontalAlignment="Left" Margin="0, 14, 0, 0" Background="Transparent"
-                  ItemsSource="{Binding Answers, Source={StaticResource ViewModel}}"
-                  ItemTemplate="{StaticResource AnswerItem}">
+                  ItemsSource="{Binding Scores, Source={StaticResource ViewModel}}">
                 <ListView.ItemsPanel>
                     <ItemsPanelTemplate>
-                        <WrapPanel IsItemsHost="True" Orientation="Horizontal" Width="130" />
+                        <WrapPanel Margin="-8, -8, 0, 0" IsItemsHost="True" Orientation="Horizontal" Width="200" />
                     </ItemsPanelTemplate>
                 </ListView.ItemsPanel>
-                <ListBox.ItemContainerStyle>
-                    <Style TargetType="{x:Type ListViewItem}">
-                        <Setter Property="Focusable" Value="False"/>
-                        <Setter Property="Template">
-                            <Setter.Value>
-                                <ControlTemplate TargetType="ListViewItem">
-                                    <Border Padding="0, 0, 8, 8">
-                                        <ContentPresenter />
-                                    </Border>
-                                </ControlTemplate>
-                            </Setter.Value>
-                        </Setter>
-                    </Style>
-                </ListBox.ItemContainerStyle>
+                <ListView.Resources>
+                    <DataTemplate DataType="{x:Type sys:Int32}">
+                        <tal:TalTouch Click="Score_Click" MinWidth="56" TouchStyle="Solid"
+                                        Content="{Binding Converter={StaticResource ToStringConverter}}" />
+                    </DataTemplate>
+                    <DataTemplate DataType="{x:Type sys:Boolean}">
+                        <tal:TalTouch Click="Score_Click" Width="120">
+                            <StackPanel Orientation="Horizontal">
+                                <Image Width="16" Source="/Icons/Clear.png" />
+                                <TextBlock Margin="8, 0, 0, 0" Text="删除"/>
+                            </StackPanel>
+                        </tal:TalTouch>
+                    </DataTemplate>
+                </ListView.Resources>
             </ListView>
-            <StackPanel Grid.Row="2" Margin="0, -4, 0, 4" Orientation="Horizontal"
+            
+            <StackPanel Grid.Row="2" Margin="0, 4, 0, 4" Orientation="Horizontal"
                         Visibility="{Binding SelectedAnswer, Source={StaticResource ViewModel}, Converter={StaticResource NullVisibleConverter}}">
                 <Image Width="12" Height="12" Source="{svgc:SvgImage Source=/Icons/bad.svg}" />
                 <TextBlock Margin="4, 0, 0, 0" FontSize="11" Foreground="#ffff6767"  Text="请为本题打分"/>
             </StackPanel>
+            
         </StackPanel>
+        
         <tal:TalButton Grid.Row="3" IsDefault="True" Content="确认" Click="Confirm_Click"/>
+        
     </Grid>
 </Page>

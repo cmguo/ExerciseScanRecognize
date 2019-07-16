@@ -12,9 +12,17 @@
       Title="HomePage">
 
     <Page.Resources>
-        <cv:NonNullTrueConverter x:Key="NonNullTrueConverter" />
-        <cv:NullVisibleConverter x:Key="NullVisibleConverter" />
-        <vm:SchoolViewModel x:Key="ViewModel" />
+        <ResourceDictionary>
+
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="../../Themes/ComboBox.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+
+            <cv:NonNullTrueConverter x:Key="NonNullTrueConverter" />
+            <cv:NullVisibleConverter x:Key="NullVisibleConverter" />
+            <vm:SchoolViewModel x:Key="ViewModel" />
+
+        </ResourceDictionary>
     </Page.Resources>
 
     <Grid>

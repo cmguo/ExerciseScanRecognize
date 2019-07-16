@@ -47,7 +47,10 @@ namespace Exercise.View
                 return null;
             }
             IEnumerable<Geometry> geometries = locations.Where(l => l != null).Select(l => new RectangleGeometry(
-                new Rect(l.LeftTop.X, l.LeftTop.Y, l.RightBottom.X - l.LeftTop.X, l.RightBottom.Y - l.LeftTop.Y)));
+                new Rect(l.LeftTop.X, l.LeftTop.Y, l.RightBottom.X - l.LeftTop.X, l.RightBottom.Y - l.LeftTop.Y))
+            {
+                RadiusX = 2, RadiusY = 2, 
+            });
             return new GeometryGroup() { Children = new GeometryCollection(geometries) };
         }
 

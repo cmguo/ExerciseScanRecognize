@@ -37,9 +37,9 @@
                     <ColumnDefinition Width="16" />
                 </Grid.ColumnDefinitions>
                 <TextBlock FontSize="16" TextWrapping="Wrap" Text="{Binding Caption}" HorizontalAlignment="Stretch" />
-                <tb:TalButton2 Grid.Column="1" x:Name="close" Width="16" Height="16" Click="Btn_Click">
+                <tb:TalTouch Grid.Column="1" x:Name="close" Width="16" Height="16" Click="Btn_Click">
                     <svgc:SvgViewbox Source="Icons/关闭/粗.svg"/>
-                </tb:TalButton2>
+                </tb:TalTouch>
             </Grid>
             <StackPanel Grid.Row="1" Orientation="Horizontal" Margin="0, 24, 0, 24">
                 <Image Source="{svgc:SvgImage Source=/Icons/Warn/24.svg}" Width="24" Height="24" VerticalAlignment="Top" />

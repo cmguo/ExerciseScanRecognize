@@ -37,7 +37,7 @@ namespace Exercise.View
                     ButtonFace2_Click(this, null);
                     return;
                 }
-                ButtonFace1_Click(this, null);
+                face.IsChecked = false;
             }
         }
 
@@ -58,16 +58,12 @@ namespace Exercise.View
 
         private void ButtonFace1_Click(object sender, RoutedEventArgs e)
         {
-            face1.Background = Brushes.Blue;
-            face2.Background = Brushes.White;
             paper1.Visibility = Visibility.Visible;
             paper2.Visibility = Visibility.Collapsed;
         }
 
         private void ButtonFace2_Click(object sender, RoutedEventArgs e)
         {
-            face1.Background = Brushes.White;
-            face2.Background = Brushes.Blue;
             paper1.Visibility = Visibility.Collapsed;
             paper2.Visibility = Visibility.Visible;
         }

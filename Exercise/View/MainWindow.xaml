@@ -45,14 +45,14 @@
                 <StackPanel Grid.Column="2" Orientation="Horizontal" HorizontalAlignment="Right">
                     <StackPanel x:Name="right"  Orientation="Horizontal"/>
                     <StackPanel Orientation="Horizontal">
-                        <tal:TalButton2 x:Name="mini" Width="16" Height="16" 
+                        <tal:TalTouch x:Name="mini" Width="16" Height="16" TouchStyle="Label"
                                 Click="Mini_Click">
                             <svgc:SvgViewbox Source="Icons/收起.svg"/>
-                        </tal:TalButton2>
-                        <tal:TalButton2 Margin="20, 0, 0, 0" x:Name="close" Width="16" Height="16" 
-                                Command="ApplicationCommands.Close">
+                        </tal:TalTouch>
+                        <tal:TalTouch Margin="20, 0, 0, 0" x:Name="close" Width="16" Height="16" 
+                                Command="ApplicationCommands.Close" TouchStyle="Label">
                             <svgc:SvgViewbox Source="Icons/关闭/细.svg"/>
-                        </tal:TalButton2>
+                        </tal:TalTouch>
                     </StackPanel>
                 </StackPanel>
             </Grid>

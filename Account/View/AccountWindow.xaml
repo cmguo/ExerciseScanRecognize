@@ -28,13 +28,13 @@
 
             <vm:AccountViewModel x:Key="ViewModel" />
 
-            <tal:TalButton2 x:Key="Logout"
+            <tal:TalTouch x:Key="Logout" TouchStyle="Label"
                         DataContext="{StaticResource ViewModel}" Click="Logout_Click" >
                 <StackPanel Orientation="Horizontal">
                     <TextBlock Text="{Binding Account.SchoolName}" />
                     <Image Margin="4, 0, 0, 0"  Width="16" Height="16" Source="{svgc:SvgImage /Icons/DownArrow/白色.svg}" />
                 </StackPanel>
-            </tal:TalButton2>
+            </tal:TalTouch>
 
             <Popup x:Key="LogoutPopup" StaysOpen="False" Placement="Bottom" PlacementTarget="{StaticResource Logout}">
                 <tal:TalButton Content="退出登录" BorderThickness="0"
@@ -59,12 +59,13 @@
         <Image Margin="0, 50, 0, 0" Source="/Images/logo.png" Width="299" VerticalAlignment="Top" HorizontalAlignment="Center" />
 
         <StackPanel Margin="0, 16, 13, 0" Orientation="Horizontal" FlowDirection="RightToLeft" VerticalAlignment="Top">
-            <tal:TalButton2 Margin="0, 0, 12, 0" x:Name="close" Width="16" Height="16" Click="Close_Click">
+            <tal:TalTouch Margin="0, 0, 12, 0" x:Name="close" Width="16" Height="16" 
+                          Click="Close_Click" TouchStyle="Label">
                 <svgc:SvgViewbox Source="Icons/关闭/细.svg"/>
-            </tal:TalButton2>
-            <tal:TalButton2 x:Name="mini" Width="16" Height="16" Click="Mini_Click">
+            </tal:TalTouch>
+            <tal:TalTouch x:Name="mini" Width="16" Height="16" Click="Mini_Click" TouchStyle="Label">
                 <svgc:SvgViewbox Source="Icons/收起.svg"/>
-            </tal:TalButton2>
+            </tal:TalTouch>
         </StackPanel>
 
         <Border Margin="0, 150, 0, 0" CornerRadius="10, 10, 0, 0" Background="White">

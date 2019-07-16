@@ -143,7 +143,6 @@
     <Compile Include="View\PaperOverlayConverter.cs" />
     <Compile Include="View\PaperViewer.cs" />
     <Compile Include="View\Resolve\FalseVisibleConverter.cs" />
-    <Compile Include="View\SelectionConverter.cs" />
     <Compile Include="View\SubmitPage.xaml.cs">
       <DependentUpon>SubmitPage.xaml</DependentUpon>
     </Compile>
@@ -174,6 +173,7 @@
     <Compile Include="View\ScanningPage.xaml.cs">
       <DependentUpon>ScanningPage.xaml</DependentUpon>
     </Compile>
+    <Compile Include="View\ToggleList.cs" />
     <Compile Include="View\TreeViewEx.cs" />
     <Compile Include="View\TreeViewItemEx.cs" />
   </ItemGroup>
@@ -200,6 +200,18 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Page Include="Themes\ComboBox.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Themes\ButtonList.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Themes\TreeView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="Themes\DataGrid.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>

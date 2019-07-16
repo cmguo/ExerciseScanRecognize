@@ -5,7 +5,7 @@
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
       xmlns:vm="clr-namespace:Exercise.ViewModel"
       xmlns:local="clr-namespace:Exercise.View"
-      xmlns:mu="clr-namespace:Panuon.UI;assembly=Panuon.UI"
+      xmlns:sys="clr-namespace:System;assembly=mscorlib"
       xmlns:tb="clr-namespace:Base.TitleBar;assembly=Base"
       xmlns:cv="clr-namespace:Base.Mvvm.Converter;assembly=Base"
       xmlns:tal="clr-namespace:TalBase.View;assembly=TalBase"
@@ -16,28 +16,29 @@
       Title="HomePage">
 
     <Page.Resources>
-
         <ResourceDictionary>
 
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="pack://application:,,,/TalBase;component/Themes/Generic.xaml" />
                 <ResourceDictionary Source="../Themes/DataGrid.xaml" />
+                <ResourceDictionary Source="../Themes/ButtonList.xaml" />
             </ResourceDictionary.MergedDictionaries>
 
+            
             <cv:MultiValueConverter x:Key="MultiValueConverter" />
-            <vm:HistoryViewModel x:Key="ViewModel" />
+            <cv:BooleanObjectConverter x:Key="PageIconConverter" 
+                                       FalseValue="/Icons/left.png" TrueValue="/Icons/right.png" />
+            <cv:ToStringConverter x:Key="ToStringConverter" />
             <local:HistroyDetailConverter x:Key="HistroyDetailConverter" />
-            <local:SelectionConverter x:Key="SelectionConverter" Selected="#FF4C84FF" Unselected="{x:Null}" />
-            <local:SelectionConverter x:Key="ForegroundConverter" Selected="White" Unselected="#FF2D4A66" />
 
-            <tal:TalButton3 x:Key="Return" 
+            <tal:TalTouch x:Key="Return" 
                             Command="{Binding ReturnCommand}"
                             CommandParameter="{Binding Source={x:Reference Page}}">
                 <StackPanel Orientation="Horizontal">
-                    <Image Width="24" Height="24" VerticalAlignment="Center" Source="{svgc:SvgImage Source=/Icons/back.svg}" />
+                    <Image Width="24" Height="24" VerticalAlignment="Center" Source="/Icons/back.png" />
                     <TextBlock Margin="5, 0, 0, 0" VerticalAlignment="Center" Text="返回" />
                 </StackPanel>
-            </tal:TalButton3>
+            </tal:TalTouch>
             
             <Style TargetType="TextBlock">
                 <Setter Property="FontSize" Value="14" />
@@ -55,7 +56,10 @@
             
         </ResourceDictionary>
     </Page.Resources>
-
+    
+    <Page.DataContext>
+        <vm:HistoryViewModel />
+    </Page.DataContext>
 
     <tb:TitleBarManager.Buttons>
         <tb:TitleButton Name="Return" Content="{StaticResource Return}" />
@@ -105,7 +109,7 @@
                             </StackPanel>
                             <StackPanel DockPanel.Dock="Right" Orientation="Horizontal" VerticalAlignment="Center">
                                 <tal:TalHyperlink Content="查看扫描结果" 
-                                        Command="{Binding SummaryCommand, Source={StaticResource ViewModel}}">
+                                        Command="{Binding SummaryCommand}">
                                     <tal:TalHyperlink.CommandParameter>
                                         <MultiBinding Converter="{StaticResource MultiValueConverter}">
                                             <Binding ElementName="Page"/>
@@ -114,7 +118,7 @@
                                     </tal:TalHyperlink.CommandParameter>
                                 </tal:TalHyperlink>
                                 <tal:TalHyperlink Content="放弃本次扫描" Margin="16, 0, 0, 0"
-                                        Command="{Binding DiscardCommand, Source={StaticResource ViewModel}}"
+                                        Command="{Binding DiscardCommand}"
                                         CommandParameter="{Binding}" />
                             </StackPanel>
                             <Border/>
@@ -123,8 +127,8 @@
                 </DataTemplate>
             </ListView.ItemTemplate>
         </ListView>
-        
-        <DataGrid Grid.Row="2" x:Name="dataGrid" Margin="30, 16, 30, 0" Focusable="False"
+
+        <DataGrid Grid.Row="2" x:Name="dataGrid" Margin="30, 16, 30, 0" Focusable="False" ScrollViewer.CanContentScroll="False"
                   ItemsSource="{Binding Records}">
             <DataGrid.Columns>
                 <DataGridTemplateColumn Header="试卷名称" IsReadOnly="False" Width="230" 
@@ -146,49 +150,26 @@
             </DataGrid.Columns>
         </DataGrid>
 
-        <ListView Grid.Row="3" ItemsSource="{Binding Pages, ElementName=Page}" 
-                  BorderThickness="0" Padding="0" HorizontalAlignment="Right" Margin="0, 0, 30, 30">
+        <ListView Grid.Row="3" x:Name="pageBar" ItemsSource="{Binding Pages}" 
+                  BorderThickness="0" Padding="0" HorizontalAlignment="Right" Margin="0, 0, 30, 30"
+                  SelectedItem="{Binding PageIndex}" SelectionMode="Single">
             <ListView.ItemsPanel>
                 <ItemsPanelTemplate>
-                    <WrapPanel IsItemsHost="True" Orientation="Horizontal" />
+                    <WrapPanel Margin="-8, 0, 0, 0" IsItemsHost="True" Orientation="Horizontal" />
                 </ItemsPanelTemplate>
             </ListView.ItemsPanel>
-            <ListBox.ItemContainerStyle>
-                <Style TargetType="{x:Type ListViewItem}">
-                    <Setter Property="Focusable" Value="False"/>
-                    <Setter Property="Template">
-                        <Setter.Value>
-                            <ControlTemplate TargetType="ListViewItem">
-                                <Border Padding="4, 0, 4, 0">
-                                    <ContentPresenter />
-                                </Border>
-                            </ControlTemplate>
-                        </Setter.Value>
-                    </Setter>
-                </Style>
-            </ListBox.ItemContainerStyle>
-            <ListView.ItemTemplate>
-                <DataTemplate>
-                    <Button BorderThickness="1" BorderBrush="{x:Null}" Background="{x:Null}" Click="ButtonPage_Click">
-                        <Border CornerRadius="2" MinWidth="32" Height="32" BorderThickness="1" BorderBrush="#332D4A66">
-                            <Border.Background>
-                                <MultiBinding Converter="{StaticResource SelectionConverter}">
-                                    <Binding Path="PageIndex" ElementName="Page" />
-                                    <Binding />
-                                </MultiBinding>
-                            </Border.Background>
-                            <TextBlock Text="{Binding}" HorizontalAlignment="Center" VerticalAlignment="Center">
-                                <TextBlock.Foreground>
-                                    <MultiBinding Converter="{StaticResource ForegroundConverter}">
-                                        <Binding Path="PageIndex" ElementName="Page" />
-                                        <Binding />
-                                    </MultiBinding>
-                                </TextBlock.Foreground>
-                            </TextBlock>
-                        </Border>
-                    </Button>
+            <ListView.Resources>
+                <DataTemplate DataType="{x:Type sys:Int32}">
+                    <tal:TalRatio Width="32" RatioStyle="Fill"
+                                  Content="{Binding Converter={StaticResource ToStringConverter}}"
+                                  IsChecked="{Binding IsSelected, RelativeSource={RelativeSource AncestorType=ListViewItem}}"/>
                 </DataTemplate>
-            </ListView.ItemTemplate>
+                <DataTemplate DataType="{x:Type sys:Boolean}">
+                    <tal:TalTouch Width="32" Click="ButtonPage_Click"  TouchStyle="Fill">
+                        <Image Width="16" Height="16" Source="{Binding Converter={StaticResource PageIconConverter}}"/>
+                    </tal:TalTouch>
+                </DataTemplate>
+            </ListView.Resources>
         </ListView>
 
     </Grid>

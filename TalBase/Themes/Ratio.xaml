@@ -1,0 +1,142 @@
+<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:local="clr-namespace:TalBase.View">
+    
+    <Style x:Key="DefaultTalRatioStyle" TargetType="local:TalRatio">
+        <Setter Property="FontSize" Value="14"/>
+        <Setter Property="Padding" Value="7, 0, 7, 0"/>
+        <Setter Property="Height" Value="32"/>
+        <Setter Property="MinWidth" Value="32"/>
+        <!--Normal-->
+        <Style.Triggers>
+            <Trigger Property="RatioStyle" Value="Normal">
+                <Setter Property="BorderThickness" Value="1"/>
+                <Setter Property="BorderBrush" Value="#FFCAD3DD"/>
+                <Setter Property="Background" Value="{x:Null}"/>
+                <Setter Property="Foreground" Value="#FF2D4A66"/>
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="local:TalRatio">
+                            <Border 
+                                    BorderThickness="{TemplateBinding BorderThickness}"
+                                    BorderBrush="{TemplateBinding BorderBrush}"
+                                    Background="{TemplateBinding Background}"
+                                    Padding="{TemplateBinding Padding}">
+                                <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
+                            </Border>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+            </Trigger>
+            <MultiTrigger>
+                <MultiTrigger.Conditions>
+                    <Condition Property="RatioStyle" Value="Normal"/>
+                    <Condition Property="IsMouseOver" Value="True"/>
+                </MultiTrigger.Conditions>
+                <Setter Property="BorderBrush" Value="#802D4A66"/>
+            </MultiTrigger>
+            <MultiTrigger>
+                <MultiTrigger.Conditions>
+                    <Condition Property="RatioStyle" Value="Normal"/>
+                    <Condition Property="IsPressed" Value="True"/>
+                </MultiTrigger.Conditions>
+                <Setter Property="BorderBrush" Value="#FF2D4A66"/>
+                <Setter Property="Background" Value="#FFF5F8FB"/>
+            </MultiTrigger>
+            <MultiTrigger>
+                <MultiTrigger.Conditions>
+                    <Condition Property="RatioStyle" Value="Normal"/>
+                    <Condition Property="IsChecked" Value="True"/>
+                </MultiTrigger.Conditions>
+                <Setter Property="BorderBrush" Value="#FF2D4A66"/>
+            </MultiTrigger>
+
+            <!--Solid-->
+            <Trigger Property="RatioStyle" Value="Solid">
+                <Setter Property="Background" Value="#FFE5EFFE"/>
+                <Setter Property="Foreground" Value="#FF4C84FF"/>
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="local:TalRatio">
+                            <Border CornerRadius="2"
+                                    BorderThickness="0"
+                                    BorderBrush="{TemplateBinding BorderBrush}"
+                                    Background="{TemplateBinding Background}"
+                                    Padding="{TemplateBinding Padding}">
+                                <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
+                            </Border>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+            </Trigger>
+            <MultiTrigger>
+                <MultiTrigger.Conditions>
+                    <Condition Property="RatioStyle" Value="Solid"/>
+                    <Condition Property="IsMouseOver" Value="True"/>
+                </MultiTrigger.Conditions>
+                <Setter Property="Background" Value="#404C84FF"/>
+            </MultiTrigger>
+            <MultiTrigger>
+                <MultiTrigger.Conditions>
+                    <Condition Property="RatioStyle" Value="Solid"/>
+                    <Condition Property="IsPressed" Value="True"/>
+                </MultiTrigger.Conditions>
+                <Setter Property="Background" Value="#80739FFF"/>
+            </MultiTrigger>
+            <MultiTrigger>
+                <MultiTrigger.Conditions>
+                    <Condition Property="RatioStyle" Value="Solid"/>
+                    <Condition Property="IsChecked" Value="True"/>
+                </MultiTrigger.Conditions>
+                <Setter Property="Background" Value="#FF4C84FF"/>
+                <Setter Property="Foreground" Value="White"/>
+            </MultiTrigger>
+
+            <!--Fill-->
+            <Trigger Property="RatioStyle" Value="Fill">
+                <Setter Property="Foreground" Value="#FF2D4A66"/>
+                <Setter Property="BorderBrush" Value="#332D4A66"/>
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="local:TalRatio">
+                            <Border CornerRadius="2"
+                                    BorderThickness="1"
+                                    BorderBrush="{TemplateBinding BorderBrush}"
+                                    Background="{TemplateBinding Background}"
+                                    Padding="{TemplateBinding Padding}">
+                                <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
+                            </Border>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+            </Trigger>
+            <MultiTrigger>
+                <MultiTrigger.Conditions>
+                    <Condition Property="RatioStyle" Value="Fill"/>
+                    <Condition Property="IsMouseOver" Value="True"/>
+                </MultiTrigger.Conditions>
+                <Setter Property="BorderBrush" Value="#802D4A66"/>
+            </MultiTrigger>
+            <MultiTrigger>
+                <MultiTrigger.Conditions>
+                    <Condition Property="RatioStyle" Value="Fill"/>
+                    <Condition Property="IsPressed" Value="True"/>
+                </MultiTrigger.Conditions>
+                <Setter Property="BorderBrush" Value="#FF2D4A66"/>
+                <Setter Property="Background" Value="#FFF5F8FB"/>
+            </MultiTrigger>
+            <MultiTrigger>
+                <MultiTrigger.Conditions>
+                    <Condition Property="RatioStyle" Value="Fill"/>
+                    <Condition Property="IsChecked" Value="True"/>
+                </MultiTrigger.Conditions>
+                <Setter Property="Background" Value="#FF4C84FF"/>
+                <Setter Property="Foreground" Value="White"/>
+            </MultiTrigger>
+
+        </Style.Triggers>
+    </Style>
+
+    <Style TargetType="local:TalRatio" BasedOn="{StaticResource DefaultTalRatioStyle}"/>
+    
+</ResourceDictionary>

@@ -76,6 +76,7 @@
     <Compile Include="Mvvm\Converter\NullVisibleConverter.cs" />
     <Compile Include="Mvvm\Converter\NonNullVisibleConverter.cs" />
     <Compile Include="Mvvm\Converter\BooleanBrushConverter.cs" />
+    <Compile Include="Mvvm\Converter\ToStringConverter.cs" />
     <Compile Include="Mvvm\Converter\VisibilityConverter.cs" />
     <Compile Include="Mvvm\ObservableCollections.cs" />
     <Compile Include="Mvvm\RelayCommand.cs" />

@@ -63,7 +63,17 @@ namespace Exercise.View.Resolve
             }
         }
 
-        public IList<string> Scores { get; internal set; }
+        private IList<object>_Scores;
+        public IList<object> Scores
+        {
+            get => _Scores;
+            set
+            {
+                _Scores = value;
+                RaisePropertyChanged("Scores");
+            }
+        }
+
     }
 
     public partial class AnswerExceptionPage : Page
@@ -104,23 +114,22 @@ namespace Exercise.View.Resolve
         private void FillAnswers(QuestionException question)
         {
             viewModel.Answers = question.Question.ItemInfo[0].Value.Split(',').Concat(new string[] { null }).ToList();
-            viewModel.Scores = viewModel.Answers;
         }
 
         private void FillScores(QuestionException question)
         {
             int total = (int) float.Parse(question.Question.ItemInfo[0].TotalScore);
-            viewModel.Scores = Enumerable.Range(0, total + 1).Select(v => v.ToString()).ToList();
+            viewModel.Answers = Enumerable.Range(0, total + 1).Select(v => v.ToString()).ToList();
         }
 
         private void FillScores()
         {
-            List<string> answers = new List<string>();
+            List<object> scores = new List<object>();
             for (int i = 1; i < 10; ++i)
-                answers.Add(i.ToString());
-            answers.Add("0");
-            answers.Add("<=删除");
-            viewModel.Answers = answers;
+                scores.Add(i);
+            scores.Add(0);
+            scores.Add(false);
+            viewModel.Scores = scores;
         }
 
         private void Question_Click(object sender, RoutedEventArgs e)
@@ -128,30 +137,28 @@ namespace Exercise.View.Resolve
             viewModel.SelectedQuestion = (sender as FrameworkElement).DataContext as QuestionException;
         }
 
-        private void Answer_Click(object sender, RoutedEventArgs e)
+        private void Score_Click(object sender, RoutedEventArgs e)
         {
-            if (type == ExceptionType.AnswerException)
+            object n = (sender as FrameworkElement).DataContext;
+            if (n is Int32)
             {
-                viewModel.SelectedAnswer = (sender as FrameworkElement).DataContext as string;
+                viewModel.SelectedAnswer += n.ToString();
             }
             else
             {
-                string n = (string)(sender as FrameworkElement).DataContext;
-                if (n.Length == 1)
-                {
-                    viewModel.SelectedAnswer += n;
-                }
-                else
-                {
-                    if (viewModel.SelectedAnswer.Length > 0)
-                        viewModel.SelectedAnswer = viewModel.SelectedAnswer.Substring(0, viewModel.SelectedAnswer.Length - 1);
-                }
+                if (viewModel.SelectedAnswer.Length > 0)
+                    viewModel.SelectedAnswer = viewModel.SelectedAnswer.Substring(0, viewModel.SelectedAnswer.Length - 1);
             }
+        }
+
+        private void Answer_Click(object sender, RoutedEventArgs e)
+        {
+            viewModel.SelectedAnswer = (sender as FrameworkElement).DataContext as string;
         }
 
         private void Confirm_Click(object sender, RoutedEventArgs e)
         {
-            if (!viewModel.Scores.Contains(viewModel.SelectedAnswer))
+            if (!viewModel.Answers.Contains(viewModel.SelectedAnswer))
             {
                 PopupDialog.Show(this, "TODO", "输入值不在有效范围中", 0, "确定");
                 return;
@@ -203,5 +210,9 @@ namespace Exercise.View.Resolve
             }
         }
 
+        private void TalRatio_Checked(object sender, RoutedEventArgs e)
+        {
+
+        }
     }
 }

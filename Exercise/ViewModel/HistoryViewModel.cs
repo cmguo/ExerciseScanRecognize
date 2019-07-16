@@ -15,6 +15,8 @@ namespace Exercise.ViewModel
     class HistoryViewModel : ViewModelBase
     {
 
+        private const int PAGE_BAR_COUNT = 6;
+
         #region Properties
 
         public ObservableCollection<Record> LocalRecords => historyModel.LocalRecords;
@@ -34,11 +36,11 @@ namespace Exercise.ViewModel
         private int _PageIndex;
         public int PageIndex
         {
-            get => _PageIndex;
+            get => _PageIndex + 1;
             set
             {
-                _PageIndex = value;
-                SelectPage(value);
+                _PageIndex = value - 1;
+                SelectPage(_PageIndex);
                 RaisePropertyChanged("PageIndex");
             }
         }
@@ -53,8 +55,14 @@ namespace Exercise.ViewModel
                     return;
                 _PageCount = value;
                 RaisePropertyChanged("PageCount");
+                UpdatePageCount();
             }
         }
+
+        public ObservableCollection<object> Pages { get; private set; }
+
+        private int pageStart = 1;
+        private int pageEnd = 5;
 
         #endregion
 
@@ -75,11 +83,39 @@ namespace Exercise.ViewModel
             SummaryCommand = new RelayCommand((o) => Summary(o));
             DiscardCommand = new RelayCommand((o) => historyModel.Remove(o as Record));
             ReturnCommand = new RelayCommand((o) => Return(o));
+            Pages = new ObservableCollection<object>();
             new RelayCommand((o) => historyModel.Load()).Execute(null);
             historyModel.PropertyChanged += HistoryModel_PropertyChanged;
-            if (historyModel.Records != null)
+            if (historyModel.Records != null && historyModel.Records.Length > 0)
+            {
                 PageCount = historyModel.Records.Length;
-            PageIndex = 0;
+            }
+            PageIndex = 1;
+        }
+
+        public void ShiftPages(bool left)
+        {
+            if (left)
+            {
+                if (pageStart > 1)
+                {
+                    --pageStart;
+                    --pageEnd;
+                    Pages.RemoveAt(5);
+                    Pages.Insert(1, pageStart);
+                }
+            }
+            else
+            {
+                if (pageEnd < PageCount - 1)
+                {
+                    ++pageStart;
+                    ++pageEnd;
+                    Pages.RemoveAt(1);
+                    Pages.Insert(5, pageEnd);
+                }
+            }
+            RaisePropertyChanged("PageIndex");
         }
 
         public override void Release()
@@ -102,8 +138,8 @@ namespace Exercise.ViewModel
 
         private void SelectPage(int value)
         {
-            if (historyModel.Records != null && PageIndex < historyModel.Records.Length)
-                Records = historyModel.Records[PageIndex];
+            if (historyModel.Records != null && _PageIndex < historyModel.Records.Length)
+                Records = historyModel.Records[_PageIndex];
             new RelayCommand((o) => historyModel.LoadMore(value)).Execute(null);
         }
 
@@ -113,8 +149,8 @@ namespace Exercise.ViewModel
             {
                 if (historyModel.Records != null)
                 {
-                    if (PageIndex < historyModel.Records.Length)
-                        Records = historyModel.Records[PageIndex];
+                    if (_PageIndex < historyModel.Records.Length)
+                        Records = historyModel.Records[_PageIndex];
                     PageCount = 10;// historyModel.Records.Length;
                 }
             }
@@ -124,5 +160,25 @@ namespace Exercise.ViewModel
         {
             await historyModel.ModifyRecord(record, old);
         }
+
+        private void UpdatePageCount()
+        {
+            Pages.Clear();
+            if (PageCount <= PAGE_BAR_COUNT)
+            {
+                for (int i = 1; i <= PageCount; ++i)
+                    Pages.Add(i);
+                pageEnd = PageCount;
+            }
+            else
+            {
+                Pages.Add(false);
+                for (int i = 1; i <= 5; ++i)
+                    Pages.Add(i);
+                Pages.Add(true);
+                pageEnd = 5;
+            }
+        }
+
     }
 }

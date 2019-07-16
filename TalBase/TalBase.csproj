@@ -100,10 +100,11 @@
       <DependentUpon>PopupDialog.xaml</DependentUpon>
     </Compile>
     <Compile Include="View\TalToast.cs" />
-    <Compile Include="View\TalButton3.cs" />
     <Compile Include="View\TalHyperlink.cs" />
-    <Compile Include="View\TalButton2.cs" />
+    <Compile Include="View\TalTouch.cs" />
     <Compile Include="View\TalButton.cs" />
+    <Compile Include="View\TalRatio.cs" />
+    <Compile Include="View\TalToggle.cs" />
     <Compile Include="View\Toast.xaml.cs">
       <DependentUpon>Toast.xaml</DependentUpon>
     </Compile>
@@ -119,11 +120,15 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Page Include="Themes\Toast.xaml">
+    <Page Include="Themes\Ratio.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Themes\Button3.xaml">
+    <Page Include="Themes\Toggle.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Themes\Toast.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
@@ -135,7 +140,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Themes\Button2.xaml">
+    <Page Include="Themes\Touch.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>

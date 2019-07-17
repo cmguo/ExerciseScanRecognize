@@ -50,6 +50,7 @@
         </Grid.ColumnDefinitions>
         
         <local:PaperViewer Margin="0,14,0,14" Paper="{Binding LastPage.PagePath}" ScaleMode="Ratio"
+                           OverlayPenBrush="#FF44E9FF" OverlayBrush="#1A44E9FF"
                            Overlay="{Binding LastPage, Converter={StaticResource PaperOverlayConverter}, ConverterParameter=Result}"/>
         
         <StackPanel Grid.Column="1" Orientation="Vertical" Width="346" Background="White">

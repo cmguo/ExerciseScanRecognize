@@ -40,84 +40,7 @@ namespace Exercise.Model
         public StudentInfo Student { get; set; }
 
         [JsonIgnore]
-        public IList<QuestionException> AnswerExceptions { get; set; }
-
-        [JsonIgnore]
-        public IList<QuestionException> CorrectionExceptions { get; set; }
-
-        public void CalcException()
-        {
-            AnswerExceptions = SelectExceptions(AreaType.SingleChoice);
-            CorrectionExceptions = SelectExceptions(AreaType.Answer);
-        }
-
-        private List<QuestionException> SelectExceptions(AreaType type)
-        {
-            List<QuestionException> exceptions = Answer.AreaInfo.Where(a => a.AreaType == type)
-                .SelectMany(a => a.QuestionInfo.Where(q => q.ItemInfo.Any(i => i.StatusOfItem > 0)))
-                .Select(q => new QuestionException(GetQuestion(q.QuestionId), q)).ToList();
-            if (exceptions.Count == 0)
-                exceptions = null;
-            return exceptions;
-        }
-
-        private PageData.Question GetQuestion(string questionId)
-        {
-            return MetaData.AreaInfo.SelectMany(a => a.QuestionInfo)
-                .Where(q => q.QuestionId == questionId).First();
-        }
-
-        public void ClearException(ExceptionType type)
-        {
-            if (type == ExceptionType.AnswerException)
-            {
-                AnswerExceptions.All(q =>
-                {
-                    q.Answer.ItemInfo.All(i =>
-                    {
-                        if (i.StatusOfItem > 0)
-                            i.StatusOfItem = -2;
-                        return true;
-                    });
-                    return true;
-                });
-                AnswerExceptions = null;
-            }
-            else if (type == ExceptionType.CorrectionException)
-            {
-                CorrectionExceptions.All(q =>
-                {
-                    q.Answer.ItemInfo.All(i =>
-                    {
-                        if (i.StatusOfItem > 0)
-                            i.StatusOfItem = -2;
-                        return true;
-                    });
-                    return true;
-                });
-                CorrectionExceptions = null;
-            }
-        }
-
-        public class QuestionException : ModelBase
-        {
-            private bool _HasException;
-            public bool HasException
-            {
-                get => _HasException;
-                set { _HasException = value; RaisePropertyChanged("HasException"); }
-            }
-
-            public PageData.Question Question { get; }
-            public AnswerData.Question Answer { get; }
-
-            public QuestionException(PageData.Question q, AnswerData.Question a)
-            {
-                Question = q;
-                Answer = a;
-                HasException = true;
-            }
-        }
+        public PageAnalyze Analyze { get; set; }
 
         public void Swap(Page o)
         {
@@ -138,5 +61,9 @@ namespace Exercise.Model
             o.Answer = a;
         }
 
+        public void AnalyzeException()
+        {
+            Analyze = PageAnalyze.Analyze(this);
+        }
     }
 }

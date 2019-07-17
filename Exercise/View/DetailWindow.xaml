@@ -97,7 +97,7 @@
                     <ColumnDefinition Width="16" />
                 </Grid.ColumnDefinitions>
                 <TextBlock FontSize="16" Foreground="#FF2D4A66" Text="{Binding Title, ElementName=Window}" />
-                <tal:TalTouch Grid.Column="1" x:Name="close" Width="16" Height="16" Click="Close_Click">
+                <tal:TalTouch Grid.Column="1" x:Name="close" Width="16" Height="16" TouchStyle="Label" Click="Close_Click">
                     <svgc:SvgViewbox Source="Icons/关闭/粗.svg"/>
                 </tal:TalTouch>
             </Grid>

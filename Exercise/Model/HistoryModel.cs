@@ -1,4 +1,5 @@
 ﻿using Base.Misc;
+using Base.Mvvm;
 using Base.Service;
 using Exercise.Service;
 using System;
@@ -7,15 +8,13 @@ using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
-using TalBase.Model;
 using static Exercise.Service.HistoryData;
 
 namespace Exercise.Model
 {
 
-    public class HistoryModel : ModelBase
+    public class HistoryModel : NotifyBase
     {
         private static HistoryModel s_instance;
         public static HistoryModel Instance

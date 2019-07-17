@@ -59,15 +59,16 @@ namespace Exercise.View
             set => SetValue(ScaleProperty, value);
         }
 
-       public Brush OverlayBrush
+        public Brush OverlayBrush
         {
             get => geometry.Brush;
             set => geometry.Brush = value;
         }
-        public Pen OverlayPen
+
+        public Brush OverlayPenBrush
         {
-            get => geometry.Pen;
-            set => geometry.Pen = value;
+            get => geometry.Pen.Brush;
+            set => geometry.Pen.Brush = value;
         }
 
         private BitmapImage paper;

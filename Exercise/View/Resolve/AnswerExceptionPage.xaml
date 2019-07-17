@@ -10,6 +10,7 @@
       xmlns:tal="clr-namespace:TalBase.View;assembly=TalBase"
       xmlns:svgc="http://sharpvectors.codeplex.com/svgc/"
       mc:Ignorable="d" 
+      x:Name="Page"
       d:DesignHeight="200" d:DesignWidth="231"
       Title="AnswerExceptionPage">
 
@@ -20,8 +21,6 @@
                 <ResourceDictionary Source="pack://application:,,,/TalBase;component/Themes/Generic.xaml" />
                 <ResourceDictionary Source="../../Themes/ButtonList.xaml" />
             </ResourceDictionary.MergedDictionaries>
-            
-            <resolve:AnswerExceptionViewModel x:Key="ViewModel" />
             
             <resolve:ExceptionConverter x:Key="ExceptionConverter" />
             <cv:NullVisibleConverter x:Key="NullVisibleConverter" />
@@ -40,7 +39,7 @@
         </ResourceDictionary>
     </Page.Resources>
     
-    <Grid>
+    <Grid DataContext="{Binding Page.Analyze}">
         <Grid.RowDefinitions>
             <RowDefinition />
             <RowDefinition />
@@ -49,7 +48,6 @@
         </Grid.RowDefinitions>
 
         <ListView Grid.Row="0" BorderThickness="0" Background="Transparent" 
-                  DataContext="{StaticResource ViewModel}"
                   ItemsSource="{Binding Questions}" ItemTemplate="{StaticResource QuestionItem}"
                   SelectedItem="{Binding SelectedQuestion}" SelectionMode="Single">
             <ListView.ItemsPanel>
@@ -60,12 +58,11 @@
         </ListView>
         
         <TextBlock Grid.Row="1" FontSize="12" Foreground="#FF2D4A66" Margin="0, 24, 0, 0" 
-                   Text="{Binding Converter={StaticResource ExceptionConverter}, ConverterParameter=Message}"/>
+                   Text="{Binding DataContext, ElementName=Page, Converter={StaticResource ExceptionConverter}, ConverterParameter=Message}"/>
         
         <ListView Grid.Row="2" x:Name="answers" BorderThickness="0"  Margin="0, 14, 0, 24" Background="Transparent"
-                  DataContext="{StaticResource ViewModel}"
-                  ItemsSource="{Binding Answers}" ItemTemplate="{StaticResource AnswerItem}"
-                  SelectedItem="{Binding SelectedAnswer}" SelectionMode="Single">
+                  ItemsSource="{Binding SelectedQuestion.Answers}" ItemTemplate="{StaticResource AnswerItem}"
+                  SelectedItem="{Binding SelectedQuestion.SelectedAnswer}" SelectionMode="Single">
             <ListView.ItemsPanel>
                 <ItemsPanelTemplate>
                     <StackPanel Margin="-8, -8, 0, 0" IsItemsHost="True" Orientation="Horizontal" />
@@ -75,12 +72,11 @@
 
         <StackPanel Grid.Row="2" x:Name="correct" Orientation="Vertical" Margin="0, 14, 0, 0">
             <StackPanel Orientation="Horizontal">
-                <TextBox Text="{Binding SelectedAnswer, Source={StaticResource ViewModel}}" 
+                <TextBox Text="{Binding SelectedQuestion.SelectedAnswer}" 
                          Width="72" Height="32" FontSize="14" Foreground="#FF2D4A66" VerticalContentAlignment="Center" />
                 <TextBlock Text="分" FontSize="14" Foreground="#FF2D4A66" VerticalAlignment="Center" Margin="8, 0, 0, 0"/>
             </StackPanel>
-            <ListView Grid.Row="0" BorderThickness="0" HorizontalAlignment="Left" Margin="0, 14, 0, 0" Background="Transparent"
-                  ItemsSource="{Binding Scores, Source={StaticResource ViewModel}}">
+            <ListView Grid.Row="0" x:Name="numbers" BorderThickness="0" HorizontalAlignment="Left" Margin="0, 14, 0, 0" Background="Transparent">
                 <ListView.ItemsPanel>
                     <ItemsPanelTemplate>
                         <WrapPanel Margin="-8, -8, 0, 0" IsItemsHost="True" Orientation="Horizontal" Width="200" />
@@ -92,10 +88,10 @@
                                         Content="{Binding Converter={StaticResource ToStringConverter}}" />
                     </DataTemplate>
                     <DataTemplate DataType="{x:Type sys:Boolean}">
-                        <tal:TalTouch Click="Score_Click" Width="120">
+                        <tal:TalTouch Click="Score_Click" Width="120" TouchStyle="Solid">
                             <StackPanel Orientation="Horizontal">
                                 <Image Width="16" Source="/Icons/Clear.png" />
-                                <TextBlock Margin="8, 0, 0, 0" Text="删除"/>
+                                <TextBlock Margin="8, 0, 0, 0" Text="删除" VerticalAlignment="Center"/>
                             </StackPanel>
                         </tal:TalTouch>
                     </DataTemplate>
@@ -103,7 +99,7 @@
             </ListView>
             
             <StackPanel Grid.Row="2" Margin="0, 4, 0, 4" Orientation="Horizontal"
-                        Visibility="{Binding SelectedAnswer, Source={StaticResource ViewModel}, Converter={StaticResource NullVisibleConverter}}">
+                        Visibility="{Binding SelectedQuestion.SelectedAnswer, Converter={StaticResource NullVisibleConverter}}">
                 <Image Width="12" Height="12" Source="{svgc:SvgImage Source=/Icons/bad.svg}" />
                 <TextBlock Margin="4, 0, 0, 0" FontSize="11" Foreground="#ffff6767"  Text="请为本题打分"/>
             </StackPanel>

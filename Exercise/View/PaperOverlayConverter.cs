@@ -7,6 +7,7 @@ using System.Linq;
 using System.Windows;
 using System.Windows.Data;
 using System.Windows.Media;
+using static Exercise.Model.PageAnalyze;
 using Exception = Exercise.Model.ExerciseModel.Exception;
 
 namespace Exercise.View
@@ -16,31 +17,23 @@ namespace Exercise.View
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            Page page = value as Page;
-            if (page == null && value is Exception)
-            {
-                Exception ex = value as Exception;
-                page = ex.Page;
-                if (ex.Type == ExerciseModel.ExceptionType.AnswerException)
-                    parameter = "AnswerException";
-                else if (ex.Type == ExerciseModel.ExceptionType.CorrectionException)
-                    parameter = "CorrectionException";
-            }
-            if (page == null || page.Answer == null)
-                return null;
             IEnumerable<Location> locations;
+            int radixs = 0;
             if ((string)parameter == "Result")
             {
+                Page page = value as Page;
+                if (page == null || page.Answer == null)
+                    return null;
                 var items = page.Answer.AreaInfo.SelectMany(a => a.QuestionInfo.SelectMany(q => q.ItemInfo));
                 locations = items.Where(i => i.AnalyzeResult != null).SelectMany(i => i.AnalyzeResult.Select(r => r.ValueLocation));
             }
-            else if ((string)parameter == "AnswerException")
+            else if ((string)parameter == "Exception")
             {
-                locations = page.AnswerExceptions.SelectMany(q => q.Answer.ItemInfo.Select(i => i.ItemLocation));
-            }
-            else if ((string)parameter == "CorrectionException")
-            {
-                locations = page.CorrectionExceptions.SelectMany(q => q.Answer.ItemInfo.Select(i => i.ItemLocation));
+                radixs = 2;
+                QuestionException exception = value as QuestionException;
+                if (exception == null)
+                    return null;
+                locations = exception.Answer.ItemInfo.Select(i => i.ItemLocation);
             }
             else
             {
@@ -49,7 +42,7 @@ namespace Exercise.View
             IEnumerable<Geometry> geometries = locations.Where(l => l != null).Select(l => new RectangleGeometry(
                 new Rect(l.LeftTop.X, l.LeftTop.Y, l.RightBottom.X - l.LeftTop.X, l.RightBottom.Y - l.LeftTop.Y))
             {
-                RadiusX = 2, RadiusY = 2, 
+                RadiusX = radixs, RadiusY = radixs, 
             });
             return new GeometryGroup() { Children = new GeometryCollection(geometries) };
         }

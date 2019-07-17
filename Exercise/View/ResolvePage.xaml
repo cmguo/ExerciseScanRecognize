@@ -96,10 +96,12 @@
                             HorizontalAlignment="Center" VerticalAlignment="Center"
                             Visibility="{Binding SelectedException.Page.PagePath, Converter={StaticResource NullVisibleConverter}}"/>
                 <local:PaperViewer x:Name="paper1" Paper="{Binding SelectedException.Page.PagePath}" Scale="0.666666"
-                                    Overlay="{Binding SelectedException, Converter={StaticResource PaperOverlayConverter}}"/>
-                <local:PaperViewer x:Name="paper2" Paper="{Binding SelectedException.Page.Another.PagePath}"  Scale="0.666666"/>
+                                   OverlayPenBrush="#FFFD712A" OverlayBrush="#0DFD712A"
+                                   Overlay="{Binding SelectedException.Page.Analyze.SelectedQuestion, Converter={StaticResource PaperOverlayConverter}, ConverterParameter=Exception}"/>
+                <local:PaperViewer x:Name="paper2" Paper="{Binding SelectedException.Page.Another.PagePath}" Scale="0.666666" Visibility="Collapsed" />
                 <tal:TalToggle x:Name="face" Margin="0, 24, 0, 0" Title1="正面" Title2="反面" 
                                VerticalAlignment="Top" HorizontalAlignment="Center"
+                               Visibility="{Binding SelectedException, Converter={StaticResource DuplexFaceConverter}}"
                                Unchecked="ButtonFace1_Click" Checked="ButtonFace2_Click"/>
                 <StackPanel Orientation="Horizontal" VerticalAlignment="Top" HorizontalAlignment="Right" Margin="0, 24, 84, 0"
                             Visibility="{Binding SelectedException.Page.PagePath, Converter={StaticResource NonNullVisibleConverter}, FallbackValue=Hidden}">

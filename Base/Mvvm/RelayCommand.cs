@@ -11,7 +11,7 @@ namespace Base.Mvvm
     /// http://msdn.microsoft.com/en-us/magazine/dd419663.aspx#id0090030
     /// </summary>
 
-    public class RelayCommand : ICommand, INotifyPropertyChanged
+    public class RelayCommand : NotifyBase, ICommand
     {
         #region Fields
 
@@ -40,8 +40,6 @@ namespace Base.Mvvm
         public delegate Task AsyncAction<in T>(T obj);
 
         public event EventHandler<ActionExceptionEventArgs> ExceptionRaised;
-
-        public event PropertyChangedEventHandler PropertyChanged;
 
         public ExecuteStatus Status { get; private set; }
 
@@ -139,19 +137,6 @@ namespace Base.Mvvm
             {
                 executing = false;
                 CommandManager.InvalidateRequerySuggested();
-            }
-        }
-
-        protected bool RaisePropertyChanged(string prop)
-        {
-            if (PropertyChanged != null)
-            {
-                PropertyChanged(this, new PropertyChangedEventArgs(prop));
-                return true;
-            }
-            else
-            {
-                return false;
             }
         }
 

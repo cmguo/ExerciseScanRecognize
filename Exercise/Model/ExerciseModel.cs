@@ -239,7 +239,8 @@ namespace Exercise.Model
             if (type == ResolveType.Ignore
                 || type == ResolveType.Resolve)
             {
-                oldPage.ClearException(ex.Type);
+                if (oldPage.Analyze != null)
+                    oldPage.Analyze.ClearException(ex.Type);
                 RemoveException(ex.Type, oldPage);
                 if (ex.Type == ExceptionType.NoStudentCode)
                 {
@@ -343,21 +344,25 @@ namespace Exercise.Model
             }
             if (type == ExceptionType.None)
             {
-                if (page.Answer != null)
+                AnylizePage(page);
+                if (page.Another != null)
                 {
-                    page.CalcException();
-                    if (page.AnswerExceptions != null)
-                        AddException(ExceptionType.AnswerException, page);
-                    if (page.CorrectionExceptions != null)
-                        AddException(ExceptionType.CorrectionException, page);
+                    AnylizePage(page.Another);
                 }
-                if (page.Another != null && page.Another.Answer != null)
+            }
+        }
+
+        private void AnylizePage(Page page)
+        {
+            if (page.Answer != null)
+            {
+                page.AnalyzeException();
+                if (page.Analyze != null)
                 {
-                    page.Another.CalcException();
-                    if (page.Another.AnswerExceptions != null)
-                        AddException(ExceptionType.AnswerException, page.Another);
-                    if (page.Another.CorrectionExceptions != null)
-                        AddException(ExceptionType.CorrectionException, page.Another);
+                    if (page.Analyze.AnswerExceptions != null)
+                        AddException(ExceptionType.AnswerException, page);
+                    if (page.Analyze.CorrectionExceptions != null)
+                        AddException(ExceptionType.CorrectionException, page);
                 }
             }
         }

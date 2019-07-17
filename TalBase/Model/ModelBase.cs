@@ -1,14 +1,8 @@
-﻿using System.ComponentModel;
-using System.Windows;
+﻿using Base.Mvvm;
 
 namespace TalBase.Model
 {
-    public class ModelBase : INotifyPropertyChanged
+    public class ModelBase : NotifyBase
     {
-        protected void RaisePropertyChanged(string prop)
-        {
-            if (PropertyChanged != null) { PropertyChanged(this, new PropertyChangedEventArgs(prop)); }
-        }
-        public event PropertyChangedEventHandler PropertyChanged;
     }
 }

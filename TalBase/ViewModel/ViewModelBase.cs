@@ -1,16 +1,11 @@
-﻿using System.ComponentModel;
+﻿using Base.Mvvm;
+using System.ComponentModel;
 using System.Windows;
 
 namespace TalBase.ViewModel
 {
-    public class ViewModelBase : DependencyObject, INotifyPropertyChanged
+    public class ViewModelBase : NotifyBase
     {
-        protected void RaisePropertyChanged(string prop)
-        {
-            if (PropertyChanged != null) { PropertyChanged(this, new PropertyChangedEventArgs(prop)); }
-        }
-        public event PropertyChangedEventHandler PropertyChanged;
-
         public virtual void Release()
         {
         }

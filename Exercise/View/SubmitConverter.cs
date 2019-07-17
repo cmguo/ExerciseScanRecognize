@@ -27,9 +27,9 @@ namespace Exercise.View
                 switch (status)
                 {
                     case SubmitModel.TaskStatus.Failed:
-                        return "/Icons/错误/24.png";
+                        return "/Icons/Error/24.png";
                     case SubmitModel.TaskStatus.Completed:
-                        return "/Icons/完成/24.png";
+                        return "/Icons/Finish/24.png";
                     default:
                         return null;
                 }

@@ -2,6 +2,7 @@
 using Base.Service;
 using Exercise.Algorithm;
 using Exercise.Service;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -50,6 +51,12 @@ namespace Exercise.Model
                 get { return _Finish; }
                 internal set { _Finish = value; RaisePropertyChanged("Finish"); }
             }
+
+            [JsonIgnore]
+            public int Left => (Submit.HomeworkId == null ? 1 : 0) 
+                + (Submit.Data.Count + SUBIT_BATCH_SIZE - 1) / SUBIT_BATCH_SIZE + 1 
+                + PageNames.Count + 1;
+
             private TaskStatus _Status;
             public TaskStatus Status
             {
@@ -77,7 +84,7 @@ namespace Exercise.Model
             SubmitTasks = new Dictionary<string, SubmitTask>();
             service = Services.Get<IExercise>();
             submitAction = new Base.Mvvm.Action((e) => SubmitWork(e as SubmitTask));
-            submitAction.ExceptionRaised += (s, e) => { }; // avoid error window
+            submitAction.ExceptionRaised += (s, e) => { e.IsHandled = true; }; // avoid error window
         }
 
         public async Task Save(string path, string exerciseId, ICollection<ClassInfo> classes, ICollection<StudentInfo> students)
@@ -89,8 +96,8 @@ namespace Exercise.Model
             SubmitData sdata = new SubmitData() { PaperId = exerciseId, Data = data };
             SubmitPrepare prepare = new SubmitPrepare() { PaperId = exerciseId, ClassIdList = classes.Select(c => c.ClassId).ToList() };
             IList<string> names = data.SelectMany(s => s.PageInfo.Select(p => p.ImageName)).ToList();
-            int total = (data.Count + SUBIT_BATCH_SIZE - 1) / SUBIT_BATCH_SIZE + 1 + names.Count + 1;
-            SubmitTask task = new SubmitTask() { Path = path, Status = TaskStatus.Wait, Total = total, Prepare = prepare, Submit = sdata, PageNames = names };
+            SubmitTask task = new SubmitTask() { Path = path, Status = TaskStatus.Wait, Prepare = prepare, Submit = sdata, PageNames = names };
+            task.Total = task.Left;
             SubmitTasks[path] = task;
             await task.Save();
         }
@@ -158,13 +165,13 @@ namespace Exercise.Model
         private async Task SubmitInner(SubmitTask task)
         {
             SubmitData sdata = task.Submit;
-            int left = sdata.Data.Count + task.PageNames.Count;
-            task.Finish = task.Total - left;
+            task.Finish = task.Total - task.Left;
             if (sdata.HomeworkId == null)
             {
                 StringData data = await service.GetSubmitId(task.Prepare);
                 sdata.HomeworkId = data.Value;
                 await JsonPersistent.Save(task.Path + "\\submit.json", task);
+                ++task.Finish;
             }
             await SubmitInfo(task, sdata);
             await SubmitImages(task);

@@ -20,7 +20,7 @@ namespace TalBase.View
             }
             else
             {
-                PopupDialog.Show("TODO", GetMessage(e.Exception), 0, "确定");
+                PopupDialog.Show(Application.Current.MainWindow, "TODO", GetMessage(e.Exception), 0, "确定");
             }
             e.IsHandled = true;
         }

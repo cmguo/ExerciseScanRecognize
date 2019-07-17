@@ -77,10 +77,11 @@ namespace Account.Model
         public async Task Login()
         {
             Error = null;
+            string password = LoginData.Password;
             if (LoginData.AuthenticationType == LoginData.LOGIN_BY_PASSWORD)
             {
                 MD5 md5 = new MD5CryptoServiceProvider();
-                byte[] output = md5.ComputeHash(Encoding.UTF8.GetBytes(LoginData.Password));
+                byte[] output = md5.ComputeHash(Encoding.UTF8.GetBytes(password));
                 LoginData.Password = BitConverter.ToString(output).Replace("-", "").ToLower();
             }
             try
@@ -89,6 +90,7 @@ namespace Account.Model
             }
             catch (Exception e)
             {
+                LoginData.Password = password;
                 Error = e;
                 throw e;
             }

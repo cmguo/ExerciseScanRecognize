@@ -195,13 +195,17 @@ namespace Exercise.Model
         public Task CancelScan()
         {
             Debug.WriteLine("CancelScan");
-            cancel = true;
+            lock (mutex)
+            {
+                cancel = true;
+                Monitor.PulseAll(mutex);
+            }
             scanDevice.CancelScan();
             return Task.Run(() =>
             {
                 lock (mutex)
                 {
-                    while (IsScanning && !IsCompleted)
+                    while (IsScanning || !IsCompleted)
                         Monitor.Wait(mutex);
                 }
             });
@@ -371,9 +375,13 @@ namespace Exercise.Model
                 {
                     lock (mutex)
                     {
-                        while (exerciseData == null)
+                        while (exerciseData == null && !cancel)
                         {
                             Monitor.Wait(mutex);
+                        }
+                        if (exerciseData == null)
+                        {
+                            return;
                         }
                     }
                     ScanPage(pages[0]);

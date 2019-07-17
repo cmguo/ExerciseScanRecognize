@@ -163,7 +163,7 @@ namespace Exercise.Model
             await Save();
             string path = SavePath;
             await submitModel.Save(path, scanModel.PageCode, schoolModel.Classes, PageStudents);
-            BackgroudWork.Execute(() => submitModel.Submit(path));
+            await submitModel.Submit(path);
         }
 
         public async Task Save()

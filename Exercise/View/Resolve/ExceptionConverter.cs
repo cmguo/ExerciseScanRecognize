@@ -36,17 +36,17 @@ namespace Exercise.View.Resolve
                             return String.Format("试卷{1} （第{0}页）", page.PageIndex + 1, ex.Index);
                     case ExceptionType.AnalyzeException:
                         if (page.Student != null)
-                            return String.Format("{0} {1} （{2}-{3}页）", page.Student.TalNo, page.Student.Name, page.PageIndex + 1, page.PageIndex + 2);
+                            return String.Format("{0} {1} （{2}-{3}页）", page.Student.StudentNo, page.Student.Name, page.PageIndex + 1, page.PageIndex + 2);
                         else
                             return String.Format("未识别学生{2} （{0}-{1}页）", page.PageIndex + 1, page.PageIndex + 2, ex.Index);
                     case ExceptionType.AnswerException:
                     case ExceptionType.CorrectionException:
-                        return String.Format("{0} {1} （第{2}页）", page.Student.TalNo, page.Student.Name, page.PageIndex + 1);
+                        return String.Format("{0} {1} （第{2}页）", page.Student.StudentNo, page.Student.Name, page.PageIndex + 1);
                     case ExceptionType.PageLost:
                         if (page.Another != null)
-                            return String.Format("{0} {1} （{2}-{3}页）", page.Student.TalNo, page.Student.Name, page.PageIndex + 1, page.PageIndex + 2);
+                            return String.Format("{0} {1} （{2}-{3}页）", page.Student.StudentNo, page.Student.Name, page.PageIndex + 1, page.PageIndex + 2);
                         else
-                            return String.Format("{0} {1} （第{2}页）", page.Student.TalNo, page.Student.Name, page.PageIndex + 1);
+                            return String.Format("{0} {1} （第{2}页）", page.Student.StudentNo, page.Student.Name, page.PageIndex + 1);
                     default:
                         return null;
                 }
@@ -63,18 +63,18 @@ namespace Exercise.View.Resolve
                     case ExceptionType.AnalyzeException:
                         if (page.Student != null)
                             return String.Format("{0}{1}试卷无法识别，存在以下异常，请放入此试卷重新扫描。",
-                                page.Student.TalNo, page.Student.Name);
+                                page.Student.StudentNo, page.Student.Name);
                         else
                             return String.Format("此份试卷无法识别，存在以下异常，请放入此试卷重新扫描。");
                     case ExceptionType.AnswerException:
                         return String.Format("{0}{1} （第{2}页），以下题号存在作答识别异常，请确认识别结果。",
-                            page.Student.TalNo, page.Student.Name, page.PageIndex + 1);
+                            page.Student.StudentNo, page.Student.Name, page.PageIndex + 1);
                     case ExceptionType.CorrectionException:
                         return String.Format("{0}{1} （第{2}页），以下题号存在批改识别异常，请确认得分。",
-                            page.Student.TalNo, page.Student.Name, page.PageIndex + 1);
+                            page.Student.StudentNo, page.Student.Name, page.PageIndex + 1);
                     case ExceptionType.PageLost:
                         return String.Format("{0} {1} （{2}-{3}页）缺失，请放入其试卷重新扫描。",
-                            page.Student.TalNo, page.Student.Name, page.PageIndex + 1, page.PageIndex + 2);
+                            page.Student.StudentNo, page.Student.Name, page.PageIndex + 1, page.PageIndex + 2);
                     default:
                         return null;
                 }

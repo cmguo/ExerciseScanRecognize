@@ -61,9 +61,9 @@ namespace Exercise.ViewModel
                 Name = c.ClassName,
                 StudentCount = c.Students.Count(),
                 SubmitStudentList = c.Students.Where(s => s.AnswerPages != null)
-                    .Select(s => new StudentDetail() { Name = s.Name, TalNo = s.TalNo }).ToList(),
+                    .Select(s => new StudentDetail() { Name = s.Name, StudentNo = s.StudentNo }).ToList(),
                 LostStudentList = c.Students.Where(s => s.AnswerPages == null)
-                    .Select(s => new StudentDetail() { Name = s.Name, TalNo = s.TalNo }).ToList(),
+                    .Select(s => new StudentDetail() { Name = s.Name, StudentNo = s.StudentNo }).ToList(),
             }).ToList();
             RaisePropertyChanged("StudentCount");
             RaisePropertyChanged("ClassDetails");

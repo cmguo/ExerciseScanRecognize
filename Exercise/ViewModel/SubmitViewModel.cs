@@ -44,7 +44,7 @@ namespace Exercise.ViewModel
 
         private void Retry(object obj)
         {
-            BackgroudWork.Execute(() => submitModel.Submit(Task));
+            submitModel.Submit(Task);
         }
 
         private void Return(object obj)

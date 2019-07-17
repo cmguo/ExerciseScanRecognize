@@ -16,12 +16,6 @@ namespace Exercise.ViewModel
     {
         public string[] SourceList { get; internal set; }
 
-        public int SourceIndex
-        {
-            get => scanModel.SourceIndex;
-            set { scanModel.SourceIndex = value; }
-        }
-
         #region Commands
 
         public RelayCommand StartCommand { get; set; }
@@ -45,21 +39,12 @@ namespace Exercise.ViewModel
             {
                 return;
             }
-            try
+            if (base.Continue(obj))
             {
-                SourceIndex = SourceIndex;
+                await exerciseModel.NewTask();
+                NavigationService navigationService = (obj as System.Windows.Controls.Page).NavigationService;
+                navigationService.Navigate(new ScanningPage());
             }
-            catch (Exception e)
-            {
-                Debug.WriteLine(e.ToString());
-                PopupDialog.Show(obj as UIElement, "TODO", "扫描仪未连接，请检查后重试。", 0, "确定");
-                return;
-            }
-            await exerciseModel.NewTask();
-            NavigationService navigationService = (obj as System.Windows.Controls.Page).NavigationService;
-            navigationService.Navigate(new ScanningPage());
-            if (!base.Continue(obj))
-                navigationService.Navigate(new HomePage());
         }
 
         private void History(object obj)

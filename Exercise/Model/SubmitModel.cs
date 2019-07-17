@@ -70,10 +70,14 @@ namespace Exercise.Model
 
         private IExercise service;
 
+        private Base.Mvvm.Action submitAction;
+
         public SubmitModel()
         {
             SubmitTasks = new Dictionary<string, SubmitTask>();
             service = Services.Get<IExercise>();
+            submitAction = new Base.Mvvm.Action((e) => SubmitWork(e as SubmitTask));
+            submitAction.ExceptionRaised += (s, e) => { }; // avoid error window
         }
 
         public async Task Save(string path, string exerciseId, ICollection<ClassInfo> classes, ICollection<StudentInfo> students)
@@ -99,7 +103,7 @@ namespace Exercise.Model
                 task = await JsonPersistent.Load<SubmitTask>(path + "\\submit.json");
                 SubmitTasks[path] = task;
             }
-            await Submit(task);
+            submitAction.Execute(task);
         }
 
         public async Task Cancel(SubmitTask task)
@@ -108,7 +112,12 @@ namespace Exercise.Model
             await task.Save();
         }
 
-        public async Task Submit(SubmitTask task)
+        public void Submit(SubmitTask task)
+        {
+            submitAction.Execute(task);
+        }
+
+        private async Task SubmitWork(SubmitTask task)
         {
             try
             {

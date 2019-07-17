@@ -6,6 +6,7 @@ using TalBase.ViewModel;
 using Panuon.UI;
 using TalBase.View;
 using System.Windows;
+using System.Diagnostics;
 
 namespace Exercise.ViewModel
 {
@@ -13,6 +14,12 @@ namespace Exercise.ViewModel
     {
 
         #region Properties
+
+        public int SourceIndex
+        {
+            get => scanModel.SourceIndex;
+            set { scanModel.SourceIndex = value; }
+        }
 
         public Page _lastPage;
         public Page LastPage
@@ -75,6 +82,16 @@ namespace Exercise.ViewModel
         protected virtual bool Continue(object obj)
         {
             int result = 0;
+            try
+            {
+                SourceIndex = SourceIndex;
+            }
+            catch (Exception e)
+            {
+                Debug.WriteLine(e.ToString());
+                PopupDialog.Show(obj as UIElement, "TODO", "扫描仪未连接，请检查后重试。", 0, "确定");
+                return false;
+            }
             while (result == 0 && !scanModel.FeederLoaded)
             {
                 result = PopupDialog.Show(obj as UIElement, "TODO", "扫描仪里面没有纸张，请添加试卷。", 0, "确定", "取消");

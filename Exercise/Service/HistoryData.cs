@@ -48,7 +48,7 @@ namespace Exercise.Service
         public partial class StudentDetail
         {
             public string Name { get; set; }
-            public string TalNo { get; set; }
+            public string StudentNo { get; set; }
         }
 
     }

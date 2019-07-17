@@ -86,7 +86,7 @@ namespace Exercise.ViewModel
                 RaisePropertyChanged("StudentFilter");
                 FilteredStudents = (value == null || value.Length == 0)
                     ? SelectedClass.Students
-                    : SelectedClass.Students.Where(s => s.TalNo.Contains(value) || s.Name.Contains(value)).ToList();
+                    : SelectedClass.Students.Where(s => s.ToString().Contains(value)).ToList();
                 RaisePropertyChanged("FilteredStudents");
             }
         }

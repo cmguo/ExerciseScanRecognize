@@ -80,6 +80,7 @@
     <Compile Include="Mvvm\Converter\VisibilityConverter.cs" />
     <Compile Include="Mvvm\NotifyBase.cs" />
     <Compile Include="Mvvm\ObservableCollections.cs" />
+    <Compile Include="Mvvm\Action.cs" />
     <Compile Include="Mvvm\RelayCommand.cs" />
     <Compile Include="Misc\Configuration.cs" />
     <Compile Include="Misc\JsonPersistent.cs" />

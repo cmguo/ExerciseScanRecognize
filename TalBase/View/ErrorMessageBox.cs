@@ -9,11 +9,10 @@ namespace TalBase.View
     {
         public static void Init()
         {
-            RelayCommand.ActionException += RelayCommand_ActionException;
-            BackgroudWork.WorkException += RelayCommand_ActionException;
+            Base.Mvvm.Action.ActionException += Action_ActionException;
         }
 
-        private static void RelayCommand_ActionException(object sender, RelayCommand.ActionExceptionEventArgs e)
+        private static void Action_ActionException(object sender, RelayCommand.ActionExceptionEventArgs e)
         {
             if (e.Parameter is UIElement)
             {

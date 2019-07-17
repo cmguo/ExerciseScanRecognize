@@ -96,8 +96,7 @@ namespace Account.Model
             LoginData.Password = null;
             LoginData.AuthenticationType = LoginData.LOGIN_BY_TICKET;
             timer.Start();
-            RelayCommand.ActionException += RelayCommand_ActionException;
-            BackgroudWork.WorkException += RelayCommand_ActionException;
+            Base.Mvvm.Action.ActionException += RelayCommand_ActionException;
         }
 
         public async Task Logout()
@@ -114,7 +113,6 @@ namespace Account.Model
             RaisePropertyChanged("Account");
             timer.Stop();
             RelayCommand.ActionException -= RelayCommand_ActionException;
-            BackgroudWork.WorkException -= RelayCommand_ActionException;
         }
 
         private void Timer_Tick(object sender, EventArgs e)

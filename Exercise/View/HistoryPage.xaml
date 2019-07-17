@@ -31,6 +31,8 @@
             <cv:ToStringConverter x:Key="ToStringConverter" />
             <local:HistroyDetailConverter x:Key="HistroyDetailConverter" />
 
+            <vm:HistoryViewModel x:Key="ViewModel"/>
+            
             <tal:TalTouch x:Key="Return" 
                             Command="{Binding ReturnCommand}"
                             CommandParameter="{Binding Source={x:Reference Page}}">
@@ -57,15 +59,11 @@
         </ResourceDictionary>
     </Page.Resources>
     
-    <Page.DataContext>
-        <vm:HistoryViewModel />
-    </Page.DataContext>
-
     <tb:TitleBarManager.Buttons>
         <tb:TitleButton Name="Return" Content="{StaticResource Return}" />
     </tb:TitleBarManager.Buttons>
 
-    <Grid Margin="18, 20, 18, 16">
+    <Grid Margin="18, 20, 18, 16" DataContext="{StaticResource ViewModel}">
         <Grid.RowDefinitions>
             <RowDefinition Height="auto"/>
             <RowDefinition Height="auto"/>
@@ -109,7 +107,7 @@
                             </StackPanel>
                             <StackPanel DockPanel.Dock="Right" Orientation="Horizontal" VerticalAlignment="Center">
                                 <tal:TalHyperlink Content="查看扫描结果" 
-                                        Command="{Binding SummaryCommand}">
+                                        Command="{Binding SummaryCommand, Source={StaticResource ViewModel}}">
                                     <tal:TalHyperlink.CommandParameter>
                                         <MultiBinding Converter="{StaticResource MultiValueConverter}">
                                             <Binding ElementName="Page"/>
@@ -118,7 +116,7 @@
                                     </tal:TalHyperlink.CommandParameter>
                                 </tal:TalHyperlink>
                                 <tal:TalHyperlink Content="放弃本次扫描" Margin="16, 0, 0, 0"
-                                        Command="{Binding DiscardCommand}"
+                                        Command="{Binding DiscardCommand, Source={StaticResource ViewModel}}"
                                         CommandParameter="{Binding}" />
                             </StackPanel>
                             <Border/>

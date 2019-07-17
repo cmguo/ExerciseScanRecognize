@@ -28,12 +28,13 @@
             <cv:ToStringConverter x:Key="ToStringConverter" />
             
             <DataTemplate x:Key="QuestionItem">
-                <tal:TalRatio Content="{Binding Answer.QuestionId}" GroupName="Question" />
+                <tal:TalRatio Content="{Binding Answer.QuestionId}"
+                              IsChecked="{Binding IsSelected, RelativeSource={RelativeSource AncestorType=ListViewItem}}"/>
             </DataTemplate>
 
             <DataTemplate x:Key="AnswerItem">
-                <tal:TalRatio Content="{Binding TargetNullValue=未作答}" RatioStyle="Solid" GroupName="Answer"
-                              Checked="Answer_Click"/>
+                <tal:TalRatio Content="{Binding TargetNullValue=未作答}" RatioStyle="Solid" 
+                              IsChecked="{Binding IsSelected, RelativeSource={RelativeSource AncestorType=ListViewItem}}"/>
             </DataTemplate>
 
         </ResourceDictionary>
@@ -46,13 +47,14 @@
             <RowDefinition />
             <RowDefinition />
         </Grid.RowDefinitions>
-        
-        <ListView Grid.Row="0" BorderThickness="0" Background="Transparent"
-                  ItemsSource="{Binding Questions, Source={StaticResource ViewModel}}"
-                  ItemTemplate="{StaticResource QuestionItem}">
+
+        <ListView Grid.Row="0" BorderThickness="0" Background="Transparent" 
+                  DataContext="{StaticResource ViewModel}"
+                  ItemsSource="{Binding Questions}" ItemTemplate="{StaticResource QuestionItem}"
+                  SelectedItem="{Binding SelectedQuestion}" SelectionMode="Single">
             <ListView.ItemsPanel>
                 <ItemsPanelTemplate>
-                    <WrapPanel Margin="-8, -8, 0, 0" IsItemsHost="True" Orientation="Horizontal" />
+                    <WrapPanel Margin="-8, -8, 0, 0" IsItemsHost="True" Orientation="Horizontal" Width="220" />
                 </ItemsPanelTemplate>
             </ListView.ItemsPanel>
         </ListView>
@@ -61,9 +63,9 @@
                    Text="{Binding Converter={StaticResource ExceptionConverter}, ConverterParameter=Message}"/>
         
         <ListView Grid.Row="2" x:Name="answers" BorderThickness="0"  Margin="0, 14, 0, 24" Background="Transparent"
-                  ScrollViewer.HorizontalScrollBarVisibility="Disabled"
-                  ItemsSource="{Binding Answers, Source={StaticResource ViewModel}}"
-                  ItemTemplate="{StaticResource AnswerItem}">
+                  DataContext="{StaticResource ViewModel}"
+                  ItemsSource="{Binding Answers}" ItemTemplate="{StaticResource AnswerItem}"
+                  SelectedItem="{Binding SelectedAnswer}" SelectionMode="Single">
             <ListView.ItemsPanel>
                 <ItemsPanelTemplate>
                     <StackPanel Margin="-8, -8, 0, 0" IsItemsHost="True" Orientation="Horizontal" />

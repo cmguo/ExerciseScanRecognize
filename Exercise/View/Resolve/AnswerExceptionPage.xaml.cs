@@ -78,6 +78,7 @@ namespace Exercise.View.Resolve
 
     public partial class AnswerExceptionPage : Page
     {
+        private const string NULL_ANSWER = "未作答";
 
         private AnswerExceptionViewModel viewModel;
         private ExceptionType type;
@@ -113,7 +114,7 @@ namespace Exercise.View.Resolve
 
         private void FillAnswers(QuestionException question)
         {
-            viewModel.Answers = question.Question.ItemInfo[0].Value.Split(',').Concat(new string[] { null }).ToList();
+            viewModel.Answers = question.Question.ItemInfo[0].Value.Split(',').Concat(new string[] { NULL_ANSWER }).ToList();
         }
 
         private void FillScores(QuestionException question)
@@ -167,7 +168,7 @@ namespace Exercise.View.Resolve
             {
                 i.StatusOfItem = -1;
                 i.AnalyzeResult = new List<Result>();
-                if (viewModel.SelectedAnswer != null && viewModel.SelectedAnswer != "")
+                if (viewModel.SelectedAnswer != NULL_ANSWER && viewModel.SelectedAnswer != "")
                 {
                     i.AnalyzeResult.Add(new Result() { Value = viewModel.SelectedAnswer });
                 }
@@ -198,7 +199,7 @@ namespace Exercise.View.Resolve
                 {
                     FillAnswers(viewModel.SelectedQuestion);
                     if (answer.Length == 0)
-                        answer = null;
+                        answer = NULL_ANSWER;
                     else if (answer.Length == 1)
                         answer = viewModel.Answers.Where(a => answer.Equals(a)).First();
                 }

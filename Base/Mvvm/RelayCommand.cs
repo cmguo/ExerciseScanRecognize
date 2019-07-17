@@ -2,6 +2,7 @@
 using System.Windows.Input;
 using System.Diagnostics;
 using System.Threading.Tasks;
+using System.ComponentModel;
 
 namespace Base.Mvvm
 {
@@ -10,7 +11,7 @@ namespace Base.Mvvm
     /// http://msdn.microsoft.com/en-us/magazine/dd419663.aspx#id0090030
     /// </summary>
 
-    public class RelayCommand : ICommand
+    public class RelayCommand : ICommand, INotifyPropertyChanged
     {
         #region Fields
 
@@ -29,7 +30,22 @@ namespace Base.Mvvm
 
         public static event EventHandler<ActionExceptionEventArgs> ActionException;
 
+        public enum ExecuteStatus
+        {
+            Free, 
+            Busy, 
+            Error
+        }
+
         public delegate Task AsyncAction<in T>(T obj);
+
+        public event EventHandler<ActionExceptionEventArgs> ExceptionRaised;
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        public ExecuteStatus Status { get; private set; }
+
+        public Exception Exception { get; private set; }
 
         readonly Action<object> _execute;
         readonly AsyncAction<object> _asyncExecute;
@@ -49,9 +65,9 @@ namespace Base.Mvvm
         {
             if (execute == null)
                 throw new ArgumentNullException("execute");
-
             _execute = execute;
             _canExecute = canExecute;
+            Status = ExecuteStatus.Free;
         }
 
         public RelayCommand(AsyncAction<object> execute)
@@ -66,6 +82,7 @@ namespace Base.Mvvm
 
             _asyncExecute = execute;
             _canExecute = canExecute;
+            Status = ExecuteStatus.Free;
         }
 
         #endregion // Constructors
@@ -88,6 +105,8 @@ namespace Base.Mvvm
         {
             try
             {
+                Status = ExecuteStatus.Busy;
+                RaisePropertyChanged("Status");
                 if (_execute != null)
                 {
                     _execute(parameter);
@@ -97,19 +116,42 @@ namespace Base.Mvvm
                     executing = true;
                     CommandManager.InvalidateRequerySuggested();
                     await _asyncExecute(parameter);
-                    executing = false;
-                    CommandManager.InvalidateRequerySuggested();
                 }
+                Status = ExecuteStatus.Free;
+                RaisePropertyChanged("Status");
             }
             catch (Exception e)
             {
                 Debug.WriteLine(e);
+                Status = ExecuteStatus.Error;
+                RaisePropertyChanged("Status");
+                Exception = e;
+                if (RaisePropertyChanged("Exception"))
+                    return;
                 ActionExceptionEventArgs e1 = new ActionExceptionEventArgs(e) { Parameter = parameter };
-                ActionException?.Invoke(this, e1);
-                executing = false;
-                CommandManager.InvalidateRequerySuggested();
+                ExceptionRaised?.Invoke(this, e1);
+                if (!e1.IsHandled)
+                    ActionException?.Invoke(this, e1);
                 if (!e1.IsHandled)
                     throw e;
+            }
+            finally
+            {
+                executing = false;
+                CommandManager.InvalidateRequerySuggested();
+            }
+        }
+
+        protected bool RaisePropertyChanged(string prop)
+        {
+            if (PropertyChanged != null)
+            {
+                PropertyChanged(this, new PropertyChangedEventArgs(prop));
+                return true;
+            }
+            else
+            {
+                return false;
             }
         }
 

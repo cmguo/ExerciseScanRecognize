@@ -25,8 +25,8 @@ namespace Exercise.View
         public HistoryPage()
         {
             InitializeComponent();
+            DataContext = FindResource("ViewModel");
             dataGrid.CellEditEnding += DataGrid_CellEditEnding;
-            HistoryViewModel vm = (DataContext as HistoryViewModel);
         }
 
         private void ButtonDetail_Click(object sender, System.Windows.RoutedEventArgs e)

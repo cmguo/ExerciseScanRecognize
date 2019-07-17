@@ -15,7 +15,7 @@ namespace Exercise.ViewModel
 
         #region Properties
 
-        public IList<ClassInfo> Classes => schoolModel.AllClasses;
+        public IList<ClassInfo> Classes { get; set; }
 
         private ClassInfo _SelectedClass;
         public ClassInfo SelectedClass
@@ -52,6 +52,7 @@ namespace Exercise.ViewModel
 
         public SchoolViewModel()
         {
+            Classes = schoolModel.AllClasses.OrderBy(c => c.ClassName).ToList();
         }
 
     }

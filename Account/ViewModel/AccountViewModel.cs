@@ -28,6 +28,8 @@ namespace Account.ViewModel
 
         public AccountData Account => accountModel.Account;
 
+        public Exception LoginException { get; set; }
+
         public RelayCommand LoginCommand { get; set; }
         public RelayCommand LogoutCommand { get; set; }
 

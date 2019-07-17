@@ -50,6 +50,8 @@ namespace TalBase.Service
         public async Task<T> DeserializeAsync<T>(HttpContent content)
         {
             var result = await serializer.DeserializeAsync<Result2<T>>(content);
+            if (result == null)
+                throw new ServiceException(0, "服务器异常，空数据");
             result.Check();
             return result.Data;
         }

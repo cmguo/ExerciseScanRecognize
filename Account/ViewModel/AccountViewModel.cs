@@ -70,7 +70,7 @@ namespace Account.ViewModel
 
         private static void AccountModel_PropertyChanged_Static(object sender, System.ComponentModel.PropertyChangedEventArgs e)
         {
-            if (e.PropertyName == "Account" && AccountModel.Instance.Error != null)
+            if (e.PropertyName == "Account")
             {
                 new AccountWindow() { Owner = Application.Current.MainWindow }.Show();
             }

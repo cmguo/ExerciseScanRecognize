@@ -23,6 +23,11 @@ namespace Base.Mvvm
             public bool IsHandled { get; set; }
         }
 
+        internal static void RaiseException(object owner, ActionExceptionEventArgs e1)
+        {
+            ActionException?.Invoke(owner, e1);
+        }
+
         public static event EventHandler<ActionExceptionEventArgs> ActionException;
 
         public enum ActionStatus

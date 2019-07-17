@@ -15,7 +15,6 @@
         <ResourceDictionary>
 
             <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary Source="../../Themes/ComboBox.xaml" />
             </ResourceDictionary.MergedDictionaries>
 
             <cv:NonNullTrueConverter x:Key="NonNullTrueConverter" />

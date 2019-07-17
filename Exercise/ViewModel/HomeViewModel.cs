@@ -39,11 +39,15 @@ namespace Exercise.ViewModel
             {
                 return;
             }
+            await exerciseModel.NewTask();
             if (base.Continue(obj))
             {
-                await exerciseModel.NewTask();
                 NavigationService navigationService = (obj as System.Windows.Controls.Page).NavigationService;
                 navigationService.Navigate(new ScanningPage());
+            }
+            else
+            {
+                exerciseModel.Discard();
             }
         }
 

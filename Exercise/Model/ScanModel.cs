@@ -139,6 +139,7 @@ namespace Exercise.Model
             scanDevice.ScanPaused += ScanDevice_ScanPaused;
             scanDevice.ScanError += ScanDevice_ScanError;
             scanDevice.ScanCompleted += ScanDevice_ScanCompleted;
+            IsCompleted = true;
         }
 
         public void SetSavePath(string path)
@@ -260,7 +261,7 @@ namespace Exercise.Model
         {
             PersistData data = await JsonPersistent.Load<PersistData>(path + "\\scan.json");
             PageCode = data.PageCode;
-            readIndex = data.Pages.Count;
+            readIndex = data.Pages.Count * 2;
             scanBatch = data.ScanBatch;
             savePath = path;
             foreach (Page p in data.Pages)

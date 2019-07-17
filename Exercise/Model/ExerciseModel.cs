@@ -204,14 +204,14 @@ namespace Exercise.Model
             SavePath = null;
         }
 
-        public Task ScanOne(Exception ex)
+        public async Task ScanOne(Exception ex)
         {
             lock (Exceptions)
             {
                 targetException = ex;
-                scanModel.Scan(1);
             }
-            return Task.Run(() =>
+            scanModel.Scan(1);
+            await Task.Run(() =>
             {
                 lock (Exceptions)
                 {
@@ -274,6 +274,17 @@ namespace Exercise.Model
                 if (scanModel.PageCode == null)
                     return;
                 LoadExercise();
+            }
+            else if (e.PropertyName == "IsCompleted")
+            {
+                if (scanModel.IsCompleted && targetException != null)
+                {
+                    lock (Exceptions)
+                    {
+                        targetException = null;
+                        Monitor.PulseAll(Exceptions);
+                    }
+                }
             }
         }
 

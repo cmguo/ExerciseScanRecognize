@@ -30,8 +30,6 @@ namespace Account.Model
             }
         }
 
-        public Exception Error { get; private set; }
-
         public string ServiceUri { get; private set; }
 
         public Dictionary<string, string> ServiceUris { get; private set; }
@@ -76,7 +74,6 @@ namespace Account.Model
 
         public async Task Login()
         {
-            Error = null;
             string password = LoginData.Password;
             if (LoginData.AuthenticationType == LoginData.LOGIN_BY_PASSWORD)
             {
@@ -91,7 +88,6 @@ namespace Account.Model
             catch (Exception e)
             {
                 LoginData.Password = password;
-                Error = e;
                 throw e;
             }
             RaisePropertyChanged("Account");
@@ -127,7 +123,6 @@ namespace Account.Model
             if (e.Exception is ServiceException && ((e.Exception as ServiceException).Status >= LoginData.LOGIN_OUT_FIRST
                 && (e.Exception as ServiceException).Status < LoginData.LOGIN_OUT_LAST))
             {
-                Error = e.Exception;
                 Clear();
             }
         }

@@ -81,7 +81,6 @@ namespace Exercise.ViewModel
 
         protected virtual bool Continue(object obj)
         {
-            int result = 0;
             try
             {
                 SourceIndex = SourceIndex;
@@ -92,6 +91,7 @@ namespace Exercise.ViewModel
                 PopupDialog.Show(obj as UIElement, "TODO", "扫描仪未连接，请检查后重试。", 0, "确定");
                 return false;
             }
+            int result = 0;
             while (result == 0 && !scanModel.FeederLoaded)
             {
                 result = PopupDialog.Show(obj as UIElement, "TODO", "扫描仪里面没有纸张，请添加试卷。", 0, "确定", "取消");

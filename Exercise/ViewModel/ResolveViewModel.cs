@@ -146,10 +146,13 @@ namespace Exercise.ViewModel
 
         private async Task Rescan(object obj)
         {
-            while (!scanModel.FeederLoaded)
+            int result = 0;
+            while (result == 0 && !scanModel.FeederLoaded)
             {
-                PopupDialog.Show(obj as UIElement, "TODO", "扫描仪里面没有纸张，请添加试卷。", 0, "确定");
+                result = PopupDialog.Show(obj as UIElement, "TODO", "扫描仪里面没有纸张，请添加试卷。", 0, "确定", "取消");
             }
+            if (result != 0)
+                return;
             Exception ex = SelectedException;
             await exerciseModel.ScanOne(ex);
             if (ex.Page != null)
@@ -201,7 +204,7 @@ namespace Exercise.ViewModel
                         toast = "该份试卷的异常已忽略";
                         break;
                     case ResolveType.Resolve:
-                        toast = "该份试卷的异常已忽略";
+                        toast = "该份试卷的异常已处理完成";
                         break;
                 }
                 TalToast.Show(toast);

@@ -19,7 +19,7 @@ namespace Base.Mvvm
             {
                 Debug.WriteLine(e);
                 ActionExceptionEventArgs e1 = new ActionExceptionEventArgs(e);
-                //Action.ActionException?.Invoke(owner, e1);
+                Action.RaiseException(owner, e1);
                 if (!e1.IsHandled)
                     throw e;
             }

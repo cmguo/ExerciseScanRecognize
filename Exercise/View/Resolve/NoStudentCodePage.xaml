@@ -15,6 +15,7 @@
         <ResourceDictionary>
 
             <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="../../Themes/ComboBox.xaml" />
             </ResourceDictionary.MergedDictionaries>
 
             <cv:NonNullTrueConverter x:Key="NonNullTrueConverter" />
@@ -33,12 +34,15 @@
         </Grid.RowDefinitions>
         <ComboBox Grid.Row="0" x:Name="classList" DataContext="{StaticResource ViewModel}"
                   FontSize="14" Foreground="#FF2D4A66" DisplayMemberPath="ClassName"
+                  IsReadOnly="True"
                   Height="32"
                   Width="231"
                   ItemsSource="{Binding Classes}" SelectedItem="{Binding SelectedClass}">
         </ComboBox>
         <ComboBox Grid.Row="1" x:Name="studentList" Margin="0, 14, 0, 0" 
-                  IsEditable="True" FontSize="14" Foreground="#FF2D4A66" 
+                  IsEditable="True"
+                  IsTextSearchEnabled="False"
+                  FontSize="14" Foreground="#FF2D4A66" 
                   TextBoxBase.TextChanged="StudentList_TextChanged"
                   Height="32"
                   Width="231"

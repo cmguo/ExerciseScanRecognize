@@ -6,14 +6,15 @@
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type TextBox}">
-                    <Grid>
-                        <Border
+                    <Border
                             BorderThickness="1,1,0,1"
                             CornerRadius="4,0,0,4"
+                            Padding="10,0,0,0"
+                            
                             Background="{TemplateBinding Background}"
                             BorderBrush="#2D4A66">
-                        </Border>
-                    </Grid>
+                        <ScrollViewer  x:Name="PART_ContentHost" VerticalAlignment="Center" HorizontalAlignment="Left" Width="600"/>
+                    </Border>
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
@@ -153,7 +154,6 @@
     
     <Style TargetType="{x:Type ComboBox}">
         <Setter Property="ItemContainerStyle" Value="{StaticResource ComboBoxItemStyle}" />
-        
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type ComboBox}">
@@ -164,7 +164,9 @@
                         </Grid.ColumnDefinitions>
                         <TextBox Name="PART_EditableTextBox"
                                  Style="{StaticResource ComboBoxTextBoxStyle}"
-                                 Padding="5,0,0,0"
+                                 TextWrapping="NoWrap"
+                                 VerticalContentAlignment="Center"
+                                 FontSize="14"
                                  Height="{TemplateBinding Height}"
                                  />
                         <ToggleButton Grid.Column="1" Margin="0"
@@ -181,9 +183,9 @@
                                       ContentTemplateSelector="{TemplateBinding ItemTemplateSelector}"
                                       VerticalAlignment="Center"
                                       HorizontalAlignment="Left"
-                                      Margin="5,0,0,0"/>
-                    
-                    <Popup Name="Popup"
+                                      Margin="12,0,0,0"/>
+                        
+                        <Popup Name="PART_Popup"
                                Placement="Bottom"
                                VerticalOffset="8"
                                IsOpen="{TemplateBinding IsDropDownOpen}"

@@ -33,12 +33,12 @@ namespace Exercise.View.Resolve
 
         private void StudentList_LostKeyboardFocus(object sender, KeyboardFocusChangedEventArgs e)
         {
-            studentList.IsDropDownOpen = false;
+            //studentList.IsDropDownOpen = false;
         }
 
         private void StudentList_GotKeyboardFocus(object sender, KeyboardFocusChangedEventArgs e)
         {
-            studentList.IsDropDownOpen = true;
+            //studentList.IsDropDownOpen = true;
         }
 
         private void Confirm_Click(object sender, RoutedEventArgs e)

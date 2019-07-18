@@ -395,7 +395,7 @@ namespace Panuon.UI
             }
             else
             {
-                return Visibility.Visible;
+                return Visibility.Collapsed;
             }
         }
 

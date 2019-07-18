@@ -26,6 +26,7 @@
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="pack://application:,,,/Exercise;component/Themes/TreeView.xaml" />
                 <ResourceDictionary Source="pack://application:,,,/TalBase;component/Themes/Generic.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/Exercise;component/Themes/Generic.xaml" />
             </ResourceDictionary.MergedDictionaries>
 
             <resolve:ExceptionListConverter x:Key="ExceptionListConverter" />
@@ -81,8 +82,15 @@
                     </StackPanel>
                     <HierarchicalDataTemplate.ItemTemplate>
                         <DataTemplate>
-                            <TextBlock FontSize="14" Foreground="#FF2D4A66" Margin="0, 9, 0, 9"  Width="156"
-                                       Text="{Binding Converter={StaticResource ExceptionConverter}, ConverterParameter=Tree}" />
+                            <TextBlock FontSize="14" Foreground="#FF2D4A66" Margin="0, 9, 0, 9"  Width="156" TextTrimming="CharacterEllipsis" TextWrapping="NoWrap"
+                                       Text="{Binding Converter={StaticResource ExceptionConverter}, ConverterParameter=Tree}" >
+
+                                <TextBlock.ToolTip>
+                                    <ToolTip Style="{DynamicResource TooltipStyle}" Content="{Binding Converter={StaticResource ExceptionConverter}, ConverterParameter=Tree}" Placement="Bottom"
+                                             VerticalOffset="3" Width="156" MaxWidth="156"/>
+                                </TextBlock.ToolTip>
+
+                            </TextBlock>
                         </DataTemplate>
                     </HierarchicalDataTemplate.ItemTemplate>
                 </HierarchicalDataTemplate>

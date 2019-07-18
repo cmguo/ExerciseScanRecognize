@@ -79,9 +79,12 @@ namespace Exercise.View
                     next.IsSelected = true;
                     return;
                 }
-                child = (parent as TreeViewItemEx);
-                SelectNext(child.ParentItemsControl, child);
             }
+            child = (parent as TreeViewItemEx);
+            if (child != null)
+                SelectNext(child.ParentItemsControl, child);
+            else
+                SelectNext(parent);
         }
 
         protected override void OnSelected(RoutedEventArgs e)
@@ -89,26 +92,26 @@ namespace Exercise.View
             if (Items.Count > 0)
             {
                 TreeViewItem next = ItemContainerGenerator.ContainerFromIndex(0) as TreeViewItem;
-                Dispatcher.InvokeAsync(SelectNext);
+                Dispatcher.InvokeAsync(() => SelectNext(this));
                 return;
             }
             base.OnSelected(e);
         }
 
-        private void SelectNext()
+        private static void SelectNext(ItemsControl parent)
         {
-            if (0 < Items.Count)
+            if (0 < parent.Items.Count)
             {
-                TreeViewItemEx next = ItemContainerGenerator.ContainerFromIndex(0) as TreeViewItemEx;
+                TreeViewItemEx next = parent.ItemContainerGenerator.ContainerFromIndex(0) as TreeViewItemEx;
                 if (next != null)
                 {
-                    next.SelectNext();
+                    SelectNext(next);
                     return;
                 }
             }
-            else
+            else if (parent is TreeViewItemEx)
             {
-                IsSelected = true;
+                (parent as TreeViewItemEx).IsSelected = true;
             }
         }
 

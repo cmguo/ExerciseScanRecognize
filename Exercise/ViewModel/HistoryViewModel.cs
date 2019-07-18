@@ -151,7 +151,7 @@ namespace Exercise.ViewModel
                 {
                     if (_PageIndex < historyModel.Records.Length)
                         Records = historyModel.Records[_PageIndex];
-                    PageCount = 10;// historyModel.Records.Length;
+                    PageCount = historyModel.Records.Length;
                 }
             }
         }

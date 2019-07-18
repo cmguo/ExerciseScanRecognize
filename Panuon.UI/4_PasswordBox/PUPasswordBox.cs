@@ -49,6 +49,8 @@ namespace Panuon.UI
         private void BtnShowPwd_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
         {
             Text = "";
+            if (Password == null)
+                return;
             for (int i = 0; i < Password.Length; i++)
                 Text += PasswordChar;
         }

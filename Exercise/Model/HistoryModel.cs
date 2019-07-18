@@ -130,11 +130,22 @@ namespace Exercise.Model
             {
                 Records = new IList<Record>[0];
             }
-            HistoryData records = await service.getRecords(new HistoryData.Range() { Page = page + 1, Size = PAGE_SIZE });
-            if (Records == null || Records.Length == 0)
-                Records = new IList<Record>[(records.TotalCount + PAGE_SIZE - 1) / PAGE_SIZE];
-            Records[page] = records.SubmitRecordList;
-            RaisePropertyChanged("Records");
+            try
+            {
+                HistoryData records = await service.getRecords(new HistoryData.Range() { Page = page + 1, Size = PAGE_SIZE });
+                if (Records == null || Records.Length == 0)
+                    Records = new IList<Record>[(records.TotalCount + PAGE_SIZE - 1) / PAGE_SIZE];
+                Records[page] = records.SubmitRecordList;
+                RaisePropertyChanged("Records");
+            }
+            catch (Exception e)
+            {
+                if (Records.Length > 0)
+                    Records[page] = null;
+                else
+                    Records = null;
+                throw e;
+            }
         }
 
         public async Task ModifyRecord(Record record, string old)

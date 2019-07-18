@@ -35,6 +35,11 @@ namespace Account.ViewModel
 
         private AccountModel accountModel = AccountModel.Instance;
 
+        static AccountViewModel()
+        {
+            AccountModel.Instance.PropertyChanged += AccountModel_PropertyChanged_Static;
+        }
+
         public AccountViewModel()
         {
             LoginData = AccountModel.Instance.LoginData;
@@ -70,7 +75,7 @@ namespace Account.ViewModel
 
         private static void AccountModel_PropertyChanged_Static(object sender, System.ComponentModel.PropertyChangedEventArgs e)
         {
-            if (e.PropertyName == "Account")
+            if (e.PropertyName == "Account" && AccountModel.Instance.Account.Ticket == null)
             {
                 new AccountWindow() { Owner = Application.Current.MainWindow }.Show();
             }

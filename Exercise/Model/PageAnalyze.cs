@@ -152,12 +152,10 @@ namespace Exercise.Model
         public bool Next()
         {
             int n = Exceptions.IndexOf(SelectedException);
-            if (++n < Exceptions.Count)
-            {
-                SelectedException = Exceptions[n];
-                return true;
-            }
-            return false;
+            SelectedException = Exceptions.Skip(n + 1).Where(e => e.HasException).FirstOrDefault();
+            if (SelectedException == null)
+                SelectedException = Exceptions.Take(n).Where(e => e.HasException).FirstOrDefault();
+            return SelectedException != null;
         }
 
         private static List<ItemException> SelectExceptions(PageData data, AnswerData answer, AreaType type)

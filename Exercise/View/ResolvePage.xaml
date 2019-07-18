@@ -68,6 +68,8 @@
         <local:TreeViewEx Grid.Column="0" x:Name="treeView" Margin="32, 0, 33, 0" 
                           BorderThickness="0" Background="{x:Null}"
                           ItemsSource="{Binding Exceptions}"
+                          ScrollViewer.HorizontalScrollBarVisibility="Hidden"
+                          ScrollViewer.VerticalScrollBarVisibility="Hidden"
                           ItemContainerStyle="{StaticResource TreeViewItemStyle}">
             <pb:PushBindingManager.PushBindings>
                 <pb:PushBinding TargetProperty="SelectedItem" Path="Selection"/>
@@ -82,7 +84,7 @@
                     </StackPanel>
                     <HierarchicalDataTemplate.ItemTemplate>
                         <DataTemplate>
-                            <TextBlock FontSize="14" Foreground="#FF2D4A66" Margin="0, 9, 0, 9"  Width="156" TextTrimming="CharacterEllipsis" TextWrapping="NoWrap"
+                            <TextBlock FontSize="14" Foreground="#FF2D4A66" Margin="27, 9, 0, 9"  Width="156" TextTrimming="CharacterEllipsis" TextWrapping="NoWrap"
                                        Text="{Binding Converter={StaticResource ExceptionConverter}, ConverterParameter=Tree}" >
 
                                 <TextBlock.ToolTip>

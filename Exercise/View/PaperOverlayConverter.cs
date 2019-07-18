@@ -30,10 +30,10 @@ namespace Exercise.View
             else if ((string)parameter == "Exception")
             {
                 radixs = 2;
-                QuestionException exception = value as QuestionException;
+                ItemException exception = value as ItemException;
                 if (exception == null)
                     return null;
-                locations = exception.Answer.ItemInfo.Select(i => i.ItemLocation);
+                locations = Enumerable.Repeat(exception.Answer.ItemLocation, 1);
             }
             else
             {

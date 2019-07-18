@@ -7,14 +7,14 @@ namespace Exercise.View
 {
     internal class TreeViewItemEx : TreeViewItem
     {
-        internal TreeView ParentTreeView
+        internal TreeViewEx ParentTreeView
         {
             get
             {
                 ItemsControl parent = ParentItemsControl;
                 while (parent != null)
                 {
-                    TreeView tv = parent as TreeView;
+                    TreeViewEx tv = parent as TreeViewEx;
                     if (tv != null)
                     {
                         return tv;
@@ -24,17 +24,6 @@ namespace Exercise.View
                 }
 
                 return null;
-            }
-        }
-
-        /// <summary>
-        ///     Returns the immediate parent TreeViewItem. Null if the parent is a TreeView.
-        /// </summary>
-        internal TreeViewItemEx ParentTreeViewItem
-        {
-            get
-            {
-                return ParentItemsControl as TreeViewItemEx;
             }
         }
 
@@ -71,9 +60,7 @@ namespace Exercise.View
                     }
                     if (Items.Count != 0)
                     {
-                        TreeViewItemEx parent = ParentTreeViewItem;
-                        if (parent != null)
-                            parent.SelectNext(this);
+                        SelectNext(ParentItemsControl, this);
                         return;
                     }
                 }
@@ -81,18 +68,19 @@ namespace Exercise.View
             base.OnItemsChanged(e);
         }
 
-        private void SelectNext(TreeViewItemEx child)
+        private static void SelectNext(ItemsControl parent, TreeViewItemEx child)
         {
-            int index = ItemContainerGenerator.IndexFromContainer(child);
-            if (++index < Items.Count)
+            int index = parent.ItemContainerGenerator.IndexFromContainer(child);
+            if (++index < parent.Items.Count)
             {
-                TreeViewItem next = ItemContainerGenerator.ContainerFromIndex(index) as TreeViewItem;
+                TreeViewItem next = parent.ItemContainerGenerator.ContainerFromIndex(index) as TreeViewItem;
                 if (next != null)
                 {
                     next.IsSelected = true;
                     return;
                 }
-                ParentTreeViewItem.SelectNext(this);
+                child = (parent as TreeViewItemEx);
+                SelectNext(child.ParentItemsControl, child);
             }
         }
 

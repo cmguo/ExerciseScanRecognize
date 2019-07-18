@@ -57,7 +57,7 @@ namespace Exercise.View.Resolve
         private void Score_Click(object sender, RoutedEventArgs e)
         {
             object n = (sender as FrameworkElement).DataContext;
-            analyze.SelectedQuestion.InputNumber((n is int) ? (int)n : (int?)null);
+            analyze.SelectedException.InputNumber((n is int) ? (int)n : (int?)null);
         }
 
         private void Confirm_Click(object sender, RoutedEventArgs e)

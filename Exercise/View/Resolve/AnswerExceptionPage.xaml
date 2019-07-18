@@ -26,8 +26,8 @@
             <cv:NullVisibleConverter x:Key="NullVisibleConverter" />
             <cv:ToStringConverter x:Key="ToStringConverter" />
             
-            <DataTemplate x:Key="QuestionItem">
-                <tal:TalRatio Content="{Binding Answer.QuestionId}"
+            <DataTemplate x:Key="ExceptionItem">
+                <tal:TalRatio Content="{Binding Name}"
                               IsChecked="{Binding IsSelected, RelativeSource={RelativeSource AncestorType=ListViewItem}}"/>
             </DataTemplate>
 
@@ -48,8 +48,8 @@
         </Grid.RowDefinitions>
 
         <ListView Grid.Row="0" BorderThickness="0" Background="Transparent" 
-                  ItemsSource="{Binding Questions}" ItemTemplate="{StaticResource QuestionItem}"
-                  SelectedItem="{Binding SelectedQuestion}" SelectionMode="Single">
+                  ItemsSource="{Binding Exceptions}" ItemTemplate="{StaticResource ExceptionItem}"
+                  SelectedItem="{Binding SelectedException}" SelectionMode="Single">
             <ListView.ItemsPanel>
                 <ItemsPanelTemplate>
                     <WrapPanel Margin="-8, -8, 0, 0" IsItemsHost="True" Orientation="Horizontal" Width="220" />
@@ -61,8 +61,8 @@
                    Text="{Binding DataContext, ElementName=Page, Converter={StaticResource ExceptionConverter}, ConverterParameter=Message}"/>
         
         <ListView Grid.Row="2" x:Name="answers" BorderThickness="0"  Margin="0, 14, 0, 24" Background="Transparent"
-                  ItemsSource="{Binding SelectedQuestion.Answers}" ItemTemplate="{StaticResource AnswerItem}"
-                  SelectedItem="{Binding SelectedQuestion.SelectedAnswer}" SelectionMode="Single">
+                  ItemsSource="{Binding SelectedException.Answers}" ItemTemplate="{StaticResource AnswerItem}"
+                  SelectedItem="{Binding SelectedException.SelectedAnswer}" SelectionMode="Single">
             <ListView.ItemsPanel>
                 <ItemsPanelTemplate>
                     <StackPanel Margin="-8, -8, 0, 0" IsItemsHost="True" Orientation="Horizontal" />
@@ -72,7 +72,7 @@
 
         <StackPanel Grid.Row="2" x:Name="correct" Orientation="Vertical" Margin="0, 14, 0, 0">
             <StackPanel Orientation="Horizontal">
-                <TextBox Text="{Binding SelectedQuestion.SelectedAnswer}" 
+                <TextBox Text="{Binding SelectedException.SelectedAnswer, UpdateSourceTrigger=PropertyChanged}" 
                          Width="72" Height="32" FontSize="14" Foreground="#FF2D4A66" VerticalContentAlignment="Center" />
                 <TextBlock Text="分" FontSize="14" Foreground="#FF2D4A66" VerticalAlignment="Center" Margin="8, 0, 0, 0"/>
             </StackPanel>
@@ -99,7 +99,7 @@
             </ListView>
             
             <StackPanel Grid.Row="2" Margin="0, 4, 0, 4" Orientation="Horizontal"
-                        Visibility="{Binding SelectedQuestion.SelectedAnswer, Converter={StaticResource NullVisibleConverter}}">
+                        Visibility="{Binding SelectedException.SelectedAnswer, Converter={StaticResource NullVisibleConverter}}">
                 <Image Width="12" Height="12" Source="{svgc:SvgImage Source=/Icons/bad.svg}" />
                 <TextBlock Margin="4, 0, 0, 0" FontSize="11" Foreground="#ffff6767"  Text="请为本题打分"/>
             </StackPanel>

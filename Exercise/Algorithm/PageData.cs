@@ -35,6 +35,7 @@ namespace Exercise.Algorithm
 
         public class Question
         {
+            public int Index { get; set; }
             public string QuestionId { get; set; }
             public Location QuestionLocation { get; set; } // 相对页面左上角黑色定位块左上点的位置信息，相对位置
             //public int NumOfRectsToDetectInQuestion { get; set; }

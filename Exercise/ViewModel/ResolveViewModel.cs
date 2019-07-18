@@ -62,35 +62,6 @@ namespace Exercise.ViewModel
             }
         }
 
-        public IList<ClassInfo> Classes => SchoolModel.Instance.Classes;
-
-        private ClassInfo _SelectedClass;
-        public ClassInfo SelectedClass
-        {
-            get => _SelectedClass;
-            set
-            {
-                _SelectedClass = value;
-                StudentFilter = null;
-            }
-        }
-
-        public IList<StudentInfo> FilteredStudents { get; private set; }
-        private string _StudentFilter;
-        public string StudentFilter
-        {
-            get => _StudentFilter;
-            set
-            {
-                _StudentFilter = value;
-                RaisePropertyChanged("StudentFilter");
-                FilteredStudents = (value == null || value.Length == 0)
-                    ? SelectedClass.Students
-                    : SelectedClass.Students.Where(s => s.ToString().Contains(value)).ToList();
-                RaisePropertyChanged("FilteredStudents");
-            }
-        }
-
         #endregion
 
         #region Commands

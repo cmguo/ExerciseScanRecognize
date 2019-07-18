@@ -75,8 +75,6 @@ namespace Exercise.Model
             }
         }
 
-        private static readonly Page sEmptyPage = new Page();
-
         public string SavePath { get; private set; }
         public ObservableCollection<ExceptionList> Exceptions { get; private set; }
 
@@ -179,6 +177,11 @@ namespace Exercise.Model
             Clear();
             await schoolModel.Load(path);
             ExerciseData = await JsonPersistent.Load<ExerciseData>(path + "\\exercise.json");
+            foreach (StudentInfo s in schoolModel.AllClasses.SelectMany(c => c.Students))
+            {
+                if (s.AnswerPages != null)
+                    PageStudents.Add(s);
+            }
             int n = (ExerciseData.Pages.Count + 1) / 2;
             emptyPages = new List<Page>(n);
             while (n-- > 0)
@@ -292,6 +295,8 @@ namespace Exercise.Model
         {
             if (e.Action == NotifyCollectionChangedAction.Add)
             {
+                if (ExerciseData == null)
+                    return;
                 if (targetException != null)
                 {
                     ReplacePage(e.NewItems[0] as Page);
@@ -420,7 +425,7 @@ namespace Exercise.Model
             int pageIndex = page.PageIndex / 2;
             if (page.Student.AnswerPages[pageIndex] == page)
             {
-                page.Student.AnswerPages[pageIndex] = sEmptyPage;
+                page.Student.AnswerPages[pageIndex] = Page.EmptyPage;
                 if (type != RemoveType.DuplexPage && page.Another != null)
                 {
                     page.Student.AnswerPages[pageIndex] = page.Another;

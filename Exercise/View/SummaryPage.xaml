@@ -158,7 +158,7 @@
                         <DataGrid.Columns>
                             <DataGridTextColumn Header="班级" Width="196" Binding="{Binding Name}"/>
                             <DataGridTextColumn Header="回收试卷（份）" Width="160" Binding="{Binding Result.Count}" />
-                            <DataGridTextColumn Header="人数（人）" Width="*" Binding="{Binding StudentCount}" />
+                            <DataGridTextColumn Header="总人数（人）" Width="*" Binding="{Binding StudentCount}" />
                         </DataGrid.Columns>
                     </DataGrid>
                 </Grid>

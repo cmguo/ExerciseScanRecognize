@@ -52,7 +52,13 @@ namespace Exercise.ViewModel
 
         public SchoolViewModel()
         {
-            Classes = schoolModel.AllClasses.OrderBy(c => c.ClassName).ToList();
+            ClassInfo all = new ClassInfo()
+            {
+                ClassName = "全部班级",
+                Students = schoolModel.AllClasses.SelectMany(c => c.Students).ToList()
+            };
+            Classes = Enumerable.Repeat(all, 1).Concat(schoolModel.AllClasses.OrderBy(c => c.ClassName)).ToList();
+            SelectedClass = all;
         }
 
     }

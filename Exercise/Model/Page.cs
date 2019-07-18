@@ -12,6 +12,9 @@ namespace Exercise.Model
 {
     public class Page
     {
+
+        public static readonly Page EmptyPage = new Page();
+
         public int TotalIndex { get; set; }
         public int ScanBatch { get; set; }
         public int ScanIndex { get; set; }

@@ -195,6 +195,7 @@ namespace Exercise.ViewModel
         private async Task Return(object obj)
         {
             await exerciseModel.CancelScanOne();
+            await exerciseModel.Save();
             (obj as System.Windows.Controls.Page).NavigationService.Navigate(new SummaryPage());
         }
 

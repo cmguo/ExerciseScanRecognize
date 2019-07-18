@@ -53,7 +53,10 @@ namespace Excecise.View
         {
             Page page = e.Content as Page;
             if (lastPage != null)
+            {
                 UnLoadNavButtons(lastPage);
+                RestoreNavCommands(lastPage);
+            }
             LoadNavButtons(page);
             if (IsLoaded)
                 SetNavCommands(page);
@@ -148,6 +151,19 @@ namespace Excecise.View
                             arg = e;
                         e.CanExecute = b.Command.CanExecute(arg);
                     }));
+                }
+            }
+        }
+
+        public void RestoreNavCommands(Page page)
+        {
+            TitleCommandCollection commands = TitleBarManager.GetCommands(page);
+            if (commands != null)
+            {
+                foreach (TitleCommand b in commands)
+                {
+                    ButtonBase button = GetNavButton(b.Name);
+                    button.CommandBindings.Clear();
                 }
             }
         }

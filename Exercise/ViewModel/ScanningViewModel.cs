@@ -112,6 +112,8 @@ namespace Exercise.ViewModel
 
         private async Task Finish(object obj)
         {
+            if (Error != 0)
+                return;
             Update();
             System.Windows.Controls.Page page = obj as System.Windows.Controls.Page;
             FrameworkElement element = page.Resources["ClassDetail"] as FrameworkElement;

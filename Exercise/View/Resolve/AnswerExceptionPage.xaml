@@ -25,9 +25,11 @@
             <resolve:ExceptionConverter x:Key="ExceptionConverter" />
             <cv:NullVisibleConverter x:Key="NullVisibleConverter" />
             <cv:ToStringConverter x:Key="ToStringConverter" />
+            <cv:BooleanBrushConverter x:Key="BackgroundConverter" TrueValue="Transparent" FalseValue="#FF10D900" />
             
             <DataTemplate x:Key="ExceptionItem">
                 <tal:TalRatio Content="{Binding Name}"
+                              Background="{Binding HasException, Converter={StaticResource BackgroundConverter}}"
                               IsChecked="{Binding IsSelected, RelativeSource={RelativeSource AncestorType=ListViewItem}}"/>
             </DataTemplate>
 

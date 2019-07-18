@@ -19,8 +19,8 @@ namespace Exercise.Algorithm
         public int ImgWidth { get; set; }
         public int ImgHeight { get; set; }
 
-        //public IList<Marker> PaperMarkers { get; set; }
-        //public IList<Marker> AreaMarkers { get; set; }
+        public IList<Marker> PaperMarkers { get; set; }
+        public IList<Marker> AreaMarkers { get; set; }
         public IList<Area> AreaInfo { get; set; }
 
 

@@ -1,17 +1,13 @@
 ﻿using Base.Misc;
 using Base.Mvvm;
-using Exercise.Service;
 using Exercise.ViewModel;
 using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Globalization;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
 using System.Windows.Data;
-using System.Windows.Media;
-using TalBase.View;
 using static Exercise.Service.HistoryData;
 
 namespace Exercise.View
@@ -27,6 +23,12 @@ namespace Exercise.View
             InitializeComponent();
             DataContext = FindResource("ViewModel");
             dataGrid.CellEditEnding += DataGrid_CellEditEnding;
+            dataGrid.MouseLeftButtonDown += DataGrid_MouseLeftButtonDown;
+        }
+
+        private void DataGrid_MouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        {
+            dataGrid.CommitEdit();
         }
 
         private void ButtonDetail_Click(object sender, System.Windows.RoutedEventArgs e)

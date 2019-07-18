@@ -35,6 +35,13 @@ namespace Exercise.Service
         [JsonIgnore]
         public IList<Page> AnswerPages { get; set; }
 
+        public IList<bool> EmptyPages
+        {
+            get => AnswerPages == null ? null 
+                : AnswerPages.Select(p => p == Page.EmptyPage).ToList();
+            set => AnswerPages = value == null ? null : value.Select(p => p ? Page.EmptyPage : null).ToList();
+        }
+
         public override string ToString()
         {
             return StudentNo + " " + Name;

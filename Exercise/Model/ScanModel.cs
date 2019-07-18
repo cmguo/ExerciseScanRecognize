@@ -325,7 +325,14 @@ namespace Exercise.Model
             if (pages[0].Another == null)
                 ReleasePage(pages[1]);
             int drop = PageDropped.Count;
-            Pages.Add(pages[0]);
+            try
+            {
+                Pages.Add(pages[0]);
+            }
+            catch (Exception e)
+            {
+                Debug.WriteLine(e);
+            }
             while (drop < PageDropped.Count)
             {
                 Page p1 = PageDropped[drop++];

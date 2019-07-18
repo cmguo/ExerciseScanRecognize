@@ -1,11 +1,7 @@
 ﻿using System.Windows;
-using System.Linq;
-using TalBase.ViewModel;
-using static Exercise.Algorithm.AnswerData;
 using static Exercise.Model.ExerciseModel;
 using System.Collections.Generic;
 using Base.Misc;
-using System;
 using Exception = Exercise.Model.ExerciseModel.Exception;
 using TalBase.View;
 using Exercise.Model;

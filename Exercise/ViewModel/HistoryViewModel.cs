@@ -1,12 +1,9 @@
 ﻿using Base.Mvvm;
 using Exercise.Model;
-using Exercise.Service;
 using Exercise.View;
-using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Threading.Tasks;
-using System.Windows;
 using TalBase.ViewModel;
 using static Exercise.Service.HistoryData;
 

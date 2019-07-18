@@ -1,12 +1,8 @@
-﻿using Base.Misc;
-using Base.Mvvm;
+﻿using Base.Mvvm;
 using Exercise.Model;
 using Exercise.Service;
 using Exercise.View;
-using MyToolkit.Collections;
-using Panuon.UI;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;

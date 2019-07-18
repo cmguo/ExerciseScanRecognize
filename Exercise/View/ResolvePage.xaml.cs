@@ -1,12 +1,9 @@
 ﻿using Exercise.ViewModel;
 using System;
-using System.Collections.Generic;
 using System.Globalization;
-using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
-using System.Windows.Media;
 using static Exercise.Model.ExerciseModel;
 using Exception = Exercise.Model.ExerciseModel.Exception;
 
@@ -34,7 +31,7 @@ namespace Exercise.View
             {
                 if (ex.Type == ExceptionType.AnalyzeException && ex.Page.Answer != null)
                 {
-                    ButtonFace2_Click(this, null);
+                    face.IsChecked = true;
                     return;
                 }
                 face.IsChecked = false;

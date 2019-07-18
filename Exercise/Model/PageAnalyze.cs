@@ -6,7 +6,6 @@ using System.Collections.Generic;
 using System.Linq;
 using TalBase.Model;
 using static Exercise.Model.ExerciseModel;
-using Exception = Exercise.Model.ExerciseModel.Exception;
 
 namespace Exercise.Model
 {

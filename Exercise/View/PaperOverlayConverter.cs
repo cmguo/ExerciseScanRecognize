@@ -8,7 +8,6 @@ using System.Windows;
 using System.Windows.Data;
 using System.Windows.Media;
 using static Exercise.Model.PageAnalyze;
-using Exception = Exercise.Model.ExerciseModel.Exception;
 
 namespace Exercise.View
 {

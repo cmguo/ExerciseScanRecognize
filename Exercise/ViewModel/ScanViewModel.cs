@@ -3,7 +3,6 @@ using Exercise.Model;
 using System;
 using System.Threading.Tasks;
 using TalBase.ViewModel;
-using Panuon.UI;
 using TalBase.View;
 using System.Windows;
 using System.Diagnostics;

@@ -1,12 +1,7 @@
 ﻿using Exercise.Model;
 using Exercise.Service;
-using Exercise.View;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
-using System.Windows;
-using TalBase.View;
 
 namespace Exercise.ViewModel
 {

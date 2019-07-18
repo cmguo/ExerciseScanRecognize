@@ -1,7 +1,6 @@
 ﻿using Base.Mvvm;
 using Exercise.Model;
 using Exercise.View;
-using Panuon.UI;
 using System.Windows;
 using System.Windows.Input;
 using TalBase.View;

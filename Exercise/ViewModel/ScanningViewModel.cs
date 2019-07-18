@@ -1,12 +1,8 @@
 ﻿using Base.Mvvm;
 using Exercise.Model;
 using Exercise.View;
-using System;
 using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Navigation;
-using TalBase.ViewModel;
-using Panuon.UI;
 using TalBase.View;
 
 namespace Exercise.ViewModel

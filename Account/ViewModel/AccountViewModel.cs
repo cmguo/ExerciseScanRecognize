@@ -65,7 +65,6 @@ namespace Account.ViewModel
             await AccountModel.Instance.Logout();
             Window window = Application.Current.MainWindow;
             window.Hide();
-            new AccountWindow().Show();
         }
 
         private void AccountModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)

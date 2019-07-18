@@ -6,6 +6,7 @@ using net.sf.jni4net;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 using System;
+using System.Diagnostics;
 using System.Threading.Tasks;
 
 namespace Exercise.Algorithm
@@ -39,7 +40,15 @@ namespace Exercise.Algorithm
 
         public AnswerData GetAnswer(PageData page)
         {
-            return analyze<AnswerData, PageData>(AnswerSheetAnalyze.METHOD_ANSWER_SHEET_ANALYZE, page);
+            try
+            {
+                return analyze<AnswerData, PageData>(AnswerSheetAnalyze.METHOD_ANSWER_SHEET_ANALYZE, page);
+            }
+            catch (Exception e)
+            {
+                Debug.WriteLine(e);
+                throw new Exception("识别算法异常", e);
+            }
         }
 
         private O analyze<O, I>(string method, I input)

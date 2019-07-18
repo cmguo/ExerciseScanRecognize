@@ -44,6 +44,7 @@ namespace TalBase.View
                 {
                     Type = ToastType.Warn;
                     value = value.Substring(1);
+                    SetValue(MessageProperty, value);
                 }
                 else
                 {

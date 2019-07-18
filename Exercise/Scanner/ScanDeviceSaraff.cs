@@ -1,11 +1,9 @@
-﻿using Exercise;
-using Saraff.Twain;
+﻿using Saraff.Twain;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Reflection;
 using System.Threading;
-using System.Threading.Tasks;
 using System.Windows;
 
 namespace Exercise.Scanning

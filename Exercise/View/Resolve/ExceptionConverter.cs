@@ -1,11 +1,6 @@
 ﻿using Exercise.Model;
 using System;
-using System.Collections.Generic;
 using System.Globalization;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Controls;
 using System.Windows.Data;
 using static Exercise.Model.ExerciseModel;
 using Page = Exercise.Model.Page;
@@ -35,10 +30,13 @@ namespace Exercise.View.Resolve
                         else
                             return String.Format("试卷{1} （第{0}页）", page.PageIndex + 1, ex.Index);
                     case ExceptionType.AnalyzeException:
-                        if (page.Student != null)
-                            return String.Format("{0} {1} （{2}-{3}页）", page.Student.StudentNo, page.Student.Name, page.PageIndex + 1, page.PageIndex + 2);
+                        string student = page.Student != null 
+                            ? String.Format("{0} {1}", page.Student.StudentNo, page.Student.Name)
+                            : String.Format("未识别学生{0}", ex.Index);
+                        if (page.Another != null)
+                            return String.Format("{0} （{1}-{2}页）", student, page.PageIndex + 1, page.PageIndex + 2);
                         else
-                            return String.Format("未识别学生{2} （{0}-{1}页）", page.PageIndex + 1, page.PageIndex + 2, ex.Index);
+                            return String.Format("{0} （第{1}页）", student, page.PageIndex + 1);
                     case ExceptionType.AnswerException:
                     case ExceptionType.CorrectionException:
                         return String.Format("{0} {1} （第{2}页）", page.Student.StudentNo, page.Student.Name, page.PageIndex + 1);
@@ -87,6 +85,8 @@ namespace Exercise.View.Resolve
                     return "本题的得分为：";
                 else if (page.Exception != null)
                     return page.Exception.Message;
+                else if (page.Another != null && page.Another.Exception != null)
+                    return page.Another.Exception.Message;
                 else if (ex.Type == ExceptionType.PageCodeMissMatch)
                     return "该试卷非本校试卷";
                 else

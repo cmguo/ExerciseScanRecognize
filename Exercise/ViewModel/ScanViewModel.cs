@@ -80,7 +80,7 @@ namespace Exercise.ViewModel
             await scanModel.CancelScan();
         }
 
-        protected virtual bool Continue(object obj)
+        protected bool Check(object obj)
         {
             try
             {
@@ -97,7 +97,12 @@ namespace Exercise.ViewModel
             {
                 result = PopupDialog.Show(obj as UIElement, "TODO", "扫描仪里面没有纸张，请添加试卷。", 0, "确定", "取消");
             }
-            if (result != 0)
+            return result == 0;
+        }
+
+        protected virtual bool Continue(object obj)
+        {
+            if (!Check(obj))
                 return false;
             scanModel.Scan();
             return true;

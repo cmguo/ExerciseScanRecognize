@@ -115,12 +115,7 @@ namespace Exercise.ViewModel
 
         private async Task Rescan(object obj)
         {
-            int result = 0;
-            while (result == 0 && !scanModel.FeederLoaded)
-            {
-                result = PopupDialog.Show(obj as UIElement, "TODO", "扫描仪里面没有纸张，请添加试卷。", 0, "确定", "取消");
-            }
-            if (result != 0)
+            if (!Check(obj))
                 return;
             Exception ex = SelectedException;
             await exerciseModel.ScanOne(ex);

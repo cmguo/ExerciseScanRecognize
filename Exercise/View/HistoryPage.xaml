@@ -22,6 +22,7 @@
                 <ResourceDictionary Source="pack://application:,,,/TalBase;component/Themes/Generic.xaml" />
                 <ResourceDictionary Source="../Themes/DataGrid.xaml" />
                 <ResourceDictionary Source="../Themes/ButtonList.xaml" />
+                <ResourceDictionary Source="../Themes/Generic.xaml" />
             </ResourceDictionary.MergedDictionaries>
 
             
@@ -47,7 +48,12 @@
             </Style>
 
             <DataTemplate x:Key="DataTemplate">
-                <TextBlock Text="{Binding Name}" FontSize="14" Foreground="#FF2D4A66"/>
+                <TextBlock Text="{Binding Name}" FontSize="14" Foreground="#FF2D4A66" TextTrimming="CharacterEllipsis" TextWrapping="NoWrap" Width="198">
+                    <TextBlock.ToolTip>
+                        <ToolTip Style="{DynamicResource TooltipStyle}"  Content="{Binding Name}" Placement="Bottom"
+                                              Width="198" MaxWidth="198"/>
+                    </TextBlock.ToolTip>
+                </TextBlock>
             </DataTemplate>
 
             <DataTemplate x:Key="EditingTemplate">
@@ -128,11 +134,25 @@
 
         <DataGrid Grid.Row="2" x:Name="dataGrid" Margin="30, 16, 30, 0" Focusable="False" ScrollViewer.CanContentScroll="False"
                   ItemsSource="{Binding Records}">
+   
             <DataGrid.Columns>
                 <DataGridTemplateColumn Header="试卷名称" IsReadOnly="False" Width="230" 
                                         CellTemplate="{StaticResource DataTemplate}"
-                                        CellEditingTemplate="{StaticResource EditingTemplate}"/>
-                <DataGridTextColumn Header="扫描统计" IsReadOnly="True" Binding="{Binding DetailList, Converter={StaticResource HistroyDetailConverter}}" Width="480"/>
+                                        CellEditingTemplate="{StaticResource EditingTemplate}">
+                </DataGridTemplateColumn>
+                <DataGridTemplateColumn Header="扫描统计" IsReadOnly="True" Width="480">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="{Binding DetailList, Converter={StaticResource HistroyDetailConverter}}" TextTrimming="CharacterEllipsis" TextWrapping="NoWrap" Width="448">
+                                <TextBlock.ToolTip>
+                                    <ToolTip Style="{DynamicResource TooltipStyle}"  Content="{Binding DetailList, Converter={StaticResource HistroyDetailConverter}}"
+                                              Width="480" MaxWidth="448"/>
+                                </TextBlock.ToolTip>
+                            </TextBlock>
+                        </DataTemplate>
+
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
                 <DataGridTextColumn Header="扫描时间" IsReadOnly="True" Binding="{Binding DataTime, StringFormat={}{0:yyyy.MM.dd - HH:mm}, Mode=OneWay}" Width="178"/>
                 <DataGridTemplateColumn Header="操作" Width="*">
                     <DataGridTemplateColumn.CellTemplate>

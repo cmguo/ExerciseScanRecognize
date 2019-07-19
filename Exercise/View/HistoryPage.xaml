@@ -23,6 +23,7 @@
                 <ResourceDictionary Source="../Themes/DataGrid.xaml" />
                 <ResourceDictionary Source="../Themes/ButtonList.xaml" />
                 <ResourceDictionary Source="../Themes/Generic.xaml" />
+                <ResourceDictionary Source="../Themes/ScrollBar.xaml" />
             </ResourceDictionary.MergedDictionaries>
 
             
@@ -82,7 +83,7 @@
         <TextBlock Grid.Row="0" FontSize="16" Foreground="#FF2D4A66" Margin="30, 28, 0, 0" Text="扫描记录管理"/>
 
         <ListView Grid.Row="1" Margin="30, 16, 30, 0" BorderThickness="0" ItemsSource="{Binding LocalRecords}"
-                  MaxHeight="110" HorizontalContentAlignment="Stretch">
+                  MaxHeight="215" HorizontalContentAlignment="Stretch" ScrollViewer.VerticalScrollBarVisibility="Hidden">
             <ListBox.ItemContainerStyle>
                 <Style TargetType="{x:Type ListViewItem}">
                     <Setter Property="Focusable" Value="False"/>
@@ -171,7 +172,7 @@
 
         <ListView Grid.Row="3" x:Name="pageBar" ItemsSource="{Binding Pages}" 
                   BorderThickness="0" Padding="0" HorizontalAlignment="Right" Margin="0, 0, 30, 30"
-                  SelectedItem="{Binding PageIndex}" SelectionMode="Single">
+                  SelectedItem="{Binding PageIndex}" SelectionMode="Single" ItemContainerStyle="{DynamicResource ButtonListStyle}" Style="{x:Null}">
             <ListView.ItemsPanel>
                 <ItemsPanelTemplate>
                     <WrapPanel Margin="-8, 0, 0, 0" IsItemsHost="True" Orientation="Horizontal" />

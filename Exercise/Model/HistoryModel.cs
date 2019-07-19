@@ -31,7 +31,9 @@ namespace Exercise.Model
 
         public ObservableCollection<Record> LocalRecords { get; private set; }
 
-        public IList<Record>[] Records { get; private set; }
+        public IList<Record> Records { get; private set; }
+
+        public int PageCount { get; private set; }
 
         private static readonly string ROOT_PATH = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
         private static readonly int PAGE_SIZE = 10;
@@ -77,7 +79,7 @@ namespace Exercise.Model
         {
             LocalRecords.Clear();
             await LoadLocal();
-            await LoadMore(0);
+            await LoadPage(0);
         }
 
         private async Task LoadLocal()
@@ -116,35 +118,24 @@ namespace Exercise.Model
 
         private static readonly IList<Record> empty = new List<Record>();
 
-        public async Task LoadMore(int page)
+        public async Task LoadPage(int page)
         {
-            if (Records != null)
+            HistoryData records = await service.getRecords(new HistoryData.Range() { Page = page + 1, Size = PAGE_SIZE });
+            int pageCount = 0;
+            if (records != null)
             {
-                if (page >= Records.Length)
-                    return;
-                if (Records[page] != null)
-                    return;
-                Records[page] = empty;
+                pageCount = (records.TotalCount + PAGE_SIZE - 1) / PAGE_SIZE;
+                Records = records.SubmitRecordList;
             }
             else
             {
-                Records = new IList<Record>[0];
+                Records = null;
             }
-            try
+            RaisePropertyChanged("Records");
+            if (pageCount != PageCount)
             {
-                HistoryData records = await service.getRecords(new HistoryData.Range() { Page = page + 1, Size = PAGE_SIZE });
-                if (Records == null || Records.Length == 0)
-                    Records = new IList<Record>[(records.TotalCount + PAGE_SIZE - 1) / PAGE_SIZE];
-                Records[page] = records.SubmitRecordList;
-                RaisePropertyChanged("Records");
-            }
-            catch (Exception e)
-            {
-                if (Records.Length > 0)
-                    Records[page] = null;
-                else
-                    Records = null;
-                throw e;
+                PageCount = pageCount;
+                RaisePropertyChanged("PageCount");
             }
         }
 
@@ -157,7 +148,7 @@ namespace Exercise.Model
             catch (Exception e)
             {
                 record.Name = old;
-                throw e;
+                throw;
             }
         }
     }

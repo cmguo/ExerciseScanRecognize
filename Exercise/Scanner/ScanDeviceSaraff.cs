@@ -1,9 +1,11 @@
-﻿using Saraff.Twain;
+﻿using Base.Mvvm;
+using Saraff.Twain;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Reflection;
 using System.Threading;
+using System.Threading.Tasks;
 using System.Windows;
 
 namespace Exercise.Scanning
@@ -139,6 +141,23 @@ namespace Exercise.Scanning
              twain32.OpenDSM();
         }
 
+        public void DetectSource()
+        {
+            for (int i = 0; i < SourceList.Length; ++i)
+            {
+                try
+                {
+                    twain32.CloseDataSource();
+                    twain32.SourceIndex = i;
+                    twain32.OpenDataSource();
+                    break;
+                }
+                catch
+                {
+                }
+            }
+        }
+
         public void OpenDataSource()
         {
             //twain32.SelectSource();
@@ -239,7 +258,7 @@ namespace Exercise.Scanning
         private void Twain32_XferDone(object sender, Twain32.XferDoneEventArgs e)
         {
             Debug.WriteLine("Twain32_XferDone");
-            CheckStatus(e);
+            //CheckStatus(e);
         }
 
         private void Twain32_FileXferEvent(object sender, Twain32.FileXferEventArgs e)

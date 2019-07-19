@@ -39,7 +39,6 @@ namespace Exercise.Model
         {
             get
             {
-                scanDevice.Open();
                 return scanDevice.SourceList;
             }
         }
@@ -140,11 +139,19 @@ namespace Exercise.Model
             scanDevice.ScanError += ScanDevice_ScanError;
             scanDevice.ScanCompleted += ScanDevice_ScanCompleted;
             IsCompleted = true;
+            scanDevice.Open();
+            BackgroudWork.Execute(DetectSource);
         }
 
         public void SetSavePath(string path)
         {
             savePath = path;
+        }
+
+        private async Task DetectSource()
+        {
+            await Task.Run(() => scanDevice.DetectSource());
+            RaisePropertyChanged("SourceIndex");
         }
 
         public void Scan(short count = -1)
@@ -167,7 +174,7 @@ namespace Exercise.Model
             catch (Exception e)
             {
                 IsScanning = false;
-                throw e;
+                throw;
             }
         }
 
@@ -497,6 +504,12 @@ namespace Exercise.Model
         {
             Debug.WriteLine("ScanDevice_ScanCompleted");
             IsScanning = false;
+            if (lastPage != null)
+            {
+                File.Delete(lastPage.PagePath);
+                lastPage = null;
+                --readIndex;
+            }
             if (Pages.Count * 2 == readIndex)
                 IsCompleted = true;
         }

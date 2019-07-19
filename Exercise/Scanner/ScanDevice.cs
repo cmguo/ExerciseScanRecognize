@@ -36,6 +36,8 @@ namespace Exercise.Scanning
 
         void Open();
 
+        void DetectSource();
+
         void Scan(short count);
 
         void CancelScan();

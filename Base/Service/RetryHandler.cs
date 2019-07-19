@@ -33,7 +33,7 @@ namespace Base.Service
                 catch (Exception e)
                 {
                     if (t == 0 || !Recoverable(e))
-                        throw e;
+                        throw;
                     --t;
                     await Task.Delay(Retry.Interval);
                 }

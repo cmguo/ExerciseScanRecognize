@@ -9,7 +9,7 @@ namespace Exercise.Service
 
     public partial class HistoryData
     {
-        public long TotalCount { get; set; }
+        public int TotalCount { get; set; }
         public Record[] SubmitRecordList { get; set; }
 
 

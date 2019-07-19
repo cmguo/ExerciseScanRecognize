@@ -133,7 +133,7 @@
             </ListView.ItemTemplate>
         </ListView>
 
-        <DataGrid Grid.Row="2" x:Name="dataGrid" Margin="30, 16, 30, 0" Focusable="False"
+        <DataGrid Grid.Row="2" x:Name="dataGrid" Margin="30, 16, 30, 0"
                   ItemsSource="{Binding Records}">
    
             <DataGrid.Columns>

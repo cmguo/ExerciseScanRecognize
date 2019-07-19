@@ -165,21 +165,25 @@ namespace Exercise.Model
                 PageData.Question p = GetQuestion(data, q.QuestionId);
                 for (int i = 0; i < p.ItemInfo.Count; ++i)
                 {
-                    if (q.ItemInfo[i].StatusOfItem > 0)
+                    AnswerData.Item item = q.ItemInfo[i];
+                    if (item.StatusOfItem > 0)
                     {
-                        exceptions.Add(new ItemException(p, p.ItemInfo[i], q.ItemInfo[i]));
+                        exceptions.Add(new ItemException(p, p.ItemInfo[i], item));
                         continue;
                     }
+                    if (item.StatusOfItem < 0)
+                        continue;
                     if (type != AreaType.Answer)
                         continue;
-                    string score = String.Join(",", q.ItemInfo[i].AnalyzeResult
+                    string score = string.Join(",", item.AnalyzeResult
+                        .Where(r => r != null)
                         .Select(r => r.Value)
                         .Where(v => v != null));
                     float total = float.Parse(p.ItemInfo[i].TotalScore);
                     if (score.Length > 0 && float.Parse(score) > total)
                     {
-                        q.ItemInfo[i].StatusOfItem = 100;
-                        exceptions.Add(new ItemException(p, p.ItemInfo[i], q.ItemInfo[i]));
+                        item.StatusOfItem = 100;
+                        exceptions.Add(new ItemException(p, p.ItemInfo[i], item));
                     }
                 }
             }

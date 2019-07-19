@@ -93,7 +93,8 @@ namespace Exercise.View
             Exception ex = value as Exception;
             if (ex != null && ex.Page.Another != null
                 && ex.Type != ExceptionType.AnswerException
-                && ex.Type != ExceptionType.CorrectionException)
+                && ex.Type != ExceptionType.CorrectionException
+                && ex.Type != ExceptionType.PageLost)
                 return Visibility.Visible;
             else
                 return Visibility.Collapsed;

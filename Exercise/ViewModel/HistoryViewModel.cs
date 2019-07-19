@@ -18,17 +18,9 @@ namespace Exercise.ViewModel
 
         public ObservableCollection<Record> LocalRecords => historyModel.LocalRecords;
 
-        private IList<Record> _Records;
-        public IList<Record> Records
-        {
-            get => _Records;
-            set
-            {
-                _Records = value;
-                RaisePropertyChanged("Records");
-            }
-        }
+        public IList<Record> Records => historyModel.Records;
 
+        public int PageCount => historyModel.PageCount;
 
         private int _PageIndex;
         public int PageIndex
@@ -38,21 +30,7 @@ namespace Exercise.ViewModel
             {
                 _PageIndex = value - 1;
                 SelectPage(_PageIndex);
-                RaisePropertyChanged("PageIndex");
-            }
-        }
-
-        private int _PageCount;
-        public int PageCount
-        {
-            get => _PageCount;
-            set
-            {
-                if (_PageCount == value)
-                    return;
-                _PageCount = value;
-                RaisePropertyChanged("PageCount");
-                UpdatePageCount();
+                //RaisePropertyChanged("PageIndex");
             }
         }
 
@@ -83,10 +61,6 @@ namespace Exercise.ViewModel
             Pages = new ObservableCollection<object>();
             new RelayCommand((o) => historyModel.Load()).Execute(null);
             historyModel.PropertyChanged += HistoryModel_PropertyChanged;
-            if (historyModel.Records != null && historyModel.Records.Length > 0)
-            {
-                PageCount = historyModel.Records.Length;
-            }
             PageIndex = 1;
         }
 
@@ -135,22 +109,16 @@ namespace Exercise.ViewModel
 
         private void SelectPage(int value)
         {
-            if (historyModel.Records != null && _PageIndex < historyModel.Records.Length)
-                Records = historyModel.Records[_PageIndex];
-            new RelayCommand((o) => historyModel.LoadMore(value)).Execute(null);
+            BackgroudWork.Execute(() => historyModel.LoadPage(value));
         }
 
         private void HistoryModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
         {
-            if (e.PropertyName == "Records")
+            if (e.PropertyName == "PageCount")
             {
-                if (historyModel.Records != null)
-                {
-                    if (_PageIndex < historyModel.Records.Length)
-                        Records = historyModel.Records[_PageIndex];
-                    PageCount = historyModel.Records.Length;
-                }
+                UpdatePageCount();
             }
+            RaisePropertyChanged(e.PropertyName);
         }
 
         public async Task ModifyRecordName(Record record, string old)
@@ -163,18 +131,21 @@ namespace Exercise.ViewModel
             Pages.Clear();
             if (PageCount <= PAGE_BAR_COUNT)
             {
+                Pages.Add(false);
                 for (int i = 1; i <= PageCount; ++i)
                     Pages.Add(i);
+                Pages.Add(true);
                 pageEnd = PageCount;
             }
             else
             {
                 Pages.Add(false);
-                for (int i = 1; i <= 5; ++i)
+                for (int i = 1; i <= PAGE_BAR_COUNT; ++i)
                     Pages.Add(i);
                 Pages.Add(true);
-                pageEnd = 5;
+                pageEnd = PAGE_BAR_COUNT;
             }
+            RaisePropertyChanged("PageIndex");
         }
 
     }

@@ -32,10 +32,14 @@
                         <Trigger Property="IsChecked" Value="False">
                             <Setter TargetName="text1" Property="Background" Value="#FF4C84FF" />
                             <Setter TargetName="text2" Property="Background" Value="#B3000000" />
+                            <Setter TargetName="text1" Property="IsHitTestVisible" Value="False" />
+                            <Setter TargetName="text2" Property="IsHitTestVisible" Value="True" />
                         </Trigger>
                         <Trigger Property="IsChecked" Value="True">
                             <Setter TargetName="text1" Property="Background" Value="#B3000000" />
                             <Setter TargetName="text2" Property="Background" Value="#FF4C84FF" />
+                            <Setter TargetName="text1" Property="IsHitTestVisible" Value="True" />
+                            <Setter TargetName="text2" Property="IsHitTestVisible" Value="False" />
                         </Trigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>

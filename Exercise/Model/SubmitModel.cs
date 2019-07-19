@@ -135,7 +135,7 @@ namespace Exercise.Model
             {
                 task.Status = TaskStatus.Failed;
                 await task.Save();
-                throw e;
+                throw;
             }
         }
 

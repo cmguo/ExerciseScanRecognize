@@ -88,7 +88,7 @@ namespace Account.Model
             catch (Exception e)
             {
                 LoginData.Password = password;
-                throw e;
+                throw;
             }
             RaisePropertyChanged("Account");
             LoginData.Password = null;

@@ -103,7 +103,7 @@ namespace Base.Mvvm
                 if (!e1.IsHandled)
                     ActionException?.Invoke(this, e1);
                 if (!e1.IsHandled)
-                    throw e;
+                    throw;
             }
         }
 

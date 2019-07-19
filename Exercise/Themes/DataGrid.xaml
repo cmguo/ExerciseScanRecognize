@@ -23,7 +23,6 @@
         <Setter Property="RowStyle">
             <Setter.Value>
                 <Style TargetType="DataGridRow">
-                    <Setter Property="Focusable" Value="False"/>
                     <Setter Property="BorderBrush" Value="#FFEBEEF5"/>
                     <Setter Property="BorderThickness" Value="0,0,0,1"/>
                 </Style>
@@ -37,7 +36,6 @@
                     <Setter Property="Foreground" Value="#FF2D4A66"/>
                     <Setter Property="Background" Value="{x:Null}" />
                     <Setter Property="BorderBrush" Value="{x:Null}" />
-                    <Setter Property="Focusable" Value="{Binding Focusable, RelativeSource={RelativeSource AncestorType=DataGrid}}" />
                     <Style.Triggers>
                         <Trigger Property="IsSelected" Value="True">
                             <Setter Property="Background" Value="{x:Null}" />

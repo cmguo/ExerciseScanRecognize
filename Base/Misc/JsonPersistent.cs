@@ -9,24 +9,31 @@ namespace Base.Misc
     {
         public static async Task Save<T>(string path, T data)
         {
-            string json = JsonConvert.SerializeObject(data);
-            byte[] bytes = Encoding.UTF8.GetBytes(json);
-            using (FileStream fs = new FileStream(path, FileMode.Create, FileAccess.Write))
+            await Task.Run(() =>
             {
-                await fs.WriteAsync(bytes, 0, bytes.Length);
-            }
+                using (FileStream fs = new FileStream(path, FileMode.Create, FileAccess.Write))
+                using (StreamWriter writer = new StreamWriter(fs))
+                using (JsonTextWriter jsonWriter = new JsonTextWriter(writer))
+                {
+                    JsonSerializer ser = new JsonSerializer();
+                    ser.Serialize(jsonWriter, data);
+                    jsonWriter.Flush();
+                }
+            });
         }
 
         public static async Task<T> Load<T>(string path)
         {
-            string json = null;
-            using (FileStream fs = new FileStream(path, FileMode.Open, FileAccess.Read))
+            return await Task.Run(() =>
             {
-                byte[] bytes = new byte[fs.Length];
-                await fs.ReadAsync(bytes, 0, bytes.Length);
-                json = Encoding.UTF8.GetString(bytes);
-            }
-            return JsonConvert.DeserializeObject<T>(json);
+                using (FileStream fs = new FileStream(path, FileMode.Open, FileAccess.Read))
+                using (StreamReader reader = new StreamReader(fs))
+                using (JsonTextReader jsonReader = new JsonTextReader(reader))
+                {
+                    JsonSerializer ser = new JsonSerializer();
+                    return ser.Deserialize<T>(jsonReader);
+                }
+            });
         }
 
     }

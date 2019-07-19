@@ -1,7 +1,9 @@
 ﻿using Base.Mvvm;
 using Exercise.Model;
+using Exercise.Service;
 using Exercise.View;
 using System.Collections.ObjectModel;
+using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
 using TalBase.View;
@@ -153,6 +155,18 @@ namespace Exercise.ViewModel
                 int n = PopupDialog.Show(obj as FrameworkElement, title, message, 0, btn, "取消");
                 if (n == 1)
                     return;
+            }
+            if (exception.Type == ExceptionType.NoStudentCode && type == ResolveType.Resolve)
+            {
+                StudentInfo student = exerciseModel.PageStudents.Where(s => s.TalNo == exception.Page.StudentCode).FirstOrDefault();
+                if (student != null && student.AnswerPages[exception.Page.PageIndex / 2] != null
+                    && student.AnswerPages[exception.Page.PageIndex / 2] != Page.EmptyPage)
+                {
+                    int n = PopupDialog.Show(obj as FrameworkElement, "替换试卷确认", 
+                        "您放入的学生试卷已经有扫描结果，确认替换吗？", 0, "确认", "取消");
+                    if (n != 0)
+                        return;
+                }
             }
             exerciseModel.Resolve(exception, type);
             if (Exceptions.Count == 0)

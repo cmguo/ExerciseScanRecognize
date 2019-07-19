@@ -50,6 +50,7 @@ namespace Exercise.View
             DataGridRow row = UITreeHelper.GetParentOfType<DataGridRow>(sender as UIElement);
             DataGridCellsPresenter presenter = UITreeHelper.GetChildOfType<DataGridCellsPresenter>(row);
             DataGridCell cell = (DataGridCell)presenter.ItemContainerGenerator.ContainerFromIndex(0);
+            cell.Focus();
             cell.IsEditing = true;
             //dataGrid.BeginEdit();
             e.Handled = true;

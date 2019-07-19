@@ -118,6 +118,7 @@ namespace Exercise.ViewModel
         {
             if (e.PropertyName == "IsScanning"
                 || e.PropertyName == "IsCompleted"
+                || e.PropertyName == "SourceIndex"
                 || e.PropertyName == "IsPaused")
                 RaisePropertyChanged(e.PropertyName);
         }

@@ -4,40 +4,6 @@
     xmlns:local="clr-namespace:Exercise.View"
      xmlns:mu="clr-namespace:Panuon.UI;assembly=Panuon.UI"
     >
-    <mu:TrimmedTextBlockVisibilityConverter x:Key="TimmedVisibilityConverter"></mu:TrimmedTextBlockVisibilityConverter>
-
-    <Style TargetType="{x:Type local:PaperViewer}">
-        <Setter Property="Template">
-            <Setter.Value>
-                <ControlTemplate TargetType="{x:Type local:PaperViewer}">
-                    <Border Background="{TemplateBinding Background}"
-                            BorderBrush="{TemplateBinding BorderBrush}"
-                            BorderThickness="{TemplateBinding BorderThickness}">
-                    </Border>
-                </ControlTemplate>
-            </Setter.Value>
-        </Setter>
-    </Style>
-
-    <Style x:Key="TooltipStyle" TargetType="{x:Type ToolTip}">
-        <Setter Property="BorderThickness" Value="0"/>
-        <Setter Property="FontFamily" Value="{DynamicResource BaseFontFamily}"/>
-        <Setter Property="FontSize" Value="14"/>
-        <Setter Property="Foreground" Value="#FFFFFFFF"/>
-        <Setter Property="Visibility" Value="{Binding RelativeSource={RelativeSource Self}, Path=PlacementTarget, Converter={StaticResource TimmedVisibilityConverter}}"/>
-        <Setter Property="Template">
-            <Setter.Value>
-                <ControlTemplate TargetType="{x:Type ToolTip}">
-                    <Border CornerRadius="4" Background="#B3000000" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" MaxWidth="{TemplateBinding MaxWidth}">
-                        <TextBlock Padding="10" TextWrapping="Wrap" FontFamily="{TemplateBinding FontFamily}" FontSize="{TemplateBinding FontSize}" Width="{TemplateBinding Width}" MaxWidth="{TemplateBinding MaxWidth}"
-                                            Text="{TemplateBinding Content}">
-                        </TextBlock>
-                    </Border>
-                </ControlTemplate>
-            </Setter.Value>
-        </Setter>
-    </Style>
-
     <ControlTemplate x:Key="ScrollViewerTemplate" TargetType="{x:Type ScrollViewer}">
         <Grid x:Name="Grid" Background="{TemplateBinding Background}">
             <Grid.ColumnDefinitions>
@@ -90,7 +56,7 @@
                     <Rectangle Name="thumbRect" Fill="#DDE0E3 " RadiusX="5" RadiusY="5"/>
                     <ControlTemplate.Triggers>
                         <Trigger Property="IsMouseOver" Value="True">
-                            <Setter Property="Fill" Value="CornflowerBlue" TargetName="thumbRect" />
+                            <Setter Property="Fill" Value="#BFC8D1" TargetName="thumbRect" />
                         </Trigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>

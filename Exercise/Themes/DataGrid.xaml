@@ -3,7 +3,10 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:local="clr-namespace:Exercise.View">
 
-    <Style TargetType="DataGrid">
+    <ResourceDictionary.MergedDictionaries>
+        <ResourceDictionary Source="../Themes/ScrollBar.xaml" />
+    </ResourceDictionary.MergedDictionaries>
+    <Style  TargetType="{x:Type DataGrid}">
         <Setter Property="AutoGenerateColumns" Value="False"/>
         <Setter Property="RowHeaderWidth" Value="0"/>
         <Setter Property="Background" Value="White"/>
@@ -45,6 +48,75 @@
                 </Style>
             </Setter.Value>
         </Setter>
-    </Style>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type DataGrid}">
+                    <Border Background="{TemplateBinding Control.Background}" BorderBrush="{TemplateBinding Control.BorderBrush}" BorderThickness="{TemplateBinding Control.BorderThickness}" Padding="{TemplateBinding Control.Padding}" SnapsToDevicePixels="True">
+                        <ScrollViewer Focusable="False" Name="DG_ScrollViewer">
+                            <ScrollViewer.Template>
+                                <ControlTemplate TargetType="ScrollViewer">
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="Auto" />
+                                            <ColumnDefinition Width="*" />
+                                            <ColumnDefinition Width="Auto" />
+                                        </Grid.ColumnDefinitions>
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition Height="Auto" />
+                                            <RowDefinition Height="*" />
+                                            <RowDefinition Height="Auto" />
+                                        </Grid.RowDefinitions>
 
+                                        <DataGridColumnHeadersPresenter Grid.Column="1" Grid.ColumnSpan="2" Name="PART_ColumnHeadersPresenter">
+                                            <DataGridColumnHeadersPresenter.Visibility>
+                                                <Binding Path="HeadersVisibility" RelativeSource="{RelativeSource FindAncestor, AncestorLevel=1, AncestorType=DataGrid}">
+                                                    <Binding.ConverterParameter>
+                                                        <DataGridHeadersVisibility>Column</DataGridHeadersVisibility>
+                                                    </Binding.ConverterParameter>
+                                                </Binding>
+                                            </DataGridColumnHeadersPresenter.Visibility>
+                                        </DataGridColumnHeadersPresenter>
+                                        <ScrollContentPresenter CanContentScroll="{TemplateBinding ScrollViewer.CanContentScroll}"
+                                                                CanHorizontallyScroll="False" 
+                                                                CanVerticallyScroll="False" Content="{TemplateBinding ContentControl.Content}"
+                                                                ContentStringFormat="{TemplateBinding ContentControl.ContentStringFormat}" 
+                                                                ContentTemplate="{TemplateBinding ContentControl.ContentTemplate}" Grid.ColumnSpan="2" Grid.Row="1"
+                                                                Name="PART_ScrollContentPresenter" />
+                                        <ScrollBar Grid.Column="2" Grid.Row="1" 
+                                                   Maximum="{TemplateBinding ScrollViewer.ScrollableHeight}"
+                                                   Name="PART_VerticalScrollBar" Orientation="Vertical" 
+                                                   Value="{Binding Path=VerticalOffset, Mode=OneWay, RelativeSource={RelativeSource TemplatedParent}}"
+                                                   ViewportSize="{TemplateBinding ScrollViewer.ViewportHeight}" 
+                                                   Visibility="{TemplateBinding ScrollViewer.ComputedVerticalScrollBarVisibility}"
+                                                   Style="{DynamicResource MyScrollBarStyle}"/>
+                                        <Grid Grid.Column="1" Grid.Row="2">
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="{Binding Path=NonFrozenColumnsViewportHorizontalOffset,
+                                                    RelativeSource={RelativeSource FindAncestor, AncestorLevel=1, AncestorType=DataGrid}}" />
+                                                <ColumnDefinition Width="*" />
+                                            </Grid.ColumnDefinitions>
+                                            <ScrollBar Grid.Column="1" Maximum="{TemplateBinding ScrollViewer.ScrollableWidth}" 
+                                                       Name="PART_HorizontalScrollBar" Orientation="Horizontal" Value="{Binding Path=HorizontalOffset,
+                                                Mode=OneWay, RelativeSource={RelativeSource TemplatedParent}}" ViewportSize="{TemplateBinding ScrollViewer.ViewportWidth}" 
+                                                       Visibility="{TemplateBinding ScrollViewer.ComputedHorizontalScrollBarVisibility}" />
+                                        </Grid>
+                                    </Grid>
+                                </ControlTemplate>
+                            </ScrollViewer.Template>
+                            <ItemsPresenter SnapsToDevicePixels="{TemplateBinding UIElement.SnapsToDevicePixels}" />
+                        </ScrollViewer>
+                    </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+        <Style.Triggers>
+            <MultiTrigger>
+                <MultiTrigger.Conditions>
+                    <Condition Property="IsGrouping" Value="true"/>
+                    <Condition Property="VirtualizingPanel.IsVirtualizingWhenGrouping" Value="false"/>
+                </MultiTrigger.Conditions>
+                <Setter Property="ScrollViewer.CanContentScroll" Value="false"/>
+            </MultiTrigger>
+        </Style.Triggers>
+    </Style>
 </ResourceDictionary>

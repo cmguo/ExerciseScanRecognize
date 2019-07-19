@@ -146,8 +146,20 @@ namespace Exercise.ViewModel
                 case ResolveType.Ignore:
                 case ResolveType.RemovePage:
                     title = "忽略异常";
-                    message = "忽略后，该张试卷所有题目作答将无法统计，确认忽略吗？";
                     btn = "忽略";
+                    switch (SelectedException.Type)
+                    {
+                        case ExceptionType.NoStudentCode:
+                            message = "忽略后，该张试卷所有题目作答将无法统计，确认忽略吗？";
+                            break;
+                        case ExceptionType.PageLost:
+                            message = "TODO";
+                            break;
+                        default:
+                            //Todo
+                            message = "忽略后，该张试卷无法复原，确认忽略吗？";
+                            break;
+                    }
                     break;
             }
             if (title != null)

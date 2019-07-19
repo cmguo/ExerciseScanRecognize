@@ -45,7 +45,7 @@ namespace Exercise.ViewModel
             DiscardCommand = new RelayCommand((e) => Discard(e));
             CloseCommand = new RelayCommand((e) => Close(e));
             exerciseModel.PropertyChanged += ExerciseModel_PropertyChanged;
-            CloseMessage = "退出后本次扫描结果将放弃，确认退出吗？";
+            CloseMessage = "本次扫描结果未上传，退出后，扫描结果将作废，确认退出软件吗？";
             Update();
         }
 
@@ -75,7 +75,7 @@ namespace Exercise.ViewModel
         protected virtual async Task Close(object obj)
         {
             bool paused = await scanModel.PauseScan();
-            int result = PopupDialog.Show("确认退出", CloseMessage, 1, "退出", "取消");
+            int result = PopupDialog.Show("退出软件", CloseMessage, 1, "退出", "取消");
             if (result == 0)
             {
                 await scanModel.CancelScan();
@@ -92,7 +92,7 @@ namespace Exercise.ViewModel
         protected async Task Discard(object obj)
         {
             bool paused = await scanModel.PauseScan();
-            int result = PopupDialog.Show(obj as UIElement, "确认放弃本次扫描", "放弃后，本次扫描结果将作废，确认放弃吗？", 0, "放弃本次扫描", "取消");
+            int result = PopupDialog.Show(obj as UIElement, "放弃扫描任务", "放弃后，本次扫描结果将作废，确认放弃么？", 0, "放弃本次扫描", "取消");
             if (result == 0)
             {
                 await scanModel.CancelScan();

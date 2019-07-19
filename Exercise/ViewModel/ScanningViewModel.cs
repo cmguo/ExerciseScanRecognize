@@ -70,7 +70,7 @@ namespace Exercise.ViewModel
             System.Windows.Controls.Page page = obj as System.Windows.Controls.Page;
             FrameworkElement element = page.Resources["ClassDetail"] as FrameworkElement;
             element.DataContext = this;
-            int result = PopupDialog.Show(obj as UIElement, "TODO", "扫描仪中还有试卷待扫描，确认结束扫描并查看结果吗？", element, 0, "查看结果", "继续扫描");
+            int result = PopupDialog.Show(obj as UIElement, "确认", "扫描仪中还有试卷待扫描，确认结束扫描并查看结果吗？", element, 0, "查看结果", "继续扫描");
             if (result == 0)
             {
                 await scanModel.CancelScan();
@@ -95,7 +95,7 @@ namespace Exercise.ViewModel
                 msg = "数据连接异常，请联系服务人员";
             while (true)
             {
-                int result = PopupDialog.Show(obj as UIElement, "TODO", msg, 0, "确定");
+                int result = PopupDialog.Show(obj as UIElement, "出现异常", msg, 0, "确定");
                 if (result == 0)
                 {
                     await scanModel.CancelScan();
@@ -123,7 +123,7 @@ namespace Exercise.ViewModel
                 }
                 else
                 {
-                    result = PopupDialog.Show(obj as UIElement, "TODO",
+                    result = PopupDialog.Show(obj as UIElement, "确认",
                         "扫描仪已无试卷，请添加试卷继续扫描。若已全部扫描，可查看扫描结果。", element, 0, "查看结果", "继续扫描");
                 }
                 if (result == 0)

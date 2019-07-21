@@ -27,11 +27,18 @@ namespace Excecise.View
             frmMain.Navigating += FrmMain_Navigating;
             frmMain.Navigated += FrmMain_Navigated;
             Loaded += MainWindow_Loaded;
+            Unloaded += MainWindow_Unloaded;
             titleBar.MouseLeftButtonDown += TitleBar_MouseLeftButtonDown;
             titleBar.MouseMove += TitleBar_MouseMove;
             titleBar.MouseLeftButtonUp += TitleBar_MouseLeftButtonUp;
             titleBar.LostMouseCapture += TitleBar_LostMouseCapture;
             Closing += MainWindow_Closing;
+        }
+
+        private void MainWindow_Unloaded(object sender, RoutedEventArgs e)
+        {
+            if (lastPage != null)
+                (lastPage.DataContext as ViewModelBase).Release();
         }
 
         private void MainWindow_Loaded(object sender, RoutedEventArgs e)
@@ -53,6 +60,7 @@ namespace Excecise.View
             if (lastPage != null)
             {
                 UnLoadNavButtons(lastPage);
+                (lastPage.DataContext as ViewModelBase).Release();
             }
             LoadNavButtons(page);
             lastPage = page;
@@ -122,6 +130,8 @@ namespace Excecise.View
 
         private void MainWindow_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
+            if (lastPage == null)
+                return;
             TitleCommandCollection commands = TitleBarManager.GetCommands(lastPage);
             if (commands == null)
                 return;

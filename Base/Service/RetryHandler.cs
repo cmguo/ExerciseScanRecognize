@@ -35,10 +35,10 @@ namespace Base.Service
                 }
                 catch (Exception e)
                 {
-                    Log.w(e);
                     if (t == 0 || !Recoverable(e))
                         throw;
                     --t;
+                    Log.w("retry", e);
                     await Task.Delay(Retry.Interval);
                 }
             }

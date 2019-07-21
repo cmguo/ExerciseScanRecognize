@@ -1,4 +1,5 @@
-﻿using System.Windows;
+﻿using Account.ViewModel;
+using System.Windows;
 using System.Windows.Controls.Primitives;
 
 namespace Account
@@ -11,6 +12,12 @@ namespace Account
         public AccountWindow()
         {
             InitializeComponent();
+            Unloaded += AccountWindow_Unloaded;
+        }
+
+        private void AccountWindow_Unloaded(object sender, RoutedEventArgs e)
+        {
+            (Page.DataContext as AccountViewModel).Release();
         }
 
         private void Mini_Click(object sender, RoutedEventArgs e)

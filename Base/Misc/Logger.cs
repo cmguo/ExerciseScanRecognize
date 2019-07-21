@@ -73,6 +73,11 @@ namespace Base.Misc
             wtf(ToString(msg), null, tr);
         }
 
+        public void wtf(Exception tr)
+        {
+            wtf(tr.Message, null, tr);
+        }
+
         public void wtf(String msg, Object obj)
         {
             wtf(msg, obj, null);
@@ -105,6 +110,11 @@ namespace Base.Misc
         public void e(Object msg, Exception tr)
         {
             e(ToString(msg), null, tr);
+        }
+
+        public void e(Exception tr)
+        {
+            e(tr.Message, null, tr);
         }
 
         public void e(String msg, Object obj)
@@ -141,6 +151,11 @@ namespace Base.Misc
             w(ToString(msg), null, tr);
         }
 
+        public void w(Exception tr)
+        {
+            w(tr.Message, null, tr);
+        }
+
         public void w(String msg, Object obj)
         {
             w(msg, obj, null);
@@ -175,6 +190,11 @@ namespace Base.Misc
             i(ToString(msg), null, tr);
         }
 
+        public void i(Exception tr)
+        {
+            i(tr.Message, null, tr);
+        }
+
         public void i(String msg, Object obj)
         {
             i(msg, obj, null);
@@ -206,7 +226,12 @@ namespace Base.Misc
 
         public void d(Object msg, Exception tr)
         {
-            d(ToString(msg) , null, tr);
+            d(ToString(msg), null, tr);
+        }
+
+        public void d(Exception tr)
+        {
+            d(tr.Message, null, tr);
         }
 
         public void d(String msg, Object obj)
@@ -241,6 +266,11 @@ namespace Base.Misc
         public void v(Object msg, Exception tr)
         {
             v(ToString(msg), null, tr);
+        }
+
+        public void v(Exception tr)
+        {
+            v(tr.Message, null, tr);
         }
 
         public void v(String msg, Object obj)

@@ -11,7 +11,7 @@
       xmlns:svgc="http://sharpvectors.codeplex.com/svgc/"
       xmlns:mu="clr-namespace:Panuon.UI;assembly=Panuon.UI"
       mc:Ignorable="d"
-      x:Name="Page"
+      x:Name="Window"
       Width="440" Height="606"
       WindowStyle="None"
       ResizeMode="NoResize"
@@ -56,7 +56,7 @@
         </tb:TitleButtonCollection>
     </tb:TitleBarManager.GlobalButtons>
 
-    <Grid DataContext="{StaticResource ViewModel}" >
+    <Grid x:Name="Page" DataContext="{StaticResource ViewModel}" >
 
         <Border/>
         <Image Width="440" Height="160" Source="/Images/8.png" VerticalAlignment="Top" HorizontalAlignment="Stretch"/>
@@ -107,7 +107,7 @@
                 <TextBlock Grid.Row="3" Margin="0, 8, 0, 0" FontSize="14" Foreground="#FFFF6767" Text="{Binding LoginCommand.Exception.Message}" />
                 
                 <tal:TalButton Grid.Row="4" Margin="0, 50, 0, 0" Content="登录" IsDefault="True" ButtonSize="Large" Height="48"
-                               Command="{Binding LoginCommand}" CommandParameter="{Binding ElementName=Page}" 
+                               Command="{Binding LoginCommand}" CommandParameter="{Binding ElementName=Window}" 
                                IsEnabled="{Binding LoginData.Password, Converter={StaticResource NonNullTrueConverter}}"
                                 />
 

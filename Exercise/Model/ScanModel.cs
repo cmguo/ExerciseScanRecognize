@@ -327,7 +327,8 @@ namespace Exercise.Model
             Log.d("AddImage " + fileName);
             Page page2 = page;
             Page[] pages = new Page[] { page1, page2 };
-            await Task.Factory.StartNew(() => ScanTwoPage(pages));
+            long tick = Environment.TickCount;
+            await Task.Factory.StartNew(() => ScanTwoPage(pages, tick));
             pages[0].TotalIndex = Pages.Count;
             pages[1].TotalIndex = Pages.Count;
             if (pages[0].Another == null)
@@ -355,16 +356,35 @@ namespace Exercise.Model
                     throw new InvalidOperationException(
                         "Page at " + p1.TotalIndex + " not match " + p2.TotalIndex);
             }
-            if (Pages.Count * 2 == readIndex)
+            if (!IsScanning && Pages.Count * 2 == readIndex)
                 IsCompleted = true;
+            for (int i = 0; i < elapseCounts.Length; ++i)
+            {
+                Log.d("elapse [" + i + "]: count=" + elapseCounts[i] + ", ticks=" + elapseTicks[i] 
+                    + ", average=" + (elapseCounts[i] == 0 ? "NaN" : (elapseTicks[i] / elapseCounts[i]).ToString()));
+                elapseCounts[i] = 0;
+                elapseTicks[i] = 0;
+            }
         }
 
-        private void ScanTwoPage(Page[] pages)
+        private int[] elapseCounts = new int[7];
+        private long[] elapseTicks = new long[7];
+
+        private long AddTick(int index, long tick)
         {
-            ReadPage(pages[0], true);
+            long tick1 = Environment.TickCount;
+            Interlocked.Increment(ref elapseCounts[index]);
+            Interlocked.Add(ref elapseTicks[index], tick1 - tick);
+            return tick1;
+        }
+
+        private void ScanTwoPage(Page[] pages, long tick)
+        {
+            tick = AddTick(0, tick); // queue wait
+            tick = ReadPage(pages[0], true, tick); // tick 1,2
             if (pages[0].Exception != null)
             {
-                ReadPage(pages[1], true);
+                tick = ReadPage(pages[1], true, tick);
                 if (pages[1].Exception == null)
                 {
                     pages[0].Exception = null;
@@ -375,7 +395,7 @@ namespace Exercise.Model
             }
             else
             {
-                ReadPage(pages[1], false);
+                tick = ReadPage(pages[1], false, tick); // tick 1,2
             }
             pages[1].PaperCode = pages[0].PaperCode;
             pages[1].PageIndex = pages[0].PageIndex + 1;
@@ -400,10 +420,12 @@ namespace Exercise.Model
                             return;
                         }
                     }
-                    ScanPage(pages[0]);
+                    tick = AddTick(3, tick);
+                    tick = ScanPage(pages[0], tick); // tick 4,5,6
                     if (pages[1].PageIndex < exerciseData.Pages.Count)
                     {
-                        ScanPage(pages[1]);
+                        tick = ScanPage(pages[1], tick);
+                        tick = AddTick(6, tick);
                     }
                     else
                     {
@@ -411,21 +433,26 @@ namespace Exercise.Model
                     }
                 }
             }
+            long tick3 = Environment.TickCount;
             pages[0].PageData = null;
             pages[1].PageData = null;
         }
 
-        private void ReadPage(Page page, bool needCode)
+        private long ReadPage(Page page, bool needCode, long tick)
         {
             try
             {
-                FileStream fs = new FileStream(page.PagePath, FileMode.Open, FileAccess.Read);
-                MemoryStream stream = new MemoryStream((int)fs.Length);
-                using (fs) { fs.CopyTo(stream); }
-                page.PageData = stream.GetBuffer();
+                using (FileStream fs = new FileStream(page.PagePath, FileMode.Open, FileAccess.Read))
+                using (MemoryStream stream = new MemoryStream((int)fs.Length))
+                {
+                    fs.CopyTo(stream);
+                    page.PageData = stream.GetBuffer();
+                }
+                tick = AddTick(1, tick);
                 if (needCode)
                 {
                     Algorithm.QRCodeData code = algorithm.GetCode(new Algorithm.PageRaw() { ImgBytes = page.PageData });
+                    tick = AddTick(2, tick);
                     int split = code.PaperInfo.IndexOf('_');
                     if (split < 0)
                     {
@@ -444,9 +471,10 @@ namespace Exercise.Model
             {
                 page.Exception = e;
             }
+            return tick;
         }
 
-        private void ScanPage(Page page)
+        private long ScanPage(Page page, long tick)
         {
             PageData pageData = exerciseData.Pages[page.PageIndex];
             pageData.ImgBytes = page.PageData;
@@ -454,18 +482,23 @@ namespace Exercise.Model
             try
             {
                 AnswerData answerData = algorithm.GetAnswer(pageData);
+                tick = AddTick(4, tick);
                 page.Answer = answerData;
                 page.PageData = answerData.RedressedImgBytes;
                 answerData.RedressedImgBytes = null;
                 MD5 md5 = new MD5CryptoServiceProvider();
                 byte[] output = md5.ComputeHash(page.PageData);
                 page.PageName = BitConverter.ToString(output).Replace("-", "").ToLower() + ".jpg";
+                tick = AddTick(5, tick);
                 File.Delete(page.PagePath);
                 page.PagePath = savePath + "\\" + page.PageName;
-                FileStream fs = new FileStream(page.PagePath, FileMode.Create, FileAccess.Write);
-                using (fs) { new MemoryStream(page.PageData).CopyTo(fs); }
+                using (FileStream fs = new FileStream(page.PagePath, FileMode.Create, FileAccess.Write))
+                using (Stream stream = new MemoryStream(page.PageData))
+                {
+                    stream.CopyTo(fs);
+                }
+                tick = AddTick(6, tick);
                 page.PageData = null;
-                fs.Close();
             }
             catch (Exception e)
             {
@@ -476,6 +509,7 @@ namespace Exercise.Model
                 page.PageData = null;
                 pageData.ImgBytes = null;
             }
+            return tick;
         }
 
         private void ScanDevice_GetFileName(object sender, ScanEvent e)

@@ -45,6 +45,12 @@ namespace Account.ViewModel
             accountModel.PropertyChanged += AccountModel_PropertyChanged;
         }
 
+        public override void Release()
+        {
+            base.Release();
+            accountModel.PropertyChanged -= AccountModel_PropertyChanged;
+        }
+
         private async Task DoLogin(object obj)
         {
             if (NetWorkManager.CheckNetWorkAvailable())

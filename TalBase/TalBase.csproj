@@ -42,34 +42,34 @@
       <HintPath>..\packages\Refit.4.7.9\lib\net461\Refit.dll</HintPath>
     </Reference>
     <Reference Include="SharpVectors.Converters.Wpf">
-      <HintPath>..\Application\Libraries\SharpVectors\SharpVectors.Converters.Wpf.dll</HintPath>
+      <HintPath>..\Application\..\Libraries\SharpVectors\SharpVectors.Converters.Wpf.dll</HintPath>
     </Reference>
     <Reference Include="SharpVectors.Core, Version=0.3.1.1588, Culture=neutral, PublicKeyToken=7407205e337c98ef, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\Application\Libraries\SharpVectors\SharpVectors.Core.dll</HintPath>
+      <HintPath>..\Application\..\Libraries\SharpVectors\SharpVectors.Core.dll</HintPath>
     </Reference>
     <Reference Include="SharpVectors.Css, Version=0.3.1.1590, Culture=neutral, PublicKeyToken=7a46e3f532fdb787, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\Application\Libraries\SharpVectors\SharpVectors.Css.dll</HintPath>
+      <HintPath>..\Application\..\Libraries\SharpVectors\SharpVectors.Css.dll</HintPath>
     </Reference>
     <Reference Include="SharpVectors.Dom, Version=0.3.1.1589, Culture=neutral, PublicKeyToken=517340b6277b1a7a, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\Application\Libraries\SharpVectors\SharpVectors.Dom.dll</HintPath>
+      <HintPath>..\Application\..\Libraries\SharpVectors\SharpVectors.Dom.dll</HintPath>
     </Reference>
     <Reference Include="SharpVectors.Model, Version=0.3.1.1592, Culture=neutral, PublicKeyToken=2236cfc76b505845, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\Application\Libraries\SharpVectors\SharpVectors.Model.dll</HintPath>
+      <HintPath>..\Application\..\Libraries\SharpVectors\SharpVectors.Model.dll</HintPath>
     </Reference>
     <Reference Include="SharpVectors.Rendering.Gdi, Version=0.3.1.1595, Culture=neutral, PublicKeyToken=03902092284347e3, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\Application\Libraries\SharpVectors\SharpVectors.Rendering.Gdi.dll</HintPath>
+      <HintPath>..\Application\..\Libraries\SharpVectors\SharpVectors.Rendering.Gdi.dll</HintPath>
     </Reference>
     <Reference Include="SharpVectors.Rendering.Wpf, Version=1.3.0.0, Culture=neutral, PublicKeyToken=d0902381100df30e, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\Application\Libraries\SharpVectors\SharpVectors.Rendering.Wpf.dll</HintPath>
+      <HintPath>..\Application\..\Libraries\SharpVectors\SharpVectors.Rendering.Wpf.dll</HintPath>
     </Reference>
     <Reference Include="SharpVectors.Runtime.Wpf">
-      <HintPath>..\Application\Libraries\SharpVectors\SharpVectors.Runtime.Wpf.dll</HintPath>
+      <HintPath>..\Application\..\Libraries\SharpVectors\SharpVectors.Runtime.Wpf.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />

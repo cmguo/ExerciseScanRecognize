@@ -1,12 +1,12 @@
 ﻿using Base.Misc;
 using Base.Mvvm;
-using Base.Protocol;
 using com.talcloud.paperanalyze.service.answersheet;
 using net.sf.jni4net;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 using System;
 using System.Diagnostics;
+using System.IO;
 using System.Runtime.ExceptionServices;
 using System.Threading.Tasks;
 
@@ -67,12 +67,17 @@ namespace Exercise.Algorithm
         {
             string json = @"C:\Users\Brandon\source\repos\DotNet\Exercise\0620\long_text_2019-06-20-16-53-51.txt";
             string jpg = @"C:\Users\Brandon\source\repos\DotNet\Exercise\0620\3.jpg";
-            PageRaw pagew = new PageRaw();
-            pagew.ImgBytes = await UriFetcher.GetDataAsync(new Uri(jpg));
-            QRCodeData code = GetCode(pagew);
-            PageData page = await JsonPersistent.Load<PageData>(json);
-            page.ImgBytes = pagew.ImgBytes;
-            AnswerData answer = GetAnswer(page);
+            using (FileStream fs = new FileStream(jpg, FileMode.Open, FileAccess.Read, FileShare.Read))
+            using (MemoryStream ms = new MemoryStream((int) fs.Length))
+            {
+                await fs.CopyToAsync(ms);
+                PageRaw pagew = new PageRaw();
+                pagew.ImgBytes = ms.GetBuffer();
+                QRCodeData code = GetCode(pagew);
+                PageData page = await JsonPersistent.Load<PageData>(json);
+                page.ImgBytes = pagew.ImgBytes;
+                AnswerData answer = GetAnswer(page);
+            }
         }
 
     }

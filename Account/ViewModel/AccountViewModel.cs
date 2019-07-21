@@ -3,12 +3,9 @@ using Account.Service;
 using Base.Mvvm;
 using System;
 using System.Threading.Tasks;
-using System.Windows.Navigation;
 using TalBase.ViewModel;
-using System.Windows.Controls;
 using TalBase.Utils;
 using System.Collections.Generic;
-using TalBase.View;
 using System.Windows;
 
 namespace Account.ViewModel

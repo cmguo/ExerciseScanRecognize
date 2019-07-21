@@ -50,6 +50,7 @@
         </Grid.RowDefinitions>
 
         <ListView Grid.Row="0" BorderThickness="0" Background="Transparent" 
+                  ItemContainerStyle="{StaticResource ButtonListStyle}"
                   ItemsSource="{Binding Exceptions}" ItemTemplate="{StaticResource ExceptionItem}"
                   SelectedItem="{Binding SelectedException}" SelectionMode="Single">
             <ListView.ItemsPanel>
@@ -63,6 +64,7 @@
                    Text="{Binding DataContext, ElementName=Page, Converter={StaticResource ExceptionConverter}, ConverterParameter=Message}"/>
         
         <ListView Grid.Row="2" x:Name="answers" BorderThickness="0"  Margin="0, 14, 0, 24" Background="Transparent"
+                  ItemContainerStyle="{StaticResource ButtonListStyle}"
                   ItemsSource="{Binding SelectedException.Answers}" ItemTemplate="{StaticResource AnswerItem}"
                   SelectedItem="{Binding SelectedException.SelectedAnswer}" SelectionMode="Single">
             <ListView.ItemsPanel>
@@ -78,7 +80,8 @@
                          Width="72" Height="32" FontSize="14" Foreground="#FF2D4A66" VerticalContentAlignment="Center" />
                 <TextBlock Text="分" FontSize="14" Foreground="#FF2D4A66" VerticalAlignment="Center" Margin="8, 0, 0, 0"/>
             </StackPanel>
-            <ListView Grid.Row="0" x:Name="numbers" BorderThickness="0" HorizontalAlignment="Left" Margin="0, 14, 0, 0" Background="Transparent">
+            <ListView Grid.Row="0" x:Name="numbers" BorderThickness="0" HorizontalAlignment="Left" Margin="0, 14, 0, 0" 
+                  ItemContainerStyle="{StaticResource ButtonListStyle}" Background="Transparent">
                 <ListView.ItemsPanel>
                     <ItemsPanelTemplate>
                         <WrapPanel Margin="-8, -8, 0, 0" IsItemsHost="True" Orientation="Horizontal" Width="200" />

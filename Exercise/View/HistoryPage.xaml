@@ -82,7 +82,7 @@
 
         <TextBlock Grid.Row="0" FontSize="16" Foreground="#FF2D4A66" Margin="30, 28, 0, 0" Text="扫描记录管理"/>
 
-        <ListView Grid.Row="1" Margin="30, 16, 30, 0" BorderThickness="0" ItemsSource="{Binding LocalRecords}"
+        <ListView Grid.Row="1" x:Name="local" Margin="30, 16, 30, 0" BorderThickness="0" ItemsSource="{Binding LocalRecords}"
                   MaxHeight="215" HorizontalContentAlignment="Stretch" ScrollViewer.VerticalScrollBarVisibility="Hidden">
             <ListBox.ItemContainerStyle>
                 <Style TargetType="{x:Type ListViewItem}">

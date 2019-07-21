@@ -1,13 +1,11 @@
 ﻿using Account.Service;
 using Base.Mvvm;
-using Refit;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
-using System.Windows.Controls;
 using System.Windows.Threading;
 using TalBase.Model;
 using TalBase.Service;
@@ -64,8 +62,13 @@ namespace Account.Model
             _SelectedServiceUri = ServiceUris.Values.ToList().IndexOf(Configuration.ServiceUri);
             //LoginData = new LoginData() { LoginName = "huanglaoshi3", Password = "2019@100tal",
             //    AuthenticationType = LoginData.LOGIN_BY_PASSWORD };
-            LoginData = new LoginData() { LoginName = "xujinming", Password = "123@qwe",
+            LoginData = new LoginData() { LoginName = Configuration.AccountName,
                 AuthenticationType = LoginData.LOGIN_BY_PASSWORD };
+            if (LoginData.LoginName == null || LoginData.LoginName == "xujinming")
+            {
+                LoginData.LoginName = "xujinming";
+                LoginData.Password = "123@qwe";
+            }
             Account = new Service.AccountData();
             service = Base.Service.Services.Get<IAccount>();
             timer = new DispatcherTimer() { Interval = TimeSpan.FromHours(6) };
@@ -93,6 +96,7 @@ namespace Account.Model
             RaisePropertyChanged("Account");
             LoginData.Password = null;
             LoginData.AuthenticationType = LoginData.LOGIN_BY_TICKET;
+            Configuration.AccountName = LoginData.LoginName;
             timer.Start();
             Base.Mvvm.Action.ActionException += RelayCommand_ActionException;
         }

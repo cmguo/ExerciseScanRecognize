@@ -57,6 +57,8 @@ namespace Exercise.Model
 
         public async Task Save(string path)
         {
+            if (LocalRecords.Any(r => r.LocalPath == path))
+                return;
             Record record = new Record() { Name = ExerciseModel.Instance.ExerciseData.Title, ScanDate = DateTime.Now.Timestamp() };
             await JsonPersistent.Save(path + "\\record.json", record);
         }

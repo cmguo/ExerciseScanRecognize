@@ -1,7 +1,4 @@
-﻿
-using Newtonsoft.Json;
-
-namespace Account.Service
+﻿namespace Account.Service
 {
     public class LogoutData
     {

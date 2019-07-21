@@ -126,7 +126,7 @@ namespace Exercise.Model
         internal void FillAll()
         {
             Page l = PageStudents.First().AnswerPages.Where(p => p != null).First();
-            schoolModel.GetLostPageStudents(s => {
+            schoolModel.GetNoPageStudents(s => {
                 s.AnswerPages = new List<Page>(emptyPages);
                 PageStudents.Add(s);
             });
@@ -175,11 +175,10 @@ namespace Exercise.Model
             Clear();
             await schoolModel.Load(path);
             ExerciseData = await JsonPersistent.Load<ExerciseData>(path + "\\exercise.json");
-            foreach (StudentInfo s in schoolModel.AllClasses.SelectMany(c => c.Students))
+            schoolModel.GetHasPageStudents((s) =>
             {
-                if (s.AnswerPages != null)
-                    PageStudents.Add(s);
-            }
+                PageStudents.Add(s);
+            });
             int n = (ExerciseData.Pages.Count + 1) / 2;
             emptyPages = new List<Page>(n);
             while (n-- > 0)
@@ -427,6 +426,11 @@ namespace Exercise.Model
                 if (type != RemoveType.DuplexPage && page.Another != null)
                 {
                     page.Student.AnswerPages[pageIndex] = page.Another;
+                }
+                if (page.Student.AnswerPages.All(p => p == Page.EmptyPage))
+                {
+                    PageStudents.Remove(page.Student);
+                    page.Student.AnswerPages = null;
                 }
             }
             ReleasePage(page, type);

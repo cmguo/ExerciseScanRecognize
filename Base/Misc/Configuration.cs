@@ -12,7 +12,8 @@ namespace Base.Misc
 
         public static void SetByKey(string key, string value)
         {
-            config.AppSettings.Settings[key].Value = value;
+            config.AppSettings.Settings.Remove(key);
+            config.AppSettings.Settings.Add(key, value);
             Save();
         }
 

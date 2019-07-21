@@ -3,6 +3,7 @@ using Base.Mvvm;
 using Exercise.ViewModel;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Globalization;
 using System.Windows;
 using System.Windows.Controls;
@@ -24,6 +25,8 @@ namespace Exercise.View
             DataContext = FindResource("ViewModel");
             dataGrid.CellEditEnding += DataGrid_CellEditEnding;
             dataGrid.MouseLeftButtonDown += DataGrid_MouseLeftButtonDown;
+            local.Items.SortDescriptions.Add(
+                new SortDescription("ScanDate", ListSortDirection.Descending));
         }
 
         private void DataGrid_MouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)

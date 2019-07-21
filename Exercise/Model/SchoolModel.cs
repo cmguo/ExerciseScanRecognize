@@ -81,7 +81,21 @@ namespace Exercise.Model
             return student;
         }
 
-        public void GetLostPageStudents(Action<StudentInfo> visitor)
+        public void GetHasPageStudents(Action<StudentInfo> visitor)
+        {
+            foreach (StudentInfo s in AllClasses.SelectMany(c =>
+            {
+                IEnumerable<StudentInfo> students = c.Students.Where(s => s.AnswerPages != null);
+                if (students.Count() > 0 && !Classes.Contains(c))
+                    Classes.Add(c);
+                return students;
+            }))
+            {
+                visitor(s);
+            }
+        }
+
+        public void GetNoPageStudents(Action<StudentInfo> visitor)
         {
             foreach (StudentInfo s in AllClasses.SelectMany(c =>
             {

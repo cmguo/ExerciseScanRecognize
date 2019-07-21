@@ -3,6 +3,7 @@ using Exercise.Model;
 using Exercise.Service;
 using Exercise.View;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
@@ -74,18 +75,21 @@ namespace Exercise.ViewModel
 
         protected virtual async Task Close(object obj)
         {
-            bool paused = await scanModel.PauseScan();
+            CancelEventArgs e = obj as CancelEventArgs;
+            Task<bool> task = scanModel.PauseScan();
             int result = PopupDialog.Show("退出软件", CloseMessage, 1, "退出", "取消");
             if (result == 0)
             {
+                await task;
                 await scanModel.CancelScan();
                 exerciseModel.Discard();
                 Window.GetWindow((obj as ExecutedRoutedEventArgs).OriginalSource as UIElement).Close();
             }
-            else if (paused)
+            else
             {
-                scanModel.ResumeScan();
-                //(obj as Route)
+                if (await task)
+                    scanModel.ResumeScan();
+                e.Cancel = true;
             }
         }
 

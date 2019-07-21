@@ -112,6 +112,7 @@ namespace Exercise.Scanning
         public event EventHandler<ScanEvent> OnImage;
         public event EventHandler<ScanEvent> GetFileName;
         public event EventHandler<ScanEvent> ScanPaused;
+        public event EventHandler<ScanEvent> ScanEvent;
         public event EventHandler<ScanEvent> ScanError;
         public event EventHandler<ScanEvent> ScanCompleted;
 
@@ -129,6 +130,7 @@ namespace Exercise.Scanning
             twain32.ShowUI = false;
             var versionInfo = FileVersionInfo.GetVersionInfo(Assembly.GetEntryAssembly().Location);
             //twain32.AppProductName = versionInfo.ProductName;
+            twain32.DeviceEvent += Twain32_DeviceEvent; ;
             twain32.SetupFileXferEvent += Twain32_SetupFileXferEvent;
             twain32.XferDone += Twain32_XferDone;
             twain32.FileXferEvent += Twain32_FileXferEvent; // 很慢
@@ -238,6 +240,11 @@ namespace Exercise.Scanning
                 return cancel;
             }
 
+        }
+
+        private void Twain32_DeviceEvent(object sender, Twain32.DeviceEventEventArgs e)
+        {
+            Debug.WriteLine("Twain32_DeviceEvent: " + e.Event);
         }
 
         private void Twain32_SetupFileXferEvent(object sender, Twain32.SetupFileXferEventArgs e)

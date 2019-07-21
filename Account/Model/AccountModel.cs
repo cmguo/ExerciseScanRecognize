@@ -85,7 +85,7 @@ namespace Account.Model
             {
                 Account = await service.Login(LoginData);
             }
-            catch (Exception e)
+            catch
             {
                 LoginData.Password = password;
                 throw;

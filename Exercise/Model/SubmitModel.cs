@@ -131,7 +131,7 @@ namespace Exercise.Model
                 task.Status = TaskStatus.Submiting;
                 await SubmitInner(task);
             }
-            catch (Exception e)
+            catch
             {
                 task.Status = TaskStatus.Failed;
                 await task.Save();

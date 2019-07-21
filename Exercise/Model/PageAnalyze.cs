@@ -89,10 +89,18 @@ namespace Exercise.Model
             {
                 if (score)
                 {
-                    float total = float.Parse(Problem.TotalScore);
-                    if (float.Parse(SelectedAnswer) > total)
+                    try
+                    {
+                        float total = float.Parse(Problem.TotalScore);
+                        if (float.Parse(SelectedAnswer) > total)
+                            return false;
+                    }
+                    catch
+                    {
                         return false;
+                    }
                 }
+
                 Answer.StatusOfItem = -1;
                 Answer.AnalyzeResult = new List<AnswerData.Result>();
                 if (SelectedAnswer != NULL_ANSWER && SelectedAnswer != "")

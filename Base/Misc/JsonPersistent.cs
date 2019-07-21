@@ -11,7 +11,7 @@ namespace Base.Misc
         {
             await Task.Run(() =>
             {
-                using (FileStream fs = new FileStream(path, FileMode.Create, FileAccess.Write))
+                using (FileStream fs = new FileStream(path + "temp", FileMode.Create, FileAccess.Write))
                 using (StreamWriter writer = new StreamWriter(fs))
                 using (JsonTextWriter jsonWriter = new JsonTextWriter(writer))
                 {
@@ -19,6 +19,9 @@ namespace Base.Misc
                     ser.Serialize(jsonWriter, data);
                     jsonWriter.Flush();
                 }
+                if (File.Exists(path))
+                File.Delete(path);
+                File.Move(path + "temp", path);
             });
         }
 

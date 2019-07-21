@@ -19,6 +19,8 @@ namespace Exercise.Scanning
 
         event EventHandler<ScanEvent> ScanError;
 
+        event EventHandler<ScanEvent> ScanEvent;
+
         event EventHandler<ScanEvent> ScanCompleted;
 
         string[] SourceList { get; }

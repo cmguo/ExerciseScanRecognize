@@ -145,7 +145,7 @@ namespace Exercise.Model
             {
                 await service.updateRecord(new Record() { HomeworkId = record.HomeworkId, Name = record.Name });
             }
-            catch (Exception e)
+            catch
             {
                 record.Name = old;
                 throw;

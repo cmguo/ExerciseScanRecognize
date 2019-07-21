@@ -31,6 +31,7 @@ namespace Excecise.View
             titleBar.MouseMove += TitleBar_MouseMove;
             titleBar.MouseLeftButtonUp += TitleBar_MouseLeftButtonUp;
             titleBar.LostMouseCapture += TitleBar_LostMouseCapture;
+            Closing += MainWindow_Closing;
         }
 
         private void MainWindow_Loaded(object sender, RoutedEventArgs e)
@@ -52,16 +53,8 @@ namespace Excecise.View
             if (lastPage != null)
             {
                 UnLoadNavButtons(lastPage);
-                RestoreNavCommands(lastPage);
             }
             LoadNavButtons(page);
-            if (IsLoaded)
-                SetNavCommands(page);
-            else
-                Loaded += delegate
-                {
-                    SetNavCommands(page);
-                };
             lastPage = page;
         }
 
@@ -127,50 +120,14 @@ namespace Excecise.View
             }
         }
 
-        public void SetNavCommands(Page page)
+        private void MainWindow_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
-            TitleCommandCollection commands = TitleBarManager.GetCommands(page);
-            if (commands != null)
-            {
-                foreach (TitleCommand b in commands)
-                {
-                    ButtonBase button = GetNavButton(b.Name);
-                    button.CommandBindings.Add(new CommandBinding(button.Command, (s, e) =>
-                    {
-                        object arg = b.CommandParameter;
-                        if (arg == null)
-                            arg = e;
-                        b.Command.Execute(arg);
-                    }, (s, e) =>
-                    {
-                        object arg = b.CommandParameter;
-                        if (arg == null)
-                            arg = e;
-                        e.CanExecute = b.Command.CanExecute(arg);
-                    }));
-                }
-            }
-        }
-
-        public void RestoreNavCommands(Page page)
-        {
-            TitleCommandCollection commands = TitleBarManager.GetCommands(page);
-            if (commands != null)
-            {
-                foreach (TitleCommand b in commands)
-                {
-                    ButtonBase button = GetNavButton(b.Name);
-                    button.CommandBindings.Clear();
-                }
-            }
-        }
-
-        private ButtonBase GetNavButton(string name)
-        {
-            if (name == "Close")
-                return close;
-            else
-                return null;
+            TitleCommandCollection commands = TitleBarManager.GetCommands(lastPage);
+            if (commands == null)
+                return;
+            ICommand command = commands.Find("Close");
+            if (command != null)
+                command.Execute(e);
         }
 
         private void TitleBar_LostMouseCapture(object sender, MouseEventArgs e)

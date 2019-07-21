@@ -7,6 +7,7 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 using System;
 using System.Diagnostics;
+using System.Runtime.ExceptionServices;
 using System.Threading.Tasks;
 
 namespace Exercise.Algorithm
@@ -30,7 +31,7 @@ namespace Exercise.Algorithm
 
         public QRCodeData GetCode(PageRaw page)
         {
-            QRCodeData code = analyze<QRCodeData, PageRaw>(AnswerSheetAnalyze.METHOD_QR_CODE_RECOGNIZE, page);
+            QRCodeData code = Analyze<QRCodeData, PageRaw>(AnswerSheetAnalyze.METHOD_QR_CODE_RECOGNIZE, page);
             if (code.PaperInfo == null || code.PaperInfo.Length == 0)
                 throw new NullReferenceException("试卷二维码未识别");
             if (code.StudentInfo == "")
@@ -38,11 +39,12 @@ namespace Exercise.Algorithm
             return code;
         }
 
+        [HandleProcessCorruptedStateExceptions]
         public AnswerData GetAnswer(PageData page)
         {
             try
             {
-                return analyze<AnswerData, PageData>(AnswerSheetAnalyze.METHOD_ANSWER_SHEET_ANALYZE, page);
+                return Analyze<AnswerData, PageData>(AnswerSheetAnalyze.METHOD_ANSWER_SHEET_ANALYZE, page);
             }
             catch (Exception e)
             {
@@ -51,7 +53,7 @@ namespace Exercise.Algorithm
             }
         }
 
-        private O analyze<O, I>(string method, I input)
+        private O Analyze<O, I>(string method, I input)
         {
             string args = JsonConvert.SerializeObject(input, settings);
             string result = AnswerSheetAnalyze.analyzeAnswerSheet(method, args);

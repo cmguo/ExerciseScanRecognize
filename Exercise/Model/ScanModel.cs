@@ -171,7 +171,7 @@ namespace Exercise.Model
                 scanDevice.DuplexEnabled = true;
                 scanDevice.Scan(count);
             }
-            catch (Exception e)
+            catch
             {
                 IsScanning = false;
                 throw;

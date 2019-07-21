@@ -36,6 +36,7 @@ namespace TalBase.View
         public PopupDialog(string[] buttons)
         {
             InitializeComponent();
+            //Owner = Application.Current.MainWindow;
             DataContext = this;
             if (buttons.Length > 0)
                 Button0 = buttons[0];

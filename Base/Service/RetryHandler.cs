@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Base.Misc;
+using System;
 using System.Net.Http;
 using System.Net.Sockets;
 using System.Threading;
@@ -8,6 +9,8 @@ namespace Base.Service
 {
     public class RetryHandler : DelegatingHandler
     {
+        private static readonly Logger Log = Logger.GetLogger<RetryHandler>();
+
         // Strongly consider limiting the number of retries - "retry forever" is
         // probably not the most user friendly way you could respond to "the
         // network cable got pulled out."
@@ -32,6 +35,7 @@ namespace Base.Service
                 }
                 catch (Exception e)
                 {
+                    Log.w(e);
                     if (t == 0 || !Recoverable(e))
                         throw;
                     --t;

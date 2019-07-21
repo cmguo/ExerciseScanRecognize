@@ -6,7 +6,6 @@ using Exercise.Service;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Diagnostics;
 using System.IO;
 using System.Security.Cryptography;
 using System.Threading;
@@ -18,6 +17,8 @@ namespace Exercise.Model
 {
     public class ScanModel : ModelBase
     {
+
+        private static readonly Logger Log = Logger.GetLogger<ScanModel>();
 
         private static ScanModel s_instance;
         public static ScanModel Instance
@@ -140,7 +141,7 @@ namespace Exercise.Model
             scanDevice.ScanCompleted += ScanDevice_ScanCompleted;
             IsCompleted = true;
             scanDevice.Open();
-            BackgroudWork.Execute(DetectSource);
+            //BackgroudWork.Execute(DetectSource);
         }
 
         public void SetSavePath(string path)
@@ -158,7 +159,7 @@ namespace Exercise.Model
         {
             if (IsScanning)
                 return;
-            Debug.WriteLine("Scan");
+            Log.d("Scan");
             IsScanning = true;
             IsPaused = false;
             IsCompleted = false;
@@ -180,7 +181,7 @@ namespace Exercise.Model
 
         public async Task<bool> PauseScan()
         {
-            Debug.WriteLine("PauseScan");
+            Log.d("PauseScan");
             scanDevice.PauseScan();
             await Task.Run(() =>
             {
@@ -195,14 +196,14 @@ namespace Exercise.Model
 
         public void ResumeScan()
         {
-            Debug.WriteLine("ResumeScan");
+            Log.d("ResumeScan");
             IsPaused = false;
             scanDevice.ResumeScan();
         }
 
         public Task CancelScan()
         {
-            Debug.WriteLine("CancelScan");
+            Log.d("CancelScan");
             lock (mutex)
             {
                 cancel = true;
@@ -323,7 +324,7 @@ namespace Exercise.Model
                 page1 = lastPage;
                 lastPage = null;
             }
-            Debug.WriteLine("AddImage " + fileName);
+            Log.d("AddImage " + fileName);
             Page page2 = page;
             Page[] pages = new Page[] { page1, page2 };
             await Task.Factory.StartNew(() => ScanTwoPage(pages));
@@ -338,7 +339,7 @@ namespace Exercise.Model
             }
             catch (Exception e)
             {
-                Debug.WriteLine(e);
+                Log.d(e);
             }
             while (drop < PageDropped.Count)
             {
@@ -490,19 +491,19 @@ namespace Exercise.Model
 
         private void ScanDevice_ScanPaused(object sender, ScanEvent e)
         {
-            Debug.WriteLine("ScanDevice_ScanPaused");
+            Log.d("ScanDevice_ScanPaused");
             IsPaused = true;
         }
 
         private void ScanDevice_ScanError(object sender, ScanEvent e)
         {
-            Debug.WriteLine("ScanDevice_ScanError");
+            Log.d("ScanDevice_ScanError");
             Error = e.Error;
         }
 
         private void ScanDevice_ScanCompleted(object sender, ScanEvent e)
         {
-            Debug.WriteLine("ScanDevice_ScanCompleted");
+            Log.d("ScanDevice_ScanCompleted");
             IsScanning = false;
             if (lastPage != null)
             {

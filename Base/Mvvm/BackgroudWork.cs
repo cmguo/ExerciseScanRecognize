@@ -1,5 +1,5 @@
-﻿using System;
-using System.Diagnostics;
+﻿using Base.Misc;
+using System;
 using System.Threading.Tasks;
 using static Base.Mvvm.Action;
 
@@ -9,6 +9,8 @@ namespace Base.Mvvm
     {
         public delegate Task Work();
 
+        private static readonly Logger Log = Logger.GetLogger<BackgroudWork>();
+
         public static async void Execute(Work work, object owner)
         {
             try
@@ -17,7 +19,7 @@ namespace Base.Mvvm
             }
             catch (Exception e)
             {
-                Debug.WriteLine(e);
+                Log.w(e);
                 ActionExceptionEventArgs e1 = new ActionExceptionEventArgs(e);
                 Action.RaiseException(owner, e1);
                 if (!e1.IsHandled)
@@ -33,7 +35,7 @@ namespace Base.Mvvm
             }
             catch (Exception e)
             {
-                Debug.WriteLine(e);
+                Log.w(e);
                 ActionExceptionEventArgs e1 = new ActionExceptionEventArgs(e);
                 Action.RaiseException(owner, e1);
                 if (!e1.IsHandled)

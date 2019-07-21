@@ -33,6 +33,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="log4net">
+      <HintPath>..\Libraries\log4net.dll</HintPath>
+    </Reference>
     <Reference Include="Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\Newtonsoft.Json.12.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
@@ -56,6 +59,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Helpers\Converters.cs" />
+    <Compile Include="Misc\Logger.cs" />
     <Compile Include="Misc\SystemUtil.cs" />
     <Compile Include="Misc\UITreeHelper.cs" />
     <Compile Include="Mvvm\BackgroudWork.cs" />

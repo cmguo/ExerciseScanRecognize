@@ -1,7 +1,7 @@
 ﻿using Account.Model;
+using Base.Misc;
 using Base.Service;
 using System;
-using System.Diagnostics;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
@@ -14,6 +14,8 @@ namespace Account.Service
     public class AccountHandler : HttpClientHandler
     {
         private string oldUrl = (typeof(IAccount).GetCustomAttributes(typeof(BaseUriAttribute)).First() as BaseUriAttribute).Value;
+
+        private static readonly Logger Log = Logger.GetLogger<AccountHandler>();
 
         public AccountHandler()
         {
@@ -30,7 +32,7 @@ namespace Account.Service
                 uri = request.RequestUri.ToString().Replace(oldUrl, uri);
                 request.RequestUri = new Uri(uri);
             }
-            Debug.WriteLine(request.RequestUri);
+            Log.d(request.RequestUri);
             HttpResponseMessage resp = await base.SendAsync(request, cancellationToken).ConfigureAwait(false);
             if (resp.StatusCode.CompareTo(HttpStatusCode.Ambiguous) >= 0)
                 throw new HttpResponseException(resp.StatusCode, resp.ReasonPhrase);

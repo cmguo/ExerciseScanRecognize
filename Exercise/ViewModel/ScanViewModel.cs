@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 using TalBase.ViewModel;
 using TalBase.View;
 using System.Windows;
-using System.Diagnostics;
+using Base.Misc;
 
 namespace Exercise.ViewModel
 {
@@ -53,6 +53,8 @@ namespace Exercise.ViewModel
 
         #endregion
 
+        private static readonly Logger Log = Logger.GetLogger<ScanViewModel>();
+
         private ScanModel scanModel = ScanModel.Instance;
 
         public ScanViewModel()
@@ -86,7 +88,7 @@ namespace Exercise.ViewModel
             }
             catch (Exception e)
             {
-                Debug.WriteLine(e.ToString());
+                Log.w(e.ToString());
                 PopupDialog.Show(obj as UIElement, "TODO", "扫描仪未连接，请检查后重试。", 0, "确定");
                 return false;
             }

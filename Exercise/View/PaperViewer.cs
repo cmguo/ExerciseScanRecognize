@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Base.Misc;
+using System;
 using System.Diagnostics;
 using System.Windows;
 using System.Windows.Controls;
@@ -10,6 +11,8 @@ namespace Exercise.View
 {
     public class PaperViewer : UserControl
     {
+
+        private static readonly Logger Log = Logger.GetLogger<PaperViewer>();
 
         public static readonly DependencyProperty PaperProperty =
             DependencyProperty.Register("Paper", typeof(string), typeof(PaperViewer),
@@ -129,7 +132,7 @@ namespace Exercise.View
             }
             catch (Exception e)
             {
-                Debug.WriteLine(e);
+                Log.w(e);
             }
         }
 

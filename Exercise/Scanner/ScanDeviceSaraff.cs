@@ -1,17 +1,18 @@
-﻿using Base.Mvvm;
+﻿using Base.Misc;
 using Saraff.Twain;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Reflection;
 using System.Threading;
-using System.Threading.Tasks;
 using System.Windows;
 
 namespace Exercise.Scanning
 {
     public partial class ScanDeviceSaraff : IScanDevice
     {
+        private static readonly Logger Log = Logger.GetLogger<ScanDeviceSaraff>();
+
 
         public bool Indicators
         {
@@ -244,7 +245,7 @@ namespace Exercise.Scanning
 
         private void Twain32_DeviceEvent(object sender, Twain32.DeviceEventEventArgs e)
         {
-            Debug.WriteLine("Twain32_DeviceEvent: " + e.Event);
+            Log.d("Twain32_DeviceEvent: " + e.Event);
         }
 
         private void Twain32_SetupFileXferEvent(object sender, Twain32.SetupFileXferEventArgs e)
@@ -257,20 +258,20 @@ namespace Exercise.Scanning
             {
                 ScanEvent e1 = new ScanEvent();
                 GetFileName.Invoke(this, e1);
-                Debug.WriteLine("Twain32_SetupFileXferEvent: " + e1.FileName);
+                Log.d("Twain32_SetupFileXferEvent: " + e1.FileName);
                 e.FileName = e1.FileName;
             }
         }
 
         private void Twain32_XferDone(object sender, Twain32.XferDoneEventArgs e)
         {
-            Debug.WriteLine("Twain32_XferDone");
+            Log.d("Twain32_XferDone");
             //CheckStatus(e);
         }
 
         private void Twain32_FileXferEvent(object sender, Twain32.FileXferEventArgs e)
         {
-            Debug.WriteLine("Twain32_FileXferEvent: " + e.ImageFileXfer.FileName);
+            Log.d("Twain32_FileXferEvent: " + e.ImageFileXfer.FileName);
             if (OnImage != null)
             {
                 window.Dispatcher.Invoke(() =>
@@ -280,7 +281,7 @@ namespace Exercise.Scanning
 
         private void Twain32_AcquireCompleted(object sender, EventArgs e)
         {
-            Debug.WriteLine("Twain32_AcquireCompleted");
+            Log.d("Twain32_AcquireCompleted");
             if (ScanCompleted != null)
             {
                 window.Dispatcher.Invoke(() =>
@@ -290,7 +291,7 @@ namespace Exercise.Scanning
 
         private void Twain32_AcquireError(object sender, Twain32.AcquireErrorEventArgs e)
         {
-            Debug.WriteLine("Twain32_AcquireError " + e.Exception.Message);
+            Log.w("Twain32_AcquireError " + e.Exception.Message);
             if (ScanError != null)
             {
                 window.Dispatcher.Invoke(() =>

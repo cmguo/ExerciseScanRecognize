@@ -5,7 +5,6 @@ using net.sf.jni4net;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 using System;
-using System.Diagnostics;
 using System.IO;
 using System.Runtime.ExceptionServices;
 using System.Threading.Tasks;
@@ -14,6 +13,8 @@ namespace Exercise.Algorithm
 {
     public class Algorithm
     {
+        private static readonly Logger Log = Logger.GetLogger<Algorithm>();
+
         private readonly JsonSerializerSettings settings = new JsonSerializerSettings()
         {
             ContractResolver = new CamelCasePropertyNamesContractResolver()
@@ -42,25 +43,25 @@ namespace Exercise.Algorithm
         [HandleProcessCorruptedStateExceptions]
         public AnswerData GetAnswer(PageData page)
         {
-            try
-            {
-                return Analyze<AnswerData, PageData>(AnswerSheetAnalyze.METHOD_ANSWER_SHEET_ANALYZE, page);
-            }
-            catch (Exception e)
-            {
-                Debug.WriteLine(e);
-                throw new Exception("识别算法异常", e);
-            }
+            return Analyze<AnswerData, PageData>(AnswerSheetAnalyze.METHOD_ANSWER_SHEET_ANALYZE, page);
         }
 
         private O Analyze<O, I>(string method, I input)
         {
-            string args = JsonConvert.SerializeObject(input, settings);
-            string result = AnswerSheetAnalyze.analyzeAnswerSheet(method, args);
-            Result<O> output = JsonConvert.DeserializeObject<Result<O>>(result, settings);
-            if (output.Code != 0)
-                throw new AlgorithmException(output.Code, output.Message);
-            return output.Data;
+            try
+            {
+                string args = JsonConvert.SerializeObject(input, settings);
+                string result = AnswerSheetAnalyze.analyzeAnswerSheet(method, args);
+                Result<O> output = JsonConvert.DeserializeObject<Result<O>>(result, settings);
+                if (output.Code != 0)
+                    throw new AlgorithmException(output.Code, output.Message);
+                return output.Data;
+            }
+            catch (Exception e)
+            {
+                Log.w(e);
+                throw new Exception("识别算法异常", e);
+            }
         }
 
         public async void Test()

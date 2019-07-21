@@ -1,13 +1,15 @@
 ﻿using System;
 using System.Windows.Input;
-using System.Diagnostics;
 using System.Threading.Tasks;
+using Base.Misc;
 
 namespace Base.Mvvm
 {
 
     public class Action : NotifyBase
     {
+        private static readonly Logger Log = Logger.GetLogger<Action>();
+
         #region Fields
 
         public class ActionExceptionEventArgs : EventArgs
@@ -92,7 +94,7 @@ namespace Base.Mvvm
             }
             catch (Exception e)
             {
-                Debug.WriteLine(e);
+                Log.w(e);
                 Status = ActionStatus.Error;
                 RaisePropertyChanged("Status");
                 Exception = e;

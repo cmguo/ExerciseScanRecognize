@@ -5,7 +5,6 @@ using Exercise.Service;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
@@ -16,6 +15,8 @@ namespace Exercise.Model
 
     public class HistoryModel : NotifyBase
     {
+        private static readonly Logger Log = Logger.GetLogger<HistoryModel>();
+
         private static HistoryModel s_instance;
         public static HistoryModel Instance
         {
@@ -105,7 +106,7 @@ namespace Exercise.Model
                     }
                     catch (Exception e)
                     {
-                        Debug.WriteLine("LoadLocal", e.Message);
+                        Log.w("LoadLocal", e.Message);
                     }
                 }
                 try

@@ -1,8 +1,8 @@
 ﻿using Account;
 using Application.Misc;
+using Base.Misc;
 using Excecise.View;
 using System;
-using System.Diagnostics;
 using System.IO;
 using System.Windows;
 using TalBase.View;
@@ -14,6 +14,8 @@ namespace Application
     /// </summary>
     public partial class App : System.Windows.Application
     {
+        private static readonly Logger Log = Logger.GetLogger<App>();
+
         App()
         {
             ErrorMessageBox.Init();
@@ -32,7 +34,7 @@ namespace Application
 
         private void CurrentDomain_UnhandledException(object sender, UnhandledExceptionEventArgs e)
         {
-            Debug.WriteLine(e.ExceptionObject);
+            Log.w(e.ExceptionObject);
             string path = ROOT_PATH + "\\扫描试卷\\" + DateTime.Now.ToString("D");
             Directory.CreateDirectory(path);
             path += "\\" + DateTime.Now.ToString("T").Replace(':', '.') + ".crash";

@@ -6,7 +6,7 @@
     <ResourceDictionary.MergedDictionaries>
         <ResourceDictionary Source="../Themes/ScrollBar.xaml" />
     </ResourceDictionary.MergedDictionaries>
-    <Style  TargetType="{x:Type DataGrid}">
+    <Style x:Key="DefaultDataGridStyle" TargetType="{x:Type DataGrid}">
         <Setter Property="AutoGenerateColumns" Value="False"/>
         <Setter Property="RowHeaderWidth" Value="0"/>
         <Setter Property="Background" Value="White"/>

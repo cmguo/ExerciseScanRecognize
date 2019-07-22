@@ -8,7 +8,6 @@
       xmlns:sys="clr-namespace:System;assembly=mscorlib"
       xmlns:tb="clr-namespace:Base.TitleBar;assembly=Base"
       xmlns:cv="clr-namespace:Base.Mvvm.Converter;assembly=Base"
-      xmlns:mu="clr-namespace:Panuon.UI;assembly=Panuon.UI"
       xmlns:tal="clr-namespace:TalBase.View;assembly=TalBase"
       xmlns:svgc="http://sharpvectors.codeplex.com/svgc/"
       mc:Ignorable="d"
@@ -136,9 +135,9 @@
             </ListView.ItemTemplate>
         </ListView>
 
-        <StackPanel Orientation="Vertical" Grid.Row="2" >
-            <DataGrid x:Name="dataGrid" Margin="30, 16, 30, 0"
-                  ItemsSource="{Binding Records}">
+            <DataGrid Grid.Row="2" x:Name="dataGrid" Margin="30, 16, 30, 0" ScrollViewer.VerticalScrollBarVisibility="Visible" 
+                      
+                  ItemsSource="{Binding Records}" Style="{StaticResource DefaultDataGridStyle}">
 
                 <DataGrid.Columns>
                     <DataGridTemplateColumn Header="试卷名称" IsReadOnly="False" Width="230" 
@@ -172,14 +171,14 @@
                     </DataGridTemplateColumn>
                 </DataGrid.Columns>
             </DataGrid>
-            <TextBlock x:Name="NoRecord"  Text="无已上传扫描记录" HorizontalAlignment="Center" Margin="0,16,0,0" Height="100"  Foreground="#802D4A66" FontSize="14" Background="Transparent" Visibility="{Binding PageCount, Converter={StaticResource NoRecordNoficationContentConverter}}">
+        <TextBlock Grid.Row="2" x:Name="NoRecord"  Text="无已上传扫描记录" HorizontalAlignment="Center"  Margin="0,75,0,0"   Foreground="#802D4A66" FontSize="14" Background="Transparent" Visibility="{Binding PageCount, Converter={StaticResource NoRecordNoficationContentConverter}}">
             </TextBlock>
-            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Visibility="{Binding PageCount, Converter={StaticResource ShowNetErrorContentConverter}}"  Margin="0,16,0,0">
-                <TextBlock Text="网络异常，无法加载已经上传记录，请检查后重试" FontSize="14" Foreground="#FF6767" Margin="0,1,0,0"/>
-                <Button Background="Transparent" BorderThickness="0" Click="ButtonRefresh_Click">
-                    <Button.Style>
-                        <Style TargetType="Button">
-                            <Setter Property="Template">
+        <StackPanel  Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Center" Visibility="{Binding PageCount, Converter={StaticResource ShowNetErrorContentConverter}}"  Margin="0,75,0,0">
+            <TextBlock Text="网络异常，无法加载已经上传记录，请检查后重试" FontSize="14" Foreground="#FF6767" Margin="0,1,0,0"/>
+            <Button Background="Transparent" BorderThickness="0" Click="ButtonRefresh_Click">
+                <Button.Style>
+                    <Style TargetType="Button">
+                        <Setter Property="Template">
                             <Setter.Value>
                                 <ControlTemplate TargetType="{x:Type Button}">
                                     <Border x:Name="Chrome" BorderBrush="{TemplateBinding BorderBrush}" Background="{TemplateBinding Background}" SnapsToDevicePixels="true">
@@ -187,17 +186,16 @@
                                     </Border>
                                 </ControlTemplate>
                             </Setter.Value>
-                            </Setter>
-                        </Style>
-                    </Button.Style>
+                        </Setter>
+                    </Style>
+                </Button.Style>
                 <StackPanel Orientation="Horizontal">
-                        <Image Width="16" Height="16" Source="/Icons/refresh.png" Margin="16,2,0,0"/>
-                 <TextBlock Text="刷新" Foreground="#4C84FF" FontSize="14" Margin="8,0,0,0"/>
+                    <Image Width="16" Height="16" Source="/Icons/refresh.png" Margin="16,2,0,0"/>
+                    <TextBlock Text="刷新" Foreground="#4C84FF" FontSize="14" Margin="8,0,0,0"/>
                 </StackPanel>
-                </Button>
-            </StackPanel>
+            </Button>
         </StackPanel>
-      
+
         <ListView Grid.Row="3" x:Name="pageBar" ItemsSource="{Binding Pages}" 
                   BorderThickness="0" Padding="0" HorizontalAlignment="Right" Margin="0, 0, 30, 30"
                   SelectedItem="{Binding PageIndex}" SelectionMode="Single" ItemContainerStyle="{DynamicResource ButtonListStyle}" Style="{x:Null}">

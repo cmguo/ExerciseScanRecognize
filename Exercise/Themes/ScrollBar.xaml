@@ -53,7 +53,7 @@
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type Thumb}">
 
-                    <Rectangle Name="thumbRect" Fill="#DDE0E3 " RadiusX="5" RadiusY="5"/>
+                    <Rectangle Name="thumbRect" Fill="#DDE0E3" RadiusX="5" RadiusY="5"/>
                     <ControlTemplate.Triggers>
                         <Trigger Property="IsMouseOver" Value="True">
                             <Setter Property="Fill" Value="#BFC8D1" TargetName="thumbRect" />

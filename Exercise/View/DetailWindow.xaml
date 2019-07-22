@@ -21,6 +21,7 @@
             
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="pack://application:,,,/TalBase;component/Themes/Generic.xaml" />
+                <ResourceDictionary Source="../Themes/ListView.xaml" />
             </ResourceDictionary.MergedDictionaries>
             
             <ControlTemplate x:Key="StudentList">
@@ -42,14 +43,15 @@
                             </Border>
                         </DataTemplate>
                     </ListView.ItemTemplate>
+                   
                 </ListView>
             </ControlTemplate>
 
             <ControlTemplate x:Key="ClassDetail" TargetType="ListViewItem">
                 <StackPanel Orientation="Vertical" HorizontalAlignment="Stretch" IsHitTestVisible="False" >
-                    <TextBlock Margin="0, 0, 0, 8" FontSize="14" Foreground="#FF2D4A66" Text="{Binding Name}"/>
+                    <TextBlock Margin="0, 6, 0, 8" FontSize="14" Foreground="#FF2D4A66" Text="{Binding Name}"/>
 
-                    <Border Background="#FFF4F8FE">
+                    <Border Background="#FFF4F8FE" Margin="0,0,0,10">
                         <Grid Margin="14, 16, 14, 16" >
                             <Grid.RowDefinitions>
                                 <RowDefinition Height="Auto" />
@@ -102,8 +104,8 @@
                 </tal:TalTouch>
             </Grid>
 
-            <ListView Grid.Row="1" Margin="0, 24, 0, 0" BorderThickness="0" ScrollViewer.CanContentScroll="False"
-                      ItemsSource="{Binding}" >
+            <ListView Grid.Row="1" Margin="0, 24, 0, 0" BorderThickness="0" ScrollViewer.CanContentScroll="False" ScrollViewer.VerticalScrollBarVisibility="Auto" ScrollViewer.HorizontalScrollBarVisibility="Hidden"
+                      ItemsSource="{Binding}"  Style="{StaticResource DefaultListView}">
                 <ListView.ItemContainerStyle>
                     <Style TargetType="{x:Type ListViewItem}">
                         <Setter Property="Focusable" Value="False"/>

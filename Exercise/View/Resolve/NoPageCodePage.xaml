@@ -13,11 +13,14 @@
         <resolve:ExceptionConverter x:Key="ExceptionConverter" />
     </Page.Resources>
 
-    <Grid>
-        <StackPanel HorizontalAlignment="Left" VerticalAlignment="Center" Orientation="Horizontal">
-            <Image Width="16" Height="16"  Margin="0, 0, 8, 0" Source="{svgc:SvgImage Source=/Icons/异常.svg}" />
-            <TextBlock FontSize="14" Foreground="#FF2D4A66" TextWrapping="Wrap"
+    <Grid HorizontalAlignment="Left">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="auto"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+        <Image Width="16" Height="16"  Margin="0, 0, 8, 0" Source="{svgc:SvgImage Source=/Icons/异常.svg}" />
+        <TextBlock Grid.Column="1" FontSize="14" Foreground="#FF2D4A66" TextWrapping="Wrap"
                        Text="{Binding Converter={StaticResource ExceptionConverter}, ConverterParameter=Message}" />
-        </StackPanel>
+        
     </Grid>
 </Page>

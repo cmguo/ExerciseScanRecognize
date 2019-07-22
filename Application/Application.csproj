@@ -309,7 +309,7 @@
     <Content Include="Icons\关闭\细.svg">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Icons\刷新.png">
+    <Content Include="Icons\refresh.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Icons\Finish\16.png">

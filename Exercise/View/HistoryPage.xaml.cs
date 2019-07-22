@@ -10,6 +10,7 @@ using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
 using System.Windows.Data;
 using static Exercise.Service.HistoryData;
+using TalBase.Utils;
 
 namespace Exercise.View
 {
@@ -75,6 +76,12 @@ namespace Exercise.View
             BackgroudWork.Execute(() => vm.ModifyRecordName(record, old));
         }
 
+        private void ButtonRefresh_Click(object sender, System.Windows.RoutedEventArgs e)
+        {
+            HistoryViewModel vm = DataContext as HistoryViewModel;
+            vm.PageIndex = 1;
+        }
+
     }
 
     [ValueConversion(typeof(IList<ClassDetail>), typeof(string))]
@@ -97,6 +104,47 @@ namespace Exercise.View
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
         {
             throw new NotImplementedException();
+        }
+    }
+    internal class NoRecordNoficationContentConverter : IValueConverter
+    {
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            if ((int)value>0)
+            {
+                return Visibility.Collapsed;
+            }
+            if (NetWorkManager.CheckNetWorkAvailable())
+            {
+                return Visibility.Visible;
+            }
+            return Visibility.Collapsed;
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            return DependencyProperty.UnsetValue;
+        }
+    }
+
+    internal class ShowNetErrorContentConverter : IValueConverter
+    {
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            if ((int)value > 0)
+            {
+                return Visibility.Collapsed;
+            }
+            if (NetWorkManager.CheckNetWorkAvailable())
+            {
+                return Visibility.Collapsed;
+            }
+            return Visibility.Visible;
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            return DependencyProperty.UnsetValue;
         }
     }
 }

@@ -8,6 +8,7 @@
       xmlns:sys="clr-namespace:System;assembly=mscorlib"
       xmlns:tb="clr-namespace:Base.TitleBar;assembly=Base"
       xmlns:cv="clr-namespace:Base.Mvvm.Converter;assembly=Base"
+      xmlns:mu="clr-namespace:Panuon.UI;assembly=Panuon.UI"
       xmlns:tal="clr-namespace:TalBase.View;assembly=TalBase"
       xmlns:svgc="http://sharpvectors.codeplex.com/svgc/"
       mc:Ignorable="d"
@@ -26,13 +27,14 @@
                 <ResourceDictionary Source="../Themes/ScrollBar.xaml" />
             </ResourceDictionary.MergedDictionaries>
 
-            
+
             <cv:MultiValueConverter x:Key="MultiValueConverter" />
             <cv:BooleanObjectConverter x:Key="PageIconConverter" 
                                        FalseValue="/Icons/left.png" TrueValue="/Icons/right.png" />
             <cv:ToStringConverter x:Key="ToStringConverter" />
             <local:HistroyDetailConverter x:Key="HistroyDetailConverter" />
-
+            <local:NoRecordNoficationContentConverter x:Key="NoRecordNoficationContentConverter" />
+            <local:ShowNetErrorContentConverter x:Key="ShowNetErrorContentConverter" />
             <vm:HistoryViewModel x:Key="ViewModel"/>
             
             <tal:TalTouch x:Key="Return" 
@@ -134,42 +136,68 @@
             </ListView.ItemTemplate>
         </ListView>
 
-        <DataGrid Grid.Row="2" x:Name="dataGrid" Margin="30, 16, 30, 0"
+        <StackPanel Orientation="Vertical" Grid.Row="2" >
+            <DataGrid x:Name="dataGrid" Margin="30, 16, 30, 0"
                   ItemsSource="{Binding Records}">
-   
-            <DataGrid.Columns>
-                <DataGridTemplateColumn Header="试卷名称" IsReadOnly="False" Width="230" 
+
+                <DataGrid.Columns>
+                    <DataGridTemplateColumn Header="试卷名称" IsReadOnly="False" Width="230" 
                                         CellTemplate="{StaticResource DataTemplate}"
                                         CellEditingTemplate="{StaticResource EditingTemplate}">
-                </DataGridTemplateColumn>
-                <DataGridTemplateColumn Header="扫描统计" IsReadOnly="True" Width="480">
-                    <DataGridTemplateColumn.CellTemplate>
-                        <DataTemplate>
-                            <TextBlock Text="{Binding DetailList, Converter={StaticResource HistroyDetailConverter}}" TextTrimming="CharacterEllipsis" TextWrapping="NoWrap" Width="448">
-                                <TextBlock.ToolTip>
-                                    <ToolTip Style="{DynamicResource TooltipStyle}"  Content="{Binding DetailList, Converter={StaticResource HistroyDetailConverter}}"
+                    </DataGridTemplateColumn>
+                    <DataGridTemplateColumn Header="扫描统计" IsReadOnly="True" Width="480">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding DetailList, Converter={StaticResource HistroyDetailConverter}}" TextTrimming="CharacterEllipsis" TextWrapping="NoWrap" Width="448">
+                                    <TextBlock.ToolTip>
+                                        <ToolTip Style="{DynamicResource TooltipStyle}"  Content="{Binding DetailList, Converter={StaticResource HistroyDetailConverter}}"
                                               Width="480" MaxWidth="448"/>
-                                </TextBlock.ToolTip>
-                            </TextBlock>
-                        </DataTemplate>
+                                    </TextBlock.ToolTip>
+                                </TextBlock>
+                            </DataTemplate>
 
-                    </DataGridTemplateColumn.CellTemplate>
-                </DataGridTemplateColumn>
-                <DataGridTextColumn Header="扫描时间" IsReadOnly="True" Binding="{Binding DataTime, StringFormat={}{0:yyyy.MM.dd - HH:mm}, Mode=OneWay}" Width="178"/>
-                <DataGridTemplateColumn Header="操作" Width="*">
-                    <DataGridTemplateColumn.CellTemplate>
-                        <DataTemplate>
-                            <StackPanel DockPanel.Dock="Right" Orientation="Horizontal">
-                                <tal:TalHyperlink Content="查看扫描详情" Click="ButtonDetail_Click" Background="{x:Null}" BorderThickness="0"/>
-                                <TextBlock Text=" | " />
-                                <tal:TalHyperlink Content="重命名" Click="ButtonRename_Click" Background="{x:Null}" BorderThickness="0" />
-                            </StackPanel>
-                        </DataTemplate>
-                    </DataGridTemplateColumn.CellTemplate>
-                </DataGridTemplateColumn>
-            </DataGrid.Columns>
-        </DataGrid>
-
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                    <DataGridTextColumn Header="扫描时间" IsReadOnly="True" Binding="{Binding DataTime, StringFormat={}{0:yyyy.MM.dd - HH:mm}, Mode=OneWay}" Width="178"/>
+                    <DataGridTemplateColumn Header="操作" Width="*">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <StackPanel DockPanel.Dock="Right" Orientation="Horizontal">
+                                    <tal:TalHyperlink Content="查看扫描详情" Click="ButtonDetail_Click" Background="{x:Null}" BorderThickness="0"/>
+                                    <TextBlock Text=" | " />
+                                    <tal:TalHyperlink Content="重命名" Click="ButtonRename_Click" Background="{x:Null}" BorderThickness="0" />
+                                </StackPanel>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                </DataGrid.Columns>
+            </DataGrid>
+            <TextBlock x:Name="NoRecord"  Text="无已上传扫描记录" HorizontalAlignment="Center" Margin="0,16,0,0" Height="100"  Foreground="#802D4A66" FontSize="14" Background="Transparent" Visibility="{Binding PageCount, Converter={StaticResource NoRecordNoficationContentConverter}}">
+            </TextBlock>
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Visibility="{Binding PageCount, Converter={StaticResource ShowNetErrorContentConverter}}"  Margin="0,16,0,0">
+                <TextBlock Text="网络异常，无法加载已经上传记录，请检查后重试" FontSize="14" Foreground="#FF6767" Margin="0,1,0,0"/>
+                <Button Background="Transparent" BorderThickness="0" Click="ButtonRefresh_Click">
+                    <Button.Style>
+                        <Style TargetType="Button">
+                            <Setter Property="Template">
+                            <Setter.Value>
+                                <ControlTemplate TargetType="{x:Type Button}">
+                                    <Border x:Name="Chrome" BorderBrush="{TemplateBinding BorderBrush}" Background="{TemplateBinding Background}" SnapsToDevicePixels="true">
+                                        <ContentPresenter HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" Margin="{TemplateBinding Padding}" RecognizesAccessKey="True" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
+                                    </Border>
+                                </ControlTemplate>
+                            </Setter.Value>
+                            </Setter>
+                        </Style>
+                    </Button.Style>
+                <StackPanel Orientation="Horizontal">
+                        <Image Width="16" Height="16" Source="/Icons/refresh.png" Margin="16,2,0,0"/>
+                 <TextBlock Text="刷新" Foreground="#4C84FF" FontSize="14" Margin="8,0,0,0"/>
+                </StackPanel>
+                </Button>
+            </StackPanel>
+        </StackPanel>
+      
         <ListView Grid.Row="3" x:Name="pageBar" ItemsSource="{Binding Pages}" 
                   BorderThickness="0" Padding="0" HorizontalAlignment="Right" Margin="0, 0, 30, 30"
                   SelectedItem="{Binding PageIndex}" SelectionMode="Single" ItemContainerStyle="{DynamicResource ButtonListStyle}" Style="{x:Null}">

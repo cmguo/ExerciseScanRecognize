@@ -90,13 +90,13 @@ namespace Exercise.ViewModel
             catch (Exception e)
             {
                 Log.w(e.ToString());
-                PopupDialog.Show(obj as UIElement, "TODO", "扫描仪未连接，请检查后重试。", 0, "确定");
+                PopupDialog.Show(obj as UIElement, "发现错误", "扫描仪未正确连接，请检查后重试。", 0, "确定");
                 return false;
             }
             int result = 0;
             while (result == 0 && !scanModel.FeederLoaded)
             {
-                result = PopupDialog.Show(obj as UIElement, "TODO", "扫描仪里面没有纸张，请添加试卷。", 0, "确定", "取消");
+                result = PopupDialog.Show(obj as UIElement, "发现错误", "扫描仪里面没有纸张，请添加试卷。", 0, "确定", "取消");
             }
             return result == 0;
         }

@@ -61,7 +61,7 @@ namespace Exercise.View
                 if (e.Key.CompareTo(Key.A) >= 0 && e.Key.CompareTo(Key.Z) <= 0)
                 {
                     hake += (char) ('A' + (int) e.Key - (int) Key.A);
-                    if (hake == "QWER" && PopupDialog.Show(this, "TODO", "伪造全校数据?!!", 1, "确定", "取消") == 0)
+                    if (hake == "QWER" && PopupDialog.Show(this, "确认", "伪造全校数据?!!", 1, "确定", "取消") == 0)
                     {
                         SummaryViewModel vm = DataContext as SummaryViewModel;
                         vm.FillAll();

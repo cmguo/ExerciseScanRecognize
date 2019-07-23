@@ -46,7 +46,7 @@ namespace Exercise.ViewModel
             DiscardCommand = new RelayCommand((e) => Discard(e));
             CloseCommand = new RelayCommand((e) => Close(e));
             exerciseModel.PropertyChanged += ExerciseModel_PropertyChanged;
-            CloseMessage = "本次扫描结果未上传，退出后，扫描结果将作废，确认退出软件吗？";
+            CloseMessage = "本次扫描结果未上传，退出后，扫描结果将作废，确认退出吗？";
             Update();
         }
 

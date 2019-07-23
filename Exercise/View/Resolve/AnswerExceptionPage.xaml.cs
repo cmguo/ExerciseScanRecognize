@@ -60,7 +60,7 @@ namespace Exercise.View.Resolve
         {
             if (!analyze.Confirm())
             {
-                PopupDialog.Show(this, "TODO", "输入值不在有效范围中", 0, "确定");
+                PopupDialog.Show(this, "确认", "输入值不在有效范围中", 0, "确定");
                 return;
             }
             if (!analyze.Next())

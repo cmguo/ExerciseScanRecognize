@@ -149,7 +149,7 @@ namespace Exercise.ViewModel
                 int result = -1;
                 if (scanModel.Error != null)
                 {
-                    result = PopupDialog.Show(obj as UIElement, "TODO", "扫描仪发生异常，无法说明。请检查后重试。", 1, "查看结果", "继续扫描");
+                    result = PopupDialog.Show(obj as UIElement, "发现错误", "扫描仪发生异常，无法说明。请检查后重试。", 1, "查看结果", "继续扫描");
                 }
                 else
                 {

@@ -14,7 +14,7 @@ namespace TalBase.Utils
             {
                 return true;
             }
-            PopupDialog.Show("TODO", "当前电脑无网络连接，请检查后再开始扫描。", 0, "确定");
+            PopupDialog.Show("发现错误", "当前电脑无网络连接，请检查后再开始扫描。", 0, "确定");
             return false;
             
         }

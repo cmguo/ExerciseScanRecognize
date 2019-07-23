@@ -139,7 +139,6 @@ namespace Exercise.ViewModel
             switch (type)
             {
                 case ResolveType.Ignore:
-                case ResolveType.RemovePage:
                     title = "忽略异常";
                     btn = "忽略";
                     switch (SelectedException.Type)
@@ -148,13 +147,24 @@ namespace Exercise.ViewModel
                             message = "忽略后，该张试卷所有题目作答将无法统计，确认忽略吗？";
                             break;
                         case ExceptionType.PageLost:
-                            message = "TODO";
+                            message = "忽略后，该张试卷无法还原，确认忽略吗？";
+                            break;
+                        case ExceptionType.AnswerException:
+                        case ExceptionType.CorrectionException:
+                            title = "设置异常题目为0分";
+                            btn = "确定";
+                            message = "确认要将本页所有的异常题目设置为0分吗？";
                             break;
                         default:
                             //Todo
                             message = "忽略后，该张试卷无法复原，确认忽略吗？";
                             break;
                     }
+                    break;
+                case ResolveType.RemovePage:
+                    title = "删除试卷";
+                    btn = "删除";
+                    message = "删除后该生本次考试将被放弃，不计入统计，确认删除吗？";
                     break;
             }
             if (title != null)

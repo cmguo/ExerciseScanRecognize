@@ -16,11 +16,11 @@ namespace TalBase.View
         {
             if (e.Parameter is UIElement)
             {
-                PopupDialog.Show(e.Parameter as UIElement, "TODO", GetMessage(e.Exception), 0, "确定");
+                PopupDialog.Show(e.Parameter as UIElement, "发现错误", GetMessage(e.Exception), 0, "确定");
             }
             else
             {
-                PopupDialog.Show(Application.Current.MainWindow, "TODO", GetMessage(e.Exception), 0, "确定");
+                PopupDialog.Show(Application.Current.MainWindow, "发现错误", GetMessage(e.Exception), 0, "确定");
             }
             e.IsHandled = true;
         }

@@ -442,8 +442,6 @@ namespace Exercise.Model
                 }
             }
             long tick3 = Environment.TickCount;
-            pages[0].PageData = null;
-            pages[1].PageData = null;
         }
 
         private void WaitExerciseData()
@@ -461,16 +459,10 @@ namespace Exercise.Model
         {
             try
             {
-                using (FileStream fs = new FileStream(page.PagePath, FileMode.Open, FileAccess.Read))
-                using (MemoryStream stream = new MemoryStream((int)fs.Length))
-                {
-                    fs.CopyTo(stream);
-                    page.PageData = stream.GetBuffer();
-                }
                 tick = AddTick(1, tick);
                 if (needCode)
                 {
-                    Algorithm.QRCodeData code = await algorithm.GetCode(new Algorithm.PageRaw() { ImgBytes = page.PageData });
+                    Algorithm.QRCodeData code = await algorithm.GetCode(new Algorithm.PageRaw() { ImgPathIn = page.PagePath });
                     tick = AddTick(2, tick);
                     int split = code.PaperInfo.IndexOf('_');
                     if (split < 0)
@@ -496,28 +488,28 @@ namespace Exercise.Model
         private async Task<long> ScanPage(Page page, long tick)
         {
             PageData pageData = exerciseData.Pages[page.PageIndex];
-            pageData.ImgBytes = page.PageData;
+            pageData.ImgPathIn = page.PagePath;
+            pageData.ImgPathOut = page.PagePath.Replace(".jpg", ".out.jpg");
             page.MetaData = pageData;
             try
             {
                 AnswerData answerData = await algorithm.GetAnswer(pageData);
                 tick = AddTick(4, tick);
                 page.Answer = answerData;
-                page.PageData = answerData.RedressedImgBytes;
-                answerData.RedressedImgBytes = null;
-                MD5 md5 = new MD5CryptoServiceProvider();
-                byte[] output = md5.ComputeHash(page.PageData);
-                page.PageName = BitConverter.ToString(output).Replace("-", "").ToLower() + ".jpg";
+                //page.PageData = answerData.RedressedImgBytes;
+                //answerData.RedressedImgBytes = null;
+                using (FileStream fs = new FileStream(pageData.ImgPathOut, FileMode.Open, FileAccess.Read))
+                {
+                    MD5 md5 = new MD5CryptoServiceProvider();
+                    byte[] output = md5.ComputeHash(fs);
+                    page.PageName = BitConverter.ToString(output).Replace("-", "").ToLower() + ".jpg";
+                }
                 tick = AddTick(5, tick);
                 File.Delete(page.PagePath);
                 page.PagePath = savePath + "\\" + page.PageName;
-                using (FileStream fs = new FileStream(page.PagePath, FileMode.Create, FileAccess.Write))
-                using (Stream stream = new MemoryStream(page.PageData))
-                {
-                    stream.CopyTo(fs);
-                }
+                File.Move(pageData.ImgPathOut, page.PagePath);
                 tick = AddTick(6, tick);
-                page.PageData = null;
+                //page.PageData = null;
             }
             catch (Exception e)
             {
@@ -526,8 +518,8 @@ namespace Exercise.Model
             }
             finally
             {
-                page.PageData = null;
-                pageData.ImgBytes = null;
+                //page.PageData = null;
+                //pageData.ImgBytes = null;
             }
             return tick;
         }

@@ -15,6 +15,7 @@ namespace Exercise.Model
         public int ScanIndex { get; set; }
 
         [JsonIgnore]
+        [Obsolete("PageData is deprecated")]
         public byte[] PageData { get; set; } // 算法会调整
         [JsonIgnore]
         public String PagePath { get; set; }

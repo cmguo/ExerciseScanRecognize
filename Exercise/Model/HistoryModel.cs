@@ -36,7 +36,6 @@ namespace Exercise.Model
 
         public int PageCount { get; private set; }
 
-        private static readonly string ROOT_PATH = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
         private static readonly int PAGE_SIZE = 10;
 
         private IExercise service;
@@ -45,13 +44,12 @@ namespace Exercise.Model
         {
             LocalRecords = new ObservableCollection<Record>();
             service = Services.Get<IExercise>();
-            Directory.CreateDirectory(ROOT_PATH + "\\扫描试卷");
         }
 
         public string NewSavePath()
         {
-            string path = ROOT_PATH + "\\扫描试卷\\" 
-                + DateTime.Now.ToString("D") + "\\" + DateTime.Now.ToString("T").Replace(':', '.');
+            string path = Component.DATA_PATH + "\\" + DateTime.Now.ToString("yyyyMMdd")
+                + "\\" + DateTime.Now.ToString("T").Replace(':', '.');
             Directory.CreateDirectory(path);
             return path;
         }
@@ -87,7 +85,7 @@ namespace Exercise.Model
 
         private async Task LoadLocal()
         {
-            string path = ROOT_PATH + "\\扫描试卷";
+            string path = Component.DATA_PATH;
             foreach (string path1 in Directory.EnumerateDirectories(path))
             {
                 foreach (string path2 in Directory.EnumerateDirectories(path1))

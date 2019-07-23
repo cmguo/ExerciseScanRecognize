@@ -23,10 +23,15 @@ namespace Base.Misc
             VERBOSE,
         }
 
-        static Logger()
+        public static void SetLogPath(string path)
+        {
+            GlobalContext.Properties["LogPath"] = path;
+        }
+
+        public static void Config(string file)
         {
             StreamResourceInfo resource = 
-                Application.GetContentStream(new Uri("/logger.xml", UriKind.Relative));
+                Application.GetContentStream(new Uri(file, UriKind.Relative));
             if (resource != null)
                 XmlConfigurator.Configure(resource.Stream);
         }

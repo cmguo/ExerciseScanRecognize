@@ -1,5 +1,6 @@
 ﻿using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using System;
 using System.Collections.Generic;
 
 namespace Exercise.Algorithm
@@ -8,7 +9,14 @@ namespace Exercise.Algorithm
     {
         [JsonProperty(Required = Required.Default, NullValueHandling = NullValueHandling.Ignore)]
         [JsonConverter(typeof(ByteArrayJsonConverter))]
+        [Obsolete("ImgBytes is deprecated, please use ImgPathIn & ImgPathOut instead.")]
         public byte[] ImgBytes { get; set; }
+
+        [JsonProperty(Required = Required.Default, NullValueHandling = NullValueHandling.Ignore)]
+        public string ImgPathIn { get; set; }
+        [JsonProperty(Required = Required.Default, NullValueHandling = NullValueHandling.Ignore)]
+        public string ImgPathOut { get; set; }
+
         public int NumOfAreaMarkers { get; set; }
         public IList<Area> AreaInfo { get; set; }
 

@@ -78,6 +78,7 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Drawing" />
     <Reference Include="System.Net" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xaml" />
@@ -99,6 +100,7 @@
     <Compile Include="Algorithm\PageRaw.cs" />
     <Compile Include="Algorithm\QRCodeData.cs" />
     <Compile Include="Algorithm\AlgorithmException.cs" />
+    <Compile Include="Component.cs" />
     <Compile Include="Model\HistoryModel.cs" />
     <Compile Include="Model\PageAnalyze.cs" />
     <Compile Include="Model\SubmitModel.cs" />
@@ -279,7 +281,6 @@
   <ItemGroup>
     <None Include="..\Libraries\answer-sheet-analyze-sdk.jar" />
   </ItemGroup>
-  <ItemGroup />
   <PropertyGroup>
     <PrepareForRunDependsOn>$(PrepareForRunDependsOn);MyCopyFilesToOutputDirectory</PrepareForRunDependsOn>
   </PropertyGroup>

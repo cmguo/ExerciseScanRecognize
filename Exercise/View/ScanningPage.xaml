@@ -55,7 +55,7 @@
         </Grid.ColumnDefinitions>
         
         <local:PaperViewer Margin="0,14,0,14" Paper="{Binding LastPage.PagePath}" ScaleMode="Ratio"
-                           OverlayPenBrush="#FF44E9FF" OverlayBrush="#1A44E9FF"
+                           OverlayPenBrush="#FF44E9FF" OverlayBrush="#6644E9FF"
                            Overlay="{Binding LastPage, Converter={StaticResource PaperOverlayConverter}, ConverterParameter=Result}"/>
 
         <StackPanel Grid.Column="1" Orientation="Vertical" Width="346" Background="White">
@@ -94,7 +94,7 @@
         </StackPanel>
         
         <DataGrid Grid.Column="1" VerticalAlignment="Top" HorizontalAlignment="Center" Height="400" Background="Transparent"
-                  ItemsSource="{Binding Usages}">
+                  ItemsSource="{Binding Usages}" Style="{StaticResource DefaultDataGridStyle}">
             <DataGrid.Columns>
                 <DataGridTextColumn Header="项目" Width="180" Binding="{Binding Item1}"/>
                 <DataGridTextColumn Header="数值" Width="120" Binding="{Binding Item2}"/>

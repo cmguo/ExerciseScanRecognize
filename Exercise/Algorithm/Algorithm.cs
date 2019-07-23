@@ -67,6 +67,7 @@ namespace Exercise.Algorithm
                 Bridge.RegisterAssembly(typeof(AnswerSheetAnalyze).Assembly);
                 readThread = new Thread(ReadService);
                 readThread.IsBackground = true;
+                readThread.Name = "AlgorithmRead";
                 processInfo = new ProcessStartInfo()
                 {
                     FileName = "Service.exe",
@@ -85,8 +86,11 @@ namespace Exercise.Algorithm
         {
             try
             {
-                if (process != null)
-                    process.Kill();
+                lock (remoteTasks)
+                {
+                    if (process != null)
+                        process.StandardInput.Close();
+                }
             }
             catch
             {
@@ -342,17 +346,12 @@ namespace Exercise.Algorithm
         {
             string json = @"C:\Users\Brandon\source\repos\DotNet\Exercise\0620\long_text_2019-06-20-16-53-51.txt";
             string jpg = @"C:\Users\Brandon\source\repos\DotNet\Exercise\0620\3.jpg";
-            using (FileStream fs = new FileStream(jpg, FileMode.Open, FileAccess.Read, FileShare.Read))
-            using (MemoryStream ms = new MemoryStream((int) fs.Length))
-            {
-                await fs.CopyToAsync(ms);
-                PageRaw pagew = new PageRaw();
-                pagew.ImgBytes = ms.GetBuffer();
-                QRCodeData code = await GetCode(pagew);
-                PageData page = await JsonPersistent.Load<PageData>(json);
-                page.ImgBytes = pagew.ImgBytes;
-                AnswerData answer = await GetAnswer(page);
-            }
+            PageRaw pagew = new PageRaw();
+            pagew.ImgPathIn = jpg;
+            QRCodeData code = await GetCode(pagew);
+            PageData page = await JsonPersistent.Load<PageData>(json);
+            page.ImgPathIn = jpg;
+            AnswerData answer = await GetAnswer(page);
         }
 
     }

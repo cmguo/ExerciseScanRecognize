@@ -4,10 +4,9 @@ using System.Windows.Controls.Primitives;
 using System.Windows.Input;
 using System.Windows.Navigation;
 using Base.TitleBar;
-using Exercise.View;
 using TalBase.ViewModel;
 
-namespace Excecise.View
+namespace Exercise.View
 {
     /// <summary>
     /// MainWindow.xaml 的交互逻辑

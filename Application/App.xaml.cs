@@ -1,6 +1,6 @@
 ﻿using Account;
 using Base.Misc;
-using Excecise.View;
+using Exercise.View;
 using System;
 using System.IO;
 using System.Windows;
@@ -19,8 +19,10 @@ namespace Application
         private static System.Threading.Mutex mutex;
         App()
         {
+            Logger.SetLogPath(Exercise.Component.DATA_PATH);
+            Logger.Config("logger.xml");
             ErrorMessageBox.Init();
-            Application.Misc.Jni.Init();
+            Misc.Jni.Init();
             AppDomain.CurrentDomain.UnhandledException += CurrentDomain_UnhandledException;
             this.Exit += App_Exit;
         }
@@ -48,12 +50,10 @@ namespace Application
         }
    
 
-        private static readonly string ROOT_PATH = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
-
         private void CurrentDomain_UnhandledException(object sender, UnhandledExceptionEventArgs e)
         {
             Log.w(e.ExceptionObject);
-            string path = ROOT_PATH + "\\扫描试卷\\" + DateTime.Now.ToString("D");
+            string path = Exercise.Component.DATA_PATH + DateTime.Now.ToString("D");
             Directory.CreateDirectory(path);
             path += "\\" + DateTime.Now.ToString("T").Replace(':', '.') + ".crash";
             using (FileStream fs = new FileStream(path, FileMode.Create, FileAccess.Write))

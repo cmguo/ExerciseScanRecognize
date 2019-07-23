@@ -12,6 +12,7 @@
       xmlns:mu="clr-namespace:Panuon.UI;assembly=Panuon.UI"
       mc:Ignorable="d"
       x:Name="Window"
+      Icon="/Icons/logo.ico"
       Width="440" Height="606"
       WindowStyle="None"
       ResizeMode="NoResize"
@@ -56,7 +57,11 @@
         </tb:TitleButtonCollection>
     </tb:TitleBarManager.GlobalButtons>
 
-    <Grid x:Name="Page" DataContext="{StaticResource ViewModel}" >
+    <Window.DataContext>
+        <vm:AccountViewModel/>
+    </Window.DataContext>
+    
+    <Grid x:Name="Page" >
 
         <Border/>
         <Image Width="440" Height="160" Source="/Images/8.png" VerticalAlignment="Top" HorizontalAlignment="Stretch"/>

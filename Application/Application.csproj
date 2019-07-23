@@ -88,6 +88,9 @@
   <PropertyGroup>
     <SignManifests>true</SignManifests>
   </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>logo.ico</ApplicationIcon>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="jni4net.n-0.8.8.0">
       <HintPath>..\Libraries\jni4net.n-0.8.8.0.dll</HintPath>
@@ -232,6 +235,9 @@
     <Resource Include="COPYING.LESSER.txt" />
   </ItemGroup>
   <ItemGroup>
+    <Resource Include="logo.ico" />
+    <None Include="..\Libraries\answer-sheet-analyze-sdk.j4n.jar" />
+    <None Include="..\Libraries\answer-sheet-analyze-sdk.jar" />
     <Content Include="Icons\back.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
@@ -268,6 +274,9 @@
     <Content Include="Icons\left.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="Icons\logo.ico">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="Icons\right.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
@@ -277,6 +286,7 @@
     <Content Include="Icons\作答识别异常.svg">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <None Include="..\Libraries\jni4net.j-0.8.8.0.jar" />
     <Content Include="logger.xml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>

@@ -74,11 +74,6 @@
     <Compile Include="Jni.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Properties\Resource.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Resource.resx</DependentUpon>
-    </Compile>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Base\Base.csproj">
@@ -91,21 +86,15 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <None Include="answer-sheet-analyze-sdk.j4n.jar" />
-    <None Include="answer-sheet-analyze-sdk.jar" />
     <None Include="app.config" />
-    <None Include="jni4net.j-0.8.8.0.jar" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="..\Libraries\answer-sheet-analyze-sdk.j4n.jar" />
+    <None Include="..\Libraries\answer-sheet-analyze-sdk.jar" />
+    <None Include="..\Libraries\jni4net.j-0.8.8.0.jar" />
     <Content Include="servicelogger.xml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="Properties\Resource.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>Resource.Designer.cs</LastGenOutput>
-    </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

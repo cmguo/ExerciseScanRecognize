@@ -101,7 +101,18 @@
                                Visibility="{Binding ExceptionCount, Converter={StaticResource HasExceptionConverter}}" />
                 <tal:TalButton Grid.Column="0" Content="上传扫描结果" IsDefault="True" ButtonSize="Large"
                                Command="{Binding SubmitCommand}" CommandParameter="{Binding ElementName=Page}" 
-                               Visibility="{Binding ExceptionCount, Converter={StaticResource NoExceptionConverter}}" />
+                               Visibility="{Binding ExceptionCount, Converter={StaticResource NoExceptionConverter}}">
+                    <tal:TalButton.Style>
+                        <Style TargetType="tal:TalButton" BasedOn="{StaticResource DefaultTalButtonStyle}">
+                           
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding StudentCount}" Value="0" >
+                                    <Setter Property="IsEnabled" Value="False"/>
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </tal:TalButton.Style>
+                </tal:TalButton>
                 <tal:TalButton Grid.Column="2" Content="继续扫描"  ButtonSize="Large"
                                Command="{Binding ContinueCommand}" CommandParameter="{Binding ElementName=Page}" />
             </Grid>

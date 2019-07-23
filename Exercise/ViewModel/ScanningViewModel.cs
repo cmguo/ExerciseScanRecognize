@@ -1,14 +1,23 @@
-﻿using Base.Mvvm;
+﻿using Base.Misc;
+using Base.Mvvm;
 using Exercise.Model;
 using Exercise.View;
+using net.sf.jni4net.jni;
+using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Threading;
 using TalBase.View;
 
 namespace Exercise.ViewModel
 {
     public class ScanningViewModel : ExerciseViewModel
     {
+
+        private static readonly Logger Log = Logger.GetLogger<ScanningViewModel>();
 
         #region Properties
 
@@ -25,6 +34,8 @@ namespace Exercise.ViewModel
             private set { _studentCount = value; RaisePropertyChanged("StudentSumary"); }
         }
 
+        public ObservableCollection<Tuple<string, long>> Usages { get; set; }
+
         #endregion
 
         #region Commands
@@ -36,6 +47,7 @@ namespace Exercise.ViewModel
 
         private ScanModel scanModel = ScanModel.Instance;
         private ExerciseModel exerciseModel = ExerciseModel.Instance;
+        private DispatcherTimer timer = new DispatcherTimer();
 
         public ScanningViewModel()
         {
@@ -47,11 +59,16 @@ namespace Exercise.ViewModel
             StudentSumary = exerciseModel.PageStudents.Count;
             if (exerciseModel.ExerciseData != null)
                 ExercisePageCount = exerciseModel.ExerciseData.Pages.Count;
+            Usages = new ObservableCollection<Tuple<string, long>>();
+            timer.Interval = TimeSpan.FromSeconds(5);
+            timer.Tick += Timer_Tick;
+            timer.Start();
         }
 
         public override void Release()
         {
             base.Release();
+            timer.Stop();
             exerciseModel.PageStudents.CollectionChanged -= PageStudents_CollectionChanged;
             exerciseModel.PropertyChanged -= ExerciseModel_PropertyChanged;
         }
@@ -62,8 +79,16 @@ namespace Exercise.ViewModel
         {
             if (!await scanModel.PauseScan())
             {
-                await exerciseModel.MakeResult();
-                (obj as System.Windows.Controls.Page).NavigationService.Navigate(new SummaryPage());
+                if (exerciseModel.ExerciseData == null)
+                {
+                    PopupDialog.Show(obj as UIElement, "TODO", "没有有效试卷信息", 0, "确认");
+                }
+                else
+                {
+                    await scanModel.CancelScan();
+                    await exerciseModel.MakeResult();
+                    (obj as System.Windows.Controls.Page).NavigationService.Navigate(new SummaryPage());
+                }
                 return;
             }
             Update();
@@ -71,6 +96,11 @@ namespace Exercise.ViewModel
             FrameworkElement element = page.Resources["ClassDetail"] as FrameworkElement;
             element.DataContext = this;
             int result = PopupDialog.Show(obj as UIElement, "确认", "扫描仪中还有试卷待扫描，确认结束扫描并查看结果吗？", element, 0, "查看结果", "继续扫描");
+            while (result == 0 && exerciseModel.ExerciseData == null)
+            {
+                PopupDialog.Show(obj as UIElement, "TODO", "没有有效试卷信息", 0, "确认");
+                result = PopupDialog.Show(obj as UIElement, "确认", "扫描仪中还有试卷待扫描，确认结束扫描并查看结果吗？", element, 0, "查看结果", "继续扫描");
+            }
             if (result == 0)
             {
                 await scanModel.CancelScan();
@@ -159,6 +189,31 @@ namespace Exercise.ViewModel
                 if (exerciseModel.ExerciseData != null)
                     ExercisePageCount = exerciseModel.ExerciseData.Pages.Count;
             }
+        }
+
+        private static java.lang.Object GetJavaRuntime()
+        {
+            JNIEnv env = JNIEnv.ThreadEnv;
+            java.lang.Class clazz = env.FindClass("java/lang/Runtime");
+            return clazz.Invoke<java.lang.Object>("getRuntime", "()Ljava/lang/Runtime;", new object[0]);
+        }
+
+        private java.lang.Object javaRuntime = GetJavaRuntime();
+
+        private void Timer_Tick(object sender, EventArgs e)
+        {
+            if (IsCompleted)
+                return;
+            Process currentProcess = System.Diagnostics.Process.GetCurrentProcess();
+            Usages.Clear();
+            Usages.Add(Tuple.Create("VirtualMemorySize64", currentProcess.VirtualMemorySize64));
+            Usages.Add(Tuple.Create("PrivateMemorySize64", currentProcess.PrivateMemorySize64));
+            Usages.Add(Tuple.Create("WorkingSet64", currentProcess.WorkingSet64));
+            Usages.Add(Tuple.Create("managed heap", System.GC.GetTotalMemory(false)));
+            Usages.Add(Tuple.Create("java gc", javaRuntime.Invoke<long>("totalMemory", "()J")));
+            Usages.Add(Tuple.Create("java gc max", javaRuntime.Invoke<long>("maxMemory", "()J")));
+            foreach (var u in Usages)
+                Log.d(u.Item1 + ": " + u.Item2 / 1000000 + " M");
         }
 
     }

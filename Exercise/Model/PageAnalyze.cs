@@ -168,15 +168,15 @@ namespace Exercise.Model
         private static List<ItemException> SelectExceptions(PageData data, AnswerData answer, AreaType type)
         {
             List<ItemException> exceptions = new List<ItemException>();
-            foreach (AnswerData.Question q in answer.AreaInfo.Where(a => a.AreaType == type).SelectMany(a => a.QuestionInfo))
+            foreach (AnswerData.Question qa in answer.AreaInfo.Where(a => a.AreaType == type).SelectMany(a => a.QuestionInfo))
             {
-                PageData.Question p = GetQuestion(data, q.QuestionId);
-                for (int i = 0; i < p.ItemInfo.Count; ++i)
+                PageData.Question qp = GetQuestion(data, qa.QuestionId);
+                for (int i = 0; i < qp.ItemInfo.Count; ++i)
                 {
-                    AnswerData.Item item = q.ItemInfo[i];
+                    AnswerData.Item item = qa.ItemInfo[i];
                     if (item.StatusOfItem > 0)
                     {
-                        exceptions.Add(new ItemException(p, p.ItemInfo[i], item));
+                        exceptions.Add(new ItemException(qp, qp.ItemInfo[i], item));
                         continue;
                     }
                     if (item.StatusOfItem < 0)
@@ -187,11 +187,11 @@ namespace Exercise.Model
                         .Where(r => r != null)
                         .Select(r => r.Value)
                         .Where(v => v != null));
-                    float total = float.Parse(p.ItemInfo[i].TotalScore);
+                    float total = float.Parse(qp.ItemInfo[i].TotalScore);
                     if (score.Length > 0 && float.Parse(score) > total)
                     {
                         item.StatusOfItem = 100;
-                        exceptions.Add(new ItemException(p, p.ItemInfo[i], item));
+                        exceptions.Add(new ItemException(qp, qp.ItemInfo[i], item));
                     }
                 }
             }

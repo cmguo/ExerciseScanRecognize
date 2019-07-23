@@ -1,10 +1,10 @@
 ﻿using Account;
-using Application.Misc;
 using Base.Misc;
 using Excecise.View;
 using System;
 using System.IO;
 using System.Windows;
+using TalBase.Model;
 using TalBase.View;
 
 namespace Application
@@ -19,8 +19,14 @@ namespace Application
         App()
         {
             ErrorMessageBox.Init();
-            Jni.Init();
+            Application.Misc.Jni.Init();
             AppDomain.CurrentDomain.UnhandledException += CurrentDomain_UnhandledException;
+            this.Exit += App_Exit;
+        }
+
+        private void App_Exit(object sender, ExitEventArgs e)
+        {
+            ModelBase.ShutdownAll();
         }
 
         protected override void OnStartup(StartupEventArgs e)

@@ -3,6 +3,8 @@ using Base.Mvvm;
 using Exercise.Algorithm;
 using Exercise.Scanning;
 using Exercise.Service;
+using net.sf.jni4net;
+using net.sf.jni4net.jni;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -118,7 +120,7 @@ namespace Exercise.Model
         }
 
         private IScanDevice scanDevice = new ScanDeviceSaraff(Application.Current.MainWindow);
-        private Algorithm.Algorithm algorithm = new Algorithm.Algorithm();
+        private Algorithm.Algorithm algorithm = new Algorithm.Algorithm(true);
 
         private object mutex = new object();
 
@@ -142,6 +144,11 @@ namespace Exercise.Model
             IsCompleted = true;
             scanDevice.Open();
             //BackgroudWork.Execute(DetectSource);
+        }
+
+        public override void Shutdown()
+        {
+            algorithm.Shutdown();
         }
 
         public void SetSavePath(string path)
@@ -328,7 +335,11 @@ namespace Exercise.Model
             Page page2 = page;
             Page[] pages = new Page[] { page1, page2 };
             long tick = Environment.TickCount;
-            await Task.Factory.StartNew(() => ScanTwoPage(pages, tick));
+            //for (int i = 0; i < 1000; ++i)
+            //{
+                await ScanTwoPage(pages, tick);
+                //await Task.Delay(500);
+            //}
             pages[0].TotalIndex = Pages.Count;
             pages[1].TotalIndex = Pages.Count;
             if (pages[0].Another == null)
@@ -357,13 +368,15 @@ namespace Exercise.Model
                         "Page at " + p1.TotalIndex + " not match " + p2.TotalIndex);
             }
             if (!IsScanning && Pages.Count * 2 == readIndex)
-                IsCompleted = true;
-            for (int i = 0; i < elapseCounts.Length; ++i)
             {
-                Log.d("elapse [" + i + "]: count=" + elapseCounts[i] + ", ticks=" + elapseTicks[i] 
-                    + ", average=" + (elapseCounts[i] == 0 ? "NaN" : (elapseTicks[i] / elapseCounts[i]).ToString()));
-                elapseCounts[i] = 0;
-                elapseTicks[i] = 0;
+                IsCompleted = true;
+                for (int i = 0; i < elapseCounts.Length; ++i)
+                {
+                    Log.d("elapse [" + i + "]: count=" + elapseCounts[i] + ", ticks=" + elapseTicks[i]
+                        + ", average=" + (elapseCounts[i] == 0 ? "NaN" : (elapseTicks[i] / elapseCounts[i]).ToString()));
+                    elapseCounts[i] = 0;
+                    elapseTicks[i] = 0;
+                }
             }
         }
 
@@ -378,13 +391,13 @@ namespace Exercise.Model
             return tick1;
         }
 
-        private void ScanTwoPage(Page[] pages, long tick)
+        private async Task ScanTwoPage(Page[] pages, long tick)
         {
             tick = AddTick(0, tick); // queue wait
-            tick = ReadPage(pages[0], true, tick); // tick 1,2
+            tick = await ReadPage(pages[0], true, tick); // tick 1,2
             if (pages[0].Exception != null)
             {
-                tick = ReadPage(pages[1], true, tick);
+                tick = await ReadPage(pages[1], true, tick);
                 if (pages[1].Exception == null)
                 {
                     pages[0].Exception = null;
@@ -395,7 +408,7 @@ namespace Exercise.Model
             }
             else
             {
-                tick = ReadPage(pages[1], false, tick); // tick 1,2
+                tick = await ReadPage(pages[1], false, tick); // tick 1,2
             }
             pages[1].PaperCode = pages[0].PaperCode;
             pages[1].PageIndex = pages[0].PageIndex + 1;
@@ -409,22 +422,17 @@ namespace Exercise.Model
                 }
                 if (PageCode == pages[0].PaperCode)
                 {
-                    lock (mutex)
+                    if (exerciseData == null)
                     {
-                        while (exerciseData == null && !cancel)
-                        {
-                            Monitor.Wait(mutex);
-                        }
+                        await Task.Run(() => WaitExerciseData());
                         if (exerciseData == null)
-                        {
                             return;
-                        }
                     }
                     tick = AddTick(3, tick);
-                    tick = ScanPage(pages[0], tick); // tick 4,5,6
+                    tick = await ScanPage(pages[0], tick); // tick 4,5,6
                     if (pages[1].PageIndex < exerciseData.Pages.Count)
                     {
-                        tick = ScanPage(pages[1], tick);
+                        tick = await ScanPage(pages[1], tick);
                         tick = AddTick(6, tick);
                     }
                     else
@@ -438,7 +446,18 @@ namespace Exercise.Model
             pages[1].PageData = null;
         }
 
-        private long ReadPage(Page page, bool needCode, long tick)
+        private void WaitExerciseData()
+        {
+            lock (mutex)
+            {
+                while (exerciseData == null && !cancel)
+                {
+                    Monitor.Wait(mutex);
+                }
+            }
+        }
+
+        private async Task<long> ReadPage(Page page, bool needCode, long tick)
         {
             try
             {
@@ -451,7 +470,7 @@ namespace Exercise.Model
                 tick = AddTick(1, tick);
                 if (needCode)
                 {
-                    Algorithm.QRCodeData code = algorithm.GetCode(new Algorithm.PageRaw() { ImgBytes = page.PageData });
+                    Algorithm.QRCodeData code = await algorithm.GetCode(new Algorithm.PageRaw() { ImgBytes = page.PageData });
                     tick = AddTick(2, tick);
                     int split = code.PaperInfo.IndexOf('_');
                     if (split < 0)
@@ -474,14 +493,14 @@ namespace Exercise.Model
             return tick;
         }
 
-        private long ScanPage(Page page, long tick)
+        private async Task<long> ScanPage(Page page, long tick)
         {
             PageData pageData = exerciseData.Pages[page.PageIndex];
             pageData.ImgBytes = page.PageData;
             page.MetaData = pageData;
             try
             {
-                AnswerData answerData = algorithm.GetAnswer(pageData);
+                AnswerData answerData = await algorithm.GetAnswer(pageData);
                 tick = AddTick(4, tick);
                 page.Answer = answerData;
                 page.PageData = answerData.RedressedImgBytes;
@@ -502,6 +521,7 @@ namespace Exercise.Model
             }
             catch (Exception e)
             {
+                Log.w("Scan " + e.Message + ": " + page.PagePath);
                 page.Exception = e;
             }
             finally

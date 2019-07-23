@@ -4,7 +4,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{7DF8007B-9234-4414-8DFE-5FE07C9A970B}</ProjectGuid>
+    <ProjectGuid>{5A56F521-9FCC-45BE-8746-C561B222FD9F}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Account</RootNamespace>
@@ -30,6 +30,24 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x86'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\x86\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DebugType>full</DebugType>
+    <PlatformTarget>x86</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x86'">
+    <OutputPath>bin\x86\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>x86</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -41,28 +59,28 @@
       <HintPath>..\packages\Refit.4.7.9\lib\net461\Refit.dll</HintPath>
     </Reference>
     <Reference Include="SharpVectors.Converters.Wpf">
-      <HintPath>..\Application\Libraries\SharpVectors\SharpVectors.Converters.Wpf.dll</HintPath>
+      <HintPath>..\\Libraries\SharpVectors\SharpVectors.Converters.Wpf.dll</HintPath>
     </Reference>
     <Reference Include="SharpVectors.Core">
-      <HintPath>..\Application\Libraries\SharpVectors\SharpVectors.Core.dll</HintPath>
+      <HintPath>..\\Libraries\SharpVectors\SharpVectors.Core.dll</HintPath>
     </Reference>
     <Reference Include="SharpVectors.Css">
-      <HintPath>..\Application\Libraries\SharpVectors\SharpVectors.Css.dll</HintPath>
+      <HintPath>..\\Libraries\SharpVectors\SharpVectors.Css.dll</HintPath>
     </Reference>
     <Reference Include="SharpVectors.Dom">
-      <HintPath>..\Application\Libraries\SharpVectors\SharpVectors.Dom.dll</HintPath>
+      <HintPath>..\\Libraries\SharpVectors\SharpVectors.Dom.dll</HintPath>
     </Reference>
     <Reference Include="SharpVectors.Model">
-      <HintPath>..\Application\Libraries\SharpVectors\SharpVectors.Model.dll</HintPath>
+      <HintPath>..\\Libraries\SharpVectors\SharpVectors.Model.dll</HintPath>
     </Reference>
     <Reference Include="SharpVectors.Rendering.Gdi">
-      <HintPath>..\Application\Libraries\SharpVectors\SharpVectors.Rendering.Gdi.dll</HintPath>
+      <HintPath>..\\Libraries\SharpVectors\SharpVectors.Rendering.Gdi.dll</HintPath>
     </Reference>
     <Reference Include="SharpVectors.Rendering.Wpf">
-      <HintPath>..\Application\Libraries\SharpVectors\SharpVectors.Rendering.Wpf.dll</HintPath>
+      <HintPath>..\\Libraries\SharpVectors\SharpVectors.Rendering.Wpf.dll</HintPath>
     </Reference>
     <Reference Include="SharpVectors.Runtime.Wpf">
-      <HintPath>..\Application\Libraries\SharpVectors\SharpVectors.Runtime.Wpf.dll</HintPath>
+      <HintPath>..\\Libraries\SharpVectors\SharpVectors.Runtime.Wpf.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />

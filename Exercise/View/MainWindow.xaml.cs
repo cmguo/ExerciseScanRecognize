@@ -62,6 +62,7 @@ namespace Excecise.View
                 UnLoadNavButtons(lastPage);
                 (lastPage.DataContext as ViewModelBase).Release();
             }
+            frmMain.NavigationService.RemoveBackEntry();
             LoadNavButtons(page);
             lastPage = page;
         }

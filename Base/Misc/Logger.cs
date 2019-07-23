@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Resources;
 
 namespace Base.Misc
 {
@@ -24,7 +25,15 @@ namespace Base.Misc
 
         static Logger()
         {
-            XmlConfigurator.Configure(Application.GetContentStream(new Uri("/logger.xml", UriKind.Relative)).Stream);
+            StreamResourceInfo resource = 
+                Application.GetContentStream(new Uri("/logger.xml", UriKind.Relative));
+            if (resource != null)
+                XmlConfigurator.Configure(resource.Stream);
+        }
+
+        public static void Config(Uri uri)
+        {
+            XmlConfigurator.Configure(uri);
         }
 
         public static Logger GetLogger(string name)

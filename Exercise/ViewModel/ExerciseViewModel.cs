@@ -83,7 +83,6 @@ namespace Exercise.ViewModel
                 await task;
                 await scanModel.CancelScan();
                 exerciseModel.Discard();
-                Window.GetWindow((obj as ExecutedRoutedEventArgs).OriginalSource as UIElement).Close();
             }
             else
             {

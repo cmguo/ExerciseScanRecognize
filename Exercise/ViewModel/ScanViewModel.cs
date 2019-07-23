@@ -6,6 +6,7 @@ using TalBase.ViewModel;
 using TalBase.View;
 using System.Windows;
 using Base.Misc;
+using System.Collections.Specialized;
 
 namespace Exercise.ViewModel
 {
@@ -112,7 +113,7 @@ namespace Exercise.ViewModel
 
         private void Pages_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
         {
-            if (e.NewItems == null)
+            if (e.Action != NotifyCollectionChangedAction.Add || e.NewItems == null)
                 return;
             Page page = e.NewItems[0] as Page;
             LastPage = page;

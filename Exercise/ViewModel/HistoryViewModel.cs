@@ -61,6 +61,7 @@ namespace Exercise.ViewModel
             Pages = new ObservableCollection<object>();
             new RelayCommand((o) => historyModel.Load()).Execute(null);
             historyModel.PropertyChanged += HistoryModel_PropertyChanged;
+            UpdatePageCount();
             PageIndex = 1;
         }
 

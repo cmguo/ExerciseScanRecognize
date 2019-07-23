@@ -5,9 +5,8 @@
     <ResourceDictionary.MergedDictionaries>
         <ResourceDictionary Source="../Themes/ScrollBar.xaml" />
     </ResourceDictionary.MergedDictionaries>
-    
-       <Style x:Key="DefaultListViewItem" TargetType="{x:Type ListViewItem}">
-        <Setter Property="Foreground" Value="{StaticResource TextForeground}" />
+
+    <Style x:Key="DefaultListViewItem" TargetType="{x:Type ListViewItem}">
         <Setter Property="HorizontalContentAlignment" Value="Stretch" />
         <Setter Property="VerticalContentAlignment" Value="Center" />
         <Setter Property="MinHeight" Value="25" />
@@ -25,35 +24,6 @@
                             <ContentPresenter x:Name="contentPresenter" VerticalAlignment="{TemplateBinding VerticalContentAlignment}" Visibility="Collapsed" />
                         </Grid>
                     </Border>
-                    <ControlTemplate.Triggers>
-                        <Trigger Property="GridView.ColumnCollection" Value="{x:Null}">
-                            <Setter TargetName="contentPresenter" Property="Visibility" Value="Visible" />
-                        </Trigger>
-                        <Trigger Property="IsSelected" Value="true">
-                            <Setter TargetName="Bd" Property="Background" Value="{StaticResource ItemSelectedBackground}" />
-                            <Setter Property="Foreground" Value="{StaticResource ItemSelectedForeground}" />
-                        </Trigger>
-                        <Trigger Property="ItemsControl.AlternationIndex" Value="1">
-                            <Setter Property="Background" Value="{StaticResource ItemsAlternationContentBackground}" />
-                        </Trigger>
-                        <MultiTrigger>
-                            <MultiTrigger.Conditions>
-                                <Condition Property="IsSelected" Value="true" />
-                                <Condition Property="Selector.IsSelectionActive" Value="True" />
-                            </MultiTrigger.Conditions>
-                            <Setter Property="Background" Value="{StaticResource ItemSelectedBackground}" />
-                            <Setter Property="Foreground" Value="{StaticResource ItemSelectedForeground}" />
-                        </MultiTrigger>
-                        <MultiTrigger>
-                            <MultiTrigger.Conditions>
-                                <Condition Property="IsEnabled" Value="False" />
-                                <Condition Property="IsSelected" Value="True" />
-                            </MultiTrigger.Conditions>
-                            <MultiTrigger.Setters>
-                                <Setter TargetName="PART_Root" Property="Opacity" Value="{StaticResource DisableOpacity}" />
-                            </MultiTrigger.Setters>
-                        </MultiTrigger>
-                    </ControlTemplate.Triggers>
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
@@ -85,9 +55,6 @@
                     <ControlTemplate.Triggers>
                         <Trigger Property="IsGrouping" Value="true">
                             <Setter Property="ScrollViewer.CanContentScroll" Value="false" />
-                        </Trigger>
-                        <Trigger Property="IsEnabled" Value="false">
-                            <Setter TargetName="Border" Property="Opacity" Value="{StaticResource DisableOpacity}" />
                         </Trigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>

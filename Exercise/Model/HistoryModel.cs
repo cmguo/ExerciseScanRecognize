@@ -93,7 +93,13 @@ namespace Exercise.Model
                     string path3 = path2 + "\\record.json";
                     if (!File.Exists(path3))
                     {
-                        Directory.Delete(path2, true);
+                        try
+                        {
+                            Directory.Delete(path2, true);
+                        }
+                        catch
+                        {
+                        }
                         continue;
                     }
                     try

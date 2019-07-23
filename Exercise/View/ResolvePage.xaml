@@ -27,6 +27,7 @@
                 <ResourceDictionary Source="pack://application:,,,/Exercise;component/Themes/TreeView.xaml" />
                 <ResourceDictionary Source="pack://application:,,,/TalBase;component/Themes/Generic.xaml" />
                 <ResourceDictionary Source="pack://application:,,,/Exercise;component/Themes/Generic.xaml" />
+                <ResourceDictionary Source="../Themes/ListView.xaml" />
             </ResourceDictionary.MergedDictionaries>
 
             <resolve:ExceptionListConverter x:Key="ExceptionListConverter" />
@@ -187,8 +188,8 @@
                 <TextBlock x:Name="ListTitle" Margin="0, 24, 0, 0" 
                            Text="{Binding SelectedExceptionList, Converter={StaticResource ExceptionListConverter}, ConverterParameter=Title}" TextWrapping="Wrap" />
 
-                <ListView Margin="0, 12, 0, 0" BorderThickness="1" BorderBrush="#FFE3E8F0" Height="231"
-                          ItemsSource="{Binding SelectedExceptionList.Exceptions}">
+                <ListView Margin="0, 12, 0, 0" BorderThickness="1" BorderBrush="#FFE3E8F0" Height="231"  Background="White"
+                          ItemsSource="{Binding SelectedExceptionList.Exceptions}" Style="{StaticResource DefaultListView}">
                     <ListView.ItemTemplate>
                         <DataTemplate>
                             <TextBlock Margin="14, 7, 14, 7" FontSize="14" Foreground="#FF2D4A66" Text="{Binding Converter={StaticResource ExceptionConverter}, ConverterParameter=Tree}" />

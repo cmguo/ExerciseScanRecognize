@@ -113,7 +113,7 @@
                     <Grid Background="Transparent">
                         <Border x:Name="ItemBackground" IsHitTestVisible="False" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"
                                 BorderThickness="{TemplateBinding BorderThickness}" BorderBrush="{TemplateBinding BorderBrush}" >
-                            <Grid  Margin="0,0.5" >
+                            <Grid  Margin="0,0.5">
 
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="25" />
@@ -132,8 +132,8 @@
                                                           RenderTransformOrigin="0.5,0.5" />
                                 <ContentPresenter
                                 Grid.Column="1"
-                                x:Name="contentPresenter" Margin="{TemplateBinding Padding}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
-                                          HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" />
+                                x:Name="contentPresenter" Margin="{TemplateBinding Padding}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}" MaxWidth="100"
+                                          HorizontalAlignment="Left" />
 
                             </Grid>
                         </Border>

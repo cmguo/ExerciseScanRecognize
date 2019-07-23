@@ -33,10 +33,6 @@
                             <Setter TargetName="Bd" Property="Background" Value="{StaticResource ItemSelectedBackground}" />
                             <Setter Property="Foreground" Value="{StaticResource ItemSelectedForeground}" />
                         </Trigger>
-                        <Trigger Property="IsMouseOver" Value="True">
-                            <Setter TargetName="Bd" Property="Background" Value="{StaticResource ItemMouseOverBackground}" />
-                            <Setter Property="Foreground" Value="{StaticResource ItemMouseOverForeground}" />
-                        </Trigger>
                         <Trigger Property="ItemsControl.AlternationIndex" Value="1">
                             <Setter Property="Background" Value="{StaticResource ItemsAlternationContentBackground}" />
                         </Trigger>

@@ -493,6 +493,7 @@ namespace Exercise.Model
             }
             catch (Exception e)
             {
+                Log.w("Read " + e.Message + ": " + page.PagePath);
                 page.Exception = e;
             }
             return tick;

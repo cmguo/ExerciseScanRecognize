@@ -1,6 +1,7 @@
 ﻿using Exercise.ViewModel;
 using System.Threading;
 using System.Windows.Controls;
+using System.Windows.Input;
 
 namespace Exercise.View
 {
@@ -14,6 +15,7 @@ namespace Exercise.View
             InitializeComponent();
             ScanningViewModel vm = DataContext as ScanningViewModel;
             vm.PropertyChanged += Vm_PropertyChanged;
+            KeyDown += ScanningPage_KeyDown;
         }
 
         private void Vm_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
@@ -38,5 +40,28 @@ namespace Exercise.View
                 });
             }
         }
+
+        private string hake = "";
+
+        private void ScanningPage_KeyDown(object sender, System.Windows.Input.KeyEventArgs e)
+        {
+            if (e.KeyboardDevice.IsKeyDown(Key.LeftCtrl)
+                && e.KeyboardDevice.IsKeyDown(Key.LeftAlt))
+            {
+                if (e.Key.CompareTo(Key.A) >= 0 && e.Key.CompareTo(Key.Z) <= 0)
+                {
+                    hake += (char)('A' + (int)e.Key - (int)Key.A);
+                    if (hake == "QWER")
+                    {
+                        perf.Visibility = System.Windows.Visibility.Visible;
+                    }
+                }
+            }
+            else
+            {
+                hake = "";
+            }
+        }
+
     }
 }

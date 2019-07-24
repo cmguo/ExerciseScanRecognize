@@ -126,7 +126,7 @@ namespace Exercise.View
                 paper.UriSource = new Uri(uri);
                 paper.EndInit();
                 image.ImageSource = paper;
-                image.Rect = new Rect(0, 0, paper.Width, paper.Height);
+                image.Rect = new Rect(0, 0, paper.PixelWidth, paper.PixelHeight);
                 AdjustMode();
                 Adjust();
             }
@@ -179,7 +179,7 @@ namespace Exercise.View
                 return;
             if (paper == null)
                 return;
-            double s = (RenderSize.Width * paper.Height) / (RenderSize.Height * paper.Width);
+            double s = (RenderSize.Width * paper.PixelHeight) / (RenderSize.Height * paper.PixelWidth);
             Rect rect;
             if (s > 1)
             {

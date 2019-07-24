@@ -118,7 +118,7 @@
                            Command="{Binding EndScanCommand}" CommandParameter="{Binding ElementName=Page}" />
         </StackPanel>
         
-        <DataGrid Grid.Column="1" VerticalAlignment="Top" HorizontalAlignment="Center" Height="400" Background="Transparent"
+        <DataGrid Grid.Column="1" x:Name="perf" Visibility="Collapsed" VerticalAlignment="Top" HorizontalAlignment="Center" Height="400" Background="Transparent"
                   ItemsSource="{Binding Usages}" Style="{StaticResource DefaultDataGridStyle}">
             <DataGrid.Columns>
                 <DataGridTextColumn Header="项目" Width="180" Binding="{Binding Item1}"/>

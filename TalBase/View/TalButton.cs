@@ -1,6 +1,7 @@
 ﻿using Panuon.UI;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -68,13 +69,18 @@ namespace TalBase.View
                 this.window = window;
                 focused = Keyboard.FocusedElement;
                 window.GotKeyboardFocus += Window_PreviewGotKeyboardFocus;
+                focusedStatus.Add(window, this);
             }
 
             private void Window_PreviewGotKeyboardFocus(object sender, KeyboardFocusChangedEventArgs e)
             {
                 focused = e.NewFocus;
+                if (focused == window)
+                    return;
                 foreach (TalButton b in buttons)
+                {
                     b.IsActive = b.IsFocused || (b.IsDefault && !(focused is Button));
+                }
             }
 
             internal void Add(TalButton b)

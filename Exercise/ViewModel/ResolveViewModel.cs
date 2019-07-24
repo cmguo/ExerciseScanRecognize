@@ -188,8 +188,7 @@ namespace Exercise.ViewModel
             {
                 StudentInfo student = exerciseModel.PageStudents.Where(s => s.TalNo == exception.Page.StudentCode).FirstOrDefault();
                 if (student != null && student.AnswerPages[exception.Page.PageIndex / 2] != null
-                    && student.AnswerPages[exception.Page.PageIndex / 2] != Page.EmptyPage
-                    && student.AnswerPages[exception.Page.PageIndex / 2].PagePath == null)
+                    && student.AnswerPages[exception.Page.PageIndex / 2].PagePath != null)
                 {
                     int n = PopupDialog.Show(obj as FrameworkElement, "替换试卷确认", 
                         "您放入的学生试卷已经有扫描结果，确认替换吗？", 0, "确认", "取消");

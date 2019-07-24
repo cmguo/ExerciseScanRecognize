@@ -430,6 +430,7 @@ namespace Exercise.Model
             {
                 if (PageCode == null)
                 {
+                    Log.d("PageCode=" + PageCode);
                     PageCode = pages[0].PaperCode;
                     RaisePropertyChanged("PageCode");
                 }

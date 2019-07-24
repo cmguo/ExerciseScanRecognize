@@ -23,13 +23,14 @@
         </ResourceDictionary>
     </Window.Resources>
 
-    <Grid MinWidth="458" MaxWidth="500" VerticalAlignment="Center">
+    <Grid Width="458" HorizontalAlignment="Center" VerticalAlignment="Center">
         <Border CornerRadius="10" BorderBrush="#0a2d4a66" BorderThickness="1" Background="White" />
-        <Grid Margin="33,29,32,37">
+        <Grid Margin="33,29,32,37" >
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto" />
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="32" />
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="56" />
             </Grid.RowDefinitions>
             <Grid Grid.Row="0">
                 <Grid.ColumnDefinitions>
@@ -41,13 +42,14 @@
                     <svgc:SvgViewbox Source="Icons/关闭/粗.svg"/>
                 </tb:TalTouch>
             </Grid>
-            <StackPanel Grid.Row="1" Orientation="Horizontal" Margin="0, 24, 0, 24">
+            <StackPanel Grid.Row="1" Orientation="Horizontal" Margin="0, 24, 0, 0"> 
                 <Image Source="{svgc:SvgImage Source=/Icons/Warn/24.svg}" Width="24" Height="24" VerticalAlignment="Top" />
-                <StackPanel x:Name="body" Width="350" Orientation="Vertical" Margin="16, 0, 0, 0">
-                    <TextBlock FontSize="14" TextWrapping="Wrap" Text="{Binding Message}" />
-                </StackPanel>
+                <TextBlock Margin="16, 0, 0, 0" FontSize="14" TextWrapping="Wrap"  VerticalAlignment="Center" Text="{Binding Message}" MaxWidth="352"/>
             </StackPanel>
-            <StackPanel Grid.Row="2" Orientation="Horizontal" FlowDirection="RightToLeft">
+            
+            <StackPanel Grid.Row="2" x:Name="body" Width="392" Orientation="Vertical" HorizontalAlignment="Left" VerticalAlignment="Top" />
+
+            <StackPanel Grid.Row="3" Orientation="Horizontal" FlowDirection="RightToLeft" Margin="0, 24, 0, 0">
                 <tb:TalButton x:Name="btn2" Content="{Binding Button2}" Margin="0,0,16,0"
                     Visibility="{Binding Button2, Converter={StaticResource ContentVisiableConverter}}" />
                 <tb:TalButton x:Name="btn1" Content="{Binding Button1}" Margin="0,0,16,0"

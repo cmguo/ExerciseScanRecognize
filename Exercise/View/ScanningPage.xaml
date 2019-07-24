@@ -21,28 +21,39 @@
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="pack://application:,,,/Exercise;component/Themes/DataGrid.xaml" />
             </ResourceDictionary.MergedDictionaries>
-            <StackPanel x:Key="ClassDetail" Orientation="Vertical" Background="#F4F8FE">
+
+            <Style x:Key="DataGridRowStyle" TargetType="DataGridRow">
+                <Setter Property="Background" Value="#F4F8FE"/>
+                <Setter Property="Height" Value="30"/>
+            </Style>
+            <Style x:Key="DataGridCellStyle" TargetType="DataGridCell">
+                <Setter Property="Margin" Value="0"/>
+                <Setter Property="HorizontalAlignment" Value="Left"/>
+            </Style>
+            <StackPanel x:Key="ClassDetail" Orientation="Vertical" Background="#F4F8FE" Margin="0, 16, 0, 0">
                 <StackPanel Margin="16, 16, 0, 0" Orientation="Horizontal" HorizontalAlignment="Left">
-                    <StackPanel>
-                        <TextBlock FontSize="14" Foreground="#2D4A66" Text="已扫描"/>
-                        <TextBlock FontSize="14" Foreground="#2D4A66" 
-                               Text="{Binding PageCount, StringFormat={}{0}张试卷，共识别}"/>
+                    <TextBlock FontSize="14" Foreground="#2D4A66" 
+                               Text="{Binding PageCount, StringFormat=已扫描{0}张试卷，共识别}"/>
                         <TextBlock FontSize="14" Foreground="#2D4A66"
                                Text="{Binding StudentSumary, StringFormat={}{0}人}"/>
-                    </StackPanel>
                 </StackPanel>
+
                 <DataGrid  AutoGenerateColumns="False" ItemsSource="{Binding ClassDetails}" 
                   Margin="16,16,0,0"
-                  HeadersVisibility="None"
-                  BorderThickness="0,0,0,0"  MaxHeight="200"
-                  IsReadOnly="True" Style="{StaticResource DefaultDataGridStyle}">
+                           ColumnHeaderHeight="0" RowHeaderWidth="0"
+                  GridLinesVisibility="None"
+                           HeadersVisibility="None"
+                  BorderThickness="0,0,0,0"  MaxHeight="180" Background="{x:Null}"
+                         
+                  IsReadOnly="True" Style="{StaticResource DefaultDataGridStyle}" RowStyle="{StaticResource DataGridRowStyle}" CellStyle="{StaticResource DataGridCellStyle}">
+
                     <DataGrid.Columns>
-                        <DataGridTextColumn Binding="{Binding Name}" FontSize="14" Width="120"/>
-                        <DataGridTextColumn  FontSize="14" Width="70" >
+                        <DataGridTextColumn Binding="{Binding Name}" FontSize="14" Width="Auto" MinWidth="60" MaxWidth="200" />
+                        <DataGridTextColumn  FontSize="14" Width="100" >
                             <DataGridTextColumn.Binding>
                                 <MultiBinding StringFormat="{}{0}/{1}(人)">
                                     <Binding Path=" Result.Count"/>
-                                    <Binding Path=" Result.StudentCount"/>
+                                    <Binding Path=" StudentCount"/>
                                 </MultiBinding>
                             </DataGridTextColumn.Binding>
                         </DataGridTextColumn>

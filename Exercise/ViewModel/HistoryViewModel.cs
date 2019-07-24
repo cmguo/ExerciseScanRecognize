@@ -4,6 +4,7 @@ using Exercise.View;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Threading.Tasks;
+using TalBase.View;
 using TalBase.ViewModel;
 using static Exercise.Service.HistoryData;
 
@@ -56,13 +57,22 @@ namespace Exercise.ViewModel
         public HistoryViewModel()
         {
             SummaryCommand = new RelayCommand((o) => Summary(o));
-            DiscardCommand = new RelayCommand((o) => historyModel.Remove(o as Record));
+            DiscardCommand = new RelayCommand((o) => DiscardRemove(o as Record));
             ReturnCommand = new RelayCommand((o) => Return(o));
             Pages = new ObservableCollection<object>();
             new RelayCommand((o) => historyModel.Load()).Execute(null);
             historyModel.PropertyChanged += HistoryModel_PropertyChanged;
             UpdatePageCount();
             PageIndex = 1;
+        }
+
+        private void DiscardRemove(Record record)
+        {
+            int result = PopupDialog.Show("放弃扫描任务", "放弃后，本次扫描结果将作废，确认放弃么？", 0, "放弃本次扫描", "取消");
+            if (result == 0)
+            {
+                historyModel.Remove(record);
+            }
         }
 
         public void ShiftPages(bool left)

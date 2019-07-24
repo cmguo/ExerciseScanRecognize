@@ -132,7 +132,7 @@
                                                           RenderTransformOrigin="0.5,0.5" />
                                 <ContentPresenter
                                 Grid.Column="1"
-                                x:Name="contentPresenter" Margin="{TemplateBinding Padding}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}" MaxWidth="100"
+                                x:Name="contentPresenter" Margin="{TemplateBinding Padding}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}" MaxWidth="170"
                                           HorizontalAlignment="Left" />
 
                             </Grid>

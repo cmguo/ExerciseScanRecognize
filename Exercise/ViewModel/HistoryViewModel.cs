@@ -4,6 +4,7 @@ using Exercise.View;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Threading.Tasks;
+using System.Windows;
 using TalBase.View;
 using TalBase.ViewModel;
 using static Exercise.Service.HistoryData;
@@ -68,7 +69,7 @@ namespace Exercise.ViewModel
 
         private void DiscardRemove(Record record)
         {
-            int result = PopupDialog.Show("放弃扫描任务", "放弃后，本次扫描结果将作废，确认放弃么？", 0, "放弃本次扫描", "取消");
+            int result = PopupDialog.Show(Application.Current.MainWindow,"放弃扫描任务", "放弃后，本次扫描结果将作废，确认放弃么？", 0, "放弃本次扫描", "取消");
             if (result == 0)
             {
                 historyModel.Remove(record);

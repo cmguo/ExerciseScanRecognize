@@ -23,12 +23,12 @@
         </ResourceDictionary>
     </Window.Resources>
 
-    <Grid MinWidth="458" MaxWidth="500" Height="206">
+    <Grid MinWidth="458" MaxWidth="500" VerticalAlignment="Center">
         <Border CornerRadius="10" BorderBrush="#0a2d4a66" BorderThickness="1" Background="White" />
         <Grid Margin="33,29,32,37">
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto" />
-                <RowDefinition Height="*" />
+                <RowDefinition Height="Auto" />
                 <RowDefinition Height="32" />
             </Grid.RowDefinitions>
             <Grid Grid.Row="0">

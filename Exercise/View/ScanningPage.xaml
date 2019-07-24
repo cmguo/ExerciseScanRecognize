@@ -21,20 +21,34 @@
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="pack://application:,,,/Exercise;component/Themes/DataGrid.xaml" />
             </ResourceDictionary.MergedDictionaries>
-
-            <DataGrid x:Key="ClassDetail" AutoGenerateColumns="False" ItemsSource="{Binding ClassDetails}"
-                  Margin="0,20,0,0"  RowHeaderWidth="0" ColumnHeaderHeight="50"
-                  GridLinesVisibility="Horizontal"
+            <StackPanel x:Key="ClassDetail" Orientation="Vertical" Background="#F4F8FE">
+                <StackPanel Margin="16, 16, 0, 0" Orientation="Horizontal" HorizontalAlignment="Left">
+                    <StackPanel>
+                        <TextBlock FontSize="14" Foreground="#2D4A66" Text="已扫描"/>
+                        <TextBlock FontSize="14" Foreground="#2D4A66" 
+                               Text="{Binding PageCount, StringFormat={}{0}张试卷，共识别}"/>
+                        <TextBlock FontSize="14" Foreground="#2D4A66"
+                               Text="{Binding StudentSumary, StringFormat={}{0}人}"/>
+                    </StackPanel>
+                </StackPanel>
+                <DataGrid  AutoGenerateColumns="False" ItemsSource="{Binding ClassDetails}" 
+                  Margin="16,16,0,0"
+                  HeadersVisibility="None"
                   BorderThickness="0,0,0,0"  MaxHeight="200"
-                  HorizontalGridLinesBrush="Gray"
-                  IsReadOnly="True">
-                <DataGrid.Columns>
-                    <DataGridTextColumn Header="班级" Binding="{Binding Name}" FontSize="14" Width="120"/>
-                    <DataGridTextColumn Header="回收试卷（份）" Binding="{Binding Result.Count}" FontSize="14" Width="90" />
-                    <DataGridTextColumn Header="总人数（人）" Binding="{Binding StudentCount}" FontSize="14" Width="90" />
-                </DataGrid.Columns>
-            </DataGrid>
-
+                  IsReadOnly="True" Style="{StaticResource DefaultDataGridStyle}">
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Binding="{Binding Name}" FontSize="14" Width="120"/>
+                        <DataGridTextColumn  FontSize="14" Width="70" >
+                            <DataGridTextColumn.Binding>
+                                <MultiBinding StringFormat="{}{0}/{1}(人)">
+                                    <Binding Path=" Result.Count"/>
+                                    <Binding Path=" Result.StudentCount"/>
+                                </MultiBinding>
+                            </DataGridTextColumn.Binding>
+                        </DataGridTextColumn>
+                    </DataGrid.Columns>
+                </DataGrid>
+            </StackPanel>
             <local:PaperOverlayConverter x:Key="PaperOverlayConverter" />
 
         </ResourceDictionary>

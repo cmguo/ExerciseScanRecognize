@@ -196,11 +196,10 @@ namespace Exercise.Scanning
 
         public void CheckStatus()
         {
-            if (!twain32.Capabilities.DeviceOnline.GetCurrent())
-                throw new Exception("DeviceOnline = false");
-            TwCC condition = twain32._GetTwainStatus();
-            if (condition != TwCC.Success)
-                throw new Exception(condition.ToString());
+            //TwCC condition = twain32._GetTwainStatus();
+            //if (condition != TwCC.Success)
+            //    throw new Exception(condition.ToString());
+            OpenDataSource();
         }
 
         public void Scan(short count)

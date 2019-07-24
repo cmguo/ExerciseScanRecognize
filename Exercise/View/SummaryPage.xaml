@@ -162,7 +162,7 @@
                             <ColumnDefinition Width="Auto"/>
                         </Grid.ColumnDefinitions>
                         <TextBlock Grid.Column="0" Text="{Binding StudentCount, StringFormat=共收回{0}份试卷}" VerticalAlignment="Center" />
-                        <tal:TalButton Grid.Column="1" Content="查看详情" Click="PUButton_Click" VerticalAlignment="Center" />
+                        <tal:TalButton Grid.Column="1" Content="查看详情" Focusable="False" Click="PUButton_Click" VerticalAlignment="Center" />
                     </Grid>
                     <DataGrid Grid.Row="1" Margin="26, 0, 26, 0" ItemsSource="{Binding ClassDetails}"
                               IsReadOnly="True" Focusable="False" Style="{StaticResource DefaultDataGridStyle}">

@@ -30,10 +30,7 @@ namespace Exercise.ViewModel
 
         private async Task Start(object obj)
         {
-            if (!NetWorkManager.CheckNetWorkAvailable())
-            {
-                return;
-            }
+            NetWorkManager.CheckNetWorkAvailable("当前电脑无网络连接，请检查后再开始扫描。");
             await exerciseModel.NewTask();
             if (base.Continue(obj))
             {

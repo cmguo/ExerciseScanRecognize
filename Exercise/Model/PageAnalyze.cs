@@ -22,6 +22,7 @@ namespace Exercise.Model
 
         public class ItemException : ModelBase
         {
+            public AreaType AreaType;
             public string Name { get; private set; }
 
             private bool _HasException;
@@ -48,8 +49,9 @@ namespace Exercise.Model
             public PageData.Item Problem { get; }
             public AnswerData.Item Answer { get; }
 
-            public ItemException(PageData.Question q, PageData.Item p, AnswerData.Item a)
+            public ItemException(AnswerData.Area a, PageData.Question q, PageData.Item p, AnswerData.Item i)
             {
+                AreaType = a.AreaType;
                 Name = (q.Index + 1).ToString();
                 if (q.ItemInfo.Count > 1)
                 {
@@ -57,7 +59,7 @@ namespace Exercise.Model
                     Name += p.Index;
                 }
                 Problem = p;
-                Answer = a;
+                Answer = i;
                 HasException = true;
             }
 
@@ -138,7 +140,7 @@ namespace Exercise.Model
 
         public static PageAnalyze Analyze(Page page)
         {
-            IList<ItemException> AnswerExceptions = SelectExceptions(page.MetaData, page.Answer, AreaType.SingleChoice);
+            IList<ItemException> AnswerExceptions = SelectExceptions(page.MetaData, page.Answer, AreaType.SingleChoice, AreaType.MultiChoice);
             IList<ItemException> CorrectionExceptions = SelectExceptions(page.MetaData, page.Answer, AreaType.Answer);
             if (AnswerExceptions == null && CorrectionExceptions == null)
                 return null;
@@ -165,33 +167,47 @@ namespace Exercise.Model
             return SelectedException != null;
         }
 
-        private static List<ItemException> SelectExceptions(PageData data, AnswerData answer, AreaType type)
+        private static List<ItemException> SelectExceptions(PageData data, AnswerData answer, params AreaType[] types)
         {
             List<ItemException> exceptions = new List<ItemException>();
-            foreach (AnswerData.Question qa in answer.AreaInfo.Where(a => a.AreaType == type).SelectMany(a => a.QuestionInfo))
+            foreach (AnswerData.Area a in answer.AreaInfo)
             {
-                PageData.Question qp = GetQuestion(data, qa.QuestionId);
-                for (int i = 0; i < qp.ItemInfo.Count; ++i)
+                if (!types.Contains(a.AreaType))
+                    continue;
+                foreach (AnswerData.Question qa in a.QuestionInfo)
                 {
-                    AnswerData.Item item = qa.ItemInfo[i];
-                    if (item.StatusOfItem > 0)
+                    PageData.Question qp = GetQuestion(data, qa.QuestionId);
+                    for (int i = 0; i < qp.ItemInfo.Count; ++i)
                     {
-                        exceptions.Add(new ItemException(qp, qp.ItemInfo[i], item));
-                        continue;
-                    }
-                    if (item.StatusOfItem < 0)
-                        continue;
-                    if (type != AreaType.Answer)
-                        continue;
-                    string score = string.Join(",", item.AnalyzeResult
-                        .Where(r => r != null)
-                        .Select(r => r.Value)
-                        .Where(v => v != null));
-                    float total = float.Parse(qp.ItemInfo[i].TotalScore);
-                    if (score.Length > 0 && float.Parse(score) > total)
-                    {
-                        item.StatusOfItem = 100;
-                        exceptions.Add(new ItemException(qp, qp.ItemInfo[i], item));
+                        AnswerData.Item item = qa.ItemInfo[i];
+                        if (item.StatusOfItem > 0)
+                        {
+                            exceptions.Add(new ItemException(a, qp, qp.ItemInfo[i], item));
+                            continue;
+                        }
+                        if (item.StatusOfItem < 0)
+                            continue;
+                        if (a.AreaType == AreaType.SingleChoice)
+                        {
+                            if (item.AnalyzeResult.Count > 1)
+                            {
+                                item.StatusOfItem = 100;
+                                exceptions.Add(new ItemException(a, qp, qp.ItemInfo[i], item));
+                            }
+                        }
+                        else if (a.AreaType == AreaType.Answer)
+                        {
+                            string score = string.Join(",", item.AnalyzeResult
+                                .Where(r => r != null)
+                                .Select(r => r.Value)
+                                .Where(v => v != null));
+                            float total = float.Parse(qp.ItemInfo[i].TotalScore);
+                            if (score.Length > 0 && float.Parse(score) > total)
+                            {
+                                item.StatusOfItem = 100;
+                                exceptions.Add(new ItemException(a, qp, qp.ItemInfo[i], item));
+                            }
+                        }
                     }
                 }
             }

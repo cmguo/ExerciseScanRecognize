@@ -2,7 +2,7 @@
 
 namespace Exercise.Scanning
 {
-    public class ScanEvent
+    public class ScanEvent : EventArgs
     {
         public string FileName { get; set; }
         public Exception Error { get; set; }

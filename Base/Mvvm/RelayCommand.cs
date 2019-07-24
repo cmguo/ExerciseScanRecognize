@@ -57,16 +57,9 @@ namespace Base.Mvvm
             remove { CommandManager.RequerySuggested -= value; }
         }
 
-        public override void Execute(object parameter)
+        protected override void Finish()
         {
-            try
-            {
-                base.Execute(parameter);
-            }
-            finally
-            {
-                CommandManager.InvalidateRequerySuggested();
-            }
+            CommandManager.InvalidateRequerySuggested();
         }
 
         #endregion // ICommand Members

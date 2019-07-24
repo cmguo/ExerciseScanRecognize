@@ -114,7 +114,7 @@ namespace Exercise.View
             {
                 return Visibility.Collapsed;
             }
-            if (NetWorkManager.CheckNetWorkAvailable())
+            if (NetWorkManager.IsNetWorkAvailable)
             {
                 return Visibility.Visible;
             }
@@ -135,7 +135,7 @@ namespace Exercise.View
             {
                 return Visibility.Collapsed;
             }
-            if (NetWorkManager.CheckNetWorkAvailable())
+            if (NetWorkManager.IsNetWorkAvailable)
             {
                 return Visibility.Collapsed;
             }

@@ -340,13 +340,13 @@
         "Entry"
         {
         "MsmKey" = "8:_7E1FD04983AA88B6489AD6C8519A35FD"
-        "OwnerKey" = "8:_7430E76A8CA8587BECB413EA87F2FF11"
+        "OwnerKey" = "8:_2115C2E01FFC79EFC2D5476110F32FE9"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
         "MsmKey" = "8:_7E1FD04983AA88B6489AD6C8519A35FD"
-        "OwnerKey" = "8:_2115C2E01FFC79EFC2D5476110F32FE9"
+        "OwnerKey" = "8:_7430E76A8CA8587BECB413EA87F2FF11"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -622,7 +622,7 @@
         "Entry"
         {
         "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_67F3037D5D17869C6432BDF26FC2B50D"
+        "OwnerKey" = "8:_15A68A852E074FC0855B57142F813A98"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -640,12 +640,6 @@
         "Entry"
         {
         "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_7430E76A8CA8587BECB413EA87F2FF11"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_UNDEFINED"
         "OwnerKey" = "8:_2115C2E01FFC79EFC2D5476110F32FE9"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -658,13 +652,13 @@
         "Entry"
         {
         "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_4809C73F8B8EEC8434010F9260B37041"
+        "OwnerKey" = "8:_7430E76A8CA8587BECB413EA87F2FF11"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
         "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_15A68A852E074FC0855B57142F813A98"
+        "OwnerKey" = "8:_4809C73F8B8EEC8434010F9260B37041"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -797,6 +791,12 @@
         {
         "MsmKey" = "8:_UNDEFINED"
         "OwnerKey" = "8:_E9A2C1018EABFFD08821D76FB9B44C80"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_UNDEFINED"
+        "OwnerKey" = "8:_67F3037D5D17869C6432BDF26FC2B50D"
         "MsmSig" = "8:_UNDEFINED"
         }
     }
@@ -1921,7 +1921,7 @@
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:读卷客户端"
         "ProductCode" = "8:{CEE6B7E5-CBD9-4524-A6D4-315C73084322}"
-        "PackageCode" = "8:{578C981F-8C4A-4507-B68B-FDB32AB00D3C}"
+        "PackageCode" = "8:{DC73E3EC-C23B-40DD-9255-FEAEBCBFEAF8}"
         "UpgradeCode" = "8:{86F0F312-44F0-4A04-B94C-97F93EA80D06}"
         "AspNetVersion" = "8:4.0.30319.0"
         "RestartWWWService" = "11:FALSE"
@@ -2561,6 +2561,34 @@
             "OutputConfiguration" = "8:"
             "OutputGroupCanonicalName" = "8:ReferenceCopyLocalPaths"
             "OutputProjectGuid" = "8:{5840A716-413E-4FE5-A764-46BD2F6E8181}"
+            "ShowKeyOutput" = "11:TRUE"
+                "ExcludeFilters"
+                {
+                }
+            }
+            "{5259A561-127C-4D43-A0A1-72F10C7B3BF8}:_343EDD1E492A41A5BD0700594A106EA6"
+            {
+            "SourcePath" = "8:"
+            "TargetName" = "8:"
+            "Tag" = "8:"
+            "Folder" = "8:_4B23E1A3533948F1922BEEE5376FE8A5"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            "ProjectOutputGroupRegister" = "3:1"
+            "OutputConfiguration" = "8:"
+            "OutputGroupCanonicalName" = "8:ContentFiles"
+            "OutputProjectGuid" = "8:{BC1053AD-C672-4EA0-A6B9-710A17A0AD48}"
             "ShowKeyOutput" = "11:TRUE"
                 "ExcludeFilters"
                 {

@@ -53,24 +53,18 @@ namespace Account.ViewModel
 
         private async Task DoLogin(object obj)
         {
-            if (LoginData.Password == "" || LoginData.LoginName == "")
+            if (LoginData.Password == null|| LoginData.LoginName == null || 
+                LoginData.Password == "" || LoginData.LoginName == "")
             {
                 throw new Exception("请输入账号密码");
 
             }
-            if (NetWorkManager.CheckNetWorkAvailable())
-            {
-                await AccountModel.Instance.Login();
-                Window window = Application.Current.MainWindow;
-                if (window != null)
-                    window.Show();
-                (obj as Window).Close();
-            }
-            else
-            {
-                throw new Exception("网络异常，请检查后重试");
-            }
-            
+            NetWorkManager.CheckNetWorkAvailable();
+            await AccountModel.Instance.Login();
+            Window window = Application.Current.MainWindow;
+            if (window != null)
+                window.Show();
+            (obj as Window).Close();
         }
 
         private async Task DoLogout(object obj)

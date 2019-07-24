@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
+using System.ComponentModel;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -78,6 +79,14 @@ namespace Exercise.Model
 
         public ExerciseData ExerciseData { get; private set; }
         public ObservableCollection<StudentInfo> PageStudents { get; private set; }
+
+        public class ReplacePageEventArgs : CancelEventArgs
+        {
+            public Page Old { get; internal set; }
+            public Page New { get; internal set; }
+        }
+
+        public event EventHandler<ReplacePageEventArgs> BeforeReplacePage;
 
         private SchoolModel schoolModel = SchoolModel.Instance;
         private ScanModel scanModel = ScanModel.Instance;
@@ -466,6 +475,10 @@ namespace Exercise.Model
                     return;
                 }
             }
+            ReplacePageEventArgs args = new ReplacePageEventArgs() { Old = targetException.Page, New = page };
+            BeforeReplacePage?.Invoke(this, args);
+            if (args.Cancel)
+                return;
             if (targetException.Page.Student == null)
                 RemovePage(targetException.Page, RemoveType.DuplexPage);
             AddPage(page);

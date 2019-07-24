@@ -90,6 +90,7 @@ namespace Exercise.ViewModel
             RemovePageListCommand = new RelayCommand((e) => Resolve(e, SelectedExceptionList, ResolveType.RemovePage));
             Exceptions = exerciseModel.Exceptions;
             Exceptions.CollectionChanged += Exceptions_CollectionChanged;
+            exerciseModel.BeforeReplacePage += ExerciseModel_BeforeReplacePage;
             ReturnCommand = new RelayCommand((o) => Return(o));
             foreach (ExceptionList el in Exceptions)
             {
@@ -131,6 +132,15 @@ namespace Exercise.ViewModel
                 (obj as System.Windows.Controls.Page).NavigationService.Navigate(new SummaryPage());
         }
 
+        private void ExerciseModel_BeforeReplacePage(object sender, ReplacePageEventArgs e)
+        {
+            if (e.Old.Student != null && e.New.Student != null)
+            {
+                int result = PopupDialog.Show("替换试卷确认", "您放入的学生试卷已经有扫描结果，确认替换吗？", 0, "确认", "取消");
+                e.Cancel = result == 1;
+            }
+        }
+
         private async Task Resolve(object obj, ExerciseModel.Exception exception, ResolveType type)
         {
             string title = null;
@@ -139,6 +149,7 @@ namespace Exercise.ViewModel
             switch (type)
             {
                 case ResolveType.Ignore:
+                case ResolveType.RemovePage:
                     title = "忽略异常";
                     btn = "忽略";
                     switch (SelectedException.Type)
@@ -161,8 +172,8 @@ namespace Exercise.ViewModel
                             break;
                     }
                     break;
-                case ResolveType.RemovePage:
-                    title = "删除试卷";
+                case ResolveType.RemoveStudent:
+                    title = "删除学生";
                     btn = "删除";
                     message = "删除后该生本次考试将被放弃，不计入统计，确认删除吗？";
                     break;
@@ -212,6 +223,10 @@ namespace Exercise.ViewModel
 
         private void Resolve(object obj, ExerciseModel.ExceptionList list, ResolveType type)
         {
+            int n = PopupDialog.Show(obj as FrameworkElement, "忽略异常",
+                "确认忽略以上异常？", 0, "确认", "取消");
+            if (n != 0)
+                return;
             exerciseModel.Resolve(list, type);
             if (Exceptions.Count == 0)
             {

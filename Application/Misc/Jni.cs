@@ -1,5 +1,4 @@
 ﻿using java.io;
-using java.lang;
 using net.sf.jni4net;
 using net.sf.jni4net.adaptors;
 
@@ -33,7 +32,7 @@ namespace Application.Misc
                 java.lang.System.@out.print(" : ");
 
                 // we use the hashtable
-                Object value = javaSystemProperties.get(key);
+                java.lang.Object value = javaSystemProperties.get(key);
 
                 // and this is CLR ToString() redirected to Java toString() method
                 string valueToString = value.ToString();

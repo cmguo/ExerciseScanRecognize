@@ -35,6 +35,8 @@ namespace Exercise.View
                     return;
                 }
                 face.IsChecked = false;
+                frame.NavigationService.RemoveBackEntry();
+                frame.NavigationService.RemoveBackEntry();
             }
         }
 

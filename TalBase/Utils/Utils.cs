@@ -1,22 +1,33 @@
 ﻿
+using System;
 using Microsoft.VisualBasic.Devices;
-using Panuon.UI;
-using TalBase.View;
 
 namespace TalBase.Utils
 {
     public class NetWorkManager
     {
-        public static bool CheckNetWorkAvailable()
+        [System.Runtime.InteropServices.DllImport("wininet.dll")]
+        private extern static bool InternetGetConnectedState(out int Description, int ReservedValue);
+
+        public static bool IsNetWorkAvailable
         {
-            Network network = new Network();
-            if (network.IsAvailable)
+            get
             {
-                return true;
+                int desc;
+                return InternetGetConnectedState(out desc, 0);
             }
-            PopupDialog.Show("发现错误", "当前电脑无网络连接，请检查后再开始扫描。", 0, "确定");
-            return false;
-            
+        }
+
+        public static void CheckNetWorkAvailable()
+        {
+            if (!IsNetWorkAvailable)
+                throw new System.Exception("当前无网络连接");
+        }
+
+        public static void CheckNetWorkAvailable(string msg)
+        {
+            if (!IsNetWorkAvailable)
+                throw new System.Exception(msg);
         }
     }
    

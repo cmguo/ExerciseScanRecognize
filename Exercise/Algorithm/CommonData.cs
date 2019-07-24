@@ -17,7 +17,9 @@
     {
         SingleChoice = 0,
         FillBlank = 1,
-        Answer = 2
+        Answer = 2, 
+        Judge = 3,
+        MultiChoice = 4,
     }
 
     public enum PagingInfo : int

@@ -145,7 +145,7 @@
                        DataContext="{Binding SelectedException, Converter={StaticResource ExceptionConverter}, ConverterParameter=Rescan}"
                        Visibility="{Binding Converter={StaticResource NonNullVisibleConverter}}"/>
             
-            <Frame Margin="0, 15, 0, 0" Content="{Binding SelectedException, Converter={StaticResource ExceptionPageConverter}}" Focusable="False"/>
+            <Frame x:Name="frame" Margin="0, 15, 0, 0" Content="{Binding SelectedException, Converter={StaticResource ExceptionPageConverter}}" Focusable="False"/>
             
             <StackPanel Orientation="Vertical">
                 <StackPanel.Resources>
@@ -173,7 +173,7 @@
                     Visibility="{Binding SelectedException.Page.Student, Converter={StaticResource NonNullVisibleConverter}, FallbackValue=Collapsed}" />
             </StackPanel>
 
-            <StackPanel  Orientation="Vertical" Margin="0, 24, 0, 0"
+            <StackPanel Orientation="Vertical" Margin="0, 24, 0, 0"
                         Visibility="{Binding Text, ElementName=ListTitle, Converter={StaticResource NonNullVisibleConverter}}">
 
                 <StackPanel.Resources>

@@ -107,6 +107,14 @@ namespace Base.Mvvm
                 if (!e1.IsHandled)
                     throw;
             }
+            finally
+            {
+                Finish();
+            }
+        }
+
+        protected virtual void Finish()
+        {
         }
 
         #endregion // ICommand Members

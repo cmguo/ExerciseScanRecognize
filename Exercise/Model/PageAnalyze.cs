@@ -50,7 +50,7 @@ namespace Exercise.Model
 
             public ItemException(PageData.Question q, PageData.Item p, AnswerData.Item a)
             {
-                Name = q.Index.ToString();
+                Name = (q.Index + 1).ToString();
                 if (q.ItemInfo.Count > 1)
                 {
                     Name += ".";

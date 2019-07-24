@@ -11,6 +11,8 @@ namespace Exercise.Scanning
     public interface IScanDevice
     {
 
+        #region Events
+
         event EventHandler<ScanEvent> OnImage;
 
         event EventHandler<ScanEvent> GetFileName;
@@ -23,6 +25,10 @@ namespace Exercise.Scanning
 
         event EventHandler<ScanEvent> ScanCompleted;
 
+        #endregion
+
+        #region Properties
+
         string[] SourceList { get; }
 
         int SourceIndex { get; set; }
@@ -34,11 +40,21 @@ namespace Exercise.Scanning
         float XResolution { get; set; }
         float YResolution { get; set; }
 
+        bool FeederEnabled { get; set; }
+
+        bool PaperDectectable { get; }
+
         bool FeederLoaded { get; }
+
+        #endregion
+
+        #region Methods
 
         void Open();
 
         void DetectSource();
+
+        void CheckStatus();
 
         void Scan(short count);
 
@@ -49,6 +65,9 @@ namespace Exercise.Scanning
         void ResumeScan();
 
         void Close();
+
+        #endregion
+
     }
 
 }

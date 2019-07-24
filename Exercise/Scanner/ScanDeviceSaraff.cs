@@ -97,6 +97,14 @@ namespace Exercise.Scanning
             set => twain32.Capabilities.PixelType.Set((TwPixelType)Enum.Parse(typeof(TwPixelType), value));
         }
 
+        public bool FeederEnabled
+        {
+            get => twain32.Capabilities.FeederEnabled.GetCurrent();
+            set => twain32.Capabilities.FeederEnabled.Set(value);
+        }
+
+        public bool PaperDectectable => twain32.Capabilities.PaperDetectable.GetCurrent();
+
         public bool FeederLoaded => twain32.Capabilities.FeederLoaded.GetCurrent();
 
         public ICollection<string> ImageFormats
@@ -180,8 +188,19 @@ namespace Exercise.Scanning
             twain32.Capabilities.Compression.Set(TwCompression.Jpeg);
             twain32.Capabilities.XferMech.Set(TwSX.File);
             twain32.Capabilities.PixelType.Set(TwPixelType.RGB);
+            //twain32.Capabilities.AutoFeed.Set(false);
+            //twain32.Capabilities.AutoScan.Set(false);
             XResolution = 200;
             YResolution = 200;
+        }
+
+        public void CheckStatus()
+        {
+            if (!twain32.Capabilities.DeviceOnline.GetCurrent())
+                throw new Exception("DeviceOnline = false");
+            TwCC condition = twain32._GetTwainStatus();
+            if (condition != TwCC.Success)
+                throw new Exception(condition.ToString());
         }
 
         public void Scan(short count)

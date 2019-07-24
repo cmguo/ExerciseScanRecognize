@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Windows.Input;
 using System.Diagnostics;
-using System.Threading.Tasks;
-using System.ComponentModel;
 
 namespace Base.Mvvm
 {

@@ -236,11 +236,14 @@ namespace Exercise.Model
         public void Resolve(Exception ex, ResolveType type)
         {
             Page oldPage = ex.Page;
-            if (type == ResolveType.Ignore
-                || type == ResolveType.Resolve)
+            if (type == ResolveType.Ignore)
             {
+                RemoveException(ex.Type, oldPage);
                 if (oldPage.Analyze != null)
                     oldPage.Analyze.ClearException(ex.Type);
+            }
+            else if (type == ResolveType.Resolve)
+            {
                 RemoveException(ex.Type, oldPage);
                 if (ex.Type == ExceptionType.NoStudentCode)
                 {

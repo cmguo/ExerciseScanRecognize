@@ -52,6 +52,14 @@ namespace Exercise.Model
             set => scanDevice.SourceIndex = value;
         }
 
+        public bool FeederEnabled
+        {
+            get => scanDevice.FeederEnabled;
+            set => scanDevice.FeederEnabled = value;
+        }
+
+        public bool PaperDectectable => scanDevice.PaperDectectable;
+
         public bool FeederLoaded => scanDevice.FeederLoaded;
 
         public string PageCode { get; private set; }
@@ -160,6 +168,11 @@ namespace Exercise.Model
         {
             await Task.Run(() => scanDevice.DetectSource());
             RaisePropertyChanged("SourceIndex");
+        }
+
+        public void CheckStatus()
+        {
+            scanDevice.CheckStatus();
         }
 
         public void Scan(short count = -1)

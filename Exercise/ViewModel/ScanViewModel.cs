@@ -85,7 +85,7 @@ namespace Exercise.ViewModel
         {
             try
             {
-                SourceIndex = SourceIndex;
+                scanModel.CheckStatus();
             }
             catch (Exception e)
             {

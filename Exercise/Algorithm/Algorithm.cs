@@ -137,7 +137,7 @@ namespace Exercise.Algorithm
             catch (Exception e)
             {
                 Log.w(e);
-                throw new Exception("识别算法异常", e);
+                throw new Exception("识别异常", e);
             }
         }
 

@@ -53,6 +53,11 @@ namespace Account.ViewModel
 
         private async Task DoLogin(object obj)
         {
+            if (LoginData.Password == "" || LoginData.LoginName == "")
+            {
+                throw new Exception("请输入账号密码");
+
+            }
             if (NetWorkManager.CheckNetWorkAvailable())
             {
                 await AccountModel.Instance.Login();
@@ -61,6 +66,11 @@ namespace Account.ViewModel
                     window.Show();
                 (obj as Window).Close();
             }
+            else
+            {
+                throw new Exception("网络异常，请检查后重试");
+            }
+            
         }
 
         private async Task DoLogout(object obj)

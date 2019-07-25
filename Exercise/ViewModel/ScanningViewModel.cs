@@ -81,7 +81,7 @@ namespace Exercise.ViewModel
             {
                 if (exerciseModel.ExerciseData == null)
                 {
-                    PopupDialog.Show(obj as UIElement, "TODO", "没有有效试卷信息", 0, "确认");
+                    PopupDialog.Show(obj as UIElement, "确认", "没有有效试卷信息", 0, "确认");
                 }
                 else
                 {
@@ -95,11 +95,11 @@ namespace Exercise.ViewModel
             System.Windows.Controls.Page page = obj as System.Windows.Controls.Page;
             FrameworkElement element = page.Resources["ClassDetail"] as FrameworkElement;
             element.DataContext = this;
-            int result = PopupDialog.Show(obj as UIElement, "确认", "扫描仪中还有试卷待扫描，确认结束扫描并查看结果吗？", element, 0, "查看结果", "继续扫描");
+            int result = PopupDialog.Show(obj as UIElement, "扫描中断", "扫描仪中还有试卷待扫描，确认结束扫描并查看结果吗？", element, 0, "查看结果", "继续扫描");
             while (result == 0 && exerciseModel.ExerciseData == null)
             {
-                PopupDialog.Show(obj as UIElement, "TODO", "没有有效试卷信息", 0, "确认");
-                result = PopupDialog.Show(obj as UIElement, "确认", "扫描仪中还有试卷待扫描，确认结束扫描并查看结果吗？", element, 0, "查看结果", "继续扫描");
+                PopupDialog.Show(obj as UIElement, "确认", "没有有效试卷信息", 0, "确认");
+                result = PopupDialog.Show(obj as UIElement, "扫描中断", "扫描仪中还有试卷待扫描，确认结束扫描并查看结果吗？", element, 0, "查看结果", "继续扫描");
             }
             if (result == 0)
             {

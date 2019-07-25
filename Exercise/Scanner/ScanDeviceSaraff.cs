@@ -13,6 +13,9 @@ namespace Exercise.Scanning
     {
         private static readonly Logger Log = Logger.GetLogger<ScanDeviceSaraff>();
 
+        private const int CANCEL_DROP = 1;
+        private const int CANCEL_STOP = 2;
+
 
         public bool Indicators
         {
@@ -120,15 +123,13 @@ namespace Exercise.Scanning
 
         public event EventHandler<ScanEvent> OnImage;
         public event EventHandler<ScanEvent> GetFileName;
-        public event EventHandler<ScanEvent> ScanPaused;
         public event EventHandler<ScanEvent> ScanEvent;
         public event EventHandler<ScanEvent> ScanError;
         public event EventHandler<ScanEvent> ScanCompleted;
 
         private Window window;
         private Twain32 twain32;
-        private bool cancel;
-        private bool pause;
+        private int cancel;
 
         public ScanDeviceSaraff(Window window)
         {
@@ -183,13 +184,18 @@ namespace Exercise.Scanning
             twain32.Capabilities.CameraSide.Set(TwCS.Both);
             if (twain32.Capabilities.AutoDiscardBlankPages.IsSupported(TwQC.Set))
                 twain32.Capabilities.AutoDiscardBlankPages.Set(TwBP.Disable);
+            if (twain32.Capabilities.DeviceEvent.IsSupported(TwQC.Set))
+            {
+                twain32.Capabilities.DeviceEvent.Set(TwDE.DeviceOffline);
+                twain32.Capabilities.DeviceEvent.Set(TwDE.CheckDeviceOnline);
+                twain32.Capabilities.DeviceEvent.Set(TwDE.PaperJam);
+                twain32.Capabilities.DeviceEvent.Set(TwDE.PaperDoubleFeed);
+            }
             twain32.Capabilities.DuplexEnabled.Set(true);
             twain32.Capabilities.ImageFileFormat.Set(TwFF.Jfif);
             twain32.Capabilities.Compression.Set(TwCompression.Jpeg);
             twain32.Capabilities.XferMech.Set(TwSX.File);
             twain32.Capabilities.PixelType.Set(TwPixelType.RGB);
-            //twain32.Capabilities.AutoFeed.Set(false);
-            //twain32.Capabilities.AutoScan.Set(false);
             XResolution = 200;
             YResolution = 200;
         }
@@ -206,38 +212,18 @@ namespace Exercise.Scanning
         {
             lock (twain32)
             {
-                cancel = false;
-                pause = false;
+                cancel = 0;
             }
             twain32.Capabilities.XferCount.Set(count <= 0 ? (short) -1 : (short) (count * 2));
             twain32.Acquire();
         }
 
 
-        public void CancelScan()
+        public void CancelScan(bool drop)
         {
             lock (twain32)
             {
-                cancel = true;
-                pause = false;
-                Monitor.PulseAll(twain32);
-            }
-        }
-
-        public void PauseScan()
-        {
-            lock (twain32)
-            {
-                pause = true;
-            }
-        }
-
-        public void ResumeScan()
-        {
-            lock (twain32)
-            {
-                pause = false;
-                Monitor.PulseAll(twain32);
+                cancel = drop ? CANCEL_DROP : CANCEL_STOP;
             }
         }
 
@@ -250,13 +236,9 @@ namespace Exercise.Scanning
         {
             lock (twain32)
             {
-                while (pause)
-                {
-                    ScanPaused?.Invoke(this, new ScanEvent());
-                    Monitor.Wait(twain32);
-                }
-                e.Cancel = cancel;
-                return cancel;
+                e.Cancel = cancel > 0;
+                e.Drop = cancel == CANCEL_DROP;
+                return cancel == CANCEL_DROP;
             }
 
         }
@@ -268,6 +250,7 @@ namespace Exercise.Scanning
 
         private void Twain32_SetupFileXferEvent(object sender, Twain32.SetupFileXferEventArgs e)
         {
+            Log.d("Twain32_SetupFileXferEvent");
             if (CheckStatus(e))
             {
                 return;
@@ -285,11 +268,13 @@ namespace Exercise.Scanning
         {
             Log.d("Twain32_XferDone");
             //CheckStatus(e);
+            twain32.Capabilities.FeedPage.Set(true);
         }
 
         private void Twain32_FileXferEvent(object sender, Twain32.FileXferEventArgs e)
         {
             Log.d("Twain32_FileXferEvent: " + e.ImageFileXfer.FileName);
+            CheckStatus(e);
             if (OnImage != null)
             {
                 window.Dispatcher.Invoke(() =>

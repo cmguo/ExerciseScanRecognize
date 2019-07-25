@@ -56,7 +56,7 @@ namespace Exercise.Model
                 if (q.ItemInfo.Count > 1)
                 {
                     Name += ".";
-                    Name += p.Index;
+                    Name += p.Index + 1;
                 }
                 Problem = p;
                 Answer = i;

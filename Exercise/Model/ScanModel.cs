@@ -22,6 +22,9 @@ namespace Exercise.Model
 
         private static readonly Logger Log = Logger.GetLogger<ScanModel>();
 
+        private const int CANCEL_DROP = 1;
+        private const int CANCEL_STOP = 2;
+
         private static ScanModel s_instance;
         public static ScanModel Instance
         {
@@ -111,7 +114,7 @@ namespace Exercise.Model
                     _IsCompleted = value;
                     Monitor.PulseAll(mutex);
                 }
-                if (!cancel)
+                if (cancel == 0)
                     RaisePropertyChanged("IsCompleted");
             }
         }
@@ -136,7 +139,7 @@ namespace Exercise.Model
         private int scanBatch = 0;
         private int scanIndex = 0;
         private int readIndex = 0;
-        private bool cancel = false;
+        private int cancel = 0;
         private Page lastPage;
         private ExerciseData exerciseData;
 
@@ -146,7 +149,6 @@ namespace Exercise.Model
             PageDropped = new ObservableCollection<Page>();
             scanDevice.OnImage += ScanDevice_OnImage;
             scanDevice.GetFileName += ScanDevice_GetFileName;
-            scanDevice.ScanPaused += ScanDevice_ScanPaused;
             scanDevice.ScanError += ScanDevice_ScanError;
             scanDevice.ScanCompleted += ScanDevice_ScanCompleted;
             IsCompleted = true;
@@ -184,7 +186,7 @@ namespace Exercise.Model
             IsPaused = false;
             IsCompleted = false;
             Error = null;
-            cancel = false;
+            cancel = 0;
             ++scanBatch;
             scanIndex = 0;
             try
@@ -199,37 +201,15 @@ namespace Exercise.Model
             }
         }
 
-        public async Task<bool> PauseScan()
+        public Task CancelScan(bool drop)
         {
-            Log.d("PauseScan");
-            scanDevice.PauseScan();
-            await Task.Run(() =>
-            {
-                lock (mutex)
-                {
-                    while (IsScanning && !IsPaused)
-                        Monitor.Wait(mutex);
-                }
-            });
-            return IsScanning;
-        }
-
-        public void ResumeScan()
-        {
-            Log.d("ResumeScan");
-            IsPaused = false;
-            scanDevice.ResumeScan();
-        }
-
-        public Task CancelScan()
-        {
-            Log.d("CancelScan");
+            Log.d("CancelScan " + drop);
             lock (mutex)
             {
-                cancel = true;
+                cancel = drop ? CANCEL_DROP : CANCEL_STOP;
                 Monitor.PulseAll(mutex);
             }
-            scanDevice.CancelScan();
+            scanDevice.CancelScan(drop);
             return Task.Run(() =>
             {
                 lock (mutex)
@@ -345,6 +325,12 @@ namespace Exercise.Model
                 lastPage = null;
             }
             Log.d("AddImage " + fileName);
+            if (cancel == CANCEL_DROP)
+            {
+                page1.Another = page;
+                Pages.Add(page1);
+                return;
+            }
             Page page2 = page;
             Page[] pages = new Page[] { page1, page2 };
             long tick = Environment.TickCount;
@@ -462,7 +448,7 @@ namespace Exercise.Model
         {
             lock (mutex)
             {
-                while (exerciseData == null && !cancel)
+                while (exerciseData == null && cancel != CANCEL_DROP)
                 {
                     Monitor.Wait(mutex);
                 }

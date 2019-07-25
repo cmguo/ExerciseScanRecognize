@@ -78,7 +78,7 @@ namespace Exercise.ViewModel
 
         protected virtual async Task EndScan(object obj)
         {
-            await scanModel.CancelScan();
+            await scanModel.CancelScan(true);
         }
 
         protected bool Check(object obj)

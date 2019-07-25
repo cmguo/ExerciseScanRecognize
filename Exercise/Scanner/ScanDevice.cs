@@ -17,8 +17,6 @@ namespace Exercise.Scanning
 
         event EventHandler<ScanEvent> GetFileName;
 
-        event EventHandler<ScanEvent> ScanPaused;
-
         event EventHandler<ScanEvent> ScanError;
 
         event EventHandler<ScanEvent> ScanEvent;
@@ -58,11 +56,7 @@ namespace Exercise.Scanning
 
         void Scan(short count);
 
-        void CancelScan();
-
-        void PauseScan();
-
-        void ResumeScan();
+        void CancelScan(bool drop);
 
         void Close();
 

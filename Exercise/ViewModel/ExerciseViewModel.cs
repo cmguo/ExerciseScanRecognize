@@ -5,6 +5,7 @@ using Exercise.View;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
@@ -46,7 +47,7 @@ namespace Exercise.ViewModel
             DiscardCommand = new RelayCommand((e) => Discard(e));
             CloseCommand = new RelayCommand((e) => Close(e));
             exerciseModel.PropertyChanged += ExerciseModel_PropertyChanged;
-            CloseMessage = "本次扫描结果未上传，退出后，扫描结果将作废，确认退出吗？";
+            CloseMessage = "退出后，扫描结果将作废，确认退出吗？";
             Update();
         }
 
@@ -80,36 +81,31 @@ namespace Exercise.ViewModel
 
         protected virtual async Task Close(object obj)
         {
+            if (exerciseModel.SavePath == null)
+                return;
             CancelEventArgs e = obj as CancelEventArgs;
-            Task<bool> task = scanModel.PauseScan();
             int result = PopupDialog.Show("退出软件", CloseMessage, 1, "退出", "取消");
-            if (result == 0)
+            if (result != 0)
             {
-                await task;
-                await scanModel.CancelScan();
-                exerciseModel.Discard();
-            }
-            else
-            {
-                if (await task)
-                    scanModel.ResumeScan();
                 e.Cancel = true;
+                return;
             }
+            if (!scanModel.IsScanning && scanModel.IsCompleted)
+                return;
+            e.Cancel = true;
+            await scanModel.CancelScan(true);
+            exerciseModel.Discard();
+            Application.Current.MainWindow.Close();
         }
 
         protected async Task Discard(object obj)
         {
-            bool paused = await scanModel.PauseScan();
             int result = PopupDialog.Show(obj as UIElement, "放弃扫描任务", "放弃后，本次扫描结果将作废，确认放弃么？", 0, "放弃本次扫描", "取消");
             if (result == 0)
             {
-                await scanModel.CancelScan();
+                await scanModel.CancelScan(true);
                 exerciseModel.Discard();
                 (obj as System.Windows.Controls.Page).NavigationService.Navigate(new HomePage());
-            }
-            else if (paused)
-            {
-                scanModel.ResumeScan();
             }
         }
 

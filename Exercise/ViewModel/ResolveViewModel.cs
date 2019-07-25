@@ -88,6 +88,7 @@ namespace Exercise.ViewModel
             ResolveCommand = new RelayCommand((e) => Resolve(e, SelectedException, ResolveType.Resolve));
             IgnoreListCommand = new RelayCommand((e) => Resolve(e, SelectedExceptionList, ResolveType.Ignore));
             RemovePageListCommand = new RelayCommand((e) => Resolve(e, SelectedExceptionList, ResolveType.RemovePage));
+            CloseMessage = "本次扫描结果未上传，" + CloseMessage;
             Exceptions = exerciseModel.Exceptions;
             Exceptions.CollectionChanged += Exceptions_CollectionChanged;
             exerciseModel.BeforeReplacePage += ExerciseModel_BeforeReplacePage;

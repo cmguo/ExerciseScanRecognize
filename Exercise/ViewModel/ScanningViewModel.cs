@@ -77,45 +77,38 @@ namespace Exercise.ViewModel
 
         protected override async Task EndScan(object obj)
         {
-            if (!await scanModel.PauseScan())
-            {
-                if (exerciseModel.ExerciseData == null)
-                {
-                    PopupDialog.Show(obj as UIElement, "确认", "没有有效试卷信息", 0, "确认");
-                }
-                else
-                {
-                    await scanModel.CancelScan();
-                    await exerciseModel.MakeResult();
-                    (obj as System.Windows.Controls.Page).NavigationService.Navigate(new SummaryPage());
-                }
-                return;
-            }
+            await scanModel.CancelScan(false);
             Update();
             System.Windows.Controls.Page page = obj as System.Windows.Controls.Page;
             FrameworkElement element = page.Resources["ClassDetail"] as FrameworkElement;
             element.DataContext = this;
-            int result = PopupDialog.Show(obj as UIElement, "扫描中断", "扫描仪中还有试卷待扫描，确认结束扫描并查看结果吗？", element, 0, "查看结果", "继续扫描");
-            while (result == 0 && exerciseModel.ExerciseData == null)
+            int result = PopupDialog.Show(obj as UIElement, "确认", "扫描仪中还有试卷待扫描，确认结束扫描并查看结果吗？", element, 0, "查看结果", "继续扫描");
+            if (result == 0 && exerciseModel.ExerciseData == null)
             {
-                PopupDialog.Show(obj as UIElement, "确认", "没有有效试卷信息", 0, "确认");
-                result = PopupDialog.Show(obj as UIElement, "扫描中断", "扫描仪中还有试卷待扫描，确认结束扫描并查看结果吗？", element, 0, "查看结果", "继续扫描");
+                result = PopupDialog.Show(obj as UIElement, "确认", "没有有效试卷信息", element, 0, "放弃扫描", "继续扫描");
             }
             if (result == 0)
             {
-                await scanModel.CancelScan();
-                await exerciseModel.MakeResult();
-                (obj as System.Windows.Controls.Page).NavigationService.Navigate(new SummaryPage());
+                if (exerciseModel.ExerciseData == null)
+                {
+                    exerciseModel.Discard();
+                    (obj as System.Windows.Controls.Page).NavigationService.Navigate(new HomePage());
+                }
+                else
+                {
+                    await exerciseModel.MakeResult();
+                    (obj as System.Windows.Controls.Page).NavigationService.Navigate(new SummaryPage());
+                }
             }
             else
             {
-                scanModel.ResumeScan();
+                Continue(obj);
             }
         }
 
         private async Task OnError(object obj)
         {
-            bool isScanning = await scanModel.PauseScan();
+            await scanModel.CancelScan(true);
             string msg = null;
             if (Error == 0)
                 msg = "当前试卷二维码无法识别，不能查看结果";
@@ -128,7 +121,6 @@ namespace Exercise.ViewModel
                 int result = PopupDialog.Show(obj as UIElement, "出现异常", msg, 0, "确定");
                 if (result == 0)
                 {
-                    await scanModel.CancelScan();
                     exerciseModel.Discard();
                     (obj as System.Windows.Controls.Page).NavigationService.Navigate(new HomePage());
                     break;
@@ -149,12 +141,12 @@ namespace Exercise.ViewModel
                 int result = -1;
                 if (scanModel.Error != null)
                 {
-                    result = PopupDialog.Show(obj as UIElement, "发现错误", "扫描仪发生异常，无法说明。请检查后重试。", 1, "查看结果", "继续扫描");
+                    result = PopupDialog.Show(obj as UIElement, "扫描中断", "扫描仪发生异常，请检查后重试。", 1, "查看结果", "继续扫描");
                 }
                 else
                 {
-                    result = PopupDialog.Show(obj as UIElement, "确认",
-                        "扫描仪已无试卷，请添加试卷继续扫描。若已全部扫描，可查看扫描结果。", element, 0, "查看结果", "继续扫描");
+                    result = PopupDialog.Show(obj as UIElement, "扫描中断",
+                        "扫描仪已停止，请添加试卷继续扫描。若已全部扫描，可查看扫描结果。", element, 0, "查看结果", "继续扫描");
                 }
                 if (result == 0)
                 {

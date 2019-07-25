@@ -244,7 +244,7 @@ namespace Exercise.Model
 
         public async Task CancelScanOne()
         {
-            await scanModel.CancelScan();
+            await scanModel.CancelScan(true);
             lock (Exceptions)
             {
                 targetException = null;

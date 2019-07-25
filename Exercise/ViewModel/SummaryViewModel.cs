@@ -25,6 +25,7 @@ namespace Exercise.ViewModel
         {
             ResolveCommand = new RelayCommand((e) => Resolve(e));
             SubmitCommand = new RelayCommand((e) => Submit(e));
+            CloseMessage = "本次扫描结果未上传，" + CloseMessage;
             ExerciseName = exerciseModel.ExerciseData.Title;
             ExceptionCount = Exceptions.SelectMany(el => el.Exceptions).Count();
         }

@@ -10,8 +10,8 @@
         WindowStartupLocation="CenterOwner"
         ShowInTaskbar="False"
         AllowsTransparency="True"
-        Background="#99000000"
-        Width="1200" Height="700"
+        Background="Transparent"
+        MouseLeftButtonDown="MouseLeftBtnDown_Drag"
         Title="PopupDialog" ResizeMode="NoResize" WindowStyle="None">
     
     <Window.Resources>
@@ -24,7 +24,11 @@
     </Window.Resources>
 
     <Grid Width="458" HorizontalAlignment="Center" VerticalAlignment="Center">
-        <Border CornerRadius="10" BorderBrush="#0a2d4a66" BorderThickness="1" Background="White" />
+        <Border CornerRadius="10" BorderBrush="#0a2d4a66" BorderThickness="2" Background="White" >
+        <Border.Effect>
+            <DropShadowEffect Color="#2D4A66" BlurRadius="8" ShadowDepth="4" Opacity="0.2" />
+        </Border.Effect>
+        </Border>
         <Grid Margin="33,29,32,37" >
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto" />

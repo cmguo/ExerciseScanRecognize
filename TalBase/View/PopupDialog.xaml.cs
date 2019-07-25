@@ -3,6 +3,7 @@ using Base.Mvvm.Converter;
 using Panuon.UI;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Input;
 using System.Windows.Media;
 
 namespace TalBase.View
@@ -47,6 +48,12 @@ namespace TalBase.View
             btn0.Click += Btn_Click;
             btn1.Click += Btn_Click;
             btn2.Click += Btn_Click;
+        }
+
+
+        private void MouseLeftBtnDown_Drag(object sender, MouseButtonEventArgs e)
+        {
+            this.DragMove();
         }
 
         private void Btn_Click(object sender, RoutedEventArgs e)

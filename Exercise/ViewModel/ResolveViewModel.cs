@@ -182,7 +182,7 @@ namespace Exercise.ViewModel
             if (title != null)
             {
                 int n = PopupDialog.Show(obj as FrameworkElement, title, message, 0, btn, "取消");
-                if (n == 1)
+                if (n != 0)
                     return;
             }
             if (exception.Type == ExceptionType.NoStudentCode && type == ResolveType.Resolve)

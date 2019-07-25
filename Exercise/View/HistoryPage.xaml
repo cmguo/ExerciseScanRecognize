@@ -70,14 +70,14 @@
     <tb:TitleBarManager.Buttons>
         <tb:TitleButton Name="Return" Content="{StaticResource Return}" />
     </tb:TitleBarManager.Buttons>
-    <Grid Margin="18, 20, 18, 16" DataContext="{StaticResource ViewModel}">
+    <Grid Margin="18, 20, 18, 16" DataContext="{StaticResource ViewModel}" >
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition/>
         </Grid.RowDefinitions>
         <Border Grid.RowSpan="2" CornerRadius="4" Background="White" />
-        <TextBlock  FontSize="16" Foreground="#FF2D4A66" Margin="30, 28, 0, 16" Text="扫描记录管理"/>
-        <ScrollViewer  Grid.Row="1" VerticalScrollBarVisibility="Auto" Template="{StaticResource ScrollViewerTemplate}" >
+        <TextBlock  FontSize="16" Foreground="#FF2D4A66" Margin="30, 28, 0, 16" Text="扫描记录管理" />
+        <ScrollViewer  Grid.Row="1" VerticalScrollBarVisibility="Auto" Template="{StaticResource ScrollViewerTemplate}" Focusable="True" Name="ScrollViewer">
             <Grid >
                 <Grid.RowDefinitions>
                     <RowDefinition />

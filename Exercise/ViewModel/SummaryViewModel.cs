@@ -12,7 +12,7 @@ namespace Exercise.ViewModel
     {
         public string ExerciseName { get; private set; }
         public int ExceptionCount { get; private set; }
-        public ObservableCollection<ExceptionList> Exceptions { get; private set; }
+        public ObservableCollection<ExceptionList> Exceptions => exerciseModel.Exceptions;
 
         public RelayCommand ResolveCommand { get; set; }
         public RelayCommand SubmitCommand { get; set; }
@@ -26,8 +26,7 @@ namespace Exercise.ViewModel
             ResolveCommand = new RelayCommand((e) => Resolve(e));
             SubmitCommand = new RelayCommand((e) => Submit(e));
             ExerciseName = exerciseModel.ExerciseData.Title;
-            ExceptionCount = exerciseModel.Exceptions.SelectMany(el => el.Exceptions).Count();
-            Exceptions = exerciseModel.Exceptions;
+            ExceptionCount = Exceptions.SelectMany(el => el.Exceptions).Count();
         }
 
         private void Resolve(object obj)

@@ -535,6 +535,8 @@ namespace Exercise.Model
             {
                 //page.PageData = null;
                 //pageData.ImgBytes = null;
+                pageData.ImgPathIn = null;
+                pageData.ImgPathOut = null;
             }
             return tick;
         }

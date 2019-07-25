@@ -73,6 +73,11 @@ namespace Exercise.ViewModel
             exerciseModel.PropertyChanged -= ExerciseModel_PropertyChanged;
         }
 
+        protected override bool CanContinue(object obj)
+        {
+            return !exerciseModel.Submitting;
+        }
+
         protected virtual async Task Close(object obj)
         {
             CancelEventArgs e = obj as CancelEventArgs;

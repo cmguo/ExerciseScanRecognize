@@ -110,7 +110,15 @@ namespace Exercise.ViewModel
         private async Task Summary(object obj)
         {
             object[] args = obj as object[];
-            await ExerciseModel.Instance.Load((args[1] as Record).LocalPath);
+            try
+            {
+                await ExerciseModel.Instance.Load((args[1] as Record).LocalPath);
+            }
+            catch
+            {
+                ExerciseModel.Instance.Clear();
+                throw;
+            }
             (args[0] as System.Windows.Controls.Page).NavigationService.Navigate(new SummaryPage());
         }
 

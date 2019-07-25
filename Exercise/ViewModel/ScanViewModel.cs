@@ -61,7 +61,7 @@ namespace Exercise.ViewModel
         public ScanViewModel()
         {
             PageCount = scanModel.Pages.Count;
-            ContinueCommand = new RelayCommand((e) => Continue(e));
+            ContinueCommand = new RelayCommand((e) => Continue(e), CanContinue);
             EndScanCommand = new RelayCommand((e) => EndScan(e));
             scanModel.Pages.CollectionChanged += Pages_CollectionChanged;
             scanModel.PropertyChanged += ScanModel_PropertyChanged;
@@ -99,6 +99,11 @@ namespace Exercise.ViewModel
                 result = PopupDialog.Show(obj as UIElement, "发现错误", "扫描仪里面没有纸张，请添加试卷。", 0, "确定", "取消");
             }
             return result == 0;
+        }
+
+        protected virtual bool CanContinue(object obj)
+        {
+            return true;
         }
 
         protected virtual bool Continue(object obj)

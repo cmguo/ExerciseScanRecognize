@@ -83,7 +83,7 @@ namespace Exercise.Model
                 }
                 else if (SelectedAnswer.Length > 0)
                 {
-                    SelectedAnswer = SelectedAnswer.Remove(0, 1);
+                    SelectedAnswer = SelectedAnswer.Remove(SelectedAnswer.Length - 1, 1);
                 }
             }
 

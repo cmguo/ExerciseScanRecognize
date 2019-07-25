@@ -15,6 +15,8 @@ namespace Exercise.Model
 {
     public class ExerciseModel : ModelBase
     {
+        private static readonly Logger Log = Logger.GetLogger<ExerciseModel>();
+
         private static ExerciseModel s_instance;
         public static ExerciseModel Instance
         {
@@ -79,6 +81,8 @@ namespace Exercise.Model
 
         public ExerciseData ExerciseData { get; private set; }
         public ObservableCollection<StudentInfo> PageStudents { get; private set; }
+
+        public bool Submitting { get; private set; }
 
         public class ReplacePageEventArgs : CancelEventArgs
         {
@@ -165,10 +169,14 @@ namespace Exercise.Model
 
         public async Task SubmitResult()
         {
-            await Save();
             string path = SavePath;
-            await submitModel.Save(path, scanModel.PageCode, schoolModel.Classes, PageStudents);
+            if (!Submitting)
+            {
+                await Save();
+                await submitModel.Save(path, scanModel.PageCode, schoolModel.Classes, PageStudents);
+            }
             await submitModel.Submit(path);
+            Submitting = true;
         }
 
         public async Task Save()
@@ -194,6 +202,7 @@ namespace Exercise.Model
                 emptyPages.Add(null);
             scanModel.SetExerciseData(ExerciseData);
             await scanModel.Load(path);
+            Submitting = await submitModel.Load(path) != null;
             SavePath = path;
             foreach (StudentInfo s in PageStudents)
             {
@@ -211,6 +220,7 @@ namespace Exercise.Model
             schoolModel.Clear();
             scanModel.Clear();
             SavePath = null;
+            Submitting = false;
         }
 
         public async Task ScanOne(Exception ex)

@@ -20,6 +20,8 @@ namespace Exercise.Algorithm
     {
         private static readonly Logger Log = Logger.GetLogger<Algorithm>();
 
+        private static readonly Encoding ServiceEncoidng = Encoding.GetEncoding("gbk");
+
         private readonly JsonSerializerSettings settings = new JsonSerializerSettings()
         {
             ContractResolver = new CamelCasePropertyNamesContractResolver()
@@ -75,7 +77,7 @@ namespace Exercise.Algorithm
                     UseShellExecute = false,
                     RedirectStandardInput = true,
                     RedirectStandardOutput = true,
-                    StandardOutputEncoding = Encoding.UTF8
+                    StandardOutputEncoding = ServiceEncoidng
                 };
                 remoteTasks = new Dictionary<int, RemoteTask>();
                 readThread.Start();
@@ -246,8 +248,8 @@ namespace Exercise.Algorithm
 
         public void ServiceMain(string[] args)
         {
-            StreamReader reader = new StreamReader(Console.OpenStandardInput(), Encoding.UTF8);
-            StreamWriter writer = new StreamWriter(Console.OpenStandardOutput(), Encoding.UTF8);
+            StreamReader reader = new StreamReader(Console.OpenStandardInput(), ServiceEncoidng);
+            StreamWriter writer = new StreamWriter(Console.OpenStandardOutput(), ServiceEncoidng);
             int pid = Process.GetCurrentProcess().Id;
             writer.WriteLine(pid);
             writer.Flush();
@@ -297,6 +299,7 @@ namespace Exercise.Algorithm
                 {
                     Process p = new Process() { StartInfo = processInfo };
                     p.Start();
+                    Log.d("ReadService encoding=" + p.StandardInput.Encoding);
                     string pid = p.StandardOutput.ReadLine();
                     Log.d("ReadService pid=" + pid);
                     lock (remoteTasks)

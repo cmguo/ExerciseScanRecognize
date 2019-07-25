@@ -16,7 +16,9 @@ namespace Exercise.Model
 {
     class SubmitModel : ModelBase
     {
-        private const int SUBIT_BATCH_SIZE = 50;
+        private static readonly Logger Log = Logger.GetLogger<SubmitModel>();
+
+        private const int SUBIT_BATCH_SIZE = 10;
 
         private static SubmitModel s_instance;
         public static SubmitModel Instance
@@ -102,14 +104,31 @@ namespace Exercise.Model
             await task.Save();
         }
 
-        public async Task Submit(string path)
+        public async Task<SubmitTask> Load(string path)
         {
             SubmitTask task = SubmitTasks[path];
             if (task == null)
             {
-                task = await JsonPersistent.Load<SubmitTask>(path + "\\submit.json");
-                SubmitTasks[path] = task;
+                if (File.Exists(path + "\\submit.json"))
+                {
+                    try
+                    {
+                        task = await JsonPersistent.Load<SubmitTask>(path + "\\submit.json");
+                        SubmitTasks[path] = task;
+                    }
+                    catch (Exception e)
+                    {
+                        Log.w("Load", e);
+                        File.Delete(path + "\\submit.json");
+                    }
+                }
             }
+            return task;
+        }
+
+        public async Task Submit(string path)
+        {
+            SubmitTask task = await Load(path);
             submitAction.Execute(task);
         }
 
@@ -178,7 +197,7 @@ namespace Exercise.Model
             await service.CompleteSubmit(new SubmitComplete() { HomeworkId = sdata.HomeworkId });
             ++task.Finish;
             SubmitTasks.Remove(task.Path);
-            Directory.Delete(task.Path, true);
+            HistoryModel.Instance.Remove(task.Path);
             task.Status = TaskStatus.Completed;
         }
 

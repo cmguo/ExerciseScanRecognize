@@ -23,7 +23,9 @@ namespace Exercise.View.Resolve
                 {
                     case ExceptionType.NoPageCode:
                     case ExceptionType.PageCodeMissMatch:
-                        return "未识别试卷" + ex.Index;
+                        return page.Student != null
+                            ? String.Format("{0} {1}", page.Student.StudentNo, page.Student.Name)
+                            : String.Format("未识别试卷{0}", ex.Index);
                     case ExceptionType.NoStudentCode:
                         if (page.Another != null)
                             return String.Format("试卷{2} （{0}-{1}页）", page.PageIndex + 1, page.PageIndex + 2, ex.Index);
@@ -88,7 +90,7 @@ namespace Exercise.View.Resolve
                 else if (page.Another != null && page.Another.Exception != null)
                     return page.Another.Exception.Message;
                 else if (ex.Type == ExceptionType.PageCodeMissMatch)
-                    return "该试卷非本校试卷";
+                    return "该试卷二维码与本此考试不匹配";
                 else
                     return null;
             }

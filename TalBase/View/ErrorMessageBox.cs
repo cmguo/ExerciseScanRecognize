@@ -1,4 +1,5 @@
 ﻿using Base.Mvvm;
+using Base.Service;
 using System;
 using System.Net.Http;
 using System.Windows;
@@ -29,6 +30,8 @@ namespace TalBase.View
         {
             if (e is HttpRequestException)
                 return "网络异常，" + e.Message;
+            else if (e is HttpResponseException)
+                return "服务异常，" + e.Message;
             return e.Message;
         }
     }

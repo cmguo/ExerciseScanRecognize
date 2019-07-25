@@ -64,11 +64,6 @@ namespace Account.Model
             //    AuthenticationType = LoginData.LOGIN_BY_PASSWORD };
             LoginData = new LoginData() { LoginName = Configuration.AccountName,
                 AuthenticationType = LoginData.LOGIN_BY_PASSWORD };
-            if (LoginData.LoginName == null || LoginData.LoginName == "xujinming")
-            {
-                LoginData.LoginName = "xujinming";
-                LoginData.Password = "123@qwe";
-            }
             Account = new Service.AccountData();
             service = Base.Service.Services.Get<IAccount>();
             timer = new DispatcherTimer() { Interval = TimeSpan.FromHours(6) };
@@ -88,10 +83,9 @@ namespace Account.Model
             {
                 Account = await service.Login(LoginData);
             }
-            catch
+            finally
             {
                 LoginData.Password = password;
-                throw;
             }
             RaisePropertyChanged("Account");
             LoginData.Password = null;
@@ -117,9 +111,21 @@ namespace Account.Model
             RelayCommand.ActionException -= RelayCommand_ActionException;
         }
 
+        private async Task ReLogin()
+        {
+            try
+            {
+                await Login();
+            }
+            catch (Exception e)
+            {
+                Clear();
+            }
+        }
+
         private void Timer_Tick(object sender, EventArgs e)
         {
-            BackgroudWork.Execute(() => Login());
+            BackgroudWork.Execute(() => ReLogin());
         }
 
         private void RelayCommand_ActionException(object sender, RelayCommand.ActionExceptionEventArgs e)
@@ -128,6 +134,7 @@ namespace Account.Model
                 && (e.Exception as ServiceException).Status < LoginData.LOGIN_OUT_LAST))
             {
                 Clear();
+                e.IsHandled = true;
             }
         }
 

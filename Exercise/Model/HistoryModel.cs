@@ -60,6 +60,7 @@ namespace Exercise.Model
                 return;
             Record record = new Record() { Name = ExerciseModel.Instance.ExerciseData.Title, ScanDate = DateTime.Now.Timestamp() };
             await JsonPersistent.Save(path + "\\record.json", record);
+            LocalRecords.Add(record);
         }
 
         public void Remove(string path)
@@ -158,5 +159,6 @@ namespace Exercise.Model
                 throw;
             }
         }
+
     }
 }

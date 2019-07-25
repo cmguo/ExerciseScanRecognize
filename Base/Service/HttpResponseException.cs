@@ -8,7 +8,7 @@ namespace Base.Service
         public HttpStatusCode StatusCode { get; private set; }
 
         public HttpResponseException(HttpStatusCode status, string message)
-            : base(message == null ? "Http " + status.ToString() : message)
+            : base((message == null || message.Length == 0) ? "Http " + status.ToString() : message)
         {
             StatusCode = status;
         }

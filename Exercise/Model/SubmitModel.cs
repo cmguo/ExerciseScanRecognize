@@ -106,8 +106,8 @@ namespace Exercise.Model
 
         public async Task<SubmitTask> Load(string path)
         {
-            SubmitTask task = SubmitTasks[path];
-            if (task == null)
+            SubmitTask task = null;
+            if (!SubmitTasks.TryGetValue(path, out task))
             {
                 if (File.Exists(path + "\\submit.json"))
                 {

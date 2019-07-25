@@ -137,7 +137,7 @@ namespace Exercise.ViewModel
         {
             if (e.Old.PagePath != null)
             {
-                int result = PopupDialog.Show("替换试卷确认", "您放入的学生试卷已经有扫描结果，确认替换吗？", 0, "确认", "取消");
+                int result = PopupDialog.Show(Application.Current.MainWindow,"替换试卷确认", "您放入的学生试卷已经有扫描结果，确认替换吗？", 0, "确认", "取消");
                 e.Cancel = result == 1;
             }
         }

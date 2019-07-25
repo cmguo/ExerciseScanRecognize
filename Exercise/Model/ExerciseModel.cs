@@ -464,9 +464,12 @@ namespace Exercise.Model
             if (type == ExceptionType.NoPageCode
                 || type == ExceptionType.PageCodeMissMatch)
                 return;
-            if (targetException.Page.PageIndex != page.PageIndex 
+            if ((targetException.Page.PaperCode != null
+                && targetException.Page.PageIndex != page.PageIndex)
                 || (targetException.Page.StudentCode != null
-                && page.StudentCode != targetException.Page.StudentCode))
+                && page.StudentCode != targetException.Page.StudentCode)
+                || (targetException.Page.Student != null
+                && page.StudentCode != targetException.Page.Student.TalNo))
                 return;
             if (type == ExceptionType.AnalyzeException)
             {

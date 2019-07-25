@@ -102,8 +102,8 @@ namespace Exercise.Algorithm
         public async Task<QRCodeData> GetCode(PageRaw page)
         {
             QRCodeData code = await Analyze<QRCodeData, PageRaw>(AnswerSheetAnalyze.METHOD_QR_CODE_RECOGNIZE, page);
-            if (code.PaperInfo == null || code.PaperInfo.Length == 0)
-                throw new NullReferenceException("试卷二维码未识别");
+            if (code.PaperInfo == "")
+                code.PaperInfo = null;
             if (code.StudentInfo == "")
                 code.StudentInfo = null;
             return code;

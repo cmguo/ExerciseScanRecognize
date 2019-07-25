@@ -408,7 +408,7 @@ namespace Exercise.Model
         {
             tick = AddTick(0, tick); // queue wait
             tick = await ReadPage(pages[0], true, tick); // tick 1,2
-            if (pages[0].Exception != null)
+            if (pages[0].PaperCode == null)
             {
                 tick = await ReadPage(pages[1], true, tick);
                 if (pages[1].Exception == null)
@@ -426,7 +426,7 @@ namespace Exercise.Model
             pages[1].PaperCode = pages[0].PaperCode;
             pages[1].PageIndex = pages[0].PageIndex + 1;
             pages[0].Another = pages[1];
-            if (pages[0].Exception == null)
+            if (pages[0].PaperCode != null)
             {
                 if (PageCode == null)
                 {
@@ -478,16 +478,23 @@ namespace Exercise.Model
                 {
                     Algorithm.QRCodeData code = await algorithm.GetCode(new Algorithm.PageRaw() { ImgPathIn = page.PagePath });
                     tick = AddTick(2, tick);
-                    int split = code.PaperInfo.IndexOf('_');
-                    if (split < 0)
+                    if (code.PaperInfo != null)
                     {
-                        page.PaperCode = code.PaperInfo;
-                        page.PageIndex = 0;
+                        int split = code.PaperInfo.IndexOf('_');
+                        if (split < 0)
+                        {
+                            page.PaperCode = code.PaperInfo;
+                            page.PageIndex = 0;
+                        }
+                        else
+                        {
+                            page.PaperCode = code.PaperInfo.Substring(0, split);
+                            page.PageIndex = Int32.Parse(code.PaperInfo.Substring(split + 1));
+                        }
                     }
                     else
                     {
-                        page.PaperCode = code.PaperInfo.Substring(0, split);
-                        page.PageIndex = Int32.Parse(code.PaperInfo.Substring(split + 1));
+                        page.Exception = new NullReferenceException("试卷二维码未识别");
                     }
                     page.StudentCode = code.StudentInfo;
                 }

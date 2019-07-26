@@ -141,11 +141,11 @@ namespace Exercise.ViewModel
                 int result = -1;
                 if (scanModel.Error != null)
                 {
-                    result = PopupDialog.Show(obj as UIElement, "扫描中断", "扫描仪发生异常，请检查后重试。", 1, "查看结果", "继续扫描");
+                    result = PopupDialog.Show(obj as UIElement, "扫描停止", "扫描仪发生异常，请检查后重试。", 1, "查看结果", "继续扫描");
                 }
                 else
                 {
-                    result = PopupDialog.Show(obj as UIElement, "扫描中断",
+                    result = PopupDialog.Show(obj as UIElement, "扫描停止",
                         "扫描仪已停止，请添加试卷继续扫描。若已全部扫描，可查看扫描结果。", element, 0, "查看结果", "继续扫描");
                 }
                 if (result == 0)

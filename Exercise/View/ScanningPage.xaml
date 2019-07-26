@@ -99,7 +99,24 @@
 
             <Grid Margin="0, 48, 0, 0" Width="120" Height="120">
                 <Image Source="/Icons/PaperScan@2x.png" />
-                <Image Source="/Icons/Scan@2x.png" />
+                <Image Source="/Icons/Scan@2x.png" Height="120">
+                    <Image.Triggers>
+                        <EventTrigger RoutedEvent="Loaded">
+                            <EventTrigger.Actions>
+                                <BeginStoryboard>
+                                    <Storyboard>
+                                        <ThicknessAnimation 
+                                            Storyboard.TargetProperty="Margin"
+                                            From="0, 0, 0, 0" To="0, 115, 0, 0"
+                                            Duration="0:0:4"
+                                            RepeatBehavior="Forever"
+                                            AutoReverse="False"/>
+                                    </Storyboard>
+                                </BeginStoryboard>
+                            </EventTrigger.Actions>
+                        </EventTrigger>
+                    </Image.Triggers>
+                </Image>
             </Grid>
 
             <StackPanel Margin="0, 48, 0, 0" Orientation="Horizontal" HorizontalAlignment="Center">

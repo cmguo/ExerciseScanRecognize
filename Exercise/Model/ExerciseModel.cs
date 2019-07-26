@@ -513,7 +513,7 @@ namespace Exercise.Model
             if (page.Student != null)
                 AddException(page.Student);
             if (tgtp != null && tgtp.PagePath != null) // maybe not replaced
-                ReleasePage(page, RemoveType.DuplexPage);
+                ReleasePage(tgtp, RemoveType.DuplexPage);
         }
 
         private void ReleasePage(Page page, RemoveType type)

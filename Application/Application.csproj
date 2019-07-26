@@ -458,9 +458,9 @@
     <Content Include="Icons\Warn\24.svg">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <None Include="Icons\PaperScan%402xpng">
+    <Content Include="Icons\PaperScan%402x.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
+    </Content>
     <Content Include="Icons\试卷扫描.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>

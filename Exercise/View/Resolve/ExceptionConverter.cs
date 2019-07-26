@@ -22,7 +22,6 @@ namespace Exercise.View.Resolve
                 switch (ex.Type)
                 {
                     case ExceptionType.NoPageCode:
-                    case ExceptionType.PageCodeMissMatch:
                         return page.Student != null
                             ? String.Format("{0} {1}", page.Student.StudentNo, page.Student.Name)
                             : String.Format("未识别试卷{0}", ex.Index);
@@ -31,6 +30,7 @@ namespace Exercise.View.Resolve
                             return String.Format("试卷{2} （{0}-{1}页）", page.PageIndex + 1, page.PageIndex + 2, ex.Index);
                         else
                             return String.Format("试卷{1} （第{0}页）", page.PageIndex + 1, ex.Index);
+                    case ExceptionType.PageCodeMissMatch:
                     case ExceptionType.AnalyzeException:
                         string student = page.Student != null 
                             ? String.Format("{0} {1}", page.Student.StudentNo, page.Student.Name)
@@ -100,7 +100,6 @@ namespace Exercise.View.Resolve
                 {
                     case ExceptionType.NoPageCode:
                     case ExceptionType.PageCodeMissMatch:
-                        return "扫描此份试卷";
                     case ExceptionType.AnalyzeException:
                         if (page.Student != null)
                             return String.Format("扫描{0}的试卷", page.Student.Name);

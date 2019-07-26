@@ -85,12 +85,12 @@
                     </StackPanel>
                     <HierarchicalDataTemplate.ItemTemplate>
                         <DataTemplate>
-                            <TextBlock FontSize="14" Foreground="#FF2D4A66" Margin="27, 9, 0, 9"  Width="156" TextTrimming="CharacterEllipsis" TextWrapping="NoWrap"
-                                       Text="{Binding Converter={StaticResource ExceptionConverter}, ConverterParameter=Tree}" >
+                            <TextBlock FontSize="14" Foreground="#FF2D4A66" Padding="27, 9, 0, 9"  Width="156" TextTrimming="CharacterEllipsis" TextWrapping="NoWrap"
+                                    Text="{Binding Converter={StaticResource ExceptionConverter}, ConverterParameter=Tree}" >
 
                                 <TextBlock.ToolTip>
                                     <ToolTip Style="{DynamicResource TooltipStyle}" Content="{Binding Converter={StaticResource ExceptionConverter}, ConverterParameter=Tree}" Placement="Bottom"
-                                             VerticalOffset="3" Width="156" MaxWidth="156"/>
+                                            VerticalOffset="3" Width="156" MaxWidth="156"/>
                                 </TextBlock.ToolTip>
 
                             </TextBlock>

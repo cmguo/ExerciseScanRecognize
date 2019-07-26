@@ -59,15 +59,37 @@ namespace Exercise.View
                     }
                     if (Items.Count != 0)
                     {
-                        SelectNext(ParentItemsControl, this);
+                        ParentItemsControl.SelectNext(this);
                         return;
                     }
+                }
+            }
+            else if (e.Action == NotifyCollectionChangedAction.Add)
+            {
+                if (IsSelected && Items.Count == e.NewItems.Count)
+                {
+                    this.SelectNext();
                 }
             }
             base.OnItemsChanged(e);
         }
 
-        private static void SelectNext(ItemsControl parent, TreeViewItemEx child)
+        protected override void OnSelected(RoutedEventArgs e)
+        {
+            if (Items.Count > 0)
+            {
+                TreeViewItem next = ItemContainerGenerator.ContainerFromIndex(0) as TreeViewItem;
+                Dispatcher.InvokeAsync(() => this.SelectNext());
+                return;
+            }
+            base.OnSelected(e);
+        }
+    }
+
+    internal static class ItemsControlEx
+    {
+
+        internal static void SelectNext(this ItemsControl parent, TreeViewItemEx child)
         {
             int index = parent.ItemContainerGenerator.IndexFromContainer(child);
             if (++index < parent.Items.Count)
@@ -86,18 +108,7 @@ namespace Exercise.View
                 SelectNext(parent);
         }
 
-        protected override void OnSelected(RoutedEventArgs e)
-        {
-            if (Items.Count > 0)
-            {
-                TreeViewItem next = ItemContainerGenerator.ContainerFromIndex(0) as TreeViewItem;
-                Dispatcher.InvokeAsync(() => SelectNext(this));
-                return;
-            }
-            base.OnSelected(e);
-        }
-
-        private static void SelectNext(ItemsControl parent)
+        internal static void SelectNext(this ItemsControl parent)
         {
             if (0 < parent.Items.Count)
             {

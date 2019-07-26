@@ -31,6 +31,7 @@
             <cv:BooleanObjectConverter x:Key="PageIconConverter" 
                                        FalseValue="/Icons/left.png" TrueValue="/Icons/right.png" />
             <cv:ToStringConverter x:Key="ToStringConverter" />
+            <cv:NonNullVisibleConverter x:Key="NonNullVisibleConverter" />
             <local:HistroyDetailConverter x:Key="HistroyDetailConverter" />
             <local:NoRecordNoficationContentConverter x:Key="NoRecordNoficationContentConverter" />
             <local:ShowNetErrorContentConverter x:Key="ShowNetErrorContentConverter" />
@@ -198,8 +199,10 @@
                 </StackPanel>
 
                 <ListView Grid.Row="2" x:Name="pageBar" ItemsSource="{Binding Pages}" 
-                  BorderThickness="0" Padding="0" HorizontalAlignment="Right" Margin="0, 0, 30, 30"
-                  SelectedItem="{Binding PageIndex}" SelectionMode="Single" ItemContainerStyle="{DynamicResource ButtonListStyle}" Style="{x:Null}">
+                          BorderThickness="0" Padding="0" HorizontalAlignment="Right" Margin="0, 0, 30, 30"
+                          Visibility="{Binding PageCount, Converter={StaticResource NonNullVisibleConverter}}"
+                          SelectedItem="{Binding PageIndex}" SelectionMode="Single" 
+                          ItemContainerStyle="{DynamicResource ButtonListStyle}" Style="{x:Null}">
                     <ListView.ItemsPanel>
                         <ItemsPanelTemplate>
                             <WrapPanel Margin="-8, 0, 0, 0" IsItemsHost="True" Orientation="Horizontal" />
@@ -212,7 +215,7 @@
                                   IsChecked="{Binding IsSelected, RelativeSource={RelativeSource AncestorType=ListViewItem}}"/>
                         </DataTemplate>
                         <DataTemplate DataType="{x:Type sys:Boolean}">
-                            <tal:TalTouch Width="32" Click="ButtonPage_Click"  TouchStyle="Fill">
+                            <tal:TalTouch Width="32" Height="32" Click="ButtonPage_Click"  TouchStyle="Fill">
                                 <Image Width="16" Height="16" Source="{Binding Converter={StaticResource PageIconConverter}}"/>
                             </tal:TalTouch>
                         </DataTemplate>

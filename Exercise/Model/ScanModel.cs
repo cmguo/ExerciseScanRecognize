@@ -379,8 +379,8 @@ namespace Exercise.Model
             }
         }
 
-        private int[] elapseCounts = new int[7];
-        private long[] elapseTicks = new long[7];
+        private int[] elapseCounts = new int[5];
+        private long[] elapseTicks = new long[5];
 
         private long AddTick(int index, long tick)
         {
@@ -393,11 +393,11 @@ namespace Exercise.Model
         private async Task ScanTwoPage(Page[] pages, long tick)
         {
             tick = AddTick(0, tick); // queue wait
-            tick = await ReadPage(pages[0], true, tick); // tick 1,2
+            tick = await ReadPage(pages[0], tick); // tick 1
             if (pages[0].PaperCode == null)
             {
-                tick = await ReadPage(pages[1], true, tick);
-                if (pages[1].Exception == null)
+                tick = await ReadPage(pages[1], tick);
+                if (pages[1].PaperCode != null)
                 {
                     pages[0].Exception = null;
                     Page p = pages[0];
@@ -405,43 +405,35 @@ namespace Exercise.Model
                     pages[1] = p;
                 }
             }
-            else
-            {
-                tick = await ReadPage(pages[1], false, tick); // tick 1,2
-            }
             pages[1].PaperCode = pages[0].PaperCode;
             pages[1].PageIndex = pages[0].PageIndex + 1;
             pages[0].Another = pages[1];
-            if (pages[0].PaperCode != null)
+            if (pages[0].PaperCode == null)
+                return;
+            if (PageCode == null)
             {
-                if (PageCode == null)
-                {
-                    Log.d("PageCode=" + PageCode);
-                    PageCode = pages[0].PaperCode;
-                    RaisePropertyChanged("PageCode");
-                }
-                if (PageCode == pages[0].PaperCode)
-                {
-                    if (exerciseData == null)
-                    {
-                        await Task.Run(() => WaitExerciseData());
-                        if (exerciseData == null)
-                            return;
-                    }
-                    tick = AddTick(3, tick);
-                    tick = await ScanPage(pages[0], tick); // tick 4,5,6
-                    if (pages[1].PageIndex < exerciseData.Pages.Count)
-                    {
-                        tick = await ScanPage(pages[1], tick);
-                        tick = AddTick(6, tick);
-                    }
-                    else
-                    {
-                        pages[0].Another = null;
-                    }
-                }
+                Log.d("PageCode=" + PageCode);
+                PageCode = pages[0].PaperCode;
+                RaisePropertyChanged("PageCode");
             }
-            long tick3 = Environment.TickCount;
+            if (PageCode != pages[0].PaperCode)
+                return;
+            if (exerciseData == null)
+            {
+                await Task.Run(() => WaitExerciseData());
+                if (exerciseData == null)
+                    return;
+            }
+            tick = AddTick(2, tick);
+            tick = await ScanPage(pages[0], tick); // tick 3,4
+            if (pages[1].PageIndex < exerciseData.Pages.Count)
+            {
+                tick = await ScanPage(pages[1], tick);
+            }
+            else
+            {
+                pages[0].Another = null;
+            }
         }
 
         private void WaitExerciseData()
@@ -455,35 +447,31 @@ namespace Exercise.Model
             }
         }
 
-        private async Task<long> ReadPage(Page page, bool needCode, long tick)
+        private async Task<long> ReadPage(Page page, long tick)
         {
             try
             {
+                Algorithm.QRCodeData code = await algorithm.GetCode(new Algorithm.PageRaw() { ImgPathIn = page.PagePath });
                 tick = AddTick(1, tick);
-                if (needCode)
+                if (code.PaperInfo != null)
                 {
-                    Algorithm.QRCodeData code = await algorithm.GetCode(new Algorithm.PageRaw() { ImgPathIn = page.PagePath });
-                    tick = AddTick(2, tick);
-                    if (code.PaperInfo != null)
+                    int split = code.PaperInfo.IndexOf('_');
+                    if (split < 0)
                     {
-                        int split = code.PaperInfo.IndexOf('_');
-                        if (split < 0)
-                        {
-                            page.PaperCode = code.PaperInfo;
-                            page.PageIndex = 0;
-                        }
-                        else
-                        {
-                            page.PaperCode = code.PaperInfo.Substring(0, split);
-                            page.PageIndex = Int32.Parse(code.PaperInfo.Substring(split + 1));
-                        }
+                        page.PaperCode = code.PaperInfo;
+                        page.PageIndex = 0;
                     }
                     else
                     {
-                        page.Exception = new NullReferenceException("试卷二维码未识别");
+                        page.PaperCode = code.PaperInfo.Substring(0, split);
+                        page.PageIndex = Int32.Parse(code.PaperInfo.Substring(split + 1));
                     }
-                    page.StudentCode = code.StudentInfo;
                 }
+                else
+                {
+                    page.Exception = new NullReferenceException("试卷二维码未识别");
+                }
+                page.StudentCode = code.StudentInfo;
             }
             catch (Exception e)
             {
@@ -502,7 +490,7 @@ namespace Exercise.Model
             try
             {
                 AnswerData answerData = await algorithm.GetAnswer(pageData);
-                tick = AddTick(4, tick);
+                tick = AddTick(3, tick);
                 page.Answer = answerData;
                 //page.PageData = answerData.RedressedImgBytes;
                 //answerData.RedressedImgBytes = null;
@@ -512,11 +500,10 @@ namespace Exercise.Model
                     byte[] output = md5.ComputeHash(fs);
                     page.PageName = BitConverter.ToString(output).Replace("-", "").ToLower() + ".jpg";
                 }
-                tick = AddTick(5, tick);
+                tick = AddTick(4, tick);
                 File.Delete(page.PagePath);
                 page.PagePath = savePath + "\\" + page.PageName;
                 File.Move(pageData.ImgPathOut, page.PagePath);
-                tick = AddTick(6, tick);
                 //page.PageData = null;
             }
             catch (Exception e)

@@ -250,7 +250,6 @@ namespace Exercise.Scanning
 
         private void Twain32_SetupFileXferEvent(object sender, Twain32.SetupFileXferEventArgs e)
         {
-            Log.d("Twain32_SetupFileXferEvent");
             if (CheckStatus(e))
             {
                 return;
@@ -259,7 +258,6 @@ namespace Exercise.Scanning
             {
                 ScanEvent e1 = new ScanEvent();
                 GetFileName.Invoke(this, e1);
-                Log.d("Twain32_SetupFileXferEvent: " + e1.FileName);
                 e.FileName = e1.FileName;
             }
         }
@@ -268,7 +266,6 @@ namespace Exercise.Scanning
         {
             Log.d("Twain32_XferDone");
             //CheckStatus(e);
-            twain32.Capabilities.FeedPage.Set(true);
         }
 
         private void Twain32_FileXferEvent(object sender, Twain32.FileXferEventArgs e)

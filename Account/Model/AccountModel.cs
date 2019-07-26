@@ -1,4 +1,5 @@
 ﻿using Account.Service;
+using Base.Misc;
 using Base.Mvvm;
 using System;
 using System.Collections.Generic;
@@ -14,6 +15,8 @@ namespace Account.Model
 {
     public class AccountModel : ModelBase
     {
+
+        private static readonly Logger Log = Logger.GetLogger<AccountModel>();
 
         private static AccountModel s_instance;
         public static AccountModel Instance
@@ -119,6 +122,7 @@ namespace Account.Model
             }
             catch (Exception e)
             {
+                Log.w("ReLogin", e);
                 Clear();
             }
         }

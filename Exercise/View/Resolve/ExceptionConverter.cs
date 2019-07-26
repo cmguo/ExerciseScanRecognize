@@ -34,7 +34,7 @@ namespace Exercise.View.Resolve
                     case ExceptionType.AnalyzeException:
                         string student = page.Student != null 
                             ? String.Format("{0} {1}", page.Student.StudentNo, page.Student.Name)
-                            : String.Format("未识别学生{0}", ex.Index);
+                            : String.Format("未识别试卷{0}", ex.Index);
                         if (page.Another != null)
                             return String.Format("{0} （{1}-{2}页）", student, page.PageIndex + 1, page.PageIndex + 2);
                         else

@@ -266,8 +266,7 @@ namespace Exercise.Model
                 RemoveException(ex.Type, oldPage);
                 if (ex.Type == ExceptionType.NoStudentCode)
                 {
-                    AddPage(oldPage);
-                    AddException(oldPage.Student);
+                    ReplacePage(oldPage);
                 }
             }
             else if (type == ResolveType.RemoveStudent)
@@ -318,7 +317,7 @@ namespace Exercise.Model
                     return;
                 if (targetException != null)
                 {
-                    ReplacePage(e.NewItems[0] as Page);
+                    ReplaceException(e.NewItems[0] as Page);
                     lock (Exceptions)
                     {
                         targetException = null;
@@ -458,7 +457,7 @@ namespace Exercise.Model
             ReleasePage(page, type);
         }
 
-        private void ReplacePage(Page page)
+        private void ReplaceException(Page page)
         {
             ExceptionType type = CalcExcetionType(page);
             if (type == ExceptionType.NoPageCode
@@ -488,13 +487,28 @@ namespace Exercise.Model
                     return;
                 }
             }
-            ReplacePageEventArgs args = new ReplacePageEventArgs() { Old = targetException.Page, New = page };
-            BeforeReplacePage?.Invoke(this, args);
-            if (args.Cancel)
-                return;
             if (targetException.Page.Student == null)
                 RemovePage(targetException.Page, RemoveType.DuplexPage);
+            ReplacePage(page);
+        }
+
+        private void ReplacePage(Page page)
+        {
+            StudentInfo student = PageStudents.Where(s => s.TalNo == page.StudentCode).FirstOrDefault();
+            if (student != null)
+            {
+                Page old = student.AnswerPages[page.PageIndex / 2];
+                if (old != null && old.PagePath != null)
+                {
+                    ReplacePageEventArgs args = new ReplacePageEventArgs() { Old = old, New = page };
+                    BeforeReplacePage?.Invoke(this, args);
+                    if (args.Cancel)
+                        return;
+                }
+            }
             AddPage(page);
+            if (page.Student != null)
+                AddException(page.Student);
         }
 
         private void ReleasePage(Page page, RemoveType type)
@@ -541,14 +555,7 @@ namespace Exercise.Model
                 Exceptions.Insert(index, list);
             }
             list.Exceptions.Add(item);
-            if (type == ExceptionType.NoPageCode || type == ExceptionType.PageCodeMissMatch)
-            {
-                item.Index = list.Exceptions.Where(e => e.Type != ExceptionType.AnalyzeException).Count();
-            }
-            else if (type == ExceptionType.NoStudentCode)
-            {
-                item.Index = list.Exceptions.Count();
-            }
+            item.Index = list.Exceptions.Where(e => e.Page.Student == null).Count();
         }
 
         private void AddException(StudentInfo s)

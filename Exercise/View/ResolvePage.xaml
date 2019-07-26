@@ -131,8 +131,8 @@
                             </Setter>
                         </Style>
                     </StackPanel.Resources>
-                    <Button Click="ButtonInc_Click" Content="{svgc:SvgImage Source=/Icons/放大/正常.svg}" />
-                    <Button Click="ButtonDec_Click" Content="{svgc:SvgImage Source=/Icons/缩小/正常.svg}" Margin="8, 0, 0, 0"/>
+                    <Button Click="ButtonInc_Click" Focusable="False" Content="{svgc:SvgImage Source=/Icons/放大/正常.svg}" />
+                    <Button Click="ButtonDec_Click" Focusable="False" Content="{svgc:SvgImage Source=/Icons/缩小/正常.svg}" Margin="8, 0, 0, 0"/>
                 </StackPanel>
             </Grid>
         </Border>

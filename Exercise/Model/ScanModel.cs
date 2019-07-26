@@ -65,7 +65,7 @@ namespace Exercise.Model
 
         public bool FeederLoaded => scanDevice.FeederLoaded;
 
-        public string PageCode { get; private set; }
+        public string PaperCode { get; private set; }
 
         private bool _IsScannig;
         public bool IsScanning
@@ -259,7 +259,7 @@ namespace Exercise.Model
             PersistData data = new PersistData()
             {
                 Pages = Pages,
-                PageCode = PageCode,
+                PageCode = PaperCode,
                 ScanBatch = scanBatch,
             };
             await JsonPersistent.Save(savePath + "\\scan.json", data);
@@ -268,7 +268,7 @@ namespace Exercise.Model
         public async Task Load(string path)
         {
             PersistData data = await JsonPersistent.Load<PersistData>(path + "\\scan.json");
-            PageCode = data.PageCode;
+            PaperCode = data.PageCode;
             readIndex = data.Pages.Count * 2;
             scanBatch = data.ScanBatch;
             savePath = path;
@@ -285,9 +285,9 @@ namespace Exercise.Model
                 }
                 if (p.Another != null && p.Another.PageName != null)
                     p.Another.PagePath = savePath + "\\" + p.Another.PageName;
-                if (p.PaperCode == PageCode)
+                if (p.PaperCode == PaperCode)
                     p.MetaData = exerciseData.Pages[p.PageIndex];
-                if (p.Another != null && p.Another.PaperCode == PageCode)
+                if (p.Another != null && p.Another.PaperCode == PaperCode)
                     p.Another.MetaData = exerciseData.Pages[p.Another.PageIndex];
                 Pages.Add(p);
             }
@@ -300,7 +300,7 @@ namespace Exercise.Model
             scanIndex = 0;
             savePath = null;
             lastPage = null;
-            PageCode = null;
+            PaperCode = null;
             RaisePropertyChanged("PageCode");
             PageDropped.Clear();
             Pages.Clear();
@@ -410,13 +410,13 @@ namespace Exercise.Model
             pages[0].Another = pages[1];
             if (pages[0].PaperCode == null)
                 return;
-            if (PageCode == null)
+            if (PaperCode == null)
             {
-                Log.d("PageCode=" + PageCode);
-                PageCode = pages[0].PaperCode;
+                Log.d("PageCode=" + PaperCode);
+                PaperCode = pages[0].PaperCode;
                 RaisePropertyChanged("PageCode");
             }
-            if (PageCode != pages[0].PaperCode)
+            if (PaperCode != pages[0].PaperCode)
                 return;
             if (exerciseData == null)
             {

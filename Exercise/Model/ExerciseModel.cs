@@ -78,7 +78,7 @@ namespace Exercise.Model
 
         public string SavePath { get; private set; }
         public ObservableCollection<ExceptionList> Exceptions { get; private set; }
-
+        public string PaperCode => scanModel.PaperCode;
         public ExerciseData ExerciseData { get; private set; }
         public ObservableCollection<StudentInfo> PageStudents { get; private set; }
 
@@ -88,6 +88,7 @@ namespace Exercise.Model
         {
             public Page Old { get; internal set; }
             public Page New { get; internal set; }
+            public Page Target { get; internal set; }
         }
 
         public event EventHandler<ReplacePageEventArgs> BeforeReplacePage;
@@ -173,7 +174,7 @@ namespace Exercise.Model
             if (!Submitting)
             {
                 await Save();
-                await submitModel.Save(path, scanModel.PageCode, schoolModel.Classes, PageStudents);
+                await submitModel.Save(path, PaperCode, schoolModel.Classes, PageStudents);
             }
             await submitModel.Submit(path);
             Submitting = true;
@@ -266,7 +267,7 @@ namespace Exercise.Model
                 RemoveException(ex.Type, oldPage);
                 if (ex.Type == ExceptionType.NoStudentCode)
                 {
-                    ReplacePage(oldPage);
+                    ReplacePage(oldPage, null);
                 }
             }
             else if (type == ResolveType.RemoveStudent)
@@ -292,7 +293,7 @@ namespace Exercise.Model
         {
             if (e.PropertyName == "PageCode")
             {
-                if (scanModel.PageCode == null)
+                if (PaperCode == null)
                     return;
                 LoadExercise();
             }
@@ -337,7 +338,7 @@ namespace Exercise.Model
         {
             try
             {
-                ExerciseData = await service.GetExercise(scanModel.PageCode);
+                ExerciseData = await service.GetExercise(PaperCode);
                 int n = (ExerciseData.Pages.Count + 1) / 2;
                 emptyPages = new List<Page>(n);
                 while (n-- > 0)
@@ -359,7 +360,7 @@ namespace Exercise.Model
             {
                 AddException(type, page);
             }
-            if (page.Student != null)
+            if (page.PaperCode == PaperCode && page.Student != null)
             {
                 if (page.Another != null)
                     page.Another.Student = page.Student;
@@ -404,11 +405,11 @@ namespace Exercise.Model
         private ExceptionType CalcExcetionType(Page page)
         {
             ExceptionType type = ExceptionType.None;
-            if (page.PaperCode == scanModel.PageCode && page.StudentCode != null)
+            if (page.StudentCode != null)
                 page.Student = schoolModel.GetStudent(page.StudentCode);
             if (page.PaperCode == null)
                 type = ExceptionType.NoPageCode;
-            else if (page.PaperCode != scanModel.PageCode)
+            else if (page.PaperCode != PaperCode)
                 type = ExceptionType.PageCodeMissMatch;
             else if (page.Answer == null
                 || (page.Another != null && page.Another.Answer == null))
@@ -421,7 +422,7 @@ namespace Exercise.Model
         public void RemovePage(Page page, RemoveType type)
         {
             // 如果 Student 为 Null，肯定是 type = DuplexPage
-            if (page.Student == null)
+            if (page.PaperCode != PaperCode || page.Student == null)
             {
                 ReleasePage(page, RemoveType.DuplexPage);
                 return;
@@ -463,36 +464,35 @@ namespace Exercise.Model
             if (type == ExceptionType.NoPageCode
                 || type == ExceptionType.PageCodeMissMatch)
                 return;
-            if ((targetException.Page.PaperCode != null
-                && targetException.Page.PageIndex != page.PageIndex)
-                || (targetException.Page.StudentCode != null
-                && page.StudentCode != targetException.Page.StudentCode)
-                || (targetException.Page.Student != null
-                && page.StudentCode != targetException.Page.Student.TalNo))
+            Page tgtp = targetException.Page;
+            if (tgtp.PaperCode != null
+                && tgtp.PageIndex != page.PageIndex
+                || tgtp.StudentCode != null
+                && page.StudentCode != tgtp.StudentCode
+                || tgtp.Student != null
+                && page.StudentCode != tgtp.Student.TalNo)
                 return;
             if (type == ExceptionType.AnalyzeException)
             {
-                if (targetException.Page.Answer != null
+                if (tgtp.Answer != null
                     && page.Another != null && page.Another.Answer != null)
                 {
-                    page.Swap(targetException.Page);
+                    page.Swap(tgtp);
                 }
-                else if (page.Answer != null && targetException.Page.Another != null
-                    && targetException.Page.Another.Answer != null)
+                else if (page.Answer != null && tgtp.Another != null
+                    && tgtp.Another.Answer != null)
                 {
-                    page.Another.Swap(targetException.Page.Another);
+                    page.Another.Swap(tgtp.Another);
                 }
                 else
                 {
                     return;
                 }
             }
-            if (targetException.Page.Student == null)
-                RemovePage(targetException.Page, RemoveType.DuplexPage);
-            ReplacePage(page);
+            ReplacePage(page, tgtp);
         }
 
-        private void ReplacePage(Page page)
+        private void ReplacePage(Page page, Page tgtp)
         {
             StudentInfo student = PageStudents.Where(s => s.TalNo == page.StudentCode).FirstOrDefault();
             if (student != null)
@@ -500,7 +500,10 @@ namespace Exercise.Model
                 Page old = student.AnswerPages[page.PageIndex / 2];
                 if (old != null && old.PagePath != null)
                 {
-                    ReplacePageEventArgs args = new ReplacePageEventArgs() { Old = old, New = page };
+                    ReplacePageEventArgs args = new ReplacePageEventArgs()
+                    {
+                        Old = old, New = page, Target = tgtp
+                    };
                     BeforeReplacePage?.Invoke(this, args);
                     if (args.Cancel)
                         return;
@@ -509,6 +512,8 @@ namespace Exercise.Model
             AddPage(page);
             if (page.Student != null)
                 AddException(page.Student);
+            if (tgtp != null && tgtp.PagePath != null) // maybe not replaced
+                ReleasePage(page, RemoveType.DuplexPage);
         }
 
         private void ReleasePage(Page page, RemoveType type)

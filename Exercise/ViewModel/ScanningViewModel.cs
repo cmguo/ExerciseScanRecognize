@@ -150,7 +150,7 @@ namespace Exercise.ViewModel
                 }
                 if (result == 0)
                 {
-                    if (scanModel.PageCode == null || exerciseModel.ExerciseData == null)
+                    if (scanModel.PaperCode == null || exerciseModel.ExerciseData == null)
                     {
                         await OnError(obj);
                         break;

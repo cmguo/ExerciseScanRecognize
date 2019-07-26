@@ -123,7 +123,7 @@ namespace Exercise.ViewModel
             Page page = e.NewItems[0] as Page;
             LastPage = page;
             PageCount = scanModel.Pages.Count;
-            if (PageCount >= 5 && scanModel.PageCode == null)
+            if (PageCount >= 5 && scanModel.PaperCode == null)
                 Error = 1;
         }
 

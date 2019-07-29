@@ -622,7 +622,7 @@
         "Entry"
         {
         "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_15A68A852E074FC0855B57142F813A98"
+        "OwnerKey" = "8:_67F3037D5D17869C6432BDF26FC2B50D"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -659,6 +659,12 @@
         {
         "MsmKey" = "8:_UNDEFINED"
         "OwnerKey" = "8:_4809C73F8B8EEC8434010F9260B37041"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_UNDEFINED"
+        "OwnerKey" = "8:_15A68A852E074FC0855B57142F813A98"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -793,12 +799,6 @@
         "OwnerKey" = "8:_E9A2C1018EABFFD08821D76FB9B44C80"
         "MsmSig" = "8:_UNDEFINED"
         }
-        "Entry"
-        {
-        "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_67F3037D5D17869C6432BDF26FC2B50D"
-        "MsmSig" = "8:_UNDEFINED"
-        }
     }
     "Configurations"
     {
@@ -830,6 +830,16 @@
                     {
                     "Name" = "8:Microsoft .NET Framework 4.6.1 (x86 和 x64)"
                     "ProductCode" = "8:.NETFramework,Version=v4.6.1"
+                    }
+                    "{EDC2488A-8267-493A-A98E-7D9C3B36CDF3}:Microsoft.Visual.C++.14.0.x64"
+                    {
+                    "Name" = "8:Visual C++ \"14\" Runtime Libraries (x64)"
+                    "ProductCode" = "8:Microsoft.Visual.C++.14.0.x64"
+                    }
+                    "{EDC2488A-8267-493A-A98E-7D9C3B36CDF3}:Microsoft.Visual.C++.14.0.x86"
+                    {
+                    "Name" = "8:Visual C++ \"14\" 运行时库(x86)"
+                    "ProductCode" = "8:Microsoft.Visual.C++.14.0.x86"
                     }
                 }
             }
@@ -1921,7 +1931,7 @@
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:读卷客户端"
         "ProductCode" = "8:{CEE6B7E5-CBD9-4524-A6D4-315C73084322}"
-        "PackageCode" = "8:{DC73E3EC-C23B-40DD-9255-FEAEBCBFEAF8}"
+        "PackageCode" = "8:{BABA4F11-79B6-4EC9-92B8-EC1E73C63AFA}"
         "UpgradeCode" = "8:{86F0F312-44F0-4A04-B94C-97F93EA80D06}"
         "AspNetVersion" = "8:4.0.30319.0"
         "RestartWWWService" = "11:FALSE"

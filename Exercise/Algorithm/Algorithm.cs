@@ -28,6 +28,7 @@ namespace Exercise.Algorithm
         };
 
 
+        private Dictionary<string, string> methodNames;
         private Thread[] threadPool = new Thread[4];
         private Queue<Task> tasks = new Queue<Task>();
 
@@ -55,6 +56,9 @@ namespace Exercise.Algorithm
                     Bridge.RegisterAssembly(typeof(AnswerSheetAnalyze).Assembly);
                     AnswerSheetAnalyze.init();
                 }
+                methodNames = new Dictionary<string, string>();
+                methodNames.Add("GetCode", AnswerSheetAnalyze.METHOD_QR_CODE_RECOGNIZE);
+                methodNames.Add("GetAnswer", AnswerSheetAnalyze.METHOD_ANSWER_SHEET_ANALYZE);
                 for (int i = 0; i < threadPool.Length; ++i)
                 {
                     threadPool[i] = new Thread(AlgorithmThread);
@@ -66,7 +70,7 @@ namespace Exercise.Algorithm
             }
             else if (client == true)
             {
-                Bridge.RegisterAssembly(typeof(AnswerSheetAnalyze).Assembly);
+                //Bridge.RegisterAssembly(typeof(AnswerSheetAnalyze).Assembly);
                 readThread = new Thread(ReadService);
                 readThread.IsBackground = true;
                 readThread.Name = "AlgorithmRead";
@@ -101,7 +105,7 @@ namespace Exercise.Algorithm
 
         public async Task<QRCodeData> GetCode(PageRaw page)
         {
-            QRCodeData code = await Analyze<QRCodeData, PageRaw>(AnswerSheetAnalyze.METHOD_QR_CODE_RECOGNIZE, page);
+            QRCodeData code = await Analyze<QRCodeData, PageRaw>("GetCode", page);
             if (code.PaperInfo == "")
                 code.PaperInfo = null;
             if (code.StudentInfo == "")
@@ -111,7 +115,7 @@ namespace Exercise.Algorithm
 
         public Task<AnswerData> GetAnswer(PageData page)
         {
-            return Analyze<AnswerData, PageData>(AnswerSheetAnalyze.METHOD_ANSWER_SHEET_ANALYZE, page);
+            return Analyze<AnswerData, PageData>("GetAnswer", page);
         }
 
         private int lastLength = 0;
@@ -147,8 +151,10 @@ namespace Exercise.Algorithm
         {
             if (remoteTasks == null)
             {
+                string methodName = null;
+                methodNames.TryGetValue(method, out methodName);
                 Task<string> task = new Task<string>(
-                    () => AnswerSheetAnalyze.analyzeAnswerSheet(method, body));
+                    () => AnswerSheetAnalyze.analyzeAnswerSheet(methodName, body));
                 lock (tasks)
                 {
                     tasks.Enqueue(task);

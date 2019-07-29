@@ -144,8 +144,16 @@
             <TextBlock FontSize="12" Foreground="#FF7F8E99" Text="（请勿放入他人试卷）"
                        DataContext="{Binding SelectedException, Converter={StaticResource ExceptionConverter}, ConverterParameter=Rescan}"
                        Visibility="{Binding Converter={StaticResource NonNullVisibleConverter}}"/>
-            
-            <Frame x:Name="frame" Margin="0, 15, 0, 0" Content="{Binding SelectedException, Converter={StaticResource ExceptionPageConverter}}" Focusable="False"/>
+            <StackPanel Orientation="Horizontal" Margin="0, 15, 0, 0" 
+                       DataContext="{Binding SelectedException, Converter={StaticResource ExceptionConverter}, ConverterParameter=Message}"
+                       Visibility="{Binding Converter={StaticResource NonNullVisibleConverter}}">
+                <Image Width="16" Height="16"  Margin="0, 0, 8, 0" Source="{svgc:SvgImage Source=/Icons/异常.svg}" />
+                <TextBlock Grid.Column="1" FontSize="14" Foreground="#FF2D4A66" TextWrapping="Wrap" Text="{Binding}" />
+            </StackPanel>
+
+            <Frame x:Name="frame" Margin="0, 15, 0, 0"  Focusable="False"
+                   Content="{Binding SelectedException, Converter={StaticResource ExceptionPageConverter}}"
+                   Visibility="{Binding Content, RelativeSource={RelativeSource Mode=Self}, Converter={StaticResource NonNullVisibleConverter}}"/>
             
             <StackPanel Orientation="Vertical">
                 <StackPanel.Resources>

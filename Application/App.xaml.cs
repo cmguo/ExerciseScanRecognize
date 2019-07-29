@@ -22,7 +22,7 @@ namespace Application
             Logger.SetLogPath(Exercise.Component.DATA_PATH);
             Logger.Config("logger.xml");
             ErrorMessageBox.Init();
-            Misc.Jni.Init();
+            //Misc.Jni.Init();
             AppDomain.CurrentDomain.UnhandledException += CurrentDomain_UnhandledException;
             this.Exit += App_Exit;
         }

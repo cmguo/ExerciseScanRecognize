@@ -36,7 +36,8 @@ namespace Exercise.Model
             NoPageCode,
             PageCodeMissMatch,
             AnalyzeException,
-            NoStudentCode, // StudentCodeMissMatch,
+            NoStudentCode,
+            StudentCodeMissMatch, 
             PageLost,
             AnswerException,
             CorrectionException,
@@ -264,10 +265,9 @@ namespace Exercise.Model
             }
             else if (type == ResolveType.Resolve)
             {
-                RemoveException(ex.Type, oldPage);
-                if (ex.Type == ExceptionType.NoStudentCode)
+                if (ex.Type == ExceptionType.NoStudentCode || ex.Type == ExceptionType.StudentCodeMissMatch)
                 {
-                    ReplacePage(oldPage, null);
+                    ReplacePage(oldPage, ex.Page);
                 }
             }
             else if (type == ResolveType.RemoveStudent)
@@ -414,8 +414,10 @@ namespace Exercise.Model
             else if (page.Answer == null
                 || (page.Another != null && page.Another.Answer == null))
                 type = ExceptionType.AnalyzeException;
-            else if (page.Student == null)
+            else if (page.StudentCode == null)
                 type = ExceptionType.NoStudentCode;
+            else if (page.Student == null)
+                type = ExceptionType.StudentCodeMissMatch;
             return type;
         }
 
@@ -533,20 +535,13 @@ namespace Exercise.Model
             }
         }
 
-        public void UpdatePage(ExceptionType type, Page page)
-        {
-            RemoveException(type, page);
-            if (type == ExceptionType.NoStudentCode)
-            {
-                AddPage(page);
-            }
-        }
-
         private void AddException(ExceptionType type, Page page)
         {
             Exception item = new Exception() { Type = type, Page = page };
             if (type == ExceptionType.AnalyzeException || type == ExceptionType.PageCodeMissMatch)
                 type = ExceptionType.NoPageCode;
+            if (type == ExceptionType.StudentCodeMissMatch)
+                type = ExceptionType.NoStudentCode;
             ExceptionList list = Exceptions.FirstOrDefault(e => type.CompareTo(e.Type) <= 0);
             if (list == null)
             {

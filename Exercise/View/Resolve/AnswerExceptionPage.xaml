@@ -61,7 +61,7 @@
         </ListView>
         
         <TextBlock Grid.Row="1" FontSize="12" Foreground="#FF2D4A66" Margin="0, 24, 0, 0" 
-                   Text="{Binding DataContext, ElementName=Page, Converter={StaticResource ExceptionConverter}, ConverterParameter=Message}"/>
+                   Text="{Binding DataContext, ElementName=Page, Converter={StaticResource ExceptionConverter}, ConverterParameter=Message2}"/>
         
         <ListView Grid.Row="2" x:Name="answers" BorderThickness="0"  Margin="0, 14, 0, 24" Background="Transparent"
                   ItemContainerStyle="{StaticResource ButtonListStyle}"

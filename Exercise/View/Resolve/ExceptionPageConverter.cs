@@ -20,14 +20,15 @@ namespace Exercise.View.Resolve
                 case ExceptionType.NoPageCode:
                 case ExceptionType.PageCodeMissMatch:
                 case ExceptionType.AnalyzeException:
-                    return new NoPageCodePage() { DataContext = ex };
+                    return null;
                 case ExceptionType.NoStudentCode:
+                case ExceptionType.StudentCodeMissMatch:
                     return new NoStudentCodePage() { DataContext = ex };
                 case ExceptionType.AnswerException:
                 case ExceptionType.CorrectionException:
                     return new AnswerExceptionPage() { DataContext = ex };
                 case ExceptionType.PageLost:
-                    return new PageLostPage() { DataContext = ex };
+                    return null;
                 default:
                     return null;
             }

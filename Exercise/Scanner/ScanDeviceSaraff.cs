@@ -181,7 +181,12 @@ namespace Exercise.Scanning
                 twain32.Capabilities.Author.Set(versionInfo.CompanyName);
             if (twain32.Capabilities.Caption.IsSupported(TwQC.Set))
                 twain32.Capabilities.Caption.Set(versionInfo.ProductName);
-            twain32.Capabilities.CameraSide.Set(TwCS.Both);
+            if (twain32.Capabilities.SupportedSizes.IsSupported(TwQC.Set))
+                twain32.Capabilities.SupportedSizes.Set(TwSS.A4);
+            if (twain32.Capabilities.Orientation.IsSupported(TwQC.Set))
+                twain32.Capabilities.Orientation.Set(TwOR.Rot0);
+            if (twain32.Capabilities.Rotation.IsSupported(TwQC.Set))
+                twain32.Capabilities.Rotation.Set(0f);
             if (twain32.Capabilities.AutoDiscardBlankPages.IsSupported(TwQC.Set))
                 twain32.Capabilities.AutoDiscardBlankPages.Set(TwBP.Disable);
             if (twain32.Capabilities.DeviceEvent.IsSupported(TwQC.Set))
@@ -191,6 +196,7 @@ namespace Exercise.Scanning
                 twain32.Capabilities.DeviceEvent.Set(TwDE.PaperJam);
                 twain32.Capabilities.DeviceEvent.Set(TwDE.PaperDoubleFeed);
             }
+            twain32.Capabilities.CameraSide.Set(TwCS.Both);
             twain32.Capabilities.DuplexEnabled.Set(true);
             twain32.Capabilities.ImageFileFormat.Set(TwFF.Jfif);
             twain32.Capabilities.Compression.Set(TwCompression.Jpeg);

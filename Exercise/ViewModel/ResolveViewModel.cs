@@ -157,6 +157,7 @@ namespace Exercise.ViewModel
                     switch (SelectedException.Type)
                     {
                         case ExceptionType.NoStudentCode:
+                        case ExceptionType.StudentCodeMissMatch:
                             message = "忽略后，该张试卷所有题目作答将无法统计，确认忽略吗？";
                             break;
                         case ExceptionType.PageLost:
@@ -186,6 +187,7 @@ namespace Exercise.ViewModel
                 if (n != 0)
                     return;
             }
+            Exception ex = SelectedException;
             exerciseModel.Resolve(exception, type);
             if (Exceptions.Count == 0)
             {
@@ -193,7 +195,7 @@ namespace Exercise.ViewModel
                 TalToast.Show("异常已全部处理完成");
                 (obj as System.Windows.Controls.Page).NavigationService.Navigate(new SummaryPage());
             }
-            else
+            else if (ex.Page == null)
             {
                 string toast = null;
                 switch (type)

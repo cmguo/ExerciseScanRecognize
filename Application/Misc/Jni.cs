@@ -6,6 +6,7 @@ namespace Application.Misc
 {
     public class Jni
     {
+
         public static void Init()
         {
             // create bridge, with default setup

@@ -140,7 +140,6 @@
     </Compile>
     <Compile Include="View\PaperOverlayConverter.cs" />
     <Compile Include="View\PaperViewer.cs" />
-    <Compile Include="View\Resolve\FalseVisibleConverter.cs" />
     <Compile Include="View\SubmitPage.xaml.cs">
       <DependentUpon>SubmitPage.xaml</DependentUpon>
     </Compile>
@@ -153,14 +152,8 @@
     <Compile Include="View\Resolve\AnswerExceptionPage.xaml.cs">
       <DependentUpon>AnswerExceptionPage.xaml</DependentUpon>
     </Compile>
-    <Compile Include="View\Resolve\PageLostPage.xaml.cs">
-      <DependentUpon>PageLostPage.xaml</DependentUpon>
-    </Compile>
     <Compile Include="View\Resolve\NoStudentCodePage.xaml.cs">
       <DependentUpon>NoStudentCodePage.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="View\Resolve\NoPageCodePage.xaml.cs">
-      <DependentUpon>NoPageCodePage.xaml</DependentUpon>
     </Compile>
     <Compile Include="View\SummaryPage.xaml.cs">
       <DependentUpon>SummaryPage.xaml</DependentUpon>
@@ -250,15 +243,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="View\Resolve\PageLostPage.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
     <Page Include="View\Resolve\NoStudentCodePage.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="View\Resolve\NoPageCodePage.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>

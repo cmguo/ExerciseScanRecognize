@@ -466,6 +466,10 @@ namespace Exercise.Model
                         page.PaperCode = code.PaperInfo.Substring(0, split);
                         page.PageIndex = Int32.Parse(code.PaperInfo.Substring(split + 1));
                     }
+                    if (code.StudentInfo == null)
+                    {
+                        page.Exception = new NullReferenceException("学生二维码未识别");
+                    }
                 }
                 else
                 {

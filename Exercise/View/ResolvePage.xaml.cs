@@ -22,6 +22,13 @@ namespace Exercise.View
             vm.PropertyChanged += Vm_PropertyChanged;
             Loaded += (s, e) => vm.InitSelection();
             treeView.SelectedItemChanged += TreeView_SelectedItemChanged;
+            frame.Navigating += Frame_Navigating;
+        }
+
+        private void Frame_Navigating(object sender, System.Windows.Navigation.NavigatingCancelEventArgs e)
+        {
+            if (e.NavigationMode == System.Windows.Navigation.NavigationMode.Back)
+                e.Cancel = true;
         }
 
         private void TreeView_SelectedItemChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
@@ -35,8 +42,8 @@ namespace Exercise.View
                     return;
                 }
                 face.IsChecked = false;
-                frame.NavigationService.RemoveBackEntry();
-                frame.NavigationService.RemoveBackEntry();
+                while (frame.NavigationService.CanGoBack)
+                    frame.NavigationService.RemoveBackEntry();
             }
         }
 

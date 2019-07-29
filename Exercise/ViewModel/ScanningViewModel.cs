@@ -185,9 +185,16 @@ namespace Exercise.ViewModel
 
         private static java.lang.Object GetJavaRuntime()
         {
-            JNIEnv env = JNIEnv.ThreadEnv;
-            java.lang.Class clazz = env.FindClass("java/lang/Runtime");
-            return clazz.Invoke<java.lang.Object>("getRuntime", "()Ljava/lang/Runtime;", new object[0]);
+            try
+            {
+                JNIEnv env = JNIEnv.ThreadEnv;
+                java.lang.Class clazz = env.FindClass("java/lang/Runtime");
+                return clazz.Invoke<java.lang.Object>("getRuntime", "()Ljava/lang/Runtime;", new object[0]);
+            }
+            catch
+            {
+                return null;
+            }
         }
 
         private java.lang.Object javaRuntime = GetJavaRuntime();
@@ -202,8 +209,11 @@ namespace Exercise.ViewModel
             Usages.Add(Tuple.Create("PrivateMemorySize64", currentProcess.PrivateMemorySize64));
             Usages.Add(Tuple.Create("WorkingSet64", currentProcess.WorkingSet64));
             Usages.Add(Tuple.Create("managed heap", System.GC.GetTotalMemory(false)));
-            Usages.Add(Tuple.Create("java gc", javaRuntime.Invoke<long>("totalMemory", "()J")));
-            Usages.Add(Tuple.Create("java gc max", javaRuntime.Invoke<long>("maxMemory", "()J")));
+            if (javaRuntime != null)
+            {
+                Usages.Add(Tuple.Create("java gc", javaRuntime.Invoke<long>("totalMemory", "()J")));
+                Usages.Add(Tuple.Create("java gc max", javaRuntime.Invoke<long>("maxMemory", "()J")));
+            }
             foreach (var u in Usages)
                 Log.d(u.Item1 + ": " + u.Item2 / 1000000 + " M");
         }

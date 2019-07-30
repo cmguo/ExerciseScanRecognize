@@ -66,7 +66,7 @@ namespace Exercise.View.Resolve
                             return String.Format("此份试卷无法识别，存在以下异常，请放入此试卷重新扫描。");
                     case ExceptionType.NoStudentCode:
                     case ExceptionType.StudentCodeMissMatch:
-                        return "该试卷所属的学生是？";
+                        return "该试卷学生信息存在下列异常，请匹配学生信息。";
                     case ExceptionType.AnswerException:
                         return String.Format("{0}{1} （第{2}页），以下题号存在作答识别异常，请确认识别结果。",
                             page.Student.StudentNo, page.Student.Name, page.PageIndex + 1);

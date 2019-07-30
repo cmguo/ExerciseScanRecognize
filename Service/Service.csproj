@@ -76,6 +76,10 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Assistant\Assistant.csproj">
+      <Project>{e77c3405-4dea-48f7-ae7d-a94a49458ead}</Project>
+      <Name>Assistant</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Base\Base.csproj">
       <Project>{05c86143-03bb-4584-9223-dfa12fca60b2}</Project>
       <Name>Base</Name>
@@ -86,7 +90,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <None Include="app.config" />
+    <None Include="service.config" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\Libraries\answer-sheet-analyze-sdk.j4n.jar" />

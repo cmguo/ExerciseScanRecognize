@@ -81,6 +81,7 @@ namespace Exercise.Model
         public ObservableCollection<ExceptionList> Exceptions { get; private set; }
         public string PaperCode => scanModel.PaperCode;
         public ExerciseData ExerciseData { get; private set; }
+        public System.Exception ExerciseException { get; private set; }
         public ObservableCollection<StudentInfo> PageStudents { get; private set; }
 
         public bool Submitting { get; private set; }
@@ -120,6 +121,7 @@ namespace Exercise.Model
             AddException(ExceptionType.AnswerException, new Page() { Student = student });
             AddException(ExceptionType.CorrectionException, new Page() { Student = student });
             //*/
+            //Assistant.Fault.CrashHandler.UploadReports();
         }
 
         public void Discard()
@@ -185,7 +187,7 @@ namespace Exercise.Model
         {
             await schoolModel.Save(SavePath);
             await scanModel.Save();
-            await JsonPersistent.Save(SavePath + "\\exercise.json", ExerciseData);
+            await JsonPersistent.SaveAsync(SavePath + "\\exercise.json", ExerciseData);
             await historyModel.Save(SavePath);
         }
 
@@ -193,7 +195,7 @@ namespace Exercise.Model
         {
             Clear();
             await schoolModel.Load(path);
-            ExerciseData = await JsonPersistent.Load<ExerciseData>(path + "\\exercise.json");
+            ExerciseData = await JsonPersistent.LoadAsync<ExerciseData>(path + "\\exercise.json");
             schoolModel.GetHasPageStudents((s) =>
             {
                 PageStudents.Add(s);
@@ -217,6 +219,7 @@ namespace Exercise.Model
             emptyPages = null;
             targetException = null;
             ExerciseData = null;
+            ExerciseException = null;
             PageStudents.Clear();
             Exceptions.Clear();
             schoolModel.Clear();
@@ -267,7 +270,11 @@ namespace Exercise.Model
             {
                 if (ex.Type == ExceptionType.NoStudentCode || ex.Type == ExceptionType.StudentCodeMissMatch)
                 {
-                    ReplacePage(oldPage, ex.Page);
+                    ReplacePage(oldPage, null);
+                }
+                else
+                {
+                    RemoveException(ex.Type, oldPage);
                 }
             }
             else if (type == ResolveType.RemoveStudent)
@@ -346,9 +353,10 @@ namespace Exercise.Model
                 RaisePropertyChanged("ExerciseData");
                 scanModel.SetExerciseData(ExerciseData);
             }
-            catch
+            catch (System.Exception e)
             {
                 ExerciseData = null;
+                ExerciseException = e;
                 RaisePropertyChanged("ExerciseData");
             }
         }
@@ -511,6 +519,8 @@ namespace Exercise.Model
                         return;
                 }
             }
+            if (tgtp == null)
+                RemoveException(ExceptionType.NoStudentCode, page);
             AddPage(page);
             if (page.Student != null)
                 AddException(page.Student);
@@ -564,7 +574,7 @@ namespace Exercise.Model
             {
                 if (s.AnswerPages[i] == null)
                 {
-                    Page p = new Page() { PageIndex = i * 2, Student = s };
+                    Page p = new Page() { PaperCode = PaperCode, PageIndex = i * 2, Student = s };
                     if (p.PageIndexPlusOne < ExerciseData.Pages.Count)
                         p.Another = p;
                     s.AnswerPages[i] = p;
@@ -588,6 +598,7 @@ namespace Exercise.Model
             if (list == null) return;
             Exception ex = list.Exceptions.FirstOrDefault(e => e.Page == page);
             if (ex == null) return;
+            ex.Page.Exception = null;
             ex.Page = null;
             list.Exceptions.Remove(ex);
             if (list.Exceptions.Count == 0)

@@ -19,11 +19,11 @@ namespace Application
         private static System.Threading.Mutex mutex;
         App()
         {
+            Assistant.Fault.CrashHandler.Init(Exercise.Component.DATA_PATH, true);
             Logger.SetLogPath(Exercise.Component.DATA_PATH);
             Logger.Config("logger.xml");
             ErrorMessageBox.Init();
             //Misc.Jni.Init();
-            AppDomain.CurrentDomain.UnhandledException += CurrentDomain_UnhandledException;
             this.Exit += App_Exit;
         }
 
@@ -41,7 +41,6 @@ namespace Application
                 Window window = new MainWindow();
                 new AccountWindow().ShowDialog();
             }
-
             else
             {
                 this.Shutdown();
@@ -49,18 +48,5 @@ namespace Application
          
         }
    
-
-        private void CurrentDomain_UnhandledException(object sender, UnhandledExceptionEventArgs e)
-        {
-            Log.w(e.ExceptionObject);
-            string path = Exercise.Component.DATA_PATH + DateTime.Now.ToString("D");
-            Directory.CreateDirectory(path);
-            path += "\\" + DateTime.Now.ToString("T").Replace(':', '.') + ".crash";
-            using (FileStream fs = new FileStream(path, FileMode.Create, FileAccess.Write))
-            using (StreamWriter writer = new StreamWriter(fs))
-            {
-                writer.Write(e.ExceptionObject);
-            }
-        }
     }
 }

@@ -4,12 +4,12 @@ using Exercise.Model;
 using Exercise.View;
 using net.sf.jni4net.jni;
 using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Threading;
+using TalBase.Service;
 using TalBase.View;
 
 namespace Exercise.ViewModel
@@ -115,7 +115,9 @@ namespace Exercise.ViewModel
             else if (Error == 1)
                 msg = "当前试卷二维码无法识别，请检查试卷后重试";
             else if (Error == 2)
-                msg = "数据连接异常，请联系服务人员";
+                msg = (exerciseModel.ExerciseException is ServiceException)
+                    ? exerciseModel.ExerciseException.Message
+                    : "数据连接异常，请联系服务人员";
             while (true)
             {
                 int result = PopupDialog.Show(obj as UIElement, "出现异常", msg, 0, "确定");

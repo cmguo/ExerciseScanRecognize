@@ -110,12 +110,12 @@ namespace Exercise.Model
 
         public async Task Save(string path)
         {
-            await JsonPersistent.Save(path + "\\school.json", schoolData);
+            await JsonPersistent.SaveAsync(path + "\\school.json", schoolData);
         }
 
         public async Task Load(string path)
         {
-            schoolData = await JsonPersistent.Load<SchoolData>(path + "\\school.json");
+            schoolData = await JsonPersistent.LoadAsync<SchoolData>(path + "\\school.json");
             Classify();
         }
 

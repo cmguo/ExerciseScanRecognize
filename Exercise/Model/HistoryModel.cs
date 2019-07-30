@@ -59,7 +59,7 @@ namespace Exercise.Model
             if (LocalRecords.Any(r => r.LocalPath == path))
                 return;
             Record record = new Record() { Name = ExerciseModel.Instance.ExerciseData.Title, ScanDate = DateTime.Now.Timestamp() };
-            await JsonPersistent.Save(path + "\\record.json", record);
+            await JsonPersistent.SaveAsync(path + "\\record.json", record);
             LocalRecords.Add(record);
         }
 
@@ -105,7 +105,7 @@ namespace Exercise.Model
                     }
                     try
                     {
-                        Record record = await JsonPersistent.Load<Record>(path3);
+                        Record record = await JsonPersistent.LoadAsync<Record>(path3);
                         record.LocalPath = path2;
                         LocalRecords.Add(record);
                     }

@@ -9,7 +9,6 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
-using System.Runtime.ExceptionServices;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -26,7 +25,6 @@ namespace Exercise.Algorithm
         {
             ContractResolver = new CamelCasePropertyNamesContractResolver()
         };
-
 
         private Dictionary<string, string> methodNames;
         private Thread[] threadPool = new Thread[4];
@@ -70,7 +68,6 @@ namespace Exercise.Algorithm
             }
             else if (client == true)
             {
-                //Bridge.RegisterAssembly(typeof(AnswerSheetAnalyze).Assembly);
                 readThread = new Thread(ReadService);
                 readThread.IsBackground = true;
                 readThread.Name = "AlgorithmRead";
@@ -113,9 +110,22 @@ namespace Exercise.Algorithm
             return code;
         }
 
-        public Task<AnswerData> GetAnswer(PageData page)
+        public Task<AnswerData> GetAnswer(PageData page, string pagePath, string outPath)
         {
-            return Analyze<AnswerData, PageData>("GetAnswer", page);
+            lock (page)
+            {
+                try
+                {
+                    page.ImgPathIn = pagePath;
+                    page.ImgPathOut = outPath;
+                    return Analyze<AnswerData, PageData>("GetAnswer", page);
+                }
+                finally
+                {
+                    page.ImgPathIn = null;
+                    page.ImgPathOut = null;
+                }
+            }
         }
 
         private int lastLength = 0;
@@ -358,9 +368,8 @@ namespace Exercise.Algorithm
             PageRaw pagew = new PageRaw();
             pagew.ImgPathIn = jpg;
             QRCodeData code = await GetCode(pagew);
-            PageData page = await JsonPersistent.Load<PageData>(json);
-            page.ImgPathIn = jpg;
-            AnswerData answer = await GetAnswer(page);
+            PageData page = await JsonPersistent.LoadAsync<PageData>(json);
+            AnswerData answer = await GetAnswer(page, jpg, jpg);
         }
 
     }

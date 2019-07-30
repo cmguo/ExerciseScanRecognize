@@ -195,6 +195,10 @@
       <Project>{7df8007b-9234-4414-8dfe-5fe07c9a970b}</Project>
       <Name>Account</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Assistant\Assistant.csproj">
+      <Project>{e77c3405-4dea-48f7-ae7d-a94a49458ead}</Project>
+      <Name>Assistant</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Base\Base.csproj">
       <Project>{2f6a6a39-eed7-4dba-a62c-cbdf3ce0f1bc}</Project>
       <Name>Base</Name>

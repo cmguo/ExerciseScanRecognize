@@ -3,55 +3,142 @@
                     xmlns:local="clr-namespace:TalBase.View">
     
     <Style x:Key="DefaultTalToggleStyle" TargetType="local:TalToggle">
-        <Setter Property="BorderThickness" Value="0"/>
-        <Setter Property="Background" Value="{x:Null}"/>
+
         <Setter Property="FontSize" Value="14"/>
-        <Setter Property="Foreground" Value="White"/>
+        <Setter Property="Padding" Value="7, 0, 7, 0"/>
         <Setter Property="Height" Value="32"/>
-        <Setter Property="Template">
-            <Setter.Value>
-                <ControlTemplate TargetType="local:TalToggle">
-                    <Border 
+        <Setter Property="MinWidth" Value="32"/>
+
+        <!--Normal-->
+        <Style.Triggers>
+            <Trigger Property="ToggleStyle" Value="Normal">
+                <Setter Property="BorderThickness" Value="1"/>
+                <Setter Property="BorderBrush" Value="#FFCAD3DD"/>
+                <Setter Property="Background" Value="{x:Null}"/>
+                <Setter Property="Foreground" Value="#FF2D4A66"/>
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="local:TalToggle">
+                            <Border 
+                                    BorderThickness="{TemplateBinding BorderThickness}"
+                                    BorderBrush="{TemplateBinding BorderBrush}"
+                                    Background="{TemplateBinding Background}"
+                                    Padding="{TemplateBinding Padding}">
+                                <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
+                            </Border>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+            </Trigger>
+            <MultiTrigger>
+                <MultiTrigger.Conditions>
+                    <Condition Property="ToggleStyle" Value="Normal"/>
+                    <Condition Property="IsMouseOver" Value="True"/>
+                </MultiTrigger.Conditions>
+                <Setter Property="BorderBrush" Value="#802D4A66"/>
+            </MultiTrigger>
+            <MultiTrigger>
+                <MultiTrigger.Conditions>
+                    <Condition Property="ToggleStyle" Value="Normal"/>
+                    <Condition Property="IsPressed" Value="True"/>
+                </MultiTrigger.Conditions>
+                <Setter Property="BorderBrush" Value="#FF2D4A66"/>
+                <Setter Property="Background" Value="#FFF5F8FB"/>
+            </MultiTrigger>
+            <MultiTrigger>
+                <MultiTrigger.Conditions>
+                    <Condition Property="ToggleStyle" Value="Normal"/>
+                    <Condition Property="IsChecked" Value="True"/>
+                </MultiTrigger.Conditions>
+                <Setter Property="BorderBrush" Value="#FF2D4A66"/>
+            </MultiTrigger>
+
+            <!--Solid-->
+            <Trigger Property="ToggleStyle" Value="Solid">
+                <Setter Property="Background" Value="#FFE5EFFE"/>
+                <Setter Property="Foreground" Value="#FF4C84FF"/>
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="local:TalToggle">
+                            <Border CornerRadius="2"
+                                    BorderThickness="0"
+                                    BorderBrush="{TemplateBinding BorderBrush}"
+                                    Background="{TemplateBinding Background}"
+                                    Padding="{TemplateBinding Padding}">
+                                <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
+                            </Border>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+            </Trigger>
+            <MultiTrigger>
+                <MultiTrigger.Conditions>
+                    <Condition Property="ToggleStyle" Value="Solid"/>
+                    <Condition Property="IsMouseOver" Value="True"/>
+                </MultiTrigger.Conditions>
+                <Setter Property="Background" Value="#404C84FF"/>
+            </MultiTrigger>
+            <MultiTrigger>
+                <MultiTrigger.Conditions>
+                    <Condition Property="ToggleStyle" Value="Solid"/>
+                    <Condition Property="IsPressed" Value="True"/>
+                </MultiTrigger.Conditions>
+                <Setter Property="Background" Value="#80739FFF"/>
+            </MultiTrigger>
+            <MultiTrigger>
+                <MultiTrigger.Conditions>
+                    <Condition Property="ToggleStyle" Value="Solid"/>
+                    <Condition Property="IsChecked" Value="True"/>
+                </MultiTrigger.Conditions>
+                <Setter Property="Background" Value="#FF4C84FF"/>
+                <Setter Property="Foreground" Value="White"/>
+            </MultiTrigger>
+
+            <!--Switch-->
+            <Trigger Property="ToggleStyle" Value="Switch">
+                <Setter Property="BorderThickness" Value="0"/>
+                <Setter Property="Background" Value="{x:Null}"/>
+                <Setter Property="FontSize" Value="14"/>
+                <Setter Property="Foreground" Value="White"/>
+                <Setter Property="Height" Value="32"/>
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="local:TalToggle">
+                            <Border 
                             BorderThickness="{TemplateBinding BorderThickness}"
                             BorderBrush="{TemplateBinding BorderBrush}"
                             Padding="{TemplateBinding Padding}">
-                        <Grid>
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition/>
-                                <ColumnDefinition/>
-                            </Grid.ColumnDefinitions>
-                            <Border Grid.Column="0" x:Name="text1" CornerRadius="4, 0, 0, 4">
-                                <TextBlock  Margin="20, 0, 20, 0" Text="{TemplateBinding Title1}" VerticalAlignment="Center" />
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition/>
+                                        <ColumnDefinition/>
+                                    </Grid.ColumnDefinitions>
+                                    <Border Grid.Column="0" x:Name="text1" CornerRadius="4, 0, 0, 4">
+                                        <TextBlock  Margin="20, 0, 20, 0" Text="{TemplateBinding Title1}" VerticalAlignment="Center" />
+                                    </Border>
+                                    <Border Grid.Column="1" x:Name="text2" CornerRadius="0, 4, 4, 0">
+                                        <TextBlock Margin="20, 0, 20, 0" Text="{TemplateBinding Title2}" VerticalAlignment="Center" />
+                                    </Border>
+                                </Grid>
                             </Border>
-                            <Border Grid.Column="1" x:Name="text2" CornerRadius="0, 4, 4, 0">
-                                <TextBlock Margin="20, 0, 20, 0" Text="{TemplateBinding Title2}" VerticalAlignment="Center" />
-                            </Border>
-                        </Grid>
-                    </Border>
-                    <ControlTemplate.Triggers>
-                        <Trigger Property="IsChecked" Value="False">
-                            <Setter TargetName="text1" Property="Background" Value="#FF4C84FF" />
-                            <Setter TargetName="text2" Property="Background" Value="#B3000000" />
-                            <Setter TargetName="text1" Property="IsHitTestVisible" Value="False" />
-                            <Setter TargetName="text2" Property="IsHitTestVisible" Value="True" />
-                        </Trigger>
-                        <Trigger Property="IsChecked" Value="True">
-                            <Setter TargetName="text1" Property="Background" Value="#B3000000" />
-                            <Setter TargetName="text2" Property="Background" Value="#FF4C84FF" />
-                            <Setter TargetName="text1" Property="IsHitTestVisible" Value="True" />
-                            <Setter TargetName="text2" Property="IsHitTestVisible" Value="False" />
-                        </Trigger>
-                    </ControlTemplate.Triggers>
-                </ControlTemplate>
-            </Setter.Value>
-        </Setter>
-        <Style.Triggers>
-            <MultiTrigger>
-                <MultiTrigger.Conditions>
-                    <Condition Property="IsMouseOver" Value="True"></Condition>
-                </MultiTrigger.Conditions>
-                <Setter Property="Opacity" Value="1"/>
-            </MultiTrigger>
+                            <ControlTemplate.Triggers>
+                                <Trigger Property="IsChecked" Value="False">
+                                    <Setter TargetName="text1" Property="Background" Value="#FF4C84FF" />
+                                    <Setter TargetName="text2" Property="Background" Value="#B3000000" />
+                                    <Setter TargetName="text1" Property="IsHitTestVisible" Value="False" />
+                                    <Setter TargetName="text2" Property="IsHitTestVisible" Value="True" />
+                                </Trigger>
+                                <Trigger Property="IsChecked" Value="True">
+                                    <Setter TargetName="text1" Property="Background" Value="#B3000000" />
+                                    <Setter TargetName="text2" Property="Background" Value="#FF4C84FF" />
+                                    <Setter TargetName="text1" Property="IsHitTestVisible" Value="True" />
+                                    <Setter TargetName="text2" Property="IsHitTestVisible" Value="False" />
+                                </Trigger>
+                            </ControlTemplate.Triggers>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+            </Trigger>
         </Style.Triggers>
     </Style>
 

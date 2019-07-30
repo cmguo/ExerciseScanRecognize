@@ -110,7 +110,7 @@
                                    OverlayPenBrush="#FFFD712A" OverlayBrush="#33FD712A"
                                    Overlay="{Binding SelectedException.Page.Analyze.SelectedException, Converter={StaticResource PaperOverlayConverter}, ConverterParameter=Exception}"/>
                 <local:PaperViewer x:Name="paper2" Paper="{Binding SelectedException.Page.Another.PagePath}" Scale="0.666666" Visibility="Collapsed" />
-                <tal:TalToggle x:Name="face" Margin="0, 24, 0, 0" Title1="正面" Title2="反面" 
+                <tal:TalToggle x:Name="face" Margin="0, 24, 0, 0" ToggleStyle="Switch" Title1="正面" Title2="反面" 
                                VerticalAlignment="Top" HorizontalAlignment="Center"
                                Visibility="{Binding SelectedException, Converter={StaticResource DuplexFaceConverter}}"
                                Unchecked="ButtonFace1_Click" Checked="ButtonFace2_Click"/>
@@ -148,7 +148,7 @@
                        DataContext="{Binding SelectedException, Converter={StaticResource ExceptionConverter}, ConverterParameter=Message}"
                        Visibility="{Binding Converter={StaticResource NonNullVisibleConverter}}">
                 <Image Width="16" Height="16"  Margin="0, 0, 8, 0" Source="{svgc:SvgImage Source=/Icons/异常.svg}" />
-                <TextBlock Grid.Column="1" FontSize="14" Foreground="#FF2D4A66" TextWrapping="Wrap" Text="{Binding}" />
+                <TextBlock Grid.Column="1" FontSize="14" Foreground="#FF2D4A66" TextWrapping="Wrap" Text="{Binding}" Width="200" />
             </StackPanel>
 
             <Frame x:Name="frame" Margin="0, 15, 0, 0"  Focusable="False"

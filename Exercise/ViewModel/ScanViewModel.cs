@@ -96,7 +96,7 @@ namespace Exercise.ViewModel
             int result = 0;
             while (result == 0 && !scanModel.FeederLoaded)
             {
-                result = PopupDialog.Show(obj as UIElement, "发现错误", "扫描仪里面没有纸张，请添加试卷。", 0, "确定", "取消");
+                result = 1;// PopupDialog.Show(obj as UIElement, "发现错误", "扫描仪里面没有纸张，请添加试卷。", 0, "确定", "取消");
             }
             return result == 0;
         }

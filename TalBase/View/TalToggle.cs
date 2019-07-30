@@ -7,6 +7,22 @@ namespace TalBase.View
 {
     public partial class TalToggle : ToggleButton
     {
+        public enum ToggleStyles
+        {
+            Normal,
+            Solid,
+            Switch,
+        }
+
+        public static DependencyProperty ToggleStyleProperty =
+            DependencyProperty.Register("ToggleStyle", typeof(ToggleStyles), typeof(TalToggle), new PropertyMetadata(ToggleStyles.Normal));
+
+        public ToggleStyles ToggleStyle
+        {
+            get { return (ToggleStyles)GetValue(ToggleStyleProperty); }
+            set { SetValue(ToggleStyleProperty, value); }
+        }
+
         public static DependencyProperty Title1Property =
             DependencyProperty.Register("Title1", typeof(string), typeof(TalToggle));
 

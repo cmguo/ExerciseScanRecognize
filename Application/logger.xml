@@ -2,6 +2,7 @@
     <appender name="file" type="log4net.Appender.RollingFileAppender">
 
       <param name="File" type="log4net.Util.PatternString" value="%property{LogPath}/App.log" />
+      <param name="Encoding" value="utf-8" />
       <param name="AppendToFile" value="true" />
       <param name="MaximumFileSize" value="2MB" />
       <param name="StaticLogFileName" value="true" />

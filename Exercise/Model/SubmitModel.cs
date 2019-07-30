@@ -71,7 +71,7 @@ namespace Exercise.Model
 
             internal async Task Save()
             {
-                await JsonPersistent.Save(Path + "\\submit.json", this);
+                await JsonPersistent.SaveAsync(Path + "\\submit.json", this);
             }
         }
 
@@ -113,7 +113,7 @@ namespace Exercise.Model
                 {
                     try
                     {
-                        task = await JsonPersistent.Load<SubmitTask>(path + "\\submit.json");
+                        task = await JsonPersistent.LoadAsync<SubmitTask>(path + "\\submit.json");
                         SubmitTasks[path] = task;
                     }
                     catch (Exception e)
@@ -189,7 +189,7 @@ namespace Exercise.Model
             {
                 StringData data = await service.GetSubmitId(task.Prepare);
                 sdata.HomeworkId = data.Value;
-                await JsonPersistent.Save(task.Path + "\\submit.json", task);
+                await JsonPersistent.SaveAsync(task.Path + "\\submit.json", task);
                 ++task.Finish;
             }
             await SubmitInfo(task, sdata);

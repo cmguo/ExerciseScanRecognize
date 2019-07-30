@@ -34,7 +34,7 @@
             </DataTemplate>
 
             <DataTemplate x:Key="AnswerItem">
-                <tal:TalRatio Content="{Binding TargetNullValue=未作答}" RatioStyle="Solid" 
+                <tal:TalToggle Content="{Binding}" ToggleStyle="Solid" 
                               IsChecked="{Binding IsSelected, RelativeSource={RelativeSource AncestorType=ListViewItem}}"/>
             </DataTemplate>
 
@@ -49,7 +49,7 @@
             <RowDefinition />
         </Grid.RowDefinitions>
 
-        <ListView Grid.Row="0" BorderThickness="0" Background="Transparent" 
+        <ListView Grid.Row="0" x:Name="questions" BorderThickness="0" Background="Transparent" 
                   ItemContainerStyle="{StaticResource ButtonListStyle}"
                   ItemsSource="{Binding Exceptions}" ItemTemplate="{StaticResource ExceptionItem}"
                   SelectedItem="{Binding SelectedException}" SelectionMode="Single">

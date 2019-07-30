@@ -5,6 +5,9 @@ using Base.Misc;
 using Exception = Exercise.Model.ExerciseModel.Exception;
 using TalBase.View;
 using Exercise.Model;
+using System.Windows.Controls;
+using System;
+using System.Linq;
 
 namespace Exercise.View.Resolve
 {
@@ -20,7 +23,7 @@ namespace Exercise.View.Resolve
         public AnswerExceptionPage()
         {
             InitializeComponent();
-            this.Loaded += AnswerExceptionPage_Initialized;
+            Loaded += AnswerExceptionPage_Initialized;
         }
 
         private void AnswerExceptionPage_Initialized(object sender, System.EventArgs e)
@@ -28,6 +31,7 @@ namespace Exercise.View.Resolve
             Exception ex = DataContext as Exception;
             type = ex.Type;
             analyze = ex.Page.Analyze;
+            //analyze.PropertyChanged += Analyze_PropertyChanged;
             analyze.Switch(type);
             if (type == ExceptionType.AnswerException)
             {
@@ -37,6 +41,22 @@ namespace Exercise.View.Resolve
             {
                 answers.Visibility = Visibility.Collapsed;
                 FillScores();
+            }
+        }
+
+        private void Analyze_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
+        {
+            if (e.PropertyName == "SelectedException")
+            {
+                answers.UnselectAll();
+                if (analyze.SelectedException == null)
+                    return;
+                foreach (char c in analyze.SelectedException.SelectedAnswer)
+                {
+                    ListViewItem item = answers.ItemContainerGenerator.ContainerFromItem(c.ToString()) as ListViewItem;
+                    if (item != null)
+                        item.IsSelected = true;
+                }
             }
         }
 
@@ -58,6 +78,11 @@ namespace Exercise.View.Resolve
 
         private void Confirm_Click(object sender, RoutedEventArgs e)
         {
+            if (type == ExceptionType.AnswerException)
+            {
+                analyze.SelectedException.SelectedAnswer = String.Join("",
+                    answers.SelectedItems.Cast<String>());
+            }
             if (!analyze.Confirm())
             {
                 PopupDialog.Show(this, "确认", "输入值不在有效范围中", 0, "确定");

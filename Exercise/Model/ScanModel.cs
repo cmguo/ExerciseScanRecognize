@@ -3,8 +3,6 @@ using Base.Mvvm;
 using Exercise.Algorithm;
 using Exercise.Scanning;
 using Exercise.Service;
-using net.sf.jni4net;
-using net.sf.jni4net.jni;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -262,12 +260,12 @@ namespace Exercise.Model
                 PageCode = PaperCode,
                 ScanBatch = scanBatch,
             };
-            await JsonPersistent.Save(savePath + "\\scan.json", data);
+            await JsonPersistent.SaveAsync(savePath + "\\scan.json", data);
         }
 
         public async Task Load(string path)
         {
-            PersistData data = await JsonPersistent.Load<PersistData>(path + "\\scan.json");
+            PersistData data = await JsonPersistent.LoadAsync<PersistData>(path + "\\scan.json");
             PaperCode = data.PageCode;
             readIndex = data.Pages.Count * 2;
             scanBatch = data.ScanBatch;
@@ -301,6 +299,7 @@ namespace Exercise.Model
             savePath = null;
             lastPage = null;
             PaperCode = null;
+            exerciseData = null;
             RaisePropertyChanged("PageCode");
             PageDropped.Clear();
             Pages.Clear();
@@ -488,17 +487,14 @@ namespace Exercise.Model
         private async Task<long> ScanPage(Page page, long tick)
         {
             PageData pageData = exerciseData.Pages[page.PageIndex];
-            pageData.ImgPathIn = page.PagePath;
-            pageData.ImgPathOut = page.PagePath.Replace(".jpg", ".out.jpg");
+            string outPath = page.PagePath.Replace(".jpg", ".out.jpg");
             page.MetaData = pageData;
             try
             {
-                AnswerData answerData = await algorithm.GetAnswer(pageData);
+                AnswerData answerData = await algorithm.GetAnswer(pageData, page.PagePath, outPath);
                 tick = AddTick(3, tick);
                 page.Answer = answerData;
-                //page.PageData = answerData.RedressedImgBytes;
-                //answerData.RedressedImgBytes = null;
-                using (FileStream fs = new FileStream(pageData.ImgPathOut, FileMode.Open, FileAccess.Read))
+                using (FileStream fs = new FileStream(outPath, FileMode.Open, FileAccess.Read))
                 {
                     MD5 md5 = new MD5CryptoServiceProvider();
                     byte[] output = md5.ComputeHash(fs);
@@ -507,20 +503,12 @@ namespace Exercise.Model
                 tick = AddTick(4, tick);
                 File.Delete(page.PagePath);
                 page.PagePath = savePath + "\\" + page.PageName;
-                File.Move(pageData.ImgPathOut, page.PagePath);
-                //page.PageData = null;
+                File.Move(outPath, page.PagePath);
             }
             catch (Exception e)
             {
                 Log.w("Scan " + e.Message + ": " + page.PagePath);
                 page.Exception = e;
-            }
-            finally
-            {
-                //page.PageData = null;
-                //pageData.ImgBytes = null;
-                pageData.ImgPathIn = null;
-                pageData.ImgPathOut = null;
             }
             return tick;
         }

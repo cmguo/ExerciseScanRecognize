@@ -39,7 +39,7 @@ namespace Exercise.ViewModel
         public ObservableCollection<object> Pages { get; private set; }
 
         private int pageStart = 1;
-        private int pageEnd = 5;
+        private int pageEnd = PAGE_BAR_COUNT;
 
         #endregion
 
@@ -84,18 +84,18 @@ namespace Exercise.ViewModel
                 {
                     --pageStart;
                     --pageEnd;
-                    Pages.RemoveAt(5);
+                    Pages.RemoveAt(PAGE_BAR_COUNT);
                     Pages.Insert(1, pageStart);
                 }
             }
             else
             {
-                if (pageEnd < PageCount - 1)
+                if (pageEnd < PageCount)
                 {
                     ++pageStart;
                     ++pageEnd;
                     Pages.RemoveAt(1);
-                    Pages.Insert(5, pageEnd);
+                    Pages.Insert(PAGE_BAR_COUNT, pageEnd);
                 }
             }
             RaisePropertyChanged("PageIndex");

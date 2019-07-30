@@ -186,6 +186,8 @@ namespace Exercise.Scanning
                 twain32.Capabilities.Orientation.Set(TwOR.Rot0);
             if (twain32.Capabilities.Rotation.IsSupported(TwQC.Set))
                 twain32.Capabilities.Rotation.Set(0f);
+            if (twain32.Capabilities.AutomaticRotate.IsSupported(TwQC.Set))
+                twain32.Capabilities.AutomaticRotate.Set(false);
             if (twain32.Capabilities.AutoDiscardBlankPages.IsSupported(TwQC.Set))
                 twain32.Capabilities.AutoDiscardBlankPages.Set(TwBP.Disable);
             if (twain32.Capabilities.DeviceEvent.IsSupported(TwQC.Set))

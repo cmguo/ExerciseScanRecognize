@@ -41,12 +41,11 @@
         </ComboBox>
         <ComboBox Grid.Row="1" x:Name="studentList" Margin="0, 14, 0, 0" 
                   IsEditable="True"
-                  IsTextSearchEnabled="False"
+                  StaysOpenOnEdit="False"
                   FontSize="14" Foreground="#FF2D4A66" 
                   TextBoxBase.TextChanged="StudentList_TextChanged"
                   Height="32"
                   Width="231"
-                  Text="{Binding StudentFilter, Source={StaticResource ViewModel}}"
                   ItemsSource="{Binding FilteredStudents, Source={StaticResource ViewModel}}" 
                   SelectedValuePath="TalNo" SelectedValue="{Binding Page.StudentCode}">
         </ComboBox>

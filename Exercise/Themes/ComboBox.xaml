@@ -4,7 +4,7 @@
     xmlns:local="clr-namespace:Exercise.View">
     <Style x:Key="ComboBoxTextBoxStyle" TargetType="{x:Type TextBox}">
         <Setter Property="Template">
-            <Setter.Value>
+                       <Setter.Value>
                 <ControlTemplate TargetType="{x:Type TextBox}">
                     <Border
                             BorderThickness="1,1,0,1"
@@ -168,6 +168,7 @@
                                  VerticalContentAlignment="Center"
                                  FontSize="14"
                                  Height="{TemplateBinding Height}"
+                                 AutoWordSelection="False"
                                  />
                         <ToggleButton Grid.Column="1" Margin="0"
                                      Height="{TemplateBinding Height}"

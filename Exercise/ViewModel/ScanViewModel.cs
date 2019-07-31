@@ -13,6 +13,8 @@ namespace Exercise.ViewModel
     public class ScanViewModel : ViewModelBase
     {
 
+        private static readonly Logger Log = Logger.GetLogger<ScanViewModel>();
+
         #region Properties
 
         public int SourceIndex
@@ -54,8 +56,6 @@ namespace Exercise.ViewModel
 
         #endregion
 
-        private static readonly Logger Log = Logger.GetLogger<ScanViewModel>();
-
         private ScanModel scanModel = ScanModel.Instance;
 
         public ScanViewModel()
@@ -89,7 +89,7 @@ namespace Exercise.ViewModel
             }
             catch (Exception e)
             {
-                Log.w(e.ToString());
+                Log.w("Check", e);
                 PopupDialog.Show(obj as UIElement, "发现错误", "扫描仪未正确连接，请检查后重试。", 0, "确定");
                 return false;
             }

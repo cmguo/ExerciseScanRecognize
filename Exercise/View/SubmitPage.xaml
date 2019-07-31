@@ -51,10 +51,10 @@
         <TextBlock Grid.Row="3" Margin="0, 8, 0, 0" FontSize="16" Foreground="#FF7F8E99" HorizontalAlignment="Center"
                    Text="{Binding ExerciseName, StringFormat=《{0}》}" />
 
-        <TextBlock Grid.Row="4" Margin="0, 32, 0, 0" FontSize="14"  HorizontalAlignment="Center" Height="15"
+        <TextBlock Grid.Row="4" Margin="0, 32, 0, 0" FontSize="14"  HorizontalAlignment="Center" 
                    Text="{Binding Task.Status, Converter={StaticResource SubmitConverter}, ConverterParameter=Message}"/>
 
-        <StackPanel Grid.Row="5" Orientation="Horizontal" Margin="0, -12, 0, 0" HorizontalAlignment="Center"
+        <StackPanel Grid.Row="4" Orientation="Horizontal" Margin="0, 32, 0, 0" HorizontalAlignment="Center"
                 Visibility="{Binding Task.Status, Converter={StaticResource SubmittingConverter}}">
             <ProgressBar VerticalAlignment="Center" Width="280" Height="8"
                 Maximum="{Binding Task.Total, Mode=OneWay}" Value="{Binding Task.Finish, Mode=OneWay}"/>
@@ -65,7 +65,7 @@
             <tal:TalButton Command="{Binding RetryCommand}" IsDefault="True"
                 CommandParameter="{Binding RelativeSource={RelativeSource AncestorType={x:Type Page}}}" 
                 Content="重新上传" Visibility="{Binding Task.Status, Converter={StaticResource RetryConverter}}" />
-            <tal:TalButton Command="{Binding ReturnCommand}"
+            <tal:TalButton Command="{Binding ReturnCommand}" Margin="24, 0, 0, 0"
                 CommandParameter="{Binding RelativeSource={RelativeSource AncestorType={x:Type Page}}}" 
                 Content="返回首页" Visibility="{Binding Task.Status, Converter={StaticResource ReturnConverter}}" />
         </StackPanel>

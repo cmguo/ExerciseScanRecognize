@@ -10,6 +10,7 @@ namespace Assistant.Fault
         public string Type { get; set; }
         public string Module { get; set; }
         public string Thread { get; set; }
+        public IList<string> Stack { get; set; }
         public string File { get; set; }
 
         public CrashInfo()

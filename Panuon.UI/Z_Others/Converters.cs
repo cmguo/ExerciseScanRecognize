@@ -424,7 +424,7 @@ namespace Panuon.UI
                 typeface,
                 textBlock.FontSize,
                 textBlock.Foreground);
-            bool isTrimmed = formattedText.Width > textBlock.Width;
+            bool isTrimmed = formattedText.Width > textBlock.Width - textBlock.Padding.Left - textBlock.Padding.Right;
             return isTrimmed;
         }
     }

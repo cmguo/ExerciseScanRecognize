@@ -1,6 +1,7 @@
 ﻿using Base.Mvvm;
 using Exercise.Model;
 using Exercise.View;
+using System.ComponentModel;
 using System.Windows;
 using System.Windows.Input;
 using TalBase.View;
@@ -53,11 +54,18 @@ namespace Exercise.ViewModel
 
         private async void Close(object obj)
         {
+            if (Task.Status != SubmitModel.TaskStatus.Submiting)
+                return;
+            CancelEventArgs e = obj as CancelEventArgs;
             int result = PopupDialog.Show(obj as UIElement, "退出软件", "扫描结果上传中，退出后，扫描结果将放弃，确认退出吗？", 0, "退出", "取消");
             if (result == 0)
             {
                 await submitModel.Cancel(Task);
-                Window.GetWindow((obj as ExecutedRoutedEventArgs).OriginalSource as UIElement).Close();
+                Application.Current.MainWindow.Close();
+            }
+            else
+            {
+                e.Cancel = true;
             }
         }
 

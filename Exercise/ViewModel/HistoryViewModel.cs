@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Threading;
 using TalBase.View;
 using TalBase.ViewModel;
 using static Exercise.Service.HistoryData;
@@ -32,14 +33,11 @@ namespace Exercise.ViewModel
             {
                 _PageIndex = value - 1;
                 SelectPage(_PageIndex);
-                //RaisePropertyChanged("PageIndex");
+                RaisePropertyChanged("PageIndex");
             }
         }
 
         public ObservableCollection<object> Pages { get; private set; }
-
-        private int pageStart = 1;
-        private int pageEnd = PAGE_BAR_COUNT;
 
         #endregion
 
@@ -80,25 +78,14 @@ namespace Exercise.ViewModel
         {
             if (left)
             {
-                if (pageStart > 1)
-                {
-                    --pageStart;
-                    --pageEnd;
-                    Pages.RemoveAt(PAGE_BAR_COUNT);
-                    Pages.Insert(1, pageStart);
-                }
+                if (PageIndex > 1)
+                    --PageIndex;
             }
             else
             {
-                if (pageEnd < PageCount)
-                {
-                    ++pageStart;
-                    ++pageEnd;
-                    Pages.RemoveAt(1);
-                    Pages.Insert(PAGE_BAR_COUNT, pageEnd);
-                }
+                if (PageIndex < PageCount)
+                    ++PageIndex;
             }
-            RaisePropertyChanged("PageIndex");
         }
 
         public override void Release()
@@ -129,7 +116,38 @@ namespace Exercise.ViewModel
 
         private void SelectPage(int value)
         {
+            Dispatcher.CurrentDispatcher.InvokeAsync(AdjustPages);
             BackgroudWork.Execute(() => historyModel.LoadPage(value));
+        }
+
+        private void AdjustPages()
+        {
+            if (PageCount <= PAGE_BAR_COUNT)
+            {
+                for (int i = Pages.Count; i < PageCount; ++i)
+                    Pages.Add(i + 1);
+            }
+            else
+            {
+                Pages.Clear();
+                int pageStart = PageIndex - PAGE_BAR_COUNT / 2;
+                int pageEnd = pageStart + PAGE_BAR_COUNT - 1;
+                if (pageStart < 1)
+                {
+                    pageEnd += 1 - pageStart;
+                    pageStart = 1;
+                }
+                else if (pageEnd > PageCount)
+                {
+                    pageStart += PageCount - pageEnd;
+                    pageEnd = PageCount;
+                }
+                Pages.Add(false);
+                for (int i = pageStart; i <= pageEnd; ++i)
+                    Pages.Add(i);
+                Pages.Add(true);
+            }
+            RaisePropertyChanged("PageIndex");
         }
 
         private void HistoryModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
@@ -148,24 +166,7 @@ namespace Exercise.ViewModel
 
         private void UpdatePageCount()
         {
-            Pages.Clear();
-            if (PageCount <= PAGE_BAR_COUNT)
-            {
-                Pages.Add(false);
-                for (int i = 1; i <= PageCount; ++i)
-                    Pages.Add(i);
-                Pages.Add(true);
-                pageEnd = PageCount;
-            }
-            else
-            {
-                Pages.Add(false);
-                for (int i = 1; i <= PAGE_BAR_COUNT; ++i)
-                    Pages.Add(i);
-                Pages.Add(true);
-                pageEnd = PAGE_BAR_COUNT;
-            }
-            RaisePropertyChanged("PageIndex");
+            PageIndex = PageIndex;
         }
 
     }

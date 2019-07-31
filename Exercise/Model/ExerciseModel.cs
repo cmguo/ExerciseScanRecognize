@@ -234,7 +234,15 @@ namespace Exercise.Model
             {
                 targetException = ex;
             }
-            scanModel.Scan(1);
+            try
+            {
+                scanModel.Scan(1);
+            }
+            catch
+            {
+                targetException = null;
+                throw;
+            }
             await Task.Run(() =>
             {
                 lock (Exceptions)

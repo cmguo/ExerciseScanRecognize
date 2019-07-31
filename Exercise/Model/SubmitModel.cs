@@ -9,6 +9,7 @@ using System.IO;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
+using System.Threading;
 using System.Threading.Tasks;
 using TalBase.Model;
 
@@ -45,13 +46,13 @@ namespace Exercise.Model
 
         public class SubmitTask : ModelBase
         {
-            public string Path { get; internal set; }
-            public int Total { get; internal set; }
+            //public string Path { get; internal set; }
+            public int Total { get; set; }
             private int _Finish;
             public int Finish
             {
                 get { return _Finish; }
-                internal set { _Finish = value; RaisePropertyChanged("Finish"); }
+                set { _Finish = value; RaisePropertyChanged("Finish"); }
             }
 
             [JsonIgnore]
@@ -63,15 +64,25 @@ namespace Exercise.Model
             public TaskStatus Status
             {
                 get { return _Status; }
-                internal set { _Status = value; RaisePropertyChanged("Status"); }
+                set {
+                    _Status = value;
+                    RaisePropertyChanged("Status");
+                    lock (this)
+                    {
+                        Monitor.PulseAll(this);
+                    }
+                }
             }
             public SubmitPrepare Prepare { get; set; }
             public SubmitData Submit { get; set; }
             public IList<string> PageNames { get; set; }
 
+            internal string path;
+            internal bool cancel;
+
             internal async Task Save()
             {
-                await JsonPersistent.SaveAsync(Path + "\\submit.json", this);
+                await JsonPersistent.SaveAsync(path + "\\submit.json", this);
             }
         }
 
@@ -98,7 +109,8 @@ namespace Exercise.Model
             SubmitData sdata = new SubmitData() { PaperId = exerciseId, Data = data };
             SubmitPrepare prepare = new SubmitPrepare() { PaperId = exerciseId, ClassIdList = classes.Select(c => c.ClassId).ToList() };
             IList<string> names = data.SelectMany(s => s.PageInfo.Select(p => p.ImageName)).ToList();
-            SubmitTask task = new SubmitTask() { Path = path, Status = TaskStatus.Wait, Prepare = prepare, Submit = sdata, PageNames = names };
+            SubmitTask task = new SubmitTask() { Status = TaskStatus.Wait, Prepare = prepare, Submit = sdata, PageNames = names };
+            task.path = path;
             task.Total = task.Left;
             SubmitTasks[path] = task;
             await task.Save();
@@ -114,6 +126,7 @@ namespace Exercise.Model
                     try
                     {
                         task = await JsonPersistent.LoadAsync<SubmitTask>(path + "\\submit.json");
+                        task.path = path;
                         SubmitTasks[path] = task;
                     }
                     catch (Exception e)
@@ -132,10 +145,19 @@ namespace Exercise.Model
             submitAction.Execute(task);
         }
 
-        public async Task Cancel(SubmitTask task)
+        public Task Cancel(SubmitTask task)
         {
-            task.Status = TaskStatus.Cancel;
-            await task.Save();
+            task.cancel = true;
+            return Task.Run(() =>
+            {
+                lock (task)
+                {
+                    while (task.Status == TaskStatus.Submiting)
+                    {
+                        Monitor.Wait(task);
+                    }
+                }
+            });
         }
 
         public void Submit(SubmitTask task)
@@ -153,8 +175,12 @@ namespace Exercise.Model
             catch
             {
                 task.Status = TaskStatus.Failed;
-                await task.Save();
                 throw;
+            }
+            finally
+            {
+                if (task.Status != TaskStatus.Completed)
+                    await task.Save();
             }
         }
 
@@ -189,15 +215,19 @@ namespace Exercise.Model
             {
                 StringData data = await service.GetSubmitId(task.Prepare);
                 sdata.HomeworkId = data.Value;
-                await JsonPersistent.SaveAsync(task.Path + "\\submit.json", task);
+                await task.Save();
                 ++task.Finish;
             }
             await SubmitInfo(task, sdata);
+            if (task.cancel)
+                return;
             await SubmitImages(task);
+            if (task.cancel)
+                return;
             await service.CompleteSubmit(new SubmitComplete() { HomeworkId = sdata.HomeworkId });
             ++task.Finish;
-            SubmitTasks.Remove(task.Path);
-            HistoryModel.Instance.Remove(task.Path);
+            SubmitTasks.Remove(task.path);
+            HistoryModel.Instance.Remove(task.path);
             task.Status = TaskStatus.Completed;
         }
 
@@ -211,12 +241,16 @@ namespace Exercise.Model
             {
                 for (; i + SUBIT_BATCH_SIZE < list.Count; i += SUBIT_BATCH_SIZE)
                 {
+                    if (task.cancel)
+                        break;
                     sdata.Data = list.Skip(i).Take(SUBIT_BATCH_SIZE).ToList();
                     await service.Submit(sdata);
                     ++task.Finish;
                     if (task.Finish % 5 == 0)
                         await task.Save();
                 }
+                if (task.cancel)
+                    return;
                 if (i > 0)
                     sdata.Data = list.Skip(i).ToList();
                 sdata.Finished = true;
@@ -242,8 +276,10 @@ namespace Exercise.Model
             hc.DefaultRequestHeaders.TryAddWithoutValidation("Content-Type", "image/jpg");
             while (pageNames.Count > 0)
             {
+                if (task.cancel)
+                    break;
                 string n = pageNames.First();
-                using (FileStream fs = new FileStream(task.Path + "\\" + n, FileMode.Open, FileAccess.Read))
+                using (FileStream fs = new FileStream(task.path + "\\" + n, FileMode.Open, FileAccess.Read))
                 {
                     StreamContent content = new StreamContent(fs);
                     content.Headers.Add("Content-Type", "image/jpg");

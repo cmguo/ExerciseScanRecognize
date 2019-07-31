@@ -1,4 +1,5 @@
-﻿using Base.Mvvm;
+﻿using Base.Misc;
+using Base.Mvvm;
 using Exercise.Model;
 using Exercise.View;
 using System.Collections.ObjectModel;
@@ -12,6 +13,8 @@ namespace Exercise.ViewModel
 {
     class ResolveViewModel : ExerciseViewModel
     {
+
+        private static readonly Logger Log = Logger.GetLogger<ResolveViewModel>();
 
         #region Properties
 
@@ -119,7 +122,15 @@ namespace Exercise.ViewModel
             if (!Check(obj))
                 return;
             Exception ex = SelectedException;
-            await exerciseModel.ScanOne(ex);
+            try
+            {
+                await exerciseModel.ScanOne(ex);
+            }
+            catch (System.Exception e)
+            {
+                Log.w("Rescan", e);
+                return;
+            }
             if (ex.Page != null)
             {
                 TalToast.Show("X该试卷仍无法识别，请检查后重新扫描");

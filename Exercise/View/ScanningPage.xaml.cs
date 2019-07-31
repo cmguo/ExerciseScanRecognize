@@ -31,12 +31,12 @@ namespace Exercise.View
                     });
                 }
             }
-            else if (e.PropertyName == "Error")
+            else if (e.PropertyName == "Status")
             {
                 Dispatcher.BeginInvoke((ThreadStart) delegate () 
                 {
                     ScanningViewModel vm = DataContext as ScanningViewModel;
-                    vm.ErrorCommand.Execute(this);
+                    vm.StatusCommand.Execute(this);
                 });
             }
         }

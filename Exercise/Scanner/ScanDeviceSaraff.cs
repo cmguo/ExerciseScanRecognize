@@ -123,7 +123,7 @@ namespace Exercise.Scanning
         public event EventHandler<ScanEvent> OnImage;
         public event EventHandler<ScanEvent> GetFileName;
         public event EventHandler<ScanEvent> ScanEvent;
-        public event EventHandler<ScanEvent> ScanError;
+        public event EventHandler<ScanEvent> ScanException;
         public event EventHandler<ScanEvent> ScanCompleted;
 
         private Window window;
@@ -299,10 +299,10 @@ namespace Exercise.Scanning
         private void Twain32_AcquireError(object sender, Twain32.AcquireErrorEventArgs e)
         {
             Log.w("Twain32_AcquireError " + e.Exception.Message);
-            if (ScanError != null)
+            if (ScanException != null)
             {
                 window.Dispatcher.Invoke(() =>
-                    ScanError(this, new ScanEvent() { Error = e.Exception }));
+                    ScanException(this, new ScanEvent() { Exception = e.Exception }));
             }
             if (ScanCompleted != null)
             {

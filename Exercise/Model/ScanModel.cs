@@ -82,23 +82,6 @@ namespace Exercise.Model
             }
         }
 
-        private bool _IsPaused;
-        public bool IsPaused
-        {
-            get { return _IsPaused; }
-            set
-            {
-                if (_IsPaused == value)
-                    return;
-                lock (mutex)
-                {
-                    _IsPaused = value;
-                    Monitor.PulseAll(mutex);
-                }
-                RaisePropertyChanged("IsPaused");
-            }
-        }
-
         private bool _IsCompleted;
         public bool IsCompleted
         {
@@ -117,14 +100,14 @@ namespace Exercise.Model
             }
         }
 
-        private Exception _Error;
-        public Exception Error
+        private Exception _Exception;
+        public Exception Exception
         {
-            get { return _Error; }
+            get { return _Exception; }
             set
             {
-                _Error = value;
-                RaisePropertyChanged("Error");
+                _Exception = value;
+                RaisePropertyChanged("Exception");
             }
         }
 
@@ -147,7 +130,7 @@ namespace Exercise.Model
             PageDropped = new ObservableCollection<Page>();
             scanDevice.OnImage += ScanDevice_OnImage;
             scanDevice.GetFileName += ScanDevice_GetFileName;
-            scanDevice.ScanError += ScanDevice_ScanError;
+            scanDevice.ScanException += ScanDevice_ScanException;
             scanDevice.ScanCompleted += ScanDevice_ScanCompleted;
             IsCompleted = true;
             scanDevice.Open();
@@ -181,9 +164,8 @@ namespace Exercise.Model
                 return;
             Log.d("Scan");
             IsScanning = true;
-            IsPaused = false;
             IsCompleted = false;
-            Error = null;
+            Exception = null;
             cancel = 0;
             ++scanBatch;
             scanIndex = 0;
@@ -192,9 +174,12 @@ namespace Exercise.Model
                 scanDevice.DuplexEnabled = true;
                 scanDevice.Scan(count);
             }
-            catch
+            catch (Exception e)
             {
+                cancel = CANCEL_DROP;
                 IsScanning = false;
+                IsCompleted = true;
+                Exception = e;
                 throw;
             }
         }
@@ -524,16 +509,10 @@ namespace Exercise.Model
             BackgroudWork.Execute(() => AddImage(e.FileName));
         }
 
-        private void ScanDevice_ScanPaused(object sender, ScanEvent e)
+        private void ScanDevice_ScanException(object sender, ScanEvent e)
         {
-            Log.d("ScanDevice_ScanPaused");
-            IsPaused = true;
-        }
-
-        private void ScanDevice_ScanError(object sender, ScanEvent e)
-        {
-            Log.d("ScanDevice_ScanError");
-            Error = e.Error;
+            Log.d("ScanDevice_ScanException");
+            Exception = e.Exception;
         }
 
         private void ScanDevice_ScanCompleted(object sender, ScanEvent e)

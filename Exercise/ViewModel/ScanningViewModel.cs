@@ -41,7 +41,7 @@ namespace Exercise.ViewModel
         #region Commands
 
         public RelayCommand FinishCommand { get; set; }
-        public RelayCommand ErrorCommand { get; set; }
+        public RelayCommand StatusCommand { get; set; }
 
         #endregion
 
@@ -52,7 +52,7 @@ namespace Exercise.ViewModel
         public ScanningViewModel()
         {
             FinishCommand = new RelayCommand((e) => Finish(e));
-            ErrorCommand = new RelayCommand((e) => OnError(e));
+            StatusCommand = new RelayCommand((e) => OnStatus(e));
             exerciseModel.PageStudents.CollectionChanged += PageStudents_CollectionChanged;
             exerciseModel.PropertyChanged += ExerciseModel_PropertyChanged;
             CloseMessage = "当前仍有扫描任务进行中，" + CloseMessage;
@@ -106,15 +106,15 @@ namespace Exercise.ViewModel
             }
         }
 
-        private async Task OnError(object obj)
+        private async Task OnStatus(object obj)
         {
             await scanModel.CancelScan(true);
             string msg = null;
-            if (Error == 0)
+            if (Status == 0)
                 msg = "当前试卷二维码无法识别，不能查看结果";
-            else if (Error == 1)
+            else if (Status == 1)
                 msg = "当前试卷二维码无法识别，请检查试卷后重试";
-            else if (Error == 2)
+            else if (Status == 2)
                 msg = (exerciseModel.ExerciseException is ServiceException)
                     ? exerciseModel.ExerciseException.Message
                     : "数据连接异常，请联系服务人员";
@@ -132,7 +132,7 @@ namespace Exercise.ViewModel
 
         private async Task Finish(object obj)
         {
-            if (Error != 0)
+            if (Status != 0)
                 return;
             Update();
             System.Windows.Controls.Page page = obj as System.Windows.Controls.Page;
@@ -141,7 +141,7 @@ namespace Exercise.ViewModel
             while (true)
             {
                 int result = -1;
-                if (scanModel.Error != null)
+                if (scanModel.Exception != null)
                 {
                     result = PopupDialog.Show(obj as UIElement, "扫描停止", "扫描仪发生异常，请检查后重试。", 1, "查看结果", "继续扫描");
                 }
@@ -154,7 +154,7 @@ namespace Exercise.ViewModel
                 {
                     if (scanModel.PaperCode == null || exerciseModel.ExerciseData == null)
                     {
-                        await OnError(obj);
+                        await OnStatus(obj);
                         break;
                     }
                     await exerciseModel.MakeResult();

@@ -35,11 +35,11 @@ namespace Exercise.ViewModel
             private set { _pageCount = value; RaisePropertyChanged("PageCount"); }
         }
 
-        public int _error;
-        public int Error
+        public int _Status;
+        public int Status
         {
-            get { return _error; }
-            protected set { _error = value; RaisePropertyChanged("Error"); }
+            get { return _Status; }
+            protected set { _Status = value; RaisePropertyChanged("Status"); }
         }
 
         public bool IsScanning => scanModel.IsScanning;
@@ -94,10 +94,10 @@ namespace Exercise.ViewModel
                 return false;
             }
             int result = 0;
-            while (result == 0 && !scanModel.FeederLoaded)
-            {
-                result = 1;// PopupDialog.Show(obj as UIElement, "发现错误", "扫描仪里面没有纸张，请添加试卷。", 0, "确定", "取消");
-            }
+            //while (result == 0 && !scanModel.FeederLoaded)
+            //{
+            //    result = 1; PopupDialog.Show(obj as UIElement, "发现错误", "扫描仪里面没有纸张，请添加试卷。", 0, "确定", "取消");
+            //}
             return result == 0;
         }
 
@@ -110,8 +110,16 @@ namespace Exercise.ViewModel
         {
             if (!Check(obj))
                 return false;
-            scanModel.Scan();
-            return true;
+            try
+            {
+                scanModel.Scan();
+                return true;
+            }
+            catch (Exception e)
+            {
+                Log.w("Continue", e);
+                return false;
+            }
         }
 
         #endregion
@@ -124,15 +132,14 @@ namespace Exercise.ViewModel
             LastPage = page;
             PageCount = scanModel.Pages.Count;
             if (PageCount >= 5 && scanModel.PaperCode == null)
-                Error = 1;
+                Status = 1;
         }
 
         private void ScanModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
         {
             if (e.PropertyName == "IsScanning"
                 || e.PropertyName == "IsCompleted"
-                || e.PropertyName == "SourceIndex"
-                || e.PropertyName == "IsPaused")
+                || e.PropertyName == "SourceIndex")
                 RaisePropertyChanged(e.PropertyName);
         }
 

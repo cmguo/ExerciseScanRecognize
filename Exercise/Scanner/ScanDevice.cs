@@ -5,7 +5,7 @@ namespace Exercise.Scanning
     public class ScanEvent : EventArgs
     {
         public string FileName { get; set; }
-        public Exception Error { get; set; }
+        public Exception Exception { get; set; }
     }
 
     public interface IScanDevice
@@ -17,7 +17,7 @@ namespace Exercise.Scanning
 
         event EventHandler<ScanEvent> GetFileName;
 
-        event EventHandler<ScanEvent> ScanError;
+        event EventHandler<ScanEvent> ScanException;
 
         event EventHandler<ScanEvent> ScanEvent;
 

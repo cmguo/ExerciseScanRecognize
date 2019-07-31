@@ -112,7 +112,7 @@ namespace Exercise.ViewModel
             if (e.PropertyName == "ExerciseData")
             {
                 if (exerciseModel.ExerciseData == null)
-                    Error = 2;
+                    Status = 2;
             }
         }
     }

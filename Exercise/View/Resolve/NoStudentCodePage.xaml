@@ -43,9 +43,9 @@
                   IsEditable="True"
                   StaysOpenOnEdit="False"
                   FontSize="14" Foreground="#FF2D4A66" 
+                  Height="32" Width="231"
                   TextBoxBase.TextChanged="StudentList_TextChanged"
-                  Height="32"
-                  Width="231"
+                  Text="{Binding StudentFilter, Source={StaticResource ViewModel}}"
                   ItemsSource="{Binding FilteredStudents, Source={StaticResource ViewModel}}" 
                   SelectedValuePath="TalNo" SelectedValue="{Binding Page.StudentCode}">
         </ComboBox>

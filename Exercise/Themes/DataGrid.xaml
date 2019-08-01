@@ -69,7 +69,7 @@
 
                                         <DataGridColumnHeadersPresenter Grid.Column="1" Grid.ColumnSpan="2" Name="PART_ColumnHeadersPresenter">
                                             <DataGridColumnHeadersPresenter.Visibility>
-                                                <Binding Path="HeadersVisibility" RelativeSource="{RelativeSource FindAncestor, AncestorLevel=1, AncestorType=DataGrid}">
+                                                <Binding Path="HeadersVisibility" Converter="{x:Static DataGrid.HeadersVisibilityConverter}" RelativeSource="{RelativeSource FindAncestor, AncestorLevel=1, AncestorType=DataGrid}">
                                                     <Binding.ConverterParameter>
                                                         <DataGridHeadersVisibility>Column</DataGridHeadersVisibility>
                                                     </Binding.ConverterParameter>

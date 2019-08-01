@@ -12,6 +12,7 @@
         public long AuthenticationType { get; set; }
         public string LoginName { get; set; }
         public string Password { get; set; }
+        public string Ticket { get; set; }
         public long NextAutoLogin { get; set; }
         public string ClientType { get; set; }
         public string ProductVersionNumber { get; set; }

@@ -124,6 +124,8 @@ namespace Exercise.ViewModel
         {
             if (PageCount <= PAGE_BAR_COUNT)
             {
+                if (Pages.Count > PageCount)
+                    Pages.Clear();
                 for (int i = Pages.Count; i < PageCount; ++i)
                     Pages.Add(i + 1);
             }
@@ -166,7 +168,7 @@ namespace Exercise.ViewModel
 
         private void UpdatePageCount()
         {
-            PageIndex = PageIndex;
+            Dispatcher.CurrentDispatcher.InvokeAsync(AdjustPages);
         }
 
     }

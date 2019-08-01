@@ -81,7 +81,6 @@ namespace Exercise.Model
         {
             LocalRecords.Clear();
             await LoadLocal();
-            await LoadPage(0);
         }
 
         private async Task LoadLocal()

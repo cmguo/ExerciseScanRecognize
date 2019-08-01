@@ -32,11 +32,6 @@ namespace Account.ViewModel
 
         private AccountModel accountModel = AccountModel.Instance;
 
-        static AccountViewModel()
-        {
-            AccountModel.Instance.PropertyChanged += AccountModel_PropertyChanged_Static;
-        }
-
         public AccountViewModel()
         {
             LoginData = AccountModel.Instance.LoginData;
@@ -61,6 +56,7 @@ namespace Account.ViewModel
             }
             NetWorkManager.CheckNetWorkAvailable();
             await AccountModel.Instance.Login();
+            AccountModel.Instance.PropertyChanged += AccountModel_PropertyChanged_Static;
             Window window = Application.Current.MainWindow;
             if (window != null)
                 window.Show();
@@ -69,9 +65,11 @@ namespace Account.ViewModel
 
         private async Task DoLogout(object obj)
         {
+            AccountModel.Instance.PropertyChanged -= AccountModel_PropertyChanged_Static;
             await AccountModel.Instance.Logout();
             Window window = Application.Current.MainWindow;
             window.Hide();
+            new AccountWindow().Show();
         }
 
         private void AccountModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
@@ -83,7 +81,8 @@ namespace Account.ViewModel
         {
             if (e.PropertyName == "Account" && AccountModel.Instance.Account.Ticket == null)
             {
-                new AccountWindow() { Owner = Application.Current.MainWindow }.Show();
+                AccountModel.Instance.PropertyChanged -= AccountModel_PropertyChanged_Static;
+                new AccountWindow() { Owner = Application.Current.MainWindow }.ShowDialog();
             }
         }
 

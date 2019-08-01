@@ -13,15 +13,22 @@ namespace TalBase.View
             Base.Mvvm.Action.ActionException += Action_ActionException;
         }
 
+        private static bool isShowing = false;
+
         private static void Action_ActionException(object sender, RelayCommand.ActionExceptionEventArgs e)
         {
-            if (e.Parameter is UIElement)
+            if (!isShowing)
             {
-                PopupDialog.Show(e.Parameter as UIElement, "出现异常", GetMessage(e.Exception), 0, "确定");
-            }
-            else
-            {
-                PopupDialog.Show(Application.Current.MainWindow, "出现异常", GetMessage(e.Exception), 0, "确定");
+                isShowing = true;
+                if (e.Parameter is UIElement)
+                {
+                    PopupDialog.Show(e.Parameter as UIElement, "出现异常", GetMessage(e.Exception), 0, "确定");
+                }
+                else
+                {
+                    PopupDialog.Show(Application.Current.MainWindow, "出现异常", GetMessage(e.Exception), 0, "确定");
+                }
+                isShowing = false;
             }
             e.IsHandled = true;
         }

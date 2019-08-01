@@ -74,16 +74,16 @@
     <Grid Margin="18, 20, 18, 16" DataContext="{StaticResource ViewModel}" >
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
-            <RowDefinition/>
+            <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
         <Border Grid.RowSpan="2" CornerRadius="4" Background="White" />
         <TextBlock  FontSize="16" Foreground="#FF2D4A66" Margin="30, 28, 0, 16" Text="扫描记录管理" />
         <ScrollViewer  Grid.Row="1" VerticalScrollBarVisibility="Auto" Template="{StaticResource ScrollViewerTemplate}" Focusable="True" Name="ScrollViewer">
             <Grid >
                 <Grid.RowDefinitions>
-                    <RowDefinition />
-                    <RowDefinition />
-                    <RowDefinition/>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="Auto"/>
                 </Grid.RowDefinitions>
                 <ListView Grid.Row="0" x:Name="local" Margin="30, 0, 30, 0" BorderThickness="0" ItemsSource="{Binding LocalRecords}"
                   HorizontalContentAlignment="Stretch" ScrollViewer.VerticalScrollBarVisibility="Hidden">

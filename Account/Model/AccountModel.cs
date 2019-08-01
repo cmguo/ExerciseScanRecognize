@@ -93,16 +93,24 @@ namespace Account.Model
             }
             RaisePropertyChanged("Account");
             LoginData.Password = null;
+            LoginData.Ticket = Account.Ticket;
             LoginData.AuthenticationType = LoginData.LOGIN_BY_TICKET;
             Configuration.AccountName = LoginData.LoginName;
             timer.Start();
-            Base.Mvvm.Action.ActionException += RelayCommand_ActionException;
+            Base.Mvvm.Action.ActionException += Action_ActionException;
         }
 
         public async Task Logout()
         {
             LogoutData logout = new LogoutData() { Ticket = Account.Ticket };
-            await service.Logout(logout);
+            try
+            {
+                await service.Logout(logout);
+            }
+            catch (Exception e)
+            {
+                Log.w("Logout", e);
+            }
             Clear();
         }
 
@@ -110,9 +118,10 @@ namespace Account.Model
         {
             Account = new AccountData();
             LoginData.AuthenticationType = LoginData.LOGIN_BY_PASSWORD;
-            RaisePropertyChanged("Account");
+            LoginData.Ticket = null;
             timer.Stop();
-            RelayCommand.ActionException -= RelayCommand_ActionException;
+            RelayCommand.ActionException -= Action_ActionException;
+            RaisePropertyChanged("Account");
         }
 
         private async Task ReLogin()
@@ -133,7 +142,7 @@ namespace Account.Model
             BackgroudWork.Execute(() => ReLogin());
         }
 
-        private void RelayCommand_ActionException(object sender, RelayCommand.ActionExceptionEventArgs e)
+        private void Action_ActionException(object sender, RelayCommand.ActionExceptionEventArgs e)
         {
             if (e.Exception is ServiceException && ((e.Exception as ServiceException).Status >= LoginData.LOGIN_OUT_FIRST
                 && (e.Exception as ServiceException).Status < LoginData.LOGIN_OUT_LAST))

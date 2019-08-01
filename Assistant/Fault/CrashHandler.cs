@@ -32,7 +32,19 @@ namespace Assistant.Fault
             {
                 report = new CrashReport(path);
                 if (main)
-                    report.Update2();
+                {
+                    int n = 0;
+                    DirectoryInfo di2 = new DirectoryInfo(logPath);
+                    foreach (FileInfo f in di2.GetFiles())
+                    {
+                        if (f.Name.EndsWith(".zip"))
+                            f.Delete();
+                        if (f.Name.EndsWith(".report"))
+                            ++n;
+                    }
+                    if (n > 0)
+                        report.Update2();
+                }
             }
             catch
             {

@@ -38,6 +38,7 @@ namespace Exercise.Model
 
         public ObservableCollection<Page> Pages { get; private set; }
         public ObservableCollection<Page> PageDropped { get; private set; }
+        public Page LastPage { get; private set; }
 
         public string[] SourceList
         {
@@ -52,16 +53,6 @@ namespace Exercise.Model
             get => scanDevice.SourceIndex;
             set => scanDevice.SourceIndex = value;
         }
-
-        public bool FeederEnabled
-        {
-            get => scanDevice.FeederEnabled;
-            set => scanDevice.FeederEnabled = value;
-        }
-
-        public bool PaperDectectable => scanDevice.PaperDectectable;
-
-        public bool FeederLoaded => scanDevice.FeederLoaded;
 
         public string PaperCode { get; private set; }
 
@@ -410,9 +401,13 @@ namespace Exercise.Model
             }
             tick = AddTick(2, tick);
             tick = await ScanPage(pages[0], tick); // tick 3,4
+            LastPage = pages[0];
+            RaisePropertyChanged("LastPage");
             if (pages[1].PageIndex < exerciseData.Pages.Count)
             {
                 tick = await ScanPage(pages[1], tick);
+                LastPage = pages[1];
+                RaisePropertyChanged("LastPage");
             }
             else
             {
@@ -474,6 +469,7 @@ namespace Exercise.Model
             PageData pageData = exerciseData.Pages[page.PageIndex];
             string outPath = page.PagePath.Replace(".jpg", ".out.jpg");
             page.MetaData = pageData;
+            page.StandardAnswers = exerciseData.Answers;
             try
             {
                 AnswerData answerData = await algorithm.GetAnswer(pageData, page.PagePath, outPath);

@@ -24,6 +24,12 @@ namespace Exercise.View.Resolve
         {
             InitializeComponent();
             Loaded += AnswerExceptionPage_Initialized;
+            Unloaded += AnswerExceptionPage_Unloaded;
+        }
+
+        private void AnswerExceptionPage_Unloaded(object sender, RoutedEventArgs e)
+        {
+            analyze.PropertyChanged -= Analyze_PropertyChanged;
         }
 
         private void AnswerExceptionPage_Initialized(object sender, System.EventArgs e)
@@ -31,7 +37,7 @@ namespace Exercise.View.Resolve
             Exception ex = DataContext as Exception;
             type = ex.Type;
             analyze = ex.Page.Analyze;
-            //analyze.PropertyChanged += Analyze_PropertyChanged;
+            analyze.PropertyChanged += Analyze_PropertyChanged;
             analyze.Switch(type);
             if (type == ExceptionType.AnswerException)
             {
@@ -48,15 +54,17 @@ namespace Exercise.View.Resolve
         {
             if (e.PropertyName == "SelectedException")
             {
-                answers.UnselectAll();
-                if (analyze.SelectedException == null)
-                    return;
-                foreach (char c in analyze.SelectedException.SelectedAnswer)
-                {
-                    ListViewItem item = answers.ItemContainerGenerator.ContainerFromItem(c.ToString()) as ListViewItem;
-                    if (item != null)
-                        item.IsSelected = true;
-                }
+                //answers.UnselectAll();
+                //if (analyze.SelectedException == null)
+                //    return;
+                //foreach (char c in analyze.SelectedException.SelectedAnswer)
+                //{
+                //    ListViewItem item = answers.ItemContainerGenerator.ContainerFromItem(c.ToString()) as ListViewItem;
+                //    if (item != null)
+                //        item.IsSelected = true;
+                //}
+                ResolvePage rp = UITreeHelper.GetParentOfType<ResolvePage>(this);
+                rp.SetPaperFocusRect(PaperOverlayConverter.MakeRect(analyze.SelectedException.Location, 0));
             }
         }
 

@@ -51,7 +51,7 @@ namespace Exercise.View
             return new GeometryGroup() { Children = new GeometryCollection(geometries) };
         }
 
-        private static Rect MakeRect(Location l, double inflate)
+        internal static Rect MakeRect(Location l, double inflate)
         {
             Rect rect = new Rect(l.LeftTop.X, l.LeftTop.Y, 
                 l.RightBottom.X - l.LeftTop.X, l.RightBottom.Y - l.LeftTop.Y);

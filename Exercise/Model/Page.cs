@@ -2,6 +2,8 @@
 using Exercise.Service;
 using Newtonsoft.Json;
 using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace Exercise.Model
 {
@@ -30,6 +32,9 @@ namespace Exercise.Model
 
         [JsonIgnore]
         public PageData MetaData { get; set; }
+        [JsonIgnore]
+        public IList<ExerciseData.Question> StandardAnswers { get; set; }
+
         public Page Another { get; set; }
 
         [JsonIgnore]
@@ -40,6 +45,8 @@ namespace Exercise.Model
 
         [JsonIgnore]
         public PageAnalyze Analyze { get; set; }
+
+        public double Score => PageAnalyze.CalcScore(this);
 
         public void Swap(Page o)
         {
@@ -64,5 +71,6 @@ namespace Exercise.Model
         {
             Analyze = PageAnalyze.Analyze(this);
         }
+
     }
 }

@@ -23,12 +23,7 @@ namespace Exercise.ViewModel
             set { scanModel.SourceIndex = value; }
         }
 
-        public Page _lastPage;
-        public Page LastPage
-        {
-            get { return _lastPage; }
-            private set { _lastPage = value; RaisePropertyChanged("LastPage"); }
-        }
+        public Page LastPage => scanModel.LastPage;
 
         public int _pageCount;
         public int PageCount
@@ -128,8 +123,6 @@ namespace Exercise.ViewModel
         {
             if (e.Action != NotifyCollectionChangedAction.Add || e.NewItems == null)
                 return;
-            Page page = e.NewItems[0] as Page;
-            LastPage = page;
             PageCount = scanModel.Pages.Count;
             if (PageCount >= 5 && scanModel.PaperCode == null)
                 Status = 1;
@@ -139,6 +132,7 @@ namespace Exercise.ViewModel
         {
             if (e.PropertyName == "IsScanning"
                 || e.PropertyName == "IsCompleted"
+                || e.PropertyName == "LastPage"
                 || e.PropertyName == "SourceIndex")
                 RaisePropertyChanged(e.PropertyName);
         }

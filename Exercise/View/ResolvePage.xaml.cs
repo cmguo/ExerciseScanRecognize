@@ -36,6 +36,8 @@ namespace Exercise.View
             Exception ex = e.NewValue as Exception;
             if (ex != null)
             {
+                paper1.Scale = 0.666666;
+                paper2.Scale = 0.666666;
                 if (ex.Type == ExceptionType.AnalyzeException && ex.Page.Answer != null)
                 {
                     face.IsChecked = true;
@@ -60,6 +62,11 @@ namespace Exercise.View
         {
             ResolveViewModel vm = DataContext as ResolveViewModel;
             vm.ResolveCommand.Execute(this);
+        }
+
+        internal void SetPaperFocusRect(Rect rect)
+        {
+            paper1.FocusRect = rect;
         }
 
         private void ButtonFace1_Click(object sender, RoutedEventArgs e)

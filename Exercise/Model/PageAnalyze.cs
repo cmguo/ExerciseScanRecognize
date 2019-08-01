@@ -1,5 +1,6 @@
 ﻿using Base.Mvvm;
 using Exercise.Algorithm;
+using Exercise.Service;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -14,10 +15,54 @@ namespace Exercise.Model
 
         private const string NULL_ANSWER = "未作答";
 
-        [JsonIgnore]
+        public static double CalcScore(Page page)
+        {
+            if (page.Answer == null)
+                return double.NaN;
+            double score = 0;
+            foreach (AnswerData.Area aa in page.Answer.AreaInfo)
+            {
+                AreaType type = aa.AreaType;
+                foreach (AnswerData.Question qa in aa.QuestionInfo)
+                {
+                    PageData.Question qp = GetQuestion(page.MetaData, qa.QuestionId);
+                    switch (type)
+                    {
+                        case AreaType.SingleChoice:
+                        case AreaType.MultiChoice:
+                        case AreaType.Judge:
+                            ExerciseData.Question qe = page.StandardAnswers.Where(q => q.QuestionId == qa.QuestionId).FirstOrDefault();
+                            if (qe == null)
+                                break;
+                            for (int i = 0; i < qa.ItemInfo.Count; ++i)
+                            {
+                                if (String.Join("", qa.ItemInfo[i].AnalyzeResult.Select(r => r.Value)) == qe.ItemInfo[i].Value)
+                                    score += double.Parse(qp.ItemInfo[i].TotalScore);
+                            }
+                            break;
+                        case AreaType.FillBlank:
+                            for (int i = 0; i < qa.ItemInfo.Count; ++i)
+                            {
+                                if (qa.ItemInfo[i].AnalyzeResult.Count > 0)
+                                    score += double.Parse(qp.ItemInfo[i].TotalScore);
+                            }
+                            break;
+                        case AreaType.Answer:
+                            for (int i = 0; i < qa.ItemInfo.Count; ++i)
+                            {
+                                string a = String.Join("", qa.ItemInfo[i].AnalyzeResult.Select(r => r.Value));
+                                score += double.Parse(a);
+                            }
+                            break;
+                    }
+                }
+            }
+            return score;
+        }
+
+
         public IList<ItemException> AnswerExceptions { get; set; }
 
-        [JsonIgnore]
         public IList<ItemException> CorrectionExceptions { get; set; }
 
         public class ItemException : ModelBase
@@ -48,11 +93,13 @@ namespace Exercise.Model
 
             public PageData.Item Problem { get; }
             public AnswerData.Item Answer { get; }
+            public Location Location { get; }
 
             public ItemException(AnswerData.Area a, PageData.Question q, PageData.Item p, AnswerData.Item i)
             {
                 AreaType = a.AreaType;
                 Name = (q.Index + 1).ToString();
+                HasException = true;
                 if (q.ItemInfo.Count > 1)
                 {
                     Name += ".";
@@ -60,7 +107,12 @@ namespace Exercise.Model
                 }
                 Problem = p;
                 Answer = i;
-                HasException = true;
+                //Location = new Location()
+                //{
+                //    LeftTop = new Point() { X = a.AreaLocation.LeftTop.X, Y = i.ItemLocation.LeftTop.Y },
+                //    RightBottom = new Point() { X = a.AreaLocation.RightBottom.X, Y = i.ItemLocation.RightBottom.Y },
+                //};
+                Location = i.ItemLocation;
             }
 
             public void Select(bool score)

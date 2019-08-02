@@ -80,6 +80,7 @@ namespace Exercise.Model
         public string SavePath { get; private set; }
         public ObservableCollection<ExceptionList> Exceptions { get; private set; }
         public string PaperCode => scanModel.PaperCode;
+        public Page LastPage { get; private set; }
         public ExerciseData ExerciseData { get; private set; }
         public System.Exception ExerciseException { get; private set; }
         public ObservableCollection<StudentInfo> PageStudents { get; private set; }
@@ -220,6 +221,7 @@ namespace Exercise.Model
             targetException = null;
             ExerciseData = null;
             ExerciseException = null;
+            LastPage = null;
             PageStudents.Clear();
             Exceptions.Clear();
             schoolModel.Clear();
@@ -312,6 +314,17 @@ namespace Exercise.Model
                     return;
                 LoadExercise();
             }
+            else if (e.PropertyName == "LastPage")
+            {
+                Page page = scanModel.LastPage;
+                if (page != null && page.Another != null)
+                {
+                    page.Student = schoolModel.GetStudent(page.StudentCode);
+                    page.Analyze = PageAnalyze.Analyze(page);
+                    LastPage = page;
+                    RaisePropertyChanged("LastPage");
+                }
+            }
             else if (e.PropertyName == "IsCompleted")
             {
                 if (scanModel.IsCompleted && targetException != null)
@@ -378,8 +391,14 @@ namespace Exercise.Model
             }
             if (page.PaperCode == PaperCode && page.Student != null)
             {
+                if (page.Analyze == null)
+                    page.Analyze = PageAnalyze.Analyze(page);
                 if (page.Another != null)
+                {
                     page.Another.Student = page.Student;
+                    if (page.Another.Analyze == null)
+                        page.Another.Analyze = PageAnalyze.Analyze(page.Another);
+                }
                 if (page.Student.AnswerPages == null)
                 {
                     page.Student.AnswerPages = new List<Page>(emptyPages);
@@ -395,33 +414,31 @@ namespace Exercise.Model
             }
             if (type == ExceptionType.None)
             {
-                AnylizePage(page);
+                AnalyzePage(page);
                 if (page.Another != null)
                 {
-                    AnylizePage(page.Another);
+                    AnalyzePage(page.Another);
                 }
             }
+            LastPage = page.Another == null ? page : page.Another;
+            RaisePropertyChanged("LastPage");
         }
 
-        private void AnylizePage(Page page)
+        private void AnalyzePage(Page page)
         {
-            if (page.Answer != null)
+            if (page.Analyze != null)
             {
-                page.AnalyzeException();
-                if (page.Analyze != null)
-                {
-                    if (page.Analyze.AnswerExceptions != null)
-                        AddException(ExceptionType.AnswerException, page);
-                    if (page.Analyze.CorrectionExceptions != null)
-                        AddException(ExceptionType.CorrectionException, page);
-                }
+                if (page.Analyze.AnswerExceptions != null)
+                    AddException(ExceptionType.AnswerException, page);
+                if (page.Analyze.CorrectionExceptions != null)
+                    AddException(ExceptionType.CorrectionException, page);
             }
         }
 
         private ExceptionType CalcExcetionType(Page page)
         {
             ExceptionType type = ExceptionType.None;
-            if (page.StudentCode != null)
+            if (page.Student == null && page.StudentCode != null)
                 page.Student = schoolModel.GetStudent(page.StudentCode);
             if (page.PaperCode == null)
                 type = ExceptionType.NoPageCode;

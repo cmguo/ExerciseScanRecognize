@@ -38,6 +38,7 @@ namespace Exercise.Service
                 : AnswerPages.Select(p => p == Page.EmptyPage).ToList();
             set => AnswerPages = value == null ? null : value.Select(p => p ? Page.EmptyPage : null).ToList();
         }
+        public double Score => AnswerPages == null ? 0 : AnswerPages.Sum(p => p == null ? 0 : p.DuplexScore);
 
         public override string ToString()
         {

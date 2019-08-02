@@ -4,6 +4,8 @@ using Exercise.View;
 using System.Threading.Tasks;
 using TalBase.Utils;
 using System.Windows.Navigation;
+using TalBase.View;
+using System.Windows;
 
 namespace Exercise.ViewModel
 {
@@ -13,6 +15,7 @@ namespace Exercise.ViewModel
 
         #region Commands
 
+        public RelayCommand CheckLocalCommand { get; set; }
         public RelayCommand StartCommand { get; set; }
         public RelayCommand HistroyCommand { get; set; }
 
@@ -23,9 +26,27 @@ namespace Exercise.ViewModel
 
         public HomeViewModel()
         {
+            CheckLocalCommand = new RelayCommand((e) => CheckLocal(e));
             StartCommand = new RelayCommand((e) => Start(e));
             HistroyCommand = new RelayCommand((e) => History(e));
             SourceList = scanModel.SourceList;
+        }
+
+        private static bool checkLocal = true;
+
+        private async Task CheckLocal(object obj)
+        {
+            if (!checkLocal)
+                return;
+            checkLocal = false;
+            await HistoryModel.Instance.Load();
+            if (HistoryModel.Instance.LocalRecords.Count > 0)
+            {
+                int result = PopupDialog.Show(obj as UIElement, "提示", 
+                    "检测到异常退出未处理的扫描记录，是否去处理？", 0, "确定", "取消");
+                if (result == 0)
+                    History(obj);
+            }
         }
 
         private async Task Start(object obj)

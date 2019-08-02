@@ -97,6 +97,15 @@
                 </TextBlock.Text>
             </TextBlock>
 
+            <TextBlock Margin="0, 8, 0, 0" FontSize="14" Foreground="#FF7F8E99" HorizontalAlignment="Center">
+                <TextBlock.Text>
+                    <MultiBinding StringFormat="{}{0}分/共{1}分">
+                        <Binding Path="LastPage.Score" />
+                        <Binding Path="LastPage.StudentScore" />
+                    </MultiBinding>
+                </TextBlock.Text>
+            </TextBlock>
+
             <Grid Margin="0, 48, 0, 0" Width="120" Height="120">
                 <Image Source="/Icons/PaperScan@2x.png" />
                 <Image Source="/Icons/Scan@2x.png" Height="120">

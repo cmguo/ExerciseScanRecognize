@@ -1,4 +1,5 @@
-﻿using System.Windows.Controls;
+﻿using Exercise.ViewModel;
+using System.Windows.Controls;
 
 namespace Exercise.View
 {
@@ -11,7 +12,12 @@ namespace Exercise.View
         public HomePage()
         {
             InitializeComponent();
+            Loaded += HomePage_Loaded;
         }
 
+        private void HomePage_Loaded(object sender, System.Windows.RoutedEventArgs e)
+        {
+            (DataContext as HomeViewModel).CheckLocalCommand.Execute(this);
+        }
     }
 }

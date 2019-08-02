@@ -49,6 +49,7 @@ namespace Exercise.Service
         {
             public string Name { get; set; }
             public string StudentNo { get; set; }
+            public double Score { get; set; }
         }
 
     }

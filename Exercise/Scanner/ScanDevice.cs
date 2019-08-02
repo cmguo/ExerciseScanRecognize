@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Exercise.Scanning
+namespace Exercise.Scanner
 {
     public class ScanEvent : EventArgs
     {

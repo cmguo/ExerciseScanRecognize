@@ -3,10 +3,11 @@ using Saraff.Twain;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Linq;
 using System.Reflection;
 using System.Windows;
 
-namespace Exercise.Scanning
+namespace Exercise.Scanner
 {
     public partial class ScanDeviceSaraff : IScanDevice
     {
@@ -129,10 +130,12 @@ namespace Exercise.Scanning
         private Window window;
         private Twain32 twain32;
         private int cancel;
+        private ImageDevice[] imageDevices;
 
         public ScanDeviceSaraff(Window window)
         {
             this.window = window;
+            ImageDevice.Init(window);
             twain32 = new Twain32(window);
             twain32.Language = TwLanguage.CHINESE_SIMPLIFIED;
             twain32.Country = TwCountry.CHINA;
@@ -149,7 +152,8 @@ namespace Exercise.Scanning
 
         public void Open()
         {
-             twain32.OpenDSM();
+            twain32.OpenDSM();
+            imageDevices = new ImageDevice[twain32.SourcesCount];
         }
 
         public void DetectSource()
@@ -205,6 +209,7 @@ namespace Exercise.Scanning
             twain32.Capabilities.PixelType.Set(TwPixelType.RGB);
             XResolution = 200;
             YResolution = 200;
+            AttachImageDevice();
         }
 
         public void CheckStatus()
@@ -213,6 +218,8 @@ namespace Exercise.Scanning
             //if (condition != TwCC.Success)
             //    throw new Exception(condition.ToString());
             OpenDataSource();
+            if (imageDevices[SourceIndex] != null && !imageDevices[SourceIndex].Present)
+                throw new InvalidOperationException("image device not connected");
         }
 
         public void Scan(short count)
@@ -237,6 +244,47 @@ namespace Exercise.Scanning
         public void Close()
         {
             twain32.CloseDataSource();
+        }
+
+        private void AttachImageDevice()
+        {
+            string scanner = twain32.GetSourceProductName(SourceIndex);
+            if (imageDevices[SourceIndex] == null)
+            {
+                int diff = int.MaxValue;
+                ImageDevice device = null;
+                foreach (ImageDevice d in ImageDevice.List)
+                {
+                    int di = EditDistance(d.Caption, scanner);
+                    if (di < diff)
+                    {
+                        device = d;
+                    }
+                }
+                imageDevices[SourceIndex] = device;
+            }
+        }
+
+        private int EditDistance(string word1, string word2)
+        {
+            int[] v1 = new int[word2.Length + 1];
+            int[] v2 = new int[word2.Length + 1];
+            for (int i = 1; i <= word2.Length; ++i)
+                v2[i] = i;
+            for (int i = 0; i < word1.Length; ++i)
+            {
+                int[] vo = (i % 2) != 0 ? v1 : v2;
+                int[] vn = (i % 2) != 0 ? v2 : v1;
+                for (int j = 0; j < word2.Length; ++j)
+                {
+                    if (word1[i] == word2[j])
+                        vn[j + 1] = vo[j];
+                    else
+                        vn[j + 1] = Math.Min(vo[j], Math.Min(vn[j], vo[j + 1])) + 1;
+                }
+            }
+            int[] v = (word1.Length % 2) == 1 ? v1 : v2;
+            return v[word2.Length];
         }
 
         private bool CheckStatus(Twain32.SerializableCancelEventArgs e)

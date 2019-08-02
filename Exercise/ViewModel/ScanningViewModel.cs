@@ -21,6 +21,8 @@ namespace Exercise.ViewModel
 
         #region Properties
 
+        public Page LastPage => scanModel.LastPage;
+
         public int _ExercisePageCount;
         public int ExercisePageCount
         {
@@ -182,6 +184,10 @@ namespace Exercise.ViewModel
             {
                 if (exerciseModel.ExerciseData != null)
                     ExercisePageCount = exerciseModel.ExerciseData.Pages.Count;
+            }
+            else if (e.PropertyName == "LastPage")
+            {
+                RaisePropertyChanged(e.PropertyName);
             }
         }
 

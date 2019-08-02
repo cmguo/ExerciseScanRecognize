@@ -1,7 +1,7 @@
 ﻿using Base.Misc;
 using Base.Mvvm;
 using Exercise.Algorithm;
-using Exercise.Scanning;
+using Exercise.Scanner;
 using Exercise.Service;
 using System;
 using System.Collections.Generic;
@@ -382,13 +382,14 @@ namespace Exercise.Model
             }
             pages[1].PaperCode = pages[0].PaperCode;
             pages[1].PageIndex = pages[0].PageIndex + 1;
+            pages[1].StudentCode = pages[0].StudentCode;
             pages[0].Another = pages[1];
             if (pages[0].PaperCode == null)
                 return;
             if (PaperCode == null)
             {
-                Log.d("PageCode=" + PaperCode);
                 PaperCode = pages[0].PaperCode;
+                Log.d("PageCode=" + PaperCode);
                 RaisePropertyChanged("PageCode");
             }
             if (PaperCode != pages[0].PaperCode)

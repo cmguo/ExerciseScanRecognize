@@ -3,7 +3,6 @@ using Exercise.Service;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace Exercise.Model
 {
@@ -46,7 +45,14 @@ namespace Exercise.Model
         [JsonIgnore]
         public PageAnalyze Analyze { get; set; }
 
-        public double Score => PageAnalyze.CalcScore(this);
+        [JsonIgnore]
+        public double Score => Analyze == null ? 0 : Analyze.Score;
+
+        [JsonIgnore]
+        public double DuplexScore => Score + (Another == null ? 0 : Another.Score);
+
+        [JsonIgnore]
+        public double StudentScore => CalcStudentScore();
 
         public void Swap(Page o)
         {
@@ -59,7 +65,7 @@ namespace Exercise.Model
             s = PagePath;
             PagePath = o.PagePath;
             o.PagePath = s;
-            System.Exception e = Exception;
+            Exception e = Exception;
             Exception = o.Exception;
             o.Exception = e;
             AnswerData a = Answer;
@@ -67,9 +73,14 @@ namespace Exercise.Model
             o.Answer = a;
         }
 
-        public void AnalyzeException()
+        private double CalcStudentScore()
         {
-            Analyze = PageAnalyze.Analyze(this);
+            if (Student == null)
+                return double.NaN;
+            double s = Student.Score;
+            if (Student.AnswerPages == null || Student.AnswerPages[PageIndex / 2] == null)
+                s += DuplexScore;
+            return s;
         }
 
     }

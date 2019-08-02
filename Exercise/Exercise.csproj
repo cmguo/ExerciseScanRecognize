@@ -79,6 +79,7 @@
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Drawing" />
+    <Reference Include="System.Management" />
     <Reference Include="System.Net" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xaml" />
@@ -111,6 +112,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Scanner\ScanDevice.cs" />
     <Compile Include="Scanner\ScanDeviceSaraff.cs" />
+    <Compile Include="Scanner\ImageDeivce.cs" />
     <Compile Include="Service\GenUriData.cs" />
     <Compile Include="Service\HistoryData.cs" />
     <Compile Include="Service\SubmitComplete.cs" />

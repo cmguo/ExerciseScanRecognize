@@ -23,8 +23,6 @@ namespace Exercise.ViewModel
             set { scanModel.SourceIndex = value; }
         }
 
-        public Page LastPage => scanModel.LastPage;
-
         public int _pageCount;
         public int PageCount
         {
@@ -132,7 +130,6 @@ namespace Exercise.ViewModel
         {
             if (e.PropertyName == "IsScanning"
                 || e.PropertyName == "IsCompleted"
-                || e.PropertyName == "LastPage"
                 || e.PropertyName == "SourceIndex")
                 RaisePropertyChanged(e.PropertyName);
         }

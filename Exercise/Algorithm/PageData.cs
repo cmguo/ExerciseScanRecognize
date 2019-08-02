@@ -33,7 +33,7 @@ namespace Exercise.Algorithm
             // 填空题该字段为空
             // 解答题每小题的分值信息（按从左到右顺序给到，以英文逗号分隔）
             public string Value { get; set; }
-            public string TotalScore { get; set; }
+            public float TotalScore { get; set; }
             public Location ItemLocation { get; set; }
 
             [JsonExtensionData]

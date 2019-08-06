@@ -104,7 +104,7 @@ namespace Exercise.Model
         {
             IList<SubmitData.AnswerInfo> data = students
                 .Where(s => s.AnswerPages != null && s.AnswerPages.Any(p => p != null && p.Answer != null))
-                .Select(s => new SubmitData.AnswerInfo() { StudentId = s.Id, PageInfo = GetAnswers(s) })
+                .Select(s => new SubmitData.AnswerInfo() { StudentId = s.Id, PageInfo = s.Answers })
                 .ToList();
             SubmitData sdata = new SubmitData() { PaperId = exerciseId, Data = data };
             SubmitPrepare prepare = new SubmitPrepare() { PaperId = exerciseId, ClassIdList = classes.Select(c => c.ClassId).ToList() };
@@ -182,29 +182,6 @@ namespace Exercise.Model
                 if (task.Status != TaskStatus.Completed)
                     await task.Save();
             }
-        }
-
-        private IList<AnswerData> GetAnswers(StudentInfo s)
-        {
-            List<AnswerData> answers = new List<AnswerData>();
-            foreach (Page p in s.AnswerPages)
-            {
-                if (p == null)
-                    continue;
-                if (p.Answer != null)
-                {
-                    p.Answer.ImageName = p.PageName;
-                    p.Answer.PageId = p.PageIndex;
-                    answers.Add(p.Answer);
-                }
-                if (p.Another != null && p.Another.Answer != null)
-                {
-                    p.Another.Answer.ImageName = p.Another.PageName;
-                    p.Another.Answer.PageId = p.Another.PageIndex;
-                    answers.Add(p.Another.Answer);
-                }
-            }
-            return answers;
         }
 
         private async Task SubmitInner(SubmitTask task)

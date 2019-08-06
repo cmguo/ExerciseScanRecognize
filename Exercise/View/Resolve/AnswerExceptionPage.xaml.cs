@@ -25,11 +25,7 @@ namespace Exercise.View.Resolve
             InitializeComponent();
             Loaded += AnswerExceptionPage_Initialized;
             Unloaded += AnswerExceptionPage_Unloaded;
-        }
-
-        private void AnswerExceptionPage_Unloaded(object sender, RoutedEventArgs e)
-        {
-            analyze.PropertyChanged -= Analyze_PropertyChanged;
+            answers.SelectionChanged += Answers_SelectionChanged;
         }
 
         private void AnswerExceptionPage_Initialized(object sender, System.EventArgs e)
@@ -50,21 +46,59 @@ namespace Exercise.View.Resolve
             }
         }
 
+        private void AnswerExceptionPage_Unloaded(object sender, RoutedEventArgs e)
+        {
+            analyze.PropertyChanged -= Analyze_PropertyChanged;
+        }
+
         private void Analyze_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
         {
             if (e.PropertyName == "SelectedException")
             {
-                //answers.UnselectAll();
-                //if (analyze.SelectedException == null)
-                //    return;
-                //foreach (char c in analyze.SelectedException.SelectedAnswer)
-                //{
-                //    ListViewItem item = answers.ItemContainerGenerator.ContainerFromItem(c.ToString()) as ListViewItem;
-                //    if (item != null)
-                //        item.IsSelected = true;
-                //}
+                answers.UnselectAll();
+                if (analyze.SelectedException == null)
+                    return;
+                foreach (char c in analyze.SelectedException.SelectedAnswer)
+                {
+                    ListViewItem item = answers.ItemContainerGenerator.ContainerFromItem(c.ToString()) as ListViewItem;
+                    if (item != null)
+                        item.IsSelected = true;
+                }
+                if (answers.SelectedItems.Count == 0)
+                {
+                    ListViewItem item = answers.ItemContainerGenerator.ContainerFromItem(PageAnalyze.NULL_ANSWER) as ListViewItem;
+                    if (item != null)
+                        item.IsSelected = true;
+                }
                 ResolvePage rp = UITreeHelper.GetParentOfType<ResolvePage>(this);
                 rp.SetPaperFocusRect(PaperOverlayConverter.MakeRect(analyze.SelectedException.Location, 0));
+            }
+        }
+
+        private void Answers_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (answers.SelectedItems.Count == 0)
+            {
+                ListViewItem item = answers.ItemContainerGenerator.ContainerFromItem(PageAnalyze.NULL_ANSWER) as ListViewItem;
+                if (item != null)
+                    item.IsSelected = true;
+            }
+            else if (e.AddedItems.Contains(PageAnalyze.NULL_ANSWER))
+            {
+                foreach (string answer in answers.Items)
+                {
+                    if (answer == PageAnalyze.NULL_ANSWER)
+                        continue;
+                    ListViewItem item = answers.ItemContainerGenerator.ContainerFromItem(answer) as ListViewItem;
+                    if (item != null)
+                        item.IsSelected = false;
+                }
+            }
+            else if (e.AddedItems.Count > 0)
+            {
+                ListViewItem item = answers.ItemContainerGenerator.ContainerFromItem(PageAnalyze.NULL_ANSWER) as ListViewItem;
+                if (item != null)
+                    item.IsSelected = false;
             }
         }
 

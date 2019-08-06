@@ -32,10 +32,14 @@
             </Style>
             <StackPanel x:Key="ClassDetail" Orientation="Vertical" Background="#F4F8FE" Margin="0, 16, 0, 0">
                 <StackPanel Margin="16, 16, 0, 0" Orientation="Horizontal" HorizontalAlignment="Left">
-                    <TextBlock FontSize="14" Foreground="#2D4A66" 
-                               Text="{Binding PageCount, StringFormat=已扫描{0}张试卷，共识别}"/>
-                        <TextBlock FontSize="14" Foreground="#2D4A66"
-                               Text="{Binding StudentSumary, StringFormat={}{0}人}"/>
+                    <TextBlock FontSize="14" Foreground="#2D4A66">
+                        <TextBlock.Text>
+                            <MultiBinding StringFormat="已扫描{0}张试卷，共识别{1}人}">
+                                <Binding Path="PageCount" />
+                                <Binding Path="StudentSumary" />
+                            </MultiBinding>
+                        </TextBlock.Text>
+                    </TextBlock> 
                 </StackPanel>
 
                 <DataGrid  AutoGenerateColumns="False" ItemsSource="{Binding ClassDetails}" 
@@ -99,8 +103,8 @@
 
             <TextBlock Margin="0, 8, 0, 0" FontSize="14" Foreground="#FF7F8E99" HorizontalAlignment="Center">
                 <TextBlock.Text>
-                    <MultiBinding StringFormat="{}{0}分/共{1}分">
-                        <Binding Path="LastPage.Score" />
+                    <MultiBinding StringFormat="已读取{0}页，共{1}分">
+                        <Binding Path="LastPage.StudentPageCount" />
                         <Binding Path="LastPage.StudentScore" />
                     </MultiBinding>
                 </TextBlock.Text>

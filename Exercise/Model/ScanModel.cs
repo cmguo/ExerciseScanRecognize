@@ -470,7 +470,6 @@ namespace Exercise.Model
             PageData pageData = exerciseData.Pages[page.PageIndex];
             string outPath = page.PagePath.Replace(".jpg", ".out.jpg");
             page.MetaData = pageData;
-            page.StandardAnswers = exerciseData.Answers;
             try
             {
                 AnswerData answerData = await algorithm.GetAnswer(pageData, page.PagePath, outPath);
@@ -503,7 +502,7 @@ namespace Exercise.Model
         private void ScanDevice_OnImage(object sender, ScanEvent e)
         {
             ++readIndex;
-            BackgroudWork.Execute(() => AddImage(e.FileName));
+            BackgroundWork.Execute(() => AddImage(e.FileName));
         }
 
         private void ScanDevice_ScanException(object sender, ScanEvent e)

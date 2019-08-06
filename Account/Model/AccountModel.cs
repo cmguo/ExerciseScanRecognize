@@ -139,7 +139,7 @@ namespace Account.Model
 
         private void Timer_Tick(object sender, EventArgs e)
         {
-            BackgroudWork.Execute(() => ReLogin());
+            BackgroundWork.Execute(() => ReLogin());
         }
 
         private void Action_ActionException(object sender, RelayCommand.ActionExceptionEventArgs e)

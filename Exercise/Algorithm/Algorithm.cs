@@ -42,7 +42,7 @@ namespace Exercise.Algorithm
             {
                 if (client == null)
                 {
-                    BackgroudWork.Execute(() => Task.Run(() =>
+                    BackgroundWork.Execute(() => Task.Run(() =>
                     {
                         Bridge.RegisterAssembly(typeof(AnswerSheetAnalyze).Assembly);
                         AnswerSheetAnalyze.init();

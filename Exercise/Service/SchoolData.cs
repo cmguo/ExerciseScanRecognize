@@ -1,4 +1,5 @@
-﻿using Exercise.Model;
+﻿using Exercise.Algorithm;
+using Exercise.Model;
 using Newtonsoft.Json;
 using System.Collections.Generic;
 using System.Linq;
@@ -38,11 +39,44 @@ namespace Exercise.Service
                 : AnswerPages.Select(p => p == Page.EmptyPage).ToList();
             set => AnswerPages = value == null ? null : value.Select(p => p ? Page.EmptyPage : null).ToList();
         }
-        public double Score => AnswerPages == null ? 0 : AnswerPages.Sum(p => p == null ? 0 : p.DuplexScore);
+
+        [JsonIgnore]
+        public double PageCount => AnswerPages == null ? double.NaN : 
+            AnswerPages.Sum(p => (p == null || p == Page.EmptyPage) ? 0 : p.DuplexPageCount);
+
+        [JsonIgnore]
+        public double Score => AnswerPages == null ? 0 : 
+            AnswerPages.Sum(p => p == null ? 0 : p.DuplexScore);
+
+        [JsonIgnore]
+        public IList<AnswerData> Answers => GetAnswers();
 
         public override string ToString()
         {
             return StudentNo + " " + Name;
+        }
+
+        private IList<AnswerData> GetAnswers()
+        {
+            List<AnswerData> answers = new List<AnswerData>();
+            foreach (Page p in AnswerPages)
+            {
+                if (p == null)
+                    continue;
+                if (p.Answer != null)
+                {
+                    p.Answer.ImageName = p.PageName;
+                    p.Answer.PageId = p.PageIndex;
+                    answers.Add(p.Answer);
+                }
+                if (p.Another != null && p.Another.Answer != null)
+                {
+                    p.Another.Answer.ImageName = p.Another.PageName;
+                    p.Another.Answer.PageId = p.Another.PageIndex;
+                    answers.Add(p.Another.Answer);
+                }
+            }
+            return answers;
         }
 
     }

@@ -6,6 +6,7 @@ using TalBase.Utils;
 using System.Windows.Navigation;
 using TalBase.View;
 using System.Windows;
+using static Exercise.Service.HistoryData;
 
 namespace Exercise.ViewModel
 {
@@ -39,13 +40,28 @@ namespace Exercise.ViewModel
             if (!checkLocal)
                 return;
             checkLocal = false;
-            await HistoryModel.Instance.Load();
+            Record record = await HistoryModel.Instance.Load();
             if (HistoryModel.Instance.LocalRecords.Count > 0)
             {
                 int result = PopupDialog.Show(obj as UIElement, "提示", 
                     "检测到异常退出未处理的扫描记录，是否去处理？", 0, "确定", "取消");
                 if (result == 0)
-                    History(obj);
+                {
+                    try
+                    {
+                        await ExerciseModel.Instance.Load(record.LocalPath);
+                    }
+                    catch
+                    {
+                        ExerciseModel.Instance.Clear();
+                        throw;
+                    }
+                    (obj as System.Windows.Controls.Page).NavigationService.Navigate(new SummaryPage());
+                }
+                else
+                {
+                    HistoryModel.Instance.Remove(record);
+                }
             }
         }
 

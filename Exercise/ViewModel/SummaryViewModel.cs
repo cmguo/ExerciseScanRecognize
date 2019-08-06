@@ -58,5 +58,6 @@ namespace Exercise.ViewModel
             RaisePropertyChanged("ExceptionCount");
             Update();
         }
+
     }
 }

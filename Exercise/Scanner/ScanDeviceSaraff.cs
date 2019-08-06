@@ -1,4 +1,5 @@
-﻿using Base.Misc;
+﻿using Base.Helpers;
+using Base.Misc;
 using Saraff.Twain;
 using System;
 using System.Collections.Generic;
@@ -251,16 +252,8 @@ namespace Exercise.Scanner
             string scanner = twain32.GetSourceProductName(SourceIndex);
             if (imageDevices[SourceIndex] == null)
             {
-                int diff = int.MaxValue;
-                ImageDevice device = null;
-                foreach (ImageDevice d in ImageDevice.List)
-                {
-                    int di = EditDistance(d.Caption, scanner);
-                    if (di < diff)
-                    {
-                        device = d;
-                    }
-                }
+                ImageDevice device = ImageDevice.List.MaxItem(
+                    d => EditDistance(d.Caption, scanner));
                 imageDevices[SourceIndex] = device;
             }
         }

@@ -1,7 +1,9 @@
 ﻿using Base.Mvvm;
+using Exercise.Algorithm;
 using Exercise.Model;
 using Exercise.Service;
 using Exercise.View;
+using OfficeOpenXml;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
@@ -57,9 +59,11 @@ namespace Exercise.ViewModel
                 Name = c.ClassName,
                 StudentCount = c.Students.Count(),
                 SubmitStudentList = c.Students.Where(s => s.AnswerPages != null)
-                    .Select(s => new StudentDetail() { Name = s.Name, StudentNo = s.StudentNo, Score = s.Score }).ToList(),
+                    .Select(s => new StudentDetail() { Name = s.Name, StudentNo = s.StudentNo, Score = s.Score })
+                    .OrderBy(s => s.StudentNo).ToList(),
                 LostStudentList = c.Students.Where(s => s.AnswerPages == null)
-                    .Select(s => new StudentDetail() { Name = s.Name, StudentNo = s.StudentNo }).ToList(),
+                    .Select(s => new StudentDetail() { Name = s.Name, StudentNo = s.StudentNo })
+                    .OrderBy(s => s.StudentNo).ToList(),
             }).ToList();
             RaisePropertyChanged("StudentCount");
             RaisePropertyChanged("ClassDetails");
@@ -115,5 +119,6 @@ namespace Exercise.ViewModel
                     Status = 2;
             }
         }
+
     }
 }

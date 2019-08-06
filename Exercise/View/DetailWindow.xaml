@@ -3,6 +3,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Exercise.View"
         xmlns:tal="clr-namespace:TalBase.View;assembly=TalBase"
         xmlns:svgc="http://sharpvectors.codeplex.com/svgc/"
         mc:Ignorable="d"
@@ -23,6 +24,8 @@
                 <ResourceDictionary Source="pack://application:,,,/TalBase;component/Themes/Generic.xaml" />
                 <ResourceDictionary Source="../Themes/ListView.xaml" />
             </ResourceDictionary.MergedDictionaries>
+
+            <local:StudentConverter x:Key="StudentConverter" />
             
             <ControlTemplate x:Key="StudentList">
                 <ListView ItemsSource="{Binding}" BorderThickness="0" Padding="0" Background="{x:Null}">
@@ -39,14 +42,8 @@
                     <ListView.ItemTemplate>
                         <DataTemplate>
                             <Border BorderThickness="0" BorderBrush="Black" Height="24">
-                                <TextBlock Margin="0, 10, 24, 0" VerticalAlignment="Center">
-                                    <TextBlock.Text>
-                                        <MultiBinding StringFormat="{}{0} {1}">
-                                            <Binding Path="Name" />
-                                            <Binding Path="Score" />
-                                        </MultiBinding>
-                                    </TextBlock.Text>
-                                </TextBlock>
+                                <TextBlock Margin="0, 10, 24, 0" VerticalAlignment="Center"
+                                           Text="{Binding Converter={StaticResource StudentConverter}}"/>
                             </Border>
                         </DataTemplate>
                     </ListView.ItemTemplate>
@@ -103,10 +100,12 @@
             <Grid Grid.Row="0">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
                     <ColumnDefinition Width="16" />
                 </Grid.ColumnDefinitions>
                 <TextBlock FontSize="16" Foreground="#FF2D4A66" Text="{Binding Title, ElementName=Window}" />
-                <tal:TalTouch Grid.Column="1" x:Name="close" Width="16" Height="16" TouchStyle="Label" Click="Close_Click">
+                <tal:TalButton Grid.Column="1" Margin="0, 0, 32, 0" Content="导出成绩单" Click="Export_Click" />
+                <tal:TalTouch Grid.Column="2" x:Name="close" Width="16" Height="16" TouchStyle="Label" Click="Close_Click">
                     <svgc:SvgViewbox Source="Icons/关闭/粗.svg"/>
                 </tal:TalTouch>
             </Grid>

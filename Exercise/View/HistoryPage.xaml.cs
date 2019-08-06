@@ -88,7 +88,7 @@ namespace Exercise.View
             HistoryViewModel vm = DataContext as HistoryViewModel;
             string old = record.Name;
             record.Name = UITreeHelper.GetChildOfType<TextBox>(e.EditingElement).Text;
-            BackgroudWork.Execute(() => vm.ModifyRecordName(record, old));
+            BackgroundWork.Execute(() => vm.ModifyRecordName(record, old));
         }
 
         private void ButtonRefresh_Click(object sender, System.Windows.RoutedEventArgs e)

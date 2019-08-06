@@ -85,8 +85,10 @@
                     <RowDefinition Height="*"/>
                     <RowDefinition Height="Auto"/>
                 </Grid.RowDefinitions>
-                <ListView Grid.Row="0" x:Name="local" Margin="30, 0, 30, 0" BorderThickness="0" ItemsSource="{Binding LocalRecords}"
-                  HorizontalContentAlignment="Stretch" ScrollViewer.VerticalScrollBarVisibility="Hidden">
+                
+                <ListView Grid.Row="0" x:Name="local" Margin="30, 0, 30, 0" BorderThickness="0" 
+                          ItemsSource="{Binding LocalRecords}" Visibility="Collapsed"
+                          HorizontalContentAlignment="Stretch" ScrollViewer.VerticalScrollBarVisibility="Hidden">
                     <ListBox.ItemContainerStyle>
                         <Style TargetType="{x:Type ListViewItem}">
                             <Setter Property="Focusable" Value="False"/>
@@ -138,9 +140,7 @@
                 </ListView>
 
                 <DataGrid Grid.Row="1" x:Name="dataGrid" Margin="30, 16, 30, 0"  ScrollViewer.HorizontalScrollBarVisibility="Disabled"
-                      
-                  ItemsSource="{Binding Records}" Style="{StaticResource DefaultDataGridStyle}">
-
+                          ItemsSource="{Binding Records}" Style="{StaticResource DefaultDataGridStyle}">
                     <DataGrid.Columns>
                         <DataGridTemplateColumn Header="试卷名称" IsReadOnly="False" Width="230" 
                                         CellTemplate="{StaticResource DataTemplate}"
@@ -173,9 +173,13 @@
                         </DataGridTemplateColumn>
                     </DataGrid.Columns>
                 </DataGrid>
-                <TextBlock Grid.Row="1" x:Name="NoRecord"  Text="无已上传扫描记录" HorizontalAlignment="Center"  Margin="0,75,0,0"   Foreground="#802D4A66" FontSize="14" Background="Transparent" Visibility="{Binding PageCount, Converter={StaticResource NoRecordNoficationContentConverter}}">
-                </TextBlock>
-                <StackPanel  Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Center" Visibility="{Binding PageCount, Converter={StaticResource ShowNetErrorContentConverter}}"  Margin="0,75,0,0">
+
+                <TextBlock Grid.Row="1" x:Name="NoRecord" Text="无已上传扫描记录" HorizontalAlignment="Center" 
+                           Margin="0,75,0,0" Foreground="#802D4A66" FontSize="14" Background="Transparent" 
+                           Visibility="{Binding PageCount, Converter={StaticResource NoRecordNoficationContentConverter}}" />
+
+                <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Center" 
+                            Visibility="{Binding PageCount, Converter={StaticResource ShowNetErrorContentConverter}}"  Margin="0,75,0,0">
                     <TextBlock Text="网络异常，无法加载已经上传记录，请检查后重试" FontSize="14" Foreground="#FF6767" Margin="0,1,0,0"/>
                     <Button Background="Transparent" BorderThickness="0" Click="ButtonRefresh_Click">
                         <Button.Style>

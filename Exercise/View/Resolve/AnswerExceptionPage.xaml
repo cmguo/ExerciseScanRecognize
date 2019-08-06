@@ -66,7 +66,7 @@
         <ListView Grid.Row="2" x:Name="answers" BorderThickness="0"  Margin="0, 14, 0, 24" Background="Transparent"
                   ItemContainerStyle="{StaticResource ButtonListStyle}"
                   ItemsSource="{Binding SelectedException.Answers}" ItemTemplate="{StaticResource AnswerItem}"
-                  SelectedItem="{Binding SelectedException.SelectedAnswer}" SelectionMode="Single">
+                  SelectionMode="Multiple">
             <ListView.ItemsPanel>
                 <ItemsPanelTemplate>
                     <StackPanel Margin="-8, -8, 0, 0" IsItemsHost="True" Orientation="Horizontal" />

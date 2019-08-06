@@ -15,11 +15,19 @@
 
     public enum AreaType : int
     {
-        SingleChoice = 0,
+        Choice = 0, // Single, Multiple, Judge
         FillBlank = 1,
-        Answer = 2, 
-        Judge = 3,
-        MultiChoice = 4,
+        Answer = 2,
+    }
+
+    public enum QuestionType : int
+    {
+        None = 0,
+        SingleChoice = 1, 
+        MultipleChoice = 2, 
+        FillBlank = 3,
+        Answer = 4,
+        Judge = 5
     }
 
     public enum PagingInfo : int

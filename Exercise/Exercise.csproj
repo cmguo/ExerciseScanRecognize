@@ -34,6 +34,9 @@
     <Reference Include="answer-sheet-analyze-sdk.j4n">
       <HintPath>..\Libraries\answer-sheet-analyze-sdk.j4n.dll</HintPath>
     </Reference>
+    <Reference Include="EPPlus, Version=4.5.3.2, Culture=neutral, PublicKeyToken=ea159fdaa78159a1, processorArchitecture=MSIL">
+      <HintPath>..\packages\EPPlus.4.5.3.2\lib\net40\EPPlus.dll</HintPath>
+    </Reference>
     <Reference Include="jni4net.n-0.8.8.0">
       <HintPath>..\Libraries\jni4net.n-0.8.8.0.dll</HintPath>
     </Reference>
@@ -77,10 +80,12 @@
       <HintPath>..\Application\..\Libraries\SharpVectors\SharpVectors.Runtime.Wpf.dll</HintPath>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Management" />
     <Reference Include="System.Net" />
+    <Reference Include="System.Security" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xaml" />
     <Reference Include="System.Xml.Linq" />
@@ -269,6 +274,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="..\Libraries\answer-sheet-analyze-sdk.j4n.jar" />
+    <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\Libraries\answer-sheet-analyze-sdk.jar" />

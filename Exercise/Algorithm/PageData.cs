@@ -26,14 +26,14 @@ namespace Exercise.Algorithm
 
         public class Item
         {
-            // public float TotalScore { get; set; }
             public int Index { get; set; }
             public PagingInfo PagingInfo { get; set; }
             // 选择题的选项信息，以英文逗号分隔 "A,B,C,D"
             // 填空题该字段为空
             // 解答题每小题的分值信息（按从左到右顺序给到，以英文逗号分隔）
             public string Value { get; set; }
-            public float TotalScore { get; set; }
+            public double TotalScore { get; set; }
+            public double HalfScore { get; set; }
             public Location ItemLocation { get; set; }
 
             [JsonExtensionData]
@@ -45,6 +45,7 @@ namespace Exercise.Algorithm
         {
             public int Index { get; set; }
             public string QuestionId { get; set; }
+            public QuestionType QuestionType { get; set; }
             public Location QuestionLocation { get; set; } // 相对页面左上角黑色定位块左上点的位置信息，相对位置
             //public int NumOfRectsToDetectInQuestion { get; set; }
             public IList<Item> ItemInfo { get; set; }

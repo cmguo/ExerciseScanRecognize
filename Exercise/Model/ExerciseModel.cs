@@ -1,11 +1,15 @@
 ﻿using Base.Misc;
+using Base.Mvvm;
 using Base.Service;
+using Exercise.Algorithm;
 using Exercise.Service;
+using OfficeOpenXml;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -112,6 +116,7 @@ namespace Exercise.Model
             service = Services.Get<IExercise>();
             Exceptions = new ObservableCollection<ExceptionList>();
             PageStudents = new ObservableCollection<StudentInfo>();
+            //BackgroundWork.Execute(service.getQuestionTypeMap().ContinueWith((t) => PageAnalyze.SetQuestionTypeMap(t.Result)));
             /* Test
             ExerciseData = new ExerciseData() { Title = "三角函数" };
             AddException(ExceptionType.NoPageCode, new Page());
@@ -197,6 +202,7 @@ namespace Exercise.Model
             Clear();
             await schoolModel.Load(path);
             ExerciseData = await JsonPersistent.LoadAsync<ExerciseData>(path + "\\exercise.json");
+            PageAnalyze.SetStandardAnswers(ExerciseData.Answers);
             schoolModel.GetHasPageStudents((s) =>
             {
                 PageStudents.Add(s);
@@ -221,6 +227,7 @@ namespace Exercise.Model
             targetException = null;
             ExerciseData = null;
             ExerciseException = null;
+            PageAnalyze.SetStandardAnswers(null);
             LastPage = null;
             PageStudents.Clear();
             Exceptions.Clear();
@@ -304,6 +311,80 @@ namespace Exercise.Model
         {
             while (el.Exceptions.Count > 0)
                 Resolve(el.Exceptions[0], type);
+        }
+
+        public void SaveClassDetail(string fileName)
+        {
+            var package = new ExcelPackage();
+            foreach (ClassInfo c in schoolModel.Classes)
+            {
+                ExcelWorksheet worksheet = package.Workbook.Worksheets.Add(c.ClassName);
+                ExerciseData exerciseData = ExerciseModel.Instance.ExerciseData;
+                //Add the headers
+                int col = 0;
+                worksheet.Cells[1, ++col].Value = "姓名";
+                worksheet.Cells[1, ++col].Value = "学号";
+                worksheet.Cells[1, ++col].Value = "总分";
+                IEnumerable<Algorithm.PageData.Question> questions = exerciseData.Questions;
+                foreach (var q in questions)
+                {
+                    if (q.ItemInfo.Count == 1)
+                    {
+                        worksheet.Cells[1, ++col].Value = "第" + (q.Index + 1) + "题";
+                    }
+                    else
+                    {
+                        foreach (var i in q.ItemInfo)
+                        {
+                            worksheet.Cells[1, ++col].Value = "第" + (q.Index + 1) + "." + (i.Index + 1) + "题";
+                        }
+                    }
+                }
+                // add items
+                ICollection<StudentInfo> students = ExerciseModel.Instance.PageStudents;
+                int row = 1;
+                foreach (var s in c.Students.Where(s => s.AnswerPages != null).OrderBy(s => s.StudentNo))
+                {
+                    ++row;
+                    col = 0;
+                    worksheet.Cells[row, ++col].Value = s.StudentNo;
+                    worksheet.Cells[row, ++col].Value = s.Name;
+                    worksheet.Cells[row, ++col].Value = s.Score;
+                    StudentInfo si = students.Where(ss => ss.StudentNo == s.StudentNo).FirstOrDefault();
+                    IEnumerable<AnswerData.Question> answers = si.Answers.SelectMany(a => a.AreaInfo.SelectMany(a1 => a1.QuestionInfo));
+                    ++col;
+                    foreach (var pq in questions)
+                    {
+                        int index = 0;
+                        AnswerData.Question aq = answers.FirstOrDefault();
+                        while (aq != null && aq.QuestionId == pq.QuestionId)
+                        {
+                            foreach (AnswerData.Item ai in aq.ItemInfo.SkipWhile(i => i.Index < index))
+                            {
+                                worksheet.Cells[row, col + ai.Index].Value = ai.Score;
+                            }
+                            if (aq.ItemInfo.Count > 0)
+                                index = aq.ItemInfo.Last().Index + 1;
+                            answers = answers.Skip(1);
+                            aq = answers.FirstOrDefault();
+                            continue;
+                        }
+                        col += pq.ItemInfo.Count;
+                    }
+                }
+                foreach (var s in c.Students.Where(s => s.AnswerPages == null).OrderBy(s => s.StudentNo))
+                {
+                    ++row;
+                    col = 0;
+                    worksheet.Cells[row, ++col].Value = s.StudentNo;
+                    worksheet.Cells[row, ++col].Value = s.Name;
+                }
+            }
+
+            ProcessModule module = Process.GetCurrentProcess().MainModule;
+            package.Workbook.Properties.Title = "《" + ExerciseData.Title + "》成绩表";
+            package.Workbook.Properties.Author = module.FileVersionInfo.CompanyName;
+            package.SaveAs(new System.IO.FileInfo(fileName));
         }
 
         private void ScanModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)

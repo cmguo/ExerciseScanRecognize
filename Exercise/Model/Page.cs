@@ -3,6 +3,7 @@ using Exercise.Service;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Exercise.Model
 {
@@ -31,8 +32,6 @@ namespace Exercise.Model
 
         [JsonIgnore]
         public PageData MetaData { get; set; }
-        [JsonIgnore]
-        public IList<ExerciseData.Question> StandardAnswers { get; set; }
 
         public Page Another { get; set; }
 
@@ -49,7 +48,13 @@ namespace Exercise.Model
         public double Score => Analyze == null ? 0 : Analyze.Score;
 
         [JsonIgnore]
-        public double DuplexScore => Score + (Another == null ? 0 : Another.Score);
+        public int DuplexPageCount => 1 + (Another == null ? 0 : Another.DuplexPageCount);
+
+        [JsonIgnore]
+        public double DuplexScore => Score + (Another == null ? 0 : Another.DuplexScore);
+
+        [JsonIgnore]
+        public int StudentPageCount => CalcStudentPageCount();
 
         [JsonIgnore]
         public double StudentScore => CalcStudentScore();
@@ -73,11 +78,23 @@ namespace Exercise.Model
             o.Answer = a;
         }
 
+        private int CalcStudentPageCount()
+        {
+            if (Student == null)
+                return DuplexPageCount;
+            int c = Student.AnswerPages.Sum(p => p.DuplexPageCount);
+            if (Student.AnswerPages == null || Student.AnswerPages[PageIndex / 2] == null)
+                c += DuplexPageCount;
+            return c;
+        }
+
         private double CalcStudentScore()
         {
             if (Student == null)
-                return double.NaN;
+                return DuplexScore;
             double s = Student.Score;
+            if (double.IsNaN(s))
+                s = 0;
             if (Student.AnswerPages == null || Student.AnswerPages[PageIndex / 2] == null)
                 s += DuplexScore;
             return s;

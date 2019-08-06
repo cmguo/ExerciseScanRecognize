@@ -77,10 +77,11 @@ namespace Exercise.Model
             Directory.Delete(record.LocalPath, true);
         }
 
-        public async Task Load()
+        public async Task<Record> Load()
         {
             LocalRecords.Clear();
             await LoadLocal();
+            return LocalRecords.FirstOrDefault();
         }
 
         private async Task LoadLocal()

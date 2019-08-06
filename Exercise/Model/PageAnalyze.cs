@@ -13,8 +13,12 @@ namespace Exercise.Model
     public class PageAnalyze : NotifyBase
     {
 
-        private const string NULL_ANSWER = "未作答";
+        public const string NULL_ANSWER = "未作答";
         private static readonly ExerciseData.Item EmptyItem = new ExerciseData.Item();
+
+        private static Dictionary<QuestionType, IList<QuestionType>> questionTypeMap = 
+            new Dictionary<QuestionType, IList<QuestionType>>();
+        private static IList<ExerciseData.Question> standardAnswers = new List<ExerciseData.Question>();
 
         public IList<ItemException> AnswerExceptions { get; set; }
 
@@ -44,6 +48,16 @@ namespace Exercise.Model
             }
         }
 
+        public static void SetQuestionTypeMap(Dictionary<QuestionType, IList<QuestionType>> map)
+        {
+            questionTypeMap = map;
+        }
+
+        public static void SetStandardAnswers(IList<ExerciseData.Question> answers)
+        {
+            standardAnswers = answers;
+        }
+
         public static PageAnalyze Analyze(Page page)
         {
             if (page.Answer == null)
@@ -58,18 +72,17 @@ namespace Exercise.Model
                 foreach (AnswerData.Question qa in aa.QuestionInfo)
                 {
                     PageData.Question qp = GetQuestion(page.MetaData, qa.QuestionId);
-                    ExerciseData.Question qe = page.StandardAnswers == null ? null
-                        : page.StandardAnswers.Where(q => q.QuestionId == qa.QuestionId).FirstOrDefault();
+                    ExerciseData.Question qe = standardAnswers == null ? null
+                        : standardAnswers.Where(q => q.QuestionId == qa.QuestionId).FirstOrDefault();
                     for (int i = 0; i < qa.ItemInfo.Count; ++i)
                     {
                         PageData.Item ip = qp.ItemInfo[i];
                         AnswerData.Item ia = qa.ItemInfo[i];
-                        ExerciseData.Item ie = qe == null ? EmptyItem : qe.ItemInfo[i];
-                        string answer;
-                        double s = Analyze(type, ip, ia, ie, out answer);
+                        ExerciseData.Item ie = qe == null ? EmptyItem : qe.ItemInfo[ip.Index]; // 注意分页
+                        string answer = Analyze(type, qp.QuestionType, ip, ia, ie);
                         if (ia.StatusOfItem != 0)
-                            exceptions.Add(new ItemException(aa, qp, ip, ia, ie, s, answer));
-                        score += s;
+                            exceptions.Add(new ItemException(aa, qp, ip, ia, ie, answer));
+                        score += ia.Score;
                     }
                 }
             }
@@ -88,9 +101,9 @@ namespace Exercise.Model
 
         public bool Confirm()
         {
-            Score -= SelectedException.Score;
+            Score -= SelectedException.Answer.Score;
             bool result = SelectedException.Confirm();
-            Score += SelectedException.Score;
+            Score += SelectedException.Answer.Score;
             return result;
         }
 
@@ -121,59 +134,75 @@ namespace Exercise.Model
         {
             foreach (ItemException i in Exceptions)
             {
-                Score -= i.Score;
+                Score -= i.Answer.Score;
                 i.Clear();
             };
         }
 
-        private static double Analyze(AreaType type, PageData.Item ip, AnswerData.Item ia, ExerciseData.Item ie, out string answer)
+        private static string Analyze(AreaType type, QuestionType qtype, 
+            PageData.Item ip, AnswerData.Item ia, ExerciseData.Item ie)
         {
             double score = 0;
-             answer = ia.AnalyzeResult == null ? ""
+            string answer = ia.AnalyzeResult == null ? ""
                 : string.Join(",", ia.AnalyzeResult.Where(r => r != null).Select(r => r.Value).Where(v => v != null));
             if (ia.StatusOfItem == 0)
             {
-                if (type == AreaType.SingleChoice)
+                if (type == AreaType.Choice)
                 {
-                    if (ia.AnalyzeResult.Count > 1)
+                    qtype = MapQuestionType(qtype);
+                    if (qtype == QuestionType.SingleChoice || qtype == QuestionType.Judge)
                     {
-                        ia.StatusOfItem = 100;
+                        if (ia.AnalyzeResult.Count > 1)
+                        {
+                            ia.StatusOfItem = 100;
+                        }
+                        else if (answer == ie.Value)
+                        {
+                            score = ip.TotalScore;
+                        }
                     }
-                    else if (answer == ie.Value)
+                    else if (qtype == QuestionType.MultipleChoice)
                     {
-                        score = ip.TotalScore;
-                    }
-                }
-                else if (type == AreaType.MultiChoice)
-                {
-                    if (answer == ie.Value)
-                    {
-                        score = ip.TotalScore;
-                    }
-                }
-                else if (type == AreaType.Judge)
-                {
-                    if (answer == ie.Value)
-                    {
-                        score = ip.TotalScore;
+                        if (answer == ie.Value)
+                        {
+                            score = ip.TotalScore;
+                        }
+                        else if (answer.Except(ie.Value).Count() == 0)
+                        {
+                            score = ip.HalfScore;
+                        }
                     }
                 }
                 else if (type == AreaType.FillBlank)
                 {
-                    if (ia.AnalyzeResult != null && ia.AnalyzeResult.Count > 0)
+                    if (answer == "T")
                         score = ip.TotalScore;
                 }
                 else if (type == AreaType.Answer)
                 {
-                    if (answer.Length > 0)
-                        score = float.Parse(answer);
-                    if (score > ip.TotalScore)
+                    if (ia.AnalyzeResult == null || ia.AnalyzeResult.Count == 0
+                        || ia.AnalyzeResult.Last().Value == "")
                     {
                         ia.StatusOfItem = 100;
                     }
+                    else
+                    {
+                        score = float.Parse(answer);
+                        if (score > ip.TotalScore)
+                        {
+                            ia.StatusOfItem = 101;
+                        }
+                    }
                 }
             }
-            return score;
+            ia.Score = score;
+            return answer;
+        }
+
+        private static QuestionType MapQuestionType(QuestionType qtype)
+        {
+            return questionTypeMap.Where(d => d.Key == qtype || d.Value.Contains(qtype))
+                .Select(d => d.Key).FirstOrDefault();
         }
 
         private static PageData.Question GetQuestion(PageData data, string questionId)
@@ -185,6 +214,7 @@ namespace Exercise.Model
         public class ItemException : ModelBase
         {
             public AreaType AreaType;
+            public QuestionType QuestionType;
             public string Name { get; private set; }
 
             private bool _HasException;
@@ -206,18 +236,16 @@ namespace Exercise.Model
                     RaisePropertyChanged("SelectedAnswer");
                 }
             }
-
-            public double Score { get; private set; }
-
             public PageData.Item Problem { get; }
             public AnswerData.Item Answer { get; }
             public ExerciseData.Item SAnswer { get; }
             public Location Location { get; }
 
             public ItemException(AnswerData.Area a, PageData.Question q, PageData.Item p, AnswerData.Item i, 
-                ExerciseData.Item e, double score, string w)
+                ExerciseData.Item e, string w)
             {
                 AreaType = a.AreaType;
+                QuestionType = MapQuestionType(q.QuestionType);
                 Name = (q.Index + 1).ToString();
                 HasException = true;
                 if (q.ItemInfo.Count > 1)
@@ -228,7 +256,6 @@ namespace Exercise.Model
                 Problem = p;
                 Answer = i;
                 SAnswer = e;
-                Score = score;
                 Answers = Problem.Value.Split(',').Concat(new string[] { NULL_ANSWER }).ToList();
                 SelectedAnswer = w;
                 //Location = new Location()
@@ -260,7 +287,7 @@ namespace Exercise.Model
                         double score = double.Parse(SelectedAnswer);
                         if (score > Problem.TotalScore)
                             return false;
-                        Score = score;
+                        Answer.Score = score;
                     }
                     catch
                     {
@@ -269,7 +296,15 @@ namespace Exercise.Model
                 }
                 else if (SelectedAnswer == SAnswer.Value)
                 {
-                    Score = Problem.TotalScore;
+                    Answer.Score = Problem.TotalScore;
+                }
+                else if (QuestionType == QuestionType.MultipleChoice)
+                {
+                    Answer.Score = (SelectedAnswer.Except(SAnswer.Value).Count() == 0) ? Problem.HalfScore : 0;
+                }
+                else
+                {
+                    Answer.Score = 0;
                 }
 
                 Answer.StatusOfItem = -1;
@@ -287,7 +322,7 @@ namespace Exercise.Model
                 if (Answer.StatusOfItem != 0)
                     Answer.StatusOfItem = -2;
                 Answer.AnalyzeResult = null;
-                Score = 0;
+                Answer.Score = 0;
             }
         }
 

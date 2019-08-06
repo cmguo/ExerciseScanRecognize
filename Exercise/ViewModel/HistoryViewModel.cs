@@ -117,7 +117,7 @@ namespace Exercise.ViewModel
         private void SelectPage(int value)
         {
             Dispatcher.CurrentDispatcher.InvokeAsync(AdjustPages);
-            BackgroudWork.Execute(() => historyModel.LoadPage(value));
+            BackgroundWork.Execute(() => historyModel.LoadPage(value));
         }
 
         private void AdjustPages()

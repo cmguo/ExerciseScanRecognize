@@ -1,5 +1,6 @@
 ﻿using Account.Service;
 using Base.Service;
+using Exercise.Algorithm;
 using Refit;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -36,5 +37,9 @@ namespace Exercise.Service
 
         [Post("/updateRecord")]
         Task<Nothing> updateRecord(HistoryData.Record record);
+
+        [Get("/getQuestionTypeMap")]
+        Task<Dictionary<QuestionType, IList<QuestionType>>> getQuestionTypeMap();
+
     }
 }

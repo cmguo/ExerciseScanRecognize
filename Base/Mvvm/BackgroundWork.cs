@@ -5,11 +5,11 @@ using static Base.Mvvm.Action;
 
 namespace Base.Mvvm
 {
-    public class BackgroudWork
+    public class BackgroundWork
     {
         public delegate Task Work();
 
-        private static readonly Logger Log = Logger.GetLogger<BackgroudWork>();
+        private static readonly Logger Log = Logger.GetLogger<BackgroundWork>();
 
         public static async void Execute(Work work, object owner)
         {

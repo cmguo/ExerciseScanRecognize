@@ -30,6 +30,18 @@ namespace Exercise.View.Resolve
 
         private void Confirm_Click(object sender, RoutedEventArgs e)
         {
+            if (studentList.SelectedItem == null)
+            {
+                if (studentList.Text == null || studentList.Text == "")
+                {
+                    msg.Text = "请选择筛选列表中的学生";
+                }
+                else
+                {
+                    msg.Text = "输入的学生不在本校范围";
+                }
+                return;
+            }
             ResolvePage rp = UITreeHelper.GetParentOfType<ResolvePage>(this);
             rp.Resolve();
         }

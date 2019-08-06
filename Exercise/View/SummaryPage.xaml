@@ -65,8 +65,7 @@
             <svgc:SvgCanvas Grid.Column="0" Width="83" Height="86" Margin="62, 25, 30, 29"
                    Source="{Binding ExceptionCount, Converter={StaticResource IconConverter}}" />
             
-            <StackPanel Grid.Column="1" HorizontalAlignment="Stretch" VerticalAlignment="Center" Orientation="Vertical" 
-                        Grid.ColumnSpan="3" Margin="30,0,0,0">
+            <StackPanel Grid.Column="1" HorizontalAlignment="Stretch" VerticalAlignment="Center" Orientation="Vertical">
                 <TextBlock Text="{Binding ExerciseName, StringFormat=《{0}》}"
                            FontSize="14" Foreground="#FF7F8E99"
                            Margin="0,0,0,8" TextWrapping="WrapWithOverflow" />

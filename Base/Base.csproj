@@ -82,6 +82,7 @@
     <Compile Include="Misc\UITreeHelper.cs" />
     <Compile Include="Mvvm\BackgroundWork.cs" />
     <Compile Include="Mvvm\Converter\BoolConverter.cs" />
+    <Compile Include="Mvvm\Converter\BooleanVisibilityConverter.cs" />
     <Compile Include="Mvvm\Converter\EnumStringConverter.cs" />
     <Compile Include="Mvvm\Converter\EnumBrushConverter.cs" />
     <Compile Include="Mvvm\Converter\EnumConverter.cs" />
@@ -89,6 +90,7 @@
     <Compile Include="Mvvm\Converter\MultiValueConverter.cs" />
     <Compile Include="Mvvm\Converter\BooleanConverter.cs" />
     <Compile Include="Mvvm\Converter\NonNullTrueConverter.cs" />
+    <Compile Include="Mvvm\Converter\NullHiddenConverter.cs" />
     <Compile Include="Mvvm\Converter\NullVisibleConverter.cs" />
     <Compile Include="Mvvm\Converter\NonNullVisibleConverter.cs" />
     <Compile Include="Mvvm\Converter\BooleanBrushConverter.cs" />

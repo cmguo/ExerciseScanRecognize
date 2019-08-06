@@ -118,7 +118,7 @@ namespace Exercise.View
             int total = 0;
             foreach (ClassDetail c in classes)
             {
-                result += "| " + c.Name + " " + c.SubmitStudentList.Count + "人";
+                result += " | " + c.Name + " " + c.SubmitStudentList.Count + "人";
                 total += c.SubmitStudentList.Count;
             }
             result = "已读" + total + "份 " + result;

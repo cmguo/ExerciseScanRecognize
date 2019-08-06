@@ -2,7 +2,6 @@
 using Base.Mvvm;
 using Exercise.Model;
 using Exercise.View;
-using System.Collections.ObjectModel;
 using System.Threading.Tasks;
 using System.Windows;
 using TalBase.View;
@@ -17,8 +16,6 @@ namespace Exercise.ViewModel
         private static readonly Logger Log = Logger.GetLogger<ResolveViewModel>();
 
         #region Properties
-
-        public ObservableCollection<ExceptionList> Exceptions { get; private set; }
 
         private ExceptionList _SelectedExceptionList;
         public ExceptionList SelectedExceptionList
@@ -79,6 +76,7 @@ namespace Exercise.ViewModel
 
         private ExerciseModel exerciseModel = ExerciseModel.Instance;
         private ScanModel scanModel = ScanModel.Instance;
+        private int exceptionCount;
 
         public ResolveViewModel()
         {
@@ -90,7 +88,6 @@ namespace Exercise.ViewModel
             IgnoreListCommand = new RelayCommand((e) => Resolve(e, SelectedExceptionList, ResolveType.Ignore));
             RemovePageListCommand = new RelayCommand((e) => Resolve(e, SelectedExceptionList, ResolveType.RemovePage));
             CloseMessage = "本次扫描结果未上传，" + CloseMessage;
-            Exceptions = exerciseModel.Exceptions;
             Exceptions.CollectionChanged += Exceptions_CollectionChanged;
             exerciseModel.BeforeReplacePage += ExerciseModel_BeforeReplacePage;
             ReturnCommand = new RelayCommand((o) => Return(o));
@@ -98,10 +95,14 @@ namespace Exercise.ViewModel
             {
                 el.Exceptions.CollectionChanged += Exceptions_CollectionChanged;
             }
+            exceptionCount = ExceptionCount;
+            HistoryModel.Instance.BeginDuration(HistoryModel.DurationType.Resolve);
         }
 
         public override void Release()
         {
+            Update();
+            HistoryModel.Instance.EndDuration(exceptionCount - ExceptionCount);
             base.Release();
             Exceptions.CollectionChanged -= Exceptions_CollectionChanged;
             exerciseModel.BeforeReplacePage -= ExerciseModel_BeforeReplacePage;
@@ -251,6 +252,13 @@ namespace Exercise.ViewModel
                     foreach (ExceptionList el in e.NewItems)
                     {
                         el.Exceptions.CollectionChanged += Exceptions_CollectionChanged;
+                    }
+                }
+                if (e.OldItems != null)
+                {
+                    foreach (ExceptionList el in e.OldItems)
+                    {
+                        el.Exceptions.CollectionChanged -= Exceptions_CollectionChanged;
                     }
                 }
             }

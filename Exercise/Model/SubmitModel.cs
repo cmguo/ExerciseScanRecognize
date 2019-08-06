@@ -1,6 +1,5 @@
 ﻿using Base.Misc;
 using Base.Service;
-using Exercise.Algorithm;
 using Exercise.Service;
 using Newtonsoft.Json;
 using System;
@@ -169,6 +168,7 @@ namespace Exercise.Model
         {
             try
             {
+                HistoryModel.Instance.BeginDuration(HistoryModel.DurationType.Submit);
                 task.Status = TaskStatus.Submiting;
                 await SubmitInner(task);
             }
@@ -179,8 +179,11 @@ namespace Exercise.Model
             }
             finally
             {
+                HistoryModel.Instance.EndDuration();
                 if (task.Status != TaskStatus.Completed)
                     await task.Save();
+                else
+                    HistoryModel.Instance.Clear();
             }
         }
 
@@ -204,7 +207,6 @@ namespace Exercise.Model
             await service.CompleteSubmit(new SubmitComplete() { HomeworkId = sdata.HomeworkId });
             ++task.Finish;
             SubmitTasks.Remove(task.path);
-            HistoryModel.Instance.Remove(task.path);
             task.Status = TaskStatus.Completed;
         }
 

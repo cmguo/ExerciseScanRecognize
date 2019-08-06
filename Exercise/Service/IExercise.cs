@@ -41,5 +41,7 @@ namespace Exercise.Service
         [Get("/getQuestionTypeMap")]
         Task<Dictionary<QuestionType, IList<QuestionType>>> getQuestionTypeMap();
 
+        [Post("/submitUseLog")]
+        Task<Nothing>SubmitUseLog(UseLog useLog);
     }
 }

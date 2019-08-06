@@ -30,11 +30,14 @@ namespace Exercise.Service
                 set { _Name = value; RaisePropertyChanged("Name"); }
             }
             public long ScanDate { get; set; }
+            public IList<ClassDetail> DetailList { get; set; }
+
             [JsonIgnore]
             public DateTime DataTime => SystemUtil.DateTimeFromTimestamp(ScanDate);
             [JsonIgnore]
             public string LocalPath { get; internal set; }
-            public IList<ClassDetail> DetailList { get; set; }
+
+            public UseLog UseLog { get; internal set; }
         }
 
         public partial class ClassDetail

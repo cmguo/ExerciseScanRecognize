@@ -1,6 +1,5 @@
 ﻿using Exercise.Algorithm;
 using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.Serialization;
@@ -10,6 +9,8 @@ namespace Exercise.Service
     public class ExerciseData
     {
         public string Title { get; set; }
+        public string Course { get; set; }
+
         [JsonProperty("typesettingResultList")]
         public IList<PageData> Pages { get; set; }
         public IList<Question> Answers { get; set; }

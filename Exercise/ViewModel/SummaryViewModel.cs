@@ -1,19 +1,12 @@
 ﻿using Base.Mvvm;
 using Exercise.Model;
 using Exercise.View;
-using System.Collections.ObjectModel;
-using System.Linq;
 using System.Threading.Tasks;
-using static Exercise.Model.ExerciseModel;
 
 namespace Exercise.ViewModel
 {
     class SummaryViewModel : ExerciseViewModel
     {
-        public string ExerciseName { get; private set; }
-        public int ExceptionCount { get; private set; }
-        public ObservableCollection<ExceptionList> Exceptions => exerciseModel.Exceptions;
-
         public RelayCommand ResolveCommand { get; set; }
         public RelayCommand SubmitCommand { get; set; }
 
@@ -26,8 +19,6 @@ namespace Exercise.ViewModel
             ResolveCommand = new RelayCommand((e) => Resolve(e));
             SubmitCommand = new RelayCommand((e) => Submit(e));
             CloseMessage = "本次扫描结果未上传，" + CloseMessage;
-            ExerciseName = exerciseModel.ExerciseData.Title;
-            ExceptionCount = Exceptions.SelectMany(el => el.Exceptions).Count();
         }
 
         private void Resolve(object obj)
@@ -49,14 +40,6 @@ namespace Exercise.ViewModel
             if (result)
                 (obj as System.Windows.Controls.Page).NavigationService.Navigate(new ScanningPage());
             return result;
-        }
-
-        internal void FillAll()
-        {
-            exerciseModel.FillAll();
-            ExceptionCount = exerciseModel.Exceptions.SelectMany(el => el.Exceptions).Count();
-            RaisePropertyChanged("ExceptionCount");
-            Update();
         }
 
     }

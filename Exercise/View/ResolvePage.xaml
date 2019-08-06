@@ -138,20 +138,22 @@
         </Border>
 
         <StackPanel Margin="24, 32, 24, 32" Grid.Column="2" Orientation="Vertical">
-            
-            <TextBlock FontSize="12" Foreground="#FF7F8E99"  TextWrapping="Wrap"
+
+            <StackPanel Margin="0, 0, 0, 10" Orientation="Vertical">
+                <TextBlock FontSize="12" Foreground="#FF7F8E99"  TextWrapping="Wrap"
                        Text="{Binding SelectedException, Converter={StaticResource ExceptionConverter}, ConverterParameter=Title}" />
-            <TextBlock FontSize="12" Foreground="#FF7F8E99" Text="（请勿放入他人试卷）"
+                <TextBlock FontSize="12" Foreground="#FF7F8E99" Text="（请勿放入他人试卷）"
                        DataContext="{Binding SelectedException, Converter={StaticResource ExceptionConverter}, ConverterParameter=Rescan}"
                        Visibility="{Binding Converter={StaticResource NonNullVisibleConverter}}"/>
-            <StackPanel Orientation="Horizontal" Margin="0, 15, 0, 0" 
+                <StackPanel Orientation="Horizontal" Margin="0, 15, 0, 0" 
                        DataContext="{Binding SelectedException, Converter={StaticResource ExceptionConverter}, ConverterParameter=Message}"
                        Visibility="{Binding Converter={StaticResource NonNullVisibleConverter}}">
-                <Image Width="16" Height="16"  Margin="0, 0, 8, 0" Source="{svgc:SvgImage Source=/Icons/异常.svg}" />
-                <TextBlock Grid.Column="1" FontSize="14" Foreground="#FF2D4A66" TextWrapping="Wrap" Text="{Binding}" Width="200" />
+                    <Image Width="16" Height="16"  Margin="0, 0, 8, 0" Source="{svgc:SvgImage Source=/Icons/异常.svg}" />
+                    <TextBlock Grid.Column="1" FontSize="14" Foreground="#FF2D4A66" TextWrapping="Wrap" Text="{Binding}" Width="200" />
+                </StackPanel>
             </StackPanel>
 
-            <Frame x:Name="frame" Margin="0, 15, 0, 0"  Focusable="False"
+            <Frame x:Name="frame" Margin="0, 14, 0, 0"  Focusable="False"
                    Content="{Binding SelectedException, Converter={StaticResource ExceptionPageConverter}}"
                    Visibility="{Binding Content, RelativeSource={RelativeSource Mode=Self}, Converter={StaticResource NonNullVisibleConverter}}"/>
             

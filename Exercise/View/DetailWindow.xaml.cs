@@ -17,6 +17,7 @@ namespace Exercise.View
         public DetailWindow()
         {
             InitializeComponent();
+            save.Visibility = ExerciseModel.Instance.ExerciseData == null ? Visibility.Collapsed : Visibility.Visible;
         }
 
         private void Close_Click(object sender, RoutedEventArgs e)

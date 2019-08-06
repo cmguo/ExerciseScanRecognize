@@ -15,7 +15,14 @@ namespace Exercise.Service
 
     public class ClassInfo
     {
+        private static readonly string[] gradeNames = { null,
+            "小一", "小二", "小三", "小四", "小五", "小六",
+            "初一", "初二", "初三",
+            "高一", "高二", "高三",
+        };
+
         public string ClassId { get; set; }
+        public int Grade { get; set; }
         public string ClassName { get; set; }
 
         [JsonIgnore]

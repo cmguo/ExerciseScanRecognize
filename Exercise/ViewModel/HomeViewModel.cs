@@ -7,6 +7,7 @@ using System.Windows.Navigation;
 using TalBase.View;
 using System.Windows;
 using static Exercise.Service.HistoryData;
+using static Exercise.Model.SubmitModel;
 
 namespace Exercise.ViewModel
 {
@@ -41,10 +42,12 @@ namespace Exercise.ViewModel
                 return;
             checkLocal = false;
             Record record = await HistoryModel.Instance.Load();
-            if (HistoryModel.Instance.LocalRecords.Count > 0)
+            if (record != null)
             {
-                int result = PopupDialog.Show(obj as UIElement, "提示", 
-                    "检测到异常退出未处理的扫描记录，是否去处理？", 0, "确定", "取消");
+                SubmitTask task = await SubmitModel.Instance.Load(record.LocalPath);
+                string msg = task == null ? "因客户端非正常关闭，上次读卷尚未完成，是否继续处理？" 
+                    : "因客户端非正常关闭，上次读卷结果尚未完成，是否继续处理？";
+                int result = PopupDialog.Show(obj as UIElement, "提示", msg, 0, "继续处理", "忽略");
                 if (result == 0)
                 {
                     try

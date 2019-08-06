@@ -121,6 +121,7 @@
     <Compile Include="Service\GenUriData.cs" />
     <Compile Include="Service\HistoryData.cs" />
     <Compile Include="Service\SubmitComplete.cs" />
+    <Compile Include="Service\UseLog.cs" />
     <Compile Include="Service\SubmitPrepare.cs" />
     <Compile Include="Service\SubmitData.cs" />
     <Compile Include="Model\Page.cs" />

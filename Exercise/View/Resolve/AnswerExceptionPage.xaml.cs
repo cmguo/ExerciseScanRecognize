@@ -115,7 +115,19 @@ namespace Exercise.View.Resolve
         private void Score_Click(object sender, RoutedEventArgs e)
         {
             object n = (sender as FrameworkElement).DataContext;
-            analyze.SelectedException.InputNumber((n is int) ? (int)n : (int?)null);
+            if ((n is int))
+            {
+                analyze.SelectedException.InputNumber((n is int) ? (int)n : (int?)null);
+            }
+            else
+            {
+                if (score.SelectionStart > 0 && score.SelectionLength == 0)
+                {
+                    --score.SelectionStart;
+                    ++score.SelectionLength;
+                }
+                score.SelectedText = "";
+            }
         }
 
         private void Confirm_Click(object sender, RoutedEventArgs e)
@@ -125,15 +137,18 @@ namespace Exercise.View.Resolve
                 analyze.SelectedException.SelectedAnswer = String.Join("",
                     answers.SelectedItems.Cast<String>());
             }
-            if (!analyze.Confirm())
+            try
             {
-                PopupDialog.Show(this, "确认", "输入值不在有效范围中", 0, "确定");
-                return;
+                analyze.Confirm();
+                if (!analyze.Next())
+                {
+                    ResolvePage rp = UITreeHelper.GetParentOfType<ResolvePage>(this);
+                    rp.Resolve();
+                }
             }
-            if (!analyze.Next())
+            catch (System.Exception ex)
             {
-                ResolvePage rp = UITreeHelper.GetParentOfType<ResolvePage>(this);
-                rp.Resolve();
+                msg.Text = ex.Message;
             }
         }
 

@@ -24,11 +24,6 @@ namespace Assistant.Fault
         {
             SysInfo = new SystemInfo(path);
             AppInfo = new ApplicationInfo(0);
-            UserInfo = new UserInfo()
-            {
-                Id = Account.Model.AccountModel.Instance.Account.Id.ToString(),
-                Name = Account.Model.AccountModel.Instance.Account.Name,
-            };
         }
 
         public void Update(Exception crash)
@@ -36,6 +31,11 @@ namespace Assistant.Fault
             Time = DateTime.Now.Timestamp();
             SysInfo.Update();
             AppInfo.Update();
+            UserInfo = new UserInfo()
+            {
+                Id = Account.Model.AccountModel.Instance.Account.Id.ToString(),
+                Name = Account.Model.AccountModel.Instance.Account.Name,
+            };
             CrashInfo = new CrashInfo(SysInfo.Storage.Path, crash);
         }
 

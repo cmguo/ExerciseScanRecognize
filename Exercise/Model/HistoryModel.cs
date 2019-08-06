@@ -1,4 +1,5 @@
-﻿using Base.Misc;
+﻿using Account.Model;
+using Base.Misc;
 using Base.Mvvm;
 using Base.Service;
 using Exercise.Service;
@@ -30,7 +31,18 @@ namespace Exercise.Model
             }
         }
 
+        public enum DurationType
+        {
+            None,
+            Scan,
+            Summary,
+            Resolve,
+            Submit
+        }
+
         public ObservableCollection<Record> LocalRecords { get; private set; }
+
+        public Record WorkingRecord { get; private set; }
 
         public IList<Record> Records { get; private set; }
 
@@ -39,6 +51,8 @@ namespace Exercise.Model
         private static readonly int PAGE_SIZE = 10;
 
         private IExercise service;
+        private DurationType durType;
+        private long durStart;
 
         public HistoryModel()
         {
@@ -46,33 +60,80 @@ namespace Exercise.Model
             service = Services.Get<IExercise>();
         }
 
-        public string NewSavePath()
+        public Record NewRecord()
         {
             string path = Component.DATA_PATH + "\\" + DateTime.Now.ToString("yyyyMMdd")
                 + "\\" + DateTime.Now.ToString("T").Replace(':', '.');
             Directory.CreateDirectory(path);
-            return path;
+            WorkingRecord = new Record()
+            {
+                LocalPath = path,
+                ScanDate = DateTime.Now.Timestamp(),
+                UseLog = new UseLog()
+                {
+                    UserId = AccountModel.Instance.Account.Id, 
+                    SchoolName = AccountModel.Instance.Account.SchoolName
+                }
+            };
+            LocalRecords.Add(WorkingRecord);
+            return WorkingRecord;
         }
 
-        public async Task Save(string path)
+        public void SetTitle(string title, string course)
         {
-            if (LocalRecords.Any(r => r.LocalPath == path))
+            WorkingRecord.Name = title;
+            WorkingRecord.UseLog.Course = course;
+        }
+
+        public void BeginDuration(DurationType type)
+        {
+            if (durType != DurationType.None)
+                EndDuration();
+            durType = type;
+            durStart = DateTime.Now.Timestamp();
+        }
+
+        public void EndDuration(int count = 0)
+        {
+            if (durType == DurationType.None || WorkingRecord.UseLog == null)
                 return;
-            Record record = new Record() { Name = ExerciseModel.Instance.ExerciseData.Title, ScanDate = DateTime.Now.Timestamp() };
-            await JsonPersistent.SaveAsync(path + "\\record.json", record);
-            LocalRecords.Add(record);
+            long end = DateTime.Now.Timestamp();
+            long dur = end - durStart;
+            switch (durType)
+            {
+                case DurationType.Scan:
+                    WorkingRecord.UseLog.PageCount = count;
+                    WorkingRecord.UseLog.ScanDuration += dur;
+                    break;
+                case DurationType.Summary:
+                    WorkingRecord.UseLog.StudentCount = count;
+                    break;
+                case DurationType.Resolve:
+                    WorkingRecord.UseLog.ExceptionCount += count;
+                    WorkingRecord.UseLog.ResolveDuration += dur;
+                    break;
+                case DurationType.Submit:
+                    WorkingRecord.UseLog.SubmitDuration += dur;
+                    break;
+            }
+            durType = DurationType.None;
         }
 
-        public void Remove(string path)
+        public async Task Save()
         {
-            Record record = LocalRecords.Where(r => r.LocalPath == path).FirstOrDefault();
-            if (record != null)
-                LocalRecords.Remove(record);
-            Directory.Delete(path, true);
+            WorkingRecord.ScanDate = DateTime.Now.Timestamp();
+            await JsonPersistent.SaveAsync(WorkingRecord.LocalPath + "\\record.json", WorkingRecord);
+        }
+
+        public void Clear()
+        {
+            Remove(WorkingRecord);
+            WorkingRecord = null;
         }
 
         public void Remove(Record record)
         {
+            service.SubmitUseLog(WorkingRecord.UseLog);
             LocalRecords.Remove(record);
             Directory.Delete(record.LocalPath, true);
         }
@@ -81,7 +142,8 @@ namespace Exercise.Model
         {
             LocalRecords.Clear();
             await LoadLocal();
-            return LocalRecords.FirstOrDefault();
+            WorkingRecord = LocalRecords.FirstOrDefault();
+            return WorkingRecord;
         }
 
         private async Task LoadLocal()

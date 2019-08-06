@@ -3,7 +3,6 @@ using Exercise.Model;
 using Exercise.View;
 using System.ComponentModel;
 using System.Windows;
-using System.Windows.Input;
 using TalBase.View;
 using TalBase.ViewModel;
 
@@ -61,6 +60,7 @@ namespace Exercise.ViewModel
             if (result == 0)
             {
                 await submitModel.Cancel(Task);
+                HistoryModel.Instance.Clear();
                 Application.Current.MainWindow.Close();
             }
             else

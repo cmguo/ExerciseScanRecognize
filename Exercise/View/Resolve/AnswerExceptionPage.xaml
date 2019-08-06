@@ -23,7 +23,7 @@
             </ResourceDictionary.MergedDictionaries>
             
             <resolve:ExceptionConverter x:Key="ExceptionConverter" />
-            <cv:NullVisibleConverter x:Key="NullVisibleConverter" />
+            <cv:NullHiddenConverter x:Key="MessageVisibleConverter"/>
             <cv:ToStringConverter x:Key="ToStringConverter" />
             <cv:BooleanBrushConverter x:Key="BackgroundConverter" TrueValue="Transparent" FalseValue="#FF10D900" />
             <cv:BooleanBrushConverter x:Key="ForegroundConverter" TrueValue="#FF2D4A66" FalseValue="White" />
@@ -77,12 +77,14 @@
         </ListView>
 
         <StackPanel Grid.Row="2" x:Name="correct" Orientation="Vertical" Margin="0, 14, 0, 0">
+            
             <StackPanel Orientation="Horizontal">
-                <TextBox Text="{Binding SelectedException.SelectedAnswer, UpdateSourceTrigger=PropertyChanged}" 
+                <TextBox x:Name="score" Text="{Binding SelectedException.SelectedAnswer, UpdateSourceTrigger=PropertyChanged}" 
                          Width="72" Height="32" FontSize="14" Foreground="#FF2D4A66" VerticalContentAlignment="Center" />
                 <TextBlock Text="分" FontSize="14" Foreground="#FF2D4A66" VerticalAlignment="Center" Margin="8, 0, 0, 0"/>
             </StackPanel>
-            <ListView Grid.Row="0" x:Name="numbers" BorderThickness="0" HorizontalAlignment="Left" Margin="0, 14, 0, 0" 
+            
+            <ListView x:Name="numbers" BorderThickness="0" HorizontalAlignment="Left" Margin="0, 14, 0, 0" 
                   ItemContainerStyle="{StaticResource ButtonListStyle}" Background="Transparent">
                 <ListView.ItemsPanel>
                     <ItemsPanelTemplate>
@@ -105,10 +107,10 @@
                 </ListView.Resources>
             </ListView>
             
-            <StackPanel Grid.Row="2" Margin="0, 4, 0, 4" Orientation="Horizontal"
-                        Visibility="{Binding SelectedException.SelectedAnswer, Converter={StaticResource NullVisibleConverter}}">
+            <StackPanel Margin="0, 4, 0, 4" Orientation="Horizontal"
+                        Visibility="{Binding Text, ElementName=msg, Converter={StaticResource MessageVisibleConverter}}">
                 <Image Width="12" Height="12" Source="{svgc:SvgImage Source=/Icons/bad.svg}" />
-                <TextBlock Margin="4, 0, 0, 0" FontSize="11" Foreground="#ffff6767"  Text="请为本题打分"/>
+                <TextBlock x:Name="msg" Margin="4, 0, 0, 0" FontSize="11" Foreground="#ffff6767" />
             </StackPanel>
             
         </StackPanel>

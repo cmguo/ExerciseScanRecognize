@@ -86,6 +86,8 @@ namespace Exercise.Model
                     _IsCompleted = value;
                     Monitor.PulseAll(mutex);
                 }
+                if (value)
+                    HistoryModel.Instance.EndDuration(Pages.Count);
                 if (cancel == 0)
                     RaisePropertyChanged("IsCompleted");
             }
@@ -164,6 +166,8 @@ namespace Exercise.Model
             {
                 scanDevice.DuplexEnabled = true;
                 scanDevice.Scan(count);
+                if (count < 0)
+                    HistoryModel.Instance.BeginDuration(HistoryModel.DurationType.Scan);
             }
             catch (Exception e)
             {

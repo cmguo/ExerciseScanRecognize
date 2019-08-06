@@ -1,5 +1,4 @@
 ﻿using Base.Misc;
-using Base.Mvvm;
 using Base.Service;
 using Exercise.Algorithm;
 using Exercise.Service;
@@ -127,7 +126,7 @@ namespace Exercise.Model
             AddException(ExceptionType.AnswerException, new Page() { Student = student });
             AddException(ExceptionType.CorrectionException, new Page() { Student = student });
             //*/
-            //Assistant.Fault.CrashHandler.UploadReports();
+            Assistant.Fault.CrashHandler.UploadReports();
         }
 
         public void Discard()
@@ -135,12 +134,12 @@ namespace Exercise.Model
             string path = SavePath;
             Clear();
             if (path != null)
-                historyModel.Remove(path);
+                historyModel.Clear();
         }
 
         public async Task NewTask()
         {
-            string path = historyModel.NewSavePath();
+            string path = historyModel.NewRecord().LocalPath;
             scanModel.SetSavePath(path);
             SavePath = path;
             await schoolModel.Refresh();
@@ -170,10 +169,12 @@ namespace Exercise.Model
         {
             if (ExerciseData == null)
                 throw new NullReferenceException("没有有效试卷信息");
+            HistoryModel.Instance.BeginDuration(HistoryModel.DurationType.Summary);
             foreach (StudentInfo s in PageStudents)
             {
                 AddException(s);
             }
+            HistoryModel.Instance.EndDuration(PageStudents.Count);
             await Save();
         }
 
@@ -194,7 +195,7 @@ namespace Exercise.Model
             await schoolModel.Save(SavePath);
             await scanModel.Save();
             await JsonPersistent.SaveAsync(SavePath + "\\exercise.json", ExerciseData);
-            await historyModel.Save(SavePath);
+            await historyModel.Save();
         }
 
         public async Task Load(string path)
@@ -325,7 +326,7 @@ namespace Exercise.Model
                 worksheet.Cells[1, ++col].Value = "姓名";
                 worksheet.Cells[1, ++col].Value = "学号";
                 worksheet.Cells[1, ++col].Value = "总分";
-                IEnumerable<Algorithm.PageData.Question> questions = exerciseData.Questions;
+                IEnumerable<PageData.Question> questions = exerciseData.Questions;
                 foreach (var q in questions)
                 {
                     if (q.ItemInfo.Count == 1)
@@ -341,43 +342,29 @@ namespace Exercise.Model
                     }
                 }
                 // add items
-                ICollection<StudentInfo> students = ExerciseModel.Instance.PageStudents;
                 int row = 1;
-                foreach (var s in c.Students.Where(s => s.AnswerPages != null).OrderBy(s => s.StudentNo))
+                foreach (StudentInfo s in c.Students.Where(s => s.AnswerPages != null).OrderBy(s => s.StudentNo))
                 {
                     ++row;
                     col = 0;
-                    worksheet.Cells[row, ++col].Value = s.StudentNo;
                     worksheet.Cells[row, ++col].Value = s.Name;
+                    worksheet.Cells[row, ++col].Value = s.StudentNo;
                     worksheet.Cells[row, ++col].Value = s.Score;
-                    StudentInfo si = students.Where(ss => ss.StudentNo == s.StudentNo).FirstOrDefault();
-                    IEnumerable<AnswerData.Question> answers = si.Answers.SelectMany(a => a.AreaInfo.SelectMany(a1 => a1.QuestionInfo));
-                    ++col;
-                    foreach (var pq in questions)
+                    IEnumerable<double> scores = PageAnalyze.GetScoreDetail(questions, s.Answers);
+                    foreach (double sc in scores)
                     {
-                        int index = 0;
-                        AnswerData.Question aq = answers.FirstOrDefault();
-                        while (aq != null && aq.QuestionId == pq.QuestionId)
-                        {
-                            foreach (AnswerData.Item ai in aq.ItemInfo.SkipWhile(i => i.Index < index))
-                            {
-                                worksheet.Cells[row, col + ai.Index].Value = ai.Score;
-                            }
-                            if (aq.ItemInfo.Count > 0)
-                                index = aq.ItemInfo.Last().Index + 1;
-                            answers = answers.Skip(1);
-                            aq = answers.FirstOrDefault();
-                            continue;
-                        }
-                        col += pq.ItemInfo.Count;
+                        if (!double.IsNaN(sc))
+                            worksheet.Cells[row, ++col].Value = sc;
+                        else
+                            ++col;
                     }
                 }
                 foreach (var s in c.Students.Where(s => s.AnswerPages == null).OrderBy(s => s.StudentNo))
                 {
                     ++row;
                     col = 0;
-                    worksheet.Cells[row, ++col].Value = s.StudentNo;
                     worksheet.Cells[row, ++col].Value = s.Name;
+                    worksheet.Cells[row, ++col].Value = s.StudentNo;
                 }
             }
 
@@ -454,6 +441,7 @@ namespace Exercise.Model
                     emptyPages.Add(null);
                 RaisePropertyChanged("ExerciseData");
                 scanModel.SetExerciseData(ExerciseData);
+                historyModel.SetTitle(ExerciseData.Title, ExerciseData.Course);
             }
             catch (System.Exception e)
             {
@@ -478,7 +466,7 @@ namespace Exercise.Model
                 {
                     page.Another.Student = page.Student;
                     if (page.Another.Analyze == null)
-                        page.Another.Analyze = PageAnalyze.Analyze(page.Another);
+                        page.Another.Analyze = PageAnalyze.Analyze(page.Another, page.Analyze);
                 }
                 if (page.Student.AnswerPages == null)
                 {

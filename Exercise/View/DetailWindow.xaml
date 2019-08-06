@@ -14,7 +14,7 @@
         ResizeMode = "NoResize"
         AllowsTransparency="True"
         Background="#99000000"
-        Width="1200" Height="700"
+        Width="1200"
         >
     
     <Window.Resources>
@@ -31,7 +31,7 @@
                 <ListView ItemsSource="{Binding}" BorderThickness="0" Padding="0" Background="{x:Null}">
                     <ListView.ItemsPanel>
                         <ItemsPanelTemplate>
-                            <WrapPanel IsItemsHost="True" Orientation="Horizontal" Width="470" />
+                            <WrapPanel IsItemsHost="True" Orientation="Horizontal" Width="470" Margin="-48, 0, 0, 0" />
                         </ItemsPanelTemplate>
                     </ListView.ItemsPanel>
                     <ListView.ItemContainerStyle>
@@ -42,7 +42,7 @@
                     <ListView.ItemTemplate>
                         <DataTemplate>
                             <Border BorderThickness="0" BorderBrush="Black" Height="24">
-                                <TextBlock Margin="0, 10, 24, 0" VerticalAlignment="Center" Foreground="#FF2D4A66"
+                                <TextBlock Margin="24, 10, 0, 0" VerticalAlignment="Center" Foreground="#FF2D4A66"
                                            Text="{Binding Converter={StaticResource StudentConverter}}"/>
                             </Border>
                         </DataTemplate>
@@ -63,20 +63,14 @@
                                 <RowDefinition Height="Auto" />
                             </Grid.RowDefinitions>
                             <StackPanel Grid.Row="0" Margin="0, 0, 0, 4" Orientation="Vertical" DataContext="{Binding SubmitStudentList}">
-                                <StackPanel Height="15" Orientation="Horizontal">
-                                    <Ellipse Width="6" Height="6" Fill="#FF12D900" VerticalAlignment="Center" />
-                                    <TextBlock Margin="8, 0, 0, 0" VerticalAlignment="Center" Opacity="0.5"
-                                           Text="{Binding Count, StringFormat=已回收 {0}人}" />
-                                </StackPanel>
+                                <TextBlock VerticalAlignment="Center" Opacity="0.5"
+                                        Text="{Binding Count, StringFormat=已回收 {0}人}" />
                                 <Thumb Template="{StaticResource StudentList}" />
                             </StackPanel>
                             <Canvas />
                             <StackPanel Grid.Row="2" Margin="0, 8, 0, 4" Orientation="Vertical" DataContext="{Binding LostStudentList}">
-                                <StackPanel Height="15" Orientation="Horizontal">
-                                    <Ellipse Width="6" Height="6" Fill="#FFFE9400" VerticalAlignment="Center" />
-                                    <TextBlock Margin="8, 0, 0, 0"  VerticalAlignment="Center" Opacity="0.5"
-                                           Text="{Binding Count, StringFormat=未回收 {0}人}" />
-                                </StackPanel>
+                                <TextBlock VerticalAlignment="Center" Opacity="0.5"
+                                        Text="{Binding Count, StringFormat=未回收 {0}人}" />
                                 <Thumb Template="{StaticResource StudentList}" />
                             </StackPanel>
                         </Grid>
@@ -93,8 +87,9 @@
 
         <Grid Margin="33, 29, 31, 29">
             <Grid.RowDefinitions>
-                <RowDefinition Height="auto"/>
+                <RowDefinition Height="Auto"/>
                 <RowDefinition Height="*"/>
+                <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
 
             <Grid Grid.Row="0">
@@ -104,14 +99,14 @@
                     <ColumnDefinition Width="16" />
                 </Grid.ColumnDefinitions>
                 <TextBlock FontSize="16" Foreground="#FF2D4A66" FontWeight="Bold" Text="{Binding Title, ElementName=Window}" VerticalAlignment="Center" />
-                <tal:TalButton Grid.Column="1" Margin="0, 0, 32, 0" Content="导出成绩单" Click="Export_Click" />
                 <tal:TalTouch Grid.Column="2" x:Name="close" Width="16" Height="16" TouchStyle="Icon" Click="Close_Click">
                     <svgc:SvgViewbox Source="Icons/关闭/粗.svg"/>
                 </tal:TalTouch>
             </Grid>
 
-            <ListView Grid.Row="1" Margin="0, 12, 0, 0" BorderThickness="0" ScrollViewer.CanContentScroll="False" ScrollViewer.VerticalScrollBarVisibility="Auto" ScrollViewer.HorizontalScrollBarVisibility="Hidden"
-                      ItemsSource="{Binding}"  Style="{StaticResource DefaultListView}">
+            <ListView Grid.Row="1" Margin="0, 12, 0, 0" BorderThickness="0" ScrollViewer.CanContentScroll="False"
+                      ScrollViewer.VerticalScrollBarVisibility="Auto" ScrollViewer.HorizontalScrollBarVisibility="Hidden"
+                      ItemsSource="{Binding}" Style="{StaticResource DefaultListView}">
                 <ListView.ItemContainerStyle>
                     <Style TargetType="{x:Type ListViewItem}">
                         <Setter Property="Focusable" Value="False"/>
@@ -119,6 +114,19 @@
                     </Style>
                 </ListView.ItemContainerStyle>
             </ListView>
+
+            <Grid x:Name="save" Grid.Row="2" Margin="0, 24, 0, 0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+                <Image Grid.Column="0" Width="14" Height="14" Source="{svgc:SvgImage Source=Icons/bad.svg}" VerticalAlignment="Center"/>
+                <TextBlock  Grid.Column="1" Margin="4, 0, 0, 0" FontSize="12" Foreground="#FFFF6767" 
+                            VerticalAlignment="Center" Text="当前扫描异常尚未处理完，成绩可能存在偏差" />
+                <tal:TalButton Grid.Column="2" Content="下载成绩表" Click="Export_Click" />
+            </Grid>
+            
         </Grid>
     </Grid>
 </Window>

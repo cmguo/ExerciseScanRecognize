@@ -12,7 +12,7 @@
       xmlns:svgc="http://sharpvectors.codeplex.com/svgc/"
       mc:Ignorable="d"
       x:Name="Page"
-      d:DesignHeight="450" d:DesignWidth="800"
+      d:DesignHeight="652" d:DesignWidth="1200"
       Title="HomePage">
 
     <Page.Resources>
@@ -160,12 +160,12 @@
                             </DataGridTemplateColumn.CellTemplate>
                         </DataGridTemplateColumn>
                         <DataGridTextColumn Header="扫描时间" IsReadOnly="True" Binding="{Binding DataTime, StringFormat={}{0:yyyy.MM.dd - HH:mm}, Mode=OneWay}" Width="178"/>
-                        <DataGridTemplateColumn Header="操作" Width="180">
+                        <DataGridTemplateColumn Header="操作" Width="190">
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
                                     <StackPanel DockPanel.Dock="Right" Orientation="Horizontal">
                                         <tal:TalHyperlink Content="查看扫描详情" Click="ButtonDetail_Click" Background="{x:Null}" BorderThickness="0"/>
-                                        <TextBlock Text=" | " Foreground="#FFE3E8F0" />
+                                        <TextBlock Text="   |   " Foreground="#FFE3E8F0" />
                                         <tal:TalHyperlink Content="重命名" Click="ButtonRename_Click" Background="{x:Null}" BorderThickness="0" />
                                     </StackPanel>
                                 </DataTemplate>

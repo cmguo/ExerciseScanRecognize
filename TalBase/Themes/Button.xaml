@@ -51,8 +51,8 @@
                 <Setter Property="BorderThickness" Value="0"/>
             </Trigger>
             <Trigger Property="IsEnabled" Value="False">
-                <Setter Property="Background" Value="#4DFFFFFF"/>
-                <Setter Property="BorderBrush" Value="#1F2D4A66"/>
+                <Setter Property="Background" Value="#FF4C84FF"/>
+                <Setter Property="BorderThickness" Value="0"/>
                 <Setter Property="Foreground" Value="#FF2D4A66"/>
             </Trigger>
         </Style.Triggers>

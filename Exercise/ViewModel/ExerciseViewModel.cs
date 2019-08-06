@@ -1,15 +1,15 @@
 ﻿using Base.Mvvm;
-using Exercise.Algorithm;
 using Exercise.Model;
 using Exercise.Service;
 using Exercise.View;
-using OfficeOpenXml;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
 using TalBase.View;
+using static Exercise.Model.ExerciseModel;
 using static Exercise.Service.HistoryData;
 
 namespace Exercise.ViewModel
@@ -26,6 +26,10 @@ namespace Exercise.ViewModel
 
         public int StudentCount { get; private set; }
         public List<ClassDetail> ClassDetails { get; private set; }
+
+        public string ExerciseName { get; private set; }
+        public int ExceptionCount { get; private set; }
+        public ObservableCollection<ExceptionList> Exceptions => exerciseModel.Exceptions;
 
         #endregion
 
@@ -48,6 +52,8 @@ namespace Exercise.ViewModel
             CloseCommand = new RelayCommand((e) => Close(e));
             exerciseModel.PropertyChanged += ExerciseModel_PropertyChanged;
             CloseMessage = "退出后，扫描结果将作废，确认退出吗？";
+            if (exerciseModel.ExerciseData != null)
+                ExerciseName = exerciseModel.ExerciseData.Title;
             Update();
         }
 
@@ -65,8 +71,10 @@ namespace Exercise.ViewModel
                     .Select(s => new StudentDetail() { Name = s.Name, StudentNo = s.StudentNo })
                     .OrderBy(s => s.StudentNo).ToList(),
             }).ToList();
+            ExceptionCount = Exceptions.SelectMany(el => el.Exceptions).Count();
             RaisePropertyChanged("StudentCount");
             RaisePropertyChanged("ClassDetails");
+            RaisePropertyChanged("ExceptionCount");
         }
 
         public override void Release()
@@ -109,6 +117,12 @@ namespace Exercise.ViewModel
                 exerciseModel.Discard();
                 (obj as System.Windows.Controls.Page).NavigationService.Navigate(new HomePage());
             }
+        }
+
+        internal void FillAll()
+        {
+            exerciseModel.FillAll();
+            Update();
         }
 
         private void ExerciseModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)

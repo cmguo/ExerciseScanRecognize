@@ -1,7 +1,6 @@
 ﻿using Base.Mvvm;
 using Exercise.Algorithm;
 using Exercise.Service;
-using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -20,11 +19,15 @@ namespace Exercise.Model
             new Dictionary<QuestionType, IList<QuestionType>>();
         private static IList<ExerciseData.Question> standardAnswers = new List<ExerciseData.Question>();
 
+        #region Properties
+
         public IList<ItemException> AnswerExceptions { get; set; }
 
         public IList<ItemException> CorrectionExceptions { get; set; }
 
         public double Score { get; private set; }
+
+        public double DuplexScore => Score + (Another == null ? 0 : Another.Score);
 
         private IList<ItemException> _Exceptions;
         public IList<ItemException> Exceptions
@@ -47,6 +50,12 @@ namespace Exercise.Model
                 RaisePropertyChanged("SelectedException");
             }
         }
+
+        public PageAnalyze Another { get; private set; }
+
+        #endregion
+
+        #region Public static methods
 
         public static void SetQuestionTypeMap(Dictionary<QuestionType, IList<QuestionType>> map)
         {
@@ -77,10 +86,12 @@ namespace Exercise.Model
                     for (int i = 0; i < qa.ItemInfo.Count; ++i)
                     {
                         PageData.Item ip = qp.ItemInfo[i];
+                        if (ip.PagingInfo != PagingInfo.None && ip.PagingInfo != PagingInfo.Down)
+                            continue;
                         AnswerData.Item ia = qa.ItemInfo[i];
                         ExerciseData.Item ie = qe == null ? EmptyItem : qe.ItemInfo[ip.Index]; // 注意分页
                         string answer = Analyze(type, qp.QuestionType, ip, ia, ie);
-                        if (ia.StatusOfItem != 0)
+                        if (ia.StatusOfItem > 0)
                             exceptions.Add(new ItemException(aa, qp, ip, ia, ie, answer));
                         score += ia.Score;
                     }
@@ -93,18 +104,63 @@ namespace Exercise.Model
             return new PageAnalyze() { AnswerExceptions = AnswerExceptions, CorrectionExceptions = CorrectionExceptions, Score = score };
         }
 
+        public static PageAnalyze Analyze(Page page, PageAnalyze another)
+        {
+            PageAnalyze analyze = Analyze(page);
+            if (analyze == null)
+                return another == null ? null : new PageAnalyze() { Another = another };
+            another.Another = analyze;
+            analyze.Another = another;
+            return analyze;
+        }
+
+        public static IEnumerable<double> GetScoreDetail(IEnumerable<PageData.Question> questions, IEnumerable<AnswerData> answerss)
+        {
+            IEnumerable<AnswerData.Question> answers = answerss.SelectMany(a => a.AreaInfo.SelectMany(a1 => a1.QuestionInfo));
+            IList<double> scores = new List<double>(questions.SelectMany(q => Enumerable.Repeat(double.NaN, q.ItemInfo.Count)));
+            int qindex = 0;
+            foreach (var pq in questions)
+            {
+                int index = 0;
+                AnswerData.Question aq = answers.FirstOrDefault();
+                while (aq != null && aq.QuestionId == pq.QuestionId)
+                {
+                    foreach (AnswerData.Item ai in aq.ItemInfo.SkipWhile(i => i.Index < index))
+                    {
+                        scores[qindex + ai.Index] = ai.Score;
+                    }
+                    if (aq.ItemInfo.Count > 0)
+                        index = aq.ItemInfo.Last().Index + 1;
+                    answers = answers.Skip(1);
+                    aq = answers.FirstOrDefault();
+                    continue;
+                }
+                qindex += pq.ItemInfo.Count;
+            }
+            return scores;
+        }
+
+        #endregion
+
+        #region Public methods
+
         public void Switch(ExceptionType type)
         {
             Exceptions = type == ExceptionType.AnswerException ? AnswerExceptions : CorrectionExceptions;
             SelectedException = Exceptions[0];
         }
 
-        public bool Confirm()
+        public void Confirm()
         {
             Score -= SelectedException.Answer.Score;
-            bool result = SelectedException.Confirm();
-            Score += SelectedException.Answer.Score;
-            return result;
+            try
+            {
+                SelectedException.Confirm();
+            }
+            finally
+            {
+                Score += SelectedException.Answer.Score;
+            }
         }
 
         public bool Next()
@@ -130,6 +186,8 @@ namespace Exercise.Model
             }
         }
 
+        #endregion
+
         private void Clear(IList<ItemException> Exceptions)
         {
             foreach (ItemException i in Exceptions)
@@ -138,6 +196,8 @@ namespace Exercise.Model
                 i.Clear();
             };
         }
+
+        #region Private static methods
 
         private static string Analyze(AreaType type, QuestionType qtype, 
             PageData.Item ip, AnswerData.Item ia, ExerciseData.Item ie)
@@ -167,7 +227,7 @@ namespace Exercise.Model
                         {
                             score = ip.TotalScore;
                         }
-                        else if (answer.Except(ie.Value).Count() == 0)
+                        else if (answer.Length > 0 && answer.Except(ie.Value).Count() == 0)
                         {
                             score = ip.HalfScore;
                         }
@@ -180,17 +240,22 @@ namespace Exercise.Model
                 }
                 else if (type == AreaType.Answer)
                 {
-                    if (ia.AnalyzeResult == null || ia.AnalyzeResult.Count == 0
-                        || ia.AnalyzeResult.Last().Value == "")
+                    if (ia.AnalyzeResult == null || ia.AnalyzeResult.Count == 0)
                     {
                         ia.StatusOfItem = 100;
                     }
                     else
                     {
+                        if (ia.AnalyzeResult.Last() == null || ia.AnalyzeResult.Last().Value == "")
+                        {
+                            ia.StatusOfItem = 101;
+                            answer += "0";
+                        }
                         score = float.Parse(answer);
                         if (score > ip.TotalScore)
                         {
-                            ia.StatusOfItem = 101;
+                            ia.StatusOfItem = 102;
+                            score = 0;
                         }
                     }
                 }
@@ -210,6 +275,8 @@ namespace Exercise.Model
             return data.AreaInfo.SelectMany(a => a.QuestionInfo)
                 .Where(q => q.QuestionId == questionId).First();
         }
+
+        #endregion
 
         public class ItemException : ModelBase
         {
@@ -278,21 +345,16 @@ namespace Exercise.Model
                 }
             }
 
-            public bool Confirm()
+            public void Confirm()
             {
                 if (AreaType == AreaType.Answer)
                 {
-                    try
-                    {
-                        double score = double.Parse(SelectedAnswer);
-                        if (score > Problem.TotalScore)
-                            return false;
-                        Answer.Score = score;
-                    }
-                    catch
-                    {
-                        return false;
-                    }
+                    if (SelectedAnswer == "")
+                        throw new System.Exception("请为本题打分");
+                    double score = double.Parse(SelectedAnswer);
+                    if (score > Problem.TotalScore)
+                        throw new System.Exception("输入值不在有效范围中");
+                    Answer.Score = score;
                 }
                 else if (SelectedAnswer == SAnswer.Value)
                 {
@@ -314,7 +376,6 @@ namespace Exercise.Model
                     Answer.AnalyzeResult.Add(new AnswerData.Result() { Value = SelectedAnswer });
                 }
                 HasException = false;
-                return true;
             }
 
             public void Clear()

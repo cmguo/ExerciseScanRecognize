@@ -1,4 +1,6 @@
-﻿namespace Base.Mvvm.Converter
+﻿using System.Windows.Controls;
+
+namespace Base.Mvvm.Converter
 {
     public class NonNullVisibleConverter : VisibilityConverter
     {

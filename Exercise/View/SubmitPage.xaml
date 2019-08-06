@@ -8,7 +8,7 @@
       xmlns:tb="clr-namespace:Base.TitleBar;assembly=Base"
       xmlns:tal="clr-namespace:TalBase.View;assembly=TalBase"
       mc:Ignorable="d" 
-      d:DesignHeight="450" d:DesignWidth="800"
+      d:DesignHeight="652" d:DesignWidth="1200"
       Title="HomePage">
 
     <Page.DataContext>

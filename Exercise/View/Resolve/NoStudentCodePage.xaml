@@ -19,7 +19,7 @@
             </ResourceDictionary.MergedDictionaries>
 
             <cv:NonNullTrueConverter x:Key="NonNullTrueConverter" />
-            <cv:NullVisibleConverter x:Key="NullVisibleConverter" />
+            <cv:NullHiddenConverter x:Key="MessageVisibleConverter" />
             <vm:SchoolViewModel x:Key="ViewModel" />
 
         </ResourceDictionary>
@@ -34,7 +34,7 @@
         </Grid.RowDefinitions>
         <ComboBox Grid.Row="0" x:Name="classList" DataContext="{StaticResource ViewModel}"
                   FontSize="14" Foreground="#FF2D4A66" DisplayMemberPath="ClassName"
-                  IsReadOnly="True" Margin="0, 14, 0, 0" 
+                  IsReadOnly="True"
                   Height="32"
                   Width="231"
                   ItemsSource="{Binding Classes}" SelectedItem="{Binding SelectedClass}">
@@ -50,11 +50,10 @@
                   SelectedValuePath="TalNo" SelectedValue="{Binding Page.StudentCode}">
         </ComboBox>
         <StackPanel Grid.Row="2" Margin="0, 9, 0 ,0" Orientation="Horizontal"
-                    Visibility="{Binding SelectedItem, ElementName=studentList, Converter={StaticResource NullVisibleConverter}}" >
+                    Visibility="{Binding Text, ElementName=msg, Converter={StaticResource MessageVisibleConverter}}" >
             <Image Width="12" Height="12" Source="{svgc:SvgImage Source=/Icons/bad.svg}" />
-            <TextBlock Margin="4, 0, 0, 0" FontSize="11" Foreground="#ffff6767" Text="请选择筛选列表中的学生" />
+            <TextBlock x:Name="msg" Margin="4, 0, 0, 0" FontSize="11" Foreground="#ffff6767" />
         </StackPanel>
-        <tal:TalButton Grid.Row="3" Margin="0, 4, 0 ,0" Content="确认" Click="Confirm_Click" IsDefault="True"
-                IsEnabled="{Binding SelectedItem, ElementName=studentList, Converter={StaticResource NonNullTrueConverter}}" />
+        <tal:TalButton Grid.Row="3" Margin="0, 4, 0 ,0" Content="确认" Click="Confirm_Click" IsDefault="True" />
     </Grid>
 </Page>

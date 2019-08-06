@@ -38,13 +38,14 @@
             </tal:TalTouch>
 
             <Popup x:Key="LogoutPopup" StaysOpen="False" Placement="Bottom" 
-                   HorizontalOffset="32"
+                   HorizontalOffset="8" VerticalOffset="8"
                    AllowsTransparency="True" PlacementTarget="{StaticResource Logout}">
-                <tal:TalButton Content="退出登录" BorderThickness="1"
+                <tal:TalButton Content="退出登录" BorderThickness="1" Width="120" Height="48"
                             DataContext="{StaticResource ViewModel}" Command="{Binding LogoutCommand}"/>
             </Popup>
 
             <cv:NonNullTrueConverter x:Key="NonNullTrueConverter" />
+            <cv:BooleanBrushConverter x:Key="BorderBrushConverter" TrueValue="#FF2D4A66" FalseValue="#332D4A66" />
 
         </ResourceDictionary>
     </Window.Resources>
@@ -71,10 +72,10 @@
 
         <StackPanel Margin="0, 16, 13, 0" Orientation="Horizontal" FlowDirection="RightToLeft" VerticalAlignment="Top">
             <tal:TalTouch Margin="0, 0, 12, 0" x:Name="close" Width="16" Height="16" 
-                          Command="ApplicationCommands.Close" TouchStyle="Label">
+                          Command="ApplicationCommands.Close" TouchStyle="Icon">
                 <svgc:SvgViewbox Source="Icons/关闭/细.svg"/>
             </tal:TalTouch>
-            <tal:TalTouch x:Name="mini" Width="16" Height="16" Click="Mini_Click" TouchStyle="Label">
+            <tal:TalTouch x:Name="mini" Width="16" Height="16" Click="Mini_Click" TouchStyle="Icon">
                 <svgc:SvgViewbox Source="Icons/收起.svg"/>
             </tal:TalTouch>
         </StackPanel>
@@ -92,20 +93,22 @@
 
                 <TextBlock Grid.Row="0" FontSize="32" Foreground="#FF2D4A66" Text="欢迎登录" FontWeight="Bold" />
 
-                <Border Grid.Row="1" Margin="0, 40, 0, 0" Height="48" CornerRadius="4" BorderThickness="1" BorderBrush="#332D4A66">
+                <Border Grid.Row="1" Margin="0, 40, 0, 0" Height="48" CornerRadius="4" BorderThickness="1"
+                        BorderBrush="{Binding IsFocused, ElementName=user, Converter={StaticResource BorderBrushConverter}}">
                     <StackPanel Orientation="Horizontal">
                         <Image Width="16" Height="16" Margin="16, 0, 0, 0" VerticalAlignment="Center" 
                            Source="{svgc:SvgImage Source=/Icons/用户.svg}"/>
-                        <mu:PUTextBox Margin="16, 0, 16, 0" BorderThickness="0" Watermark="请输入用户名" FontSize="18" Foreground="#FF2D4A66" Width="281"
+                        <mu:PUTextBox x:Name="user" Margin="16, 0, 16, 0" BorderThickness="0" Watermark="请输入用户名" FontSize="18" Foreground="#FF2D4A66" Width="261"
                                   Text="{Binding LoginData.LoginName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
                     </StackPanel>
                 </Border>
 
-                <Border Grid.Row="2" Margin="0, 18, 0, 0" Height="48" CornerRadius="4" BorderThickness="1" BorderBrush="#332D4A66">
+                <Border Grid.Row="2" Margin="0, 18, 0, 0" Height="48" CornerRadius="4" BorderThickness="1" 
+                        BorderBrush="{Binding IsFocused, ElementName=pass, Converter={StaticResource BorderBrushConverter}}">
                     <StackPanel Orientation="Horizontal">
                         <Image Width="16" Height="16" Margin="16, 0, 0, 0" VerticalAlignment="Center" 
                            Source="{svgc:SvgImage Source=/Icons/密码.svg}"/>
-                        <mu:PUPasswordBox Margin="16, 0, 16, 0" BorderThickness="0" Watermark="请输入密码" FontSize="18" Foreground="#FF2D4A66" Width="281"
+                        <mu:PUPasswordBox x:Name="pass" Margin="16, 0, 16, 0" BorderThickness="0" Watermark="请输入密码" FontSize="18" Foreground="#FF2D4A66" Width="261"
                                           IsShowPwdButtonShow="False"
                                           Password="{Binding LoginData.Password, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
                     </StackPanel>

@@ -27,14 +27,14 @@
 
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition />
-            <RowDefinition />
-            <RowDefinition />
-            <RowDefinition />
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
         <ComboBox Grid.Row="0" x:Name="classList" DataContext="{StaticResource ViewModel}"
                   FontSize="14" Foreground="#FF2D4A66" DisplayMemberPath="ClassName"
-                  IsReadOnly="True"
+                  IsReadOnly="True" Margin="0, 14, 0, 0" 
                   Height="32"
                   Width="231"
                   ItemsSource="{Binding Classes}" SelectedItem="{Binding SelectedClass}">

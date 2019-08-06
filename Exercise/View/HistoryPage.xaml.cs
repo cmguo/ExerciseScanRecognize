@@ -25,6 +25,7 @@ namespace Exercise.View
         {
             InitializeComponent();
             DataContext = FindResource("ViewModel");
+            dataGrid.PreparingCellForEdit += DataGrid_PreparingCellForEdit; ;
             dataGrid.CellEditEnding += DataGrid_CellEditEnding;
             dataGrid.MouseLeftButtonDown += DataGrid_MouseLeftButtonDown;
             local.Items.SortDescriptions.Add(
@@ -45,7 +46,8 @@ namespace Exercise.View
             };
 
         }
-    private void DataGrid_MouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
+
+        private void DataGrid_MouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
             dataGrid.CommitEdit();
         }
@@ -70,8 +72,8 @@ namespace Exercise.View
             DataGridCellsPresenter presenter = UITreeHelper.GetChildOfType<DataGridCellsPresenter>(row);
             DataGridCell cell = (DataGridCell)presenter.ItemContainerGenerator.ContainerFromIndex(0);
             cell.Focus();
-            cell.IsEditing = true;
-            //dataGrid.BeginEdit();
+            //cell.IsEditing = true;
+            dataGrid.BeginEdit();
             e.Handled = true;
         }
 
@@ -82,13 +84,20 @@ namespace Exercise.View
             vm.ShiftPages((bool)page == false);
         }
 
+        private void DataGrid_PreparingCellForEdit(object sender, DataGridPreparingCellForEditEventArgs e)
+        {
+            UITreeHelper.GetChildOfType<TextBox>(e.EditingElement).Focus();
+            UITreeHelper.GetChildOfType<TextBox>(e.EditingElement).SelectAll();
+        }
+
         private void DataGrid_CellEditEnding(object sender, DataGridCellEditEndingEventArgs e)
         {
             Record record = e.Row.DataContext as Record;
             HistoryViewModel vm = DataContext as HistoryViewModel;
             string old = record.Name;
             record.Name = UITreeHelper.GetChildOfType<TextBox>(e.EditingElement).Text;
-            BackgroundWork.Execute(() => vm.ModifyRecordName(record, old));
+            if (record.Name != old)
+                BackgroundWork.Execute(() => vm.ModifyRecordName(record, old));
         }
 
         private void ButtonRefresh_Click(object sender, System.Windows.RoutedEventArgs e)

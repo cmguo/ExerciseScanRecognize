@@ -26,10 +26,12 @@
             <cv:NullVisibleConverter x:Key="NullVisibleConverter" />
             <cv:ToStringConverter x:Key="ToStringConverter" />
             <cv:BooleanBrushConverter x:Key="BackgroundConverter" TrueValue="Transparent" FalseValue="#FF10D900" />
-            
+            <cv:BooleanBrushConverter x:Key="ForegroundConverter" TrueValue="#FF2D4A66" FalseValue="White" />
+
             <DataTemplate x:Key="ExceptionItem">
                 <tal:TalRatio Content="{Binding Name}"
                               Background="{Binding HasException, Converter={StaticResource BackgroundConverter}}"
+                              Foreground="{Binding HasException, Converter={StaticResource ForegroundConverter}}"
                               IsChecked="{Binding IsSelected, RelativeSource={RelativeSource AncestorType=ListViewItem}}"/>
             </DataTemplate>
 

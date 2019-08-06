@@ -51,7 +51,7 @@ namespace Exercise.Model
         public int DuplexPageCount => 1 + (Another == null ? 0 : Another.DuplexPageCount);
 
         [JsonIgnore]
-        public double DuplexScore => Score + (Another == null ? 0 : Another.DuplexScore);
+        public double DuplexScore => Score + (Another == null || Another == this ? 0 : Another.DuplexScore);
 
         [JsonIgnore]
         public int StudentPageCount => CalcStudentPageCount();

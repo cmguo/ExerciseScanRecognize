@@ -2545,7 +2545,7 @@
                                                     Text="{Binding Watermark,RelativeSource={RelativeSource AncestorType=TextBox}}"
                                                     VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
                                                     HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
-                                                    Opacity="0.6" />
+                                                    Opacity="0.25" />
                                         <local:PUButton x:Name="btnClear"
                                                         ButtonStyle="Link"
                                                         Visibility="Collapsed"
@@ -2801,7 +2801,7 @@
                                                     Text="{Binding Watermark,RelativeSource={RelativeSource AncestorType=TextBox}}"
                                                     VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
                                                     HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
-                                                    Opacity="0.6" />
+                                                    Opacity="0.25" />
                                         <local:PUButton x:Name="btnShowPwd"
                                                         ButtonStyle="Link"
                                                         Opacity="0"

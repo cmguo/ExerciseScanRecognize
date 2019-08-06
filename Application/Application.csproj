@@ -295,9 +295,15 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Resource Include="Icons\Info\16.png" />
-    <Resource Include="Icons\Close\thick.png" />
+    <Resource Include="Icons\关闭\粗.png" />
     <Content Include="Icons\Info\16.svg" />
-    <Resource Include="Icons\Close\thin.png" />
+    <Content Include="Icons\关闭\粗.svg">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Resource Include="Icons\关闭\细.png" />
+    <Content Include="Icons\关闭\细.svg">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="Icons\refresh.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
@@ -362,7 +368,10 @@
     <Content Include="Icons\搜索空.svg">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Icons\minimize.png">
+    <Content Include="Icons\收起.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Icons\收起.svg">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Icons\放大.png">

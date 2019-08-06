@@ -57,6 +57,30 @@
                 <Setter Property="Opacity" Value="1"/>
             </MultiTrigger>
 
+            <!--Icon-->
+            <Trigger Property="TouchStyle" Value="Icon">
+                <Setter Property="BorderThickness" Value="0"/>
+                <Setter Property="Background" Value="#01000001"/>
+                <Setter Property="Foreground" Value="White"/>
+                <Setter Property="Opacity" Value="0.5"/>
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="local:TalTouch">
+                            <Grid Background="{TemplateBinding Background}">
+                                <ContentPresenter ContentSource="Content"/>
+                            </Grid>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+            </Trigger>
+            <MultiTrigger>
+                <MultiTrigger.Conditions>
+                    <Condition Property="TouchStyle" Value="Icon" />
+                    <Condition Property="IsMouseOver" Value="True" />
+                </MultiTrigger.Conditions>
+                <Setter Property="Opacity" Value="1"/>
+            </MultiTrigger>
+
             <!--Solid-->
             <Trigger Property="TouchStyle" Value="Solid">
                 <Setter Property="FontSize" Value="14"/>

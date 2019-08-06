@@ -19,7 +19,7 @@
     
     <Page.Resources>
         <ResourceDictionary>
-            
+
             <tal:TalTouch x:Key="Histroy" TouchStyle="Label"
                 Command="{Binding HistroyCommand}" Background="{x:Null}"
                 CommandParameter="{Binding Source={x:Reference Page}}">

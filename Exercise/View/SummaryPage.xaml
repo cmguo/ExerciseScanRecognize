@@ -27,8 +27,8 @@
             </ResourceDictionary.MergedDictionaries>
         
             <resolve:ExceptionListConverter x:Key="ExceptionListConverter" />
-            <cv:BooleanObjectConverter x:Key="IconConverter" TrueValue="/Icons/PaperScanFail.png" 
-                                        FalseValue="/Icons/PaperScanOk.png" />
+            <cv:BooleanObjectConverter x:Key="IconConverter" TrueValue="Icons/试卷扫描异常.svg" 
+                                        FalseValue="Icons/试卷扫描无异常.svg" />
             <local:HasExceptionConverter x:Key="HasExceptionConverter" />
             <cv:NonNullVisibleConverter x:Key="VisibilityConverter" />
             <local:NoExceptionConverter x:Key="NoExceptionConverter" />
@@ -62,7 +62,7 @@
                 <ColumnDefinition Width="Auto"/>
             </Grid.ColumnDefinitions>
 
-            <Image Grid.Column="0" Width="83" Height="86" Margin="62, 25, 30, 29"
+            <svgc:SvgCanvas Grid.Column="0" Width="83" Height="86" Margin="62, 25, 30, 29"
                    Source="{Binding ExceptionCount, Converter={StaticResource IconConverter}}" />
             
             <StackPanel Grid.Column="1" HorizontalAlignment="Stretch" VerticalAlignment="Center" Orientation="Vertical" 
@@ -73,7 +73,7 @@
                 <StackPanel Orientation="Horizontal">
                     <StackPanel.Resources>
                         <Style TargetType="TextBlock">
-                            <Setter Property="FontSize" Value="24" />
+                            <Setter Property="FontSize" Value="20" />
                         </Style>
                     </StackPanel.Resources>
                     <TextBlock Text="本次扫描共收回" />
@@ -118,7 +118,7 @@
             </Grid>
         </Grid>
 
-        <TextBlock Grid.Row="1" Text="试卷扫描详情" Margin="24,24,0,12" FontSize="16"/>
+        <TextBlock Grid.Row="1" Text="试卷扫描详情" Margin="24,24,0,12" FontSize="16" FontWeight="Bold"/>
 
         <DockPanel Grid.Row="2" Margin="22,2,22,26" >
 
@@ -135,7 +135,7 @@
                         <RowDefinition Height="Auto" />
                         <RowDefinition Height="*" />
                     </Grid.RowDefinitions>
-                    <StackPanel Grid.Row="0" Margin="30,0,30,0" Height="80" Orientation="Horizontal">
+                    <StackPanel Grid.Row="0" Margin="30,0,30,0" Height="64" Orientation="Horizontal">
                         <TextBlock Grid.Column="1" Foreground="#FFFE9400" Text="{Binding ExceptionCount, StringFormat=共存在{0}项异常}" VerticalAlignment="Center"/>
                     </StackPanel>
                     <DataGrid Grid.Row="1" Margin="26, 0, 26, 0" ItemsSource="{Binding Exceptions}"
@@ -156,7 +156,7 @@
                         <RowDefinition Height="Auto" />
                         <RowDefinition Height="*" />
                     </Grid.RowDefinitions>
-                    <Grid Grid.Row="0" Margin="30,0,30,0" Height="80">
+                    <Grid Grid.Row="0" Margin="30,0,30,0" Height="64">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="*"/>
                             <ColumnDefinition Width="Auto"/>

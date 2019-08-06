@@ -10,6 +10,7 @@ namespace TalBase.View
         {
             Button,
             Label,
+            Icon,
             Solid, 
             Fill
         }

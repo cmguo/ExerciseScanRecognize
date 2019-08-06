@@ -22,7 +22,7 @@ namespace Exercise.View
         internal NoExceptionConverter()
         {
             VisibleValues = new object[] { 0 };
-            //CollapsedValues = new object[0];
+            HiddenValues = new object[0];
         }
     }
 

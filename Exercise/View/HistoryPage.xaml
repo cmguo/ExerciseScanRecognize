@@ -41,8 +41,8 @@
                             Command="{Binding ReturnCommand}"
                             CommandParameter="{Binding Source={x:Reference Page}}">
                 <StackPanel Orientation="Horizontal">
-                    <Image Width="24" Height="24" VerticalAlignment="Center" Source="/Icons/back.png" />
-                    <TextBlock Margin="5, 0, 0, 0" VerticalAlignment="Center" Text="返回" />
+                    <Image Width="24" Height="24" VerticalAlignment="Center" Source="{svgc:SvgImage Source=Icons/首页.svg}" />
+                    <TextBlock Margin="5, 0, 0, 0" VerticalAlignment="Center" Text="返回首页" />
                 </StackPanel>
             </tal:TalTouch>
             
@@ -77,7 +77,7 @@
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
         <Border Grid.RowSpan="2" CornerRadius="4" Background="White" />
-        <TextBlock  FontSize="16" Foreground="#FF2D4A66" Margin="30, 28, 0, 16" Text="扫描记录管理" />
+        <TextBlock  FontSize="16" Foreground="#FF2D4A66" FontWeight="Bold" Margin="30, 28, 0, 16" Text="扫描记录管理" />
         <ScrollViewer  Grid.Row="1" VerticalScrollBarVisibility="Auto" Template="{StaticResource ScrollViewerTemplate}" Focusable="True" Name="ScrollViewer">
             <Grid >
                 <Grid.RowDefinitions>
@@ -142,7 +142,7 @@
                 <DataGrid Grid.Row="1" x:Name="dataGrid" Margin="30, 16, 30, 0"  ScrollViewer.HorizontalScrollBarVisibility="Disabled"
                           ItemsSource="{Binding Records}" Style="{StaticResource DefaultDataGridStyle}">
                     <DataGrid.Columns>
-                        <DataGridTemplateColumn Header="试卷名称" IsReadOnly="False" Width="230" 
+                        <DataGridTemplateColumn Header="试卷名称" IsReadOnly="False" Width="230"
                                         CellTemplate="{StaticResource DataTemplate}"
                                         CellEditingTemplate="{StaticResource EditingTemplate}">
                         </DataGridTemplateColumn>
@@ -165,7 +165,7 @@
                                 <DataTemplate>
                                     <StackPanel DockPanel.Dock="Right" Orientation="Horizontal">
                                         <tal:TalHyperlink Content="查看扫描详情" Click="ButtonDetail_Click" Background="{x:Null}" BorderThickness="0"/>
-                                        <TextBlock Text=" | " />
+                                        <TextBlock Text=" | " Foreground="#FFE3E8F0" />
                                         <tal:TalHyperlink Content="重命名" Click="ButtonRename_Click" Background="{x:Null}" BorderThickness="0" />
                                     </StackPanel>
                                 </DataTemplate>

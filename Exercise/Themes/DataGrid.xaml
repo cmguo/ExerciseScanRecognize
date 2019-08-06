@@ -20,6 +20,7 @@
                     <Setter Property="Padding" Value="32, 0, 0, 0" />
                     <Setter Property="Background" Value="#FFF4F8FE" />
                     <Setter Property="Foreground" Value="#FF7F8E99" />
+                    <Setter Property="FontWeight" Value="Bold" />
                 </Style>
             </Setter.Value>
         </Setter>

@@ -66,8 +66,8 @@
             <ColumnDefinition Width="279" />
         </Grid.ColumnDefinitions>
 
-        <local:TreeViewEx Grid.Column="0" x:Name="treeView" Margin="32, 0, 33, 0" 
-                          BorderThickness="0" Background="{x:Null}"
+        <local:TreeViewEx Grid.Column="0" x:Name="treeView" Padding="32, 0, 33, 0" 
+                          BorderThickness="0" Background="White"
                           ItemsSource="{Binding Exceptions}"
                           ScrollViewer.HorizontalScrollBarVisibility="Hidden"
                           ScrollViewer.VerticalScrollBarVisibility="Hidden"
@@ -110,7 +110,7 @@
                                    OverlayPenBrush="#FFFD712A" OverlayBrush="#33FD712A"
                                    Overlay="{Binding SelectedException.Page.Analyze.SelectedException, Converter={StaticResource PaperOverlayConverter}, ConverterParameter=Exception}"/>
                 <local:PaperViewer x:Name="paper2" Paper="{Binding SelectedException.Page.Another.PagePath}" Visibility="Collapsed" />
-                <tal:TalToggle x:Name="face" Margin="0, 24, 0, 0" ToggleStyle="Switch" Title1="正面" Title2="反面" 
+                <tal:TalToggle x:Name="face" Margin="0, 24, 0, 0" ToggleStyle="Switch" Title1="A面" Title2="B面" 
                                VerticalAlignment="Top" HorizontalAlignment="Center"
                                Visibility="{Binding SelectedException, Converter={StaticResource DuplexFaceConverter}}"
                                Unchecked="ButtonFace1_Click" Checked="ButtonFace2_Click"/>

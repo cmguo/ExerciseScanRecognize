@@ -14,6 +14,9 @@
         ResizeMode="NoResize"
         WindowStartupLocation="CenterScreen"
         WindowStyle="None">
+
+    <TextBlock.FontSize>60</TextBlock.FontSize>
+    <Control.Foreground>Red</Control.Foreground>
     
     <Window.CommandBindings>
         <CommandBinding Command="ApplicationCommands.Close" Executed="Close_Click"/>

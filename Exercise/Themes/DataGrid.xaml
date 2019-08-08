@@ -19,8 +19,8 @@
                 <Style TargetType="DataGridColumnHeader">
                     <Setter Property="Padding" Value="32, 0, 0, 0" />
                     <Setter Property="Background" Value="#FFF4F8FE" />
-                    <Setter Property="Foreground" Value="#FF7F8E99" />
-                    <Setter Property="FontSize" Value="14" />
+                    <Setter Property="Foreground" Value="{StaticResource FontColor.Title2}" />
+                    <Setter Property="FontSize" Value="{StaticResource FontSize.Normal}" />
                     <Setter Property="FontWeight" Value="Bold" />
                 </Style>
             </Setter.Value>
@@ -38,8 +38,8 @@
                 <Style TargetType="DataGridCell">
                     <Setter Property="Margin" Value="32, 0, 0, 0" />
                     <Setter Property="VerticalAlignment" Value="Center"/>
-                    <Setter Property="FontSize" Value="14"/>
-                    <Setter Property="Foreground" Value="#FF2D4A66"/>
+                    <Setter Property="FontSize" Value="{StaticResource FontSize.Normal}"/>
+                    <Setter Property="Foreground" Value="{StaticResource FontColor.Normal}"/>
                     <Setter Property="Background" Value="{x:Null}" />
                     <Setter Property="BorderBrush" Value="{x:Null}" />
                     <Style.Triggers>

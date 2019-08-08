@@ -117,6 +117,7 @@
     </Compile>
     <Compile Include="View\TalToast.cs" />
     <Compile Include="View\TalHyperlink.cs" />
+    <Compile Include="View\TalText.cs" />
     <Compile Include="View\TalTouch.cs" />
     <Compile Include="View\TalButton.cs" />
     <Compile Include="View\TalRatio.cs" />
@@ -134,6 +135,14 @@
   </ItemGroup>
   <ItemGroup>
     <Page Include="Themes\BlueSkin.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Themes\Skin.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Themes\TalText.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>

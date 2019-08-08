@@ -27,7 +27,7 @@
 
 
             <cv:MultiValueConverter x:Key="MultiValueConverter" />
-            <cv:BooleanObjectConverter x:Key="PageIconConverter" 
+            <cv:BinaryObjectConverter x:Key="PageIconConverter" 
                                        FalseValue="/Icons/left.png" TrueValue="/Icons/right.png" />
             <cv:ToStringConverter x:Key="ToStringConverter" />
             <cv:NonNullVisibleConverter x:Key="NonNullVisibleConverter" />
@@ -50,7 +50,7 @@
             </Style>
 
             <DataTemplate x:Key="DataTemplate">
-                <TextBlock Text="{Binding Name}" FontSize="14" Foreground="#FF2D4A66" TextTrimming="CharacterEllipsis" TextWrapping="NoWrap" Width="198">
+                <TextBlock Text="{Binding Name}" TextTrimming="CharacterEllipsis" TextWrapping="NoWrap" Width="198">
                     <TextBlock.ToolTip>
                         <ToolTip Style="{DynamicResource TooltipStyle}"  Content="{Binding Name}" Placement="Bottom"
                                               Width="198" MaxWidth="198"/>
@@ -60,7 +60,7 @@
 
             <DataTemplate x:Key="EditingTemplate">
                 <Border CornerRadius="4" BorderBrush="#FF2D4A66" Width="170" Height="32" BorderThickness="1" HorizontalAlignment="Left" Margin="-3, 0, 0, 0">
-                    <TextBox Text="{Binding Name}" FontSize="14" Foreground="#FF2D4A66" VerticalAlignment="Center" BorderThickness="0"/>
+                    <TextBox Foreground="#FF2D4A66" VerticalAlignment="Center" BorderThickness="0" Text="{Binding Name}"/>
                 </Border>
             </DataTemplate>
             
@@ -70,13 +70,14 @@
     <tb:TitleBarManager.Buttons>
         <tb:TitleButton Name="Return" Content="{StaticResource Return}" />
     </tb:TitleBarManager.Buttons>
-    <Grid Margin="18, 20, 18, 16" DataContext="{StaticResource ViewModel}" >
+    
+    <Grid Margin="18, 20, 18, 16" DataContext="{StaticResource ViewModel}">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
         <Border Grid.RowSpan="2" CornerRadius="4" Background="White" />
-        <TextBlock  FontSize="16" Foreground="#FF2D4A66" FontWeight="Bold" Margin="30, 28, 0, 16" Text="扫描记录管理" />
+        <tal:TalText TextStyle="FatTitle" Margin="30, 28, 0, 16" Text="扫描记录管理" />
         <ScrollViewer  Grid.Row="1" VerticalScrollBarVisibility="Auto" Template="{StaticResource ScrollViewerTemplate}" Focusable="True" Name="ScrollViewer">
             <Grid >
                 <Grid.RowDefinitions>
@@ -108,14 +109,14 @@
                                 <DockPanel Margin="16, 0, 26, 0" >
                                     <StackPanel DockPanel.Dock="Left" Orientation="Horizontal" VerticalAlignment="Center">
                                         <Image Width="16" Height="16" Source="/Icons/Info/16.png"/>
-                                        <TextBlock Margin="8, 0, 0, 0" Foreground="#FF2D4A66">
+                                        <tal:TalText Margin="8, 0, 0, 0">
                                             <TextBlock.Text>
                                                 <MultiBinding StringFormat="异常退出待处理：{0}，扫描时间：{1:yyyy.MM.dd - HH:mm}">
                                                     <Binding Path="Name"/>
                                                     <Binding Path="DataTime"/>
                                                 </MultiBinding>
                                             </TextBlock.Text>
-                                        </TextBlock>
+                                        </tal:TalText>
                                     </StackPanel>
                                     <StackPanel DockPanel.Dock="Right" Orientation="Horizontal" VerticalAlignment="Center">
                                         <tal:TalHyperlink Content="查看扫描结果" 

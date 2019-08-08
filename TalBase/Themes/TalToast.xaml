@@ -20,7 +20,7 @@
                             Padding="{TemplateBinding Padding}">
                         <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
                             <Image x:Name="image" Width="16" Height="16" VerticalAlignment="Center" 
-                            Source="/Icons/Finish/16.png" />
+                                   Source="/Icons/Finish/16.png" />
                             <TextBlock Margin="8, 0, 0, 0" 
                                    Text="{TemplateBinding Message}" VerticalAlignment="Center" />
                         </StackPanel>

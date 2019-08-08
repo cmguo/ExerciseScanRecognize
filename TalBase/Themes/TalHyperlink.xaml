@@ -8,6 +8,15 @@
         <Setter Property="Padding" Value="20, 0, 20, 0"/>
         <Setter Property="FontSize" Value="14"/>
         <Setter Property="Foreground" Value="#FF4C84FF"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="local:TalHyperlink">
+                    <Grid Background="{TemplateBinding Background}">
+                        <ContentPresenter ContentSource="Content"/>
+                    </Grid>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
         <Style.Triggers>
             <MultiTrigger>
                 <MultiTrigger.Conditions>

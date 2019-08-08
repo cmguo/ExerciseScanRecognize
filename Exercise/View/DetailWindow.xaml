@@ -41,8 +41,7 @@
                     <ListView.ItemTemplate>
                         <DataTemplate>
                             <Border BorderThickness="0" BorderBrush="Black" Height="24">
-                                <TextBlock Margin="24, 10, 0, 0" VerticalAlignment="Center" Foreground="#FF2D4A66"
-                                           Text="{Binding Converter={StaticResource StudentConverter}}"/>
+                                <tal:TalText Margin="24, 10, 0, 0" Text="{Binding Converter={StaticResource StudentConverter}}"/>
                             </Border>
                         </DataTemplate>
                     </ListView.ItemTemplate>
@@ -52,7 +51,7 @@
 
             <ControlTemplate x:Key="ClassDetail" TargetType="ListViewItem">
                 <StackPanel Orientation="Vertical" HorizontalAlignment="Stretch" IsHitTestVisible="False" >
-                    <TextBlock Margin="0, 6, 0, 8" FontSize="14" Foreground="#FF2D4A66" Text="{Binding Name}"/>
+                    <tal:TalText Margin="0, 6, 0, 8" Text="{Binding Name}"/>
 
                     <Border Background="#FFF4F8FE" Margin="0,0,0,10">
                         <Grid Margin="14, 16, 14, 16" >
@@ -62,14 +61,12 @@
                                 <RowDefinition Height="Auto" />
                             </Grid.RowDefinitions>
                             <StackPanel Grid.Row="0" Margin="0, 0, 0, 4" Orientation="Vertical" DataContext="{Binding SubmitStudentList}">
-                                <TextBlock VerticalAlignment="Center" Opacity="0.5"
-                                        Text="{Binding Count, StringFormat=已回收 {0}人}" />
+                                <tal:TalText Opacity="0.5" Text="{Binding Count, StringFormat=已回收 {0}人}" />
                                 <Thumb Template="{StaticResource StudentList}" />
                             </StackPanel>
                             <Canvas />
                             <StackPanel Grid.Row="2" Margin="0, 8, 0, 4" Orientation="Vertical" DataContext="{Binding LostStudentList}">
-                                <TextBlock VerticalAlignment="Center" Opacity="0.5"
-                                        Text="{Binding Count, StringFormat=未回收 {0}人}" />
+                                <tal:TalText Opacity="0.5" Text="{Binding Count, StringFormat=未回收 {0}人}" />
                                 <Thumb Template="{StaticResource StudentList}" />
                             </StackPanel>
                         </Grid>
@@ -97,7 +94,7 @@
                     <ColumnDefinition Width="Auto" />
                     <ColumnDefinition Width="16" />
                 </Grid.ColumnDefinitions>
-                <TextBlock FontSize="16" Foreground="#FF2D4A66" FontWeight="Bold" Text="{Binding Title, ElementName=Window}" VerticalAlignment="Center" />
+                <tal:TalText TextStyle="FatTitle" Text="{Binding Title, ElementName=Window}" />
                 <tal:TalTouch Grid.Column="2" x:Name="close" TouchStyle="Icon" Click="Close_Click">
                     <svgc:SvgViewbox Source="Icons/关闭/粗.svg"/>
                 </tal:TalTouch>

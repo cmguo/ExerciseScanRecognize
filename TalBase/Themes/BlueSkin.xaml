@@ -3,6 +3,15 @@
                     xmlns:sys="clr-namespace:System;assembly=mscorlib"
                     xmlns:local="clr-namespace:TalBase.View">
 
+    <!--Font-->
+    <sys:Double x:Key="FontSize.Normal">14</sys:Double>
+    <sys:Double x:Key="FontSize.Fat">16</sys:Double>
+    <sys:Double x:Key="FontSize.Large">24</sys:Double>
+    <sys:Double x:Key="FontSize.Largest">26</sys:Double>
+    <SolidColorBrush x:Key="FontColor.Normal">#FF2D4A66</SolidColorBrush>
+    <SolidColorBrush x:Key="FontColor.Weak">#FF7F8E99</SolidColorBrush>
+    <SolidColorBrush x:Key="FontColor.Title2">#FF7F8E99</SolidColorBrush>
+
     <!--Button-->
     <sys:Double x:Key="ButtonHeight">32</sys:Double>
     <Thickness x:Key="ButtonPadding">20, 0, 20, 0</Thickness>
@@ -30,9 +39,5 @@
     <SolidColorBrush x:Key="ButtonDisabledForeground">#FF2D4A66</SolidColorBrush>
     <!--Pressed-->
     <SolidColorBrush x:Key="ButtonPressedBackground">#FF3068E3</SolidColorBrush>
-
-    <!--Font-->
-    <sys:Double x:Key="NormalFontSize">14</sys:Double>
-    <SolidColorBrush x:Key="NormalFontColor">#FF2D4A66</SolidColorBrush>
 
 </ResourceDictionary>

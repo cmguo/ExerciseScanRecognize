@@ -4,18 +4,14 @@
     xmlns:local="clr-namespace:TalBase.View">
 
     <ResourceDictionary.MergedDictionaries>
-        <ResourceDictionary Source="/TalBase;component/Themes/BlueSkin.xaml" />
+        <ResourceDictionary Source="/TalBase;component/Themes/Skin.xaml" />
         <ResourceDictionary Source="/TalBase;component/Themes/TalButton.xaml" />
-        <ResourceDictionary Source="/TalBase;component/Themes/TalTouch.xaml" />
+        <ResourceDictionary Source="/TalBase;component/Themes/TalHyperlink.xaml" />
+        <ResourceDictionary Source="/TalBase;component/Themes/TalRatio.xaml" />
+        <ResourceDictionary Source="/TalBase;component/Themes/TalText.xaml" />
         <ResourceDictionary Source="/TalBase;component/Themes/TalToast.xaml" />
         <ResourceDictionary Source="/TalBase;component/Themes/TalToggle.xaml" />
-        <ResourceDictionary Source="/TalBase;component/Themes/TalRatio.xaml" />
-        <ResourceDictionary Source="/TalBase;component/Themes/TalHyperlink.xaml" />
+        <ResourceDictionary Source="/TalBase;component/Themes/TalTouch.xaml" />
     </ResourceDictionary.MergedDictionaries>
-
-    <Style x:Key="NormalTextStyle" TargetType="TextBlock">
-        <Setter Property="FontSize" Value="{StaticResource NormalFontSize}"/>
-        <Setter Property="Foreground" Value="{StaticResource NormalFontColor}"/>
-    </Style>
 
 </ResourceDictionary>

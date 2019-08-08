@@ -5,13 +5,13 @@
     xmlns:local="clr-namespace:TalBase.View">
 
     <ResourceDictionary.MergedDictionaries>
-        <ResourceDictionary Source="/TalBase;component/Themes/BlueSkin.xaml" />
+        <ResourceDictionary Source="/TalBase;component/Themes/Skin.xaml" />
     </ResourceDictionary.MergedDictionaries>
     
     <Style x:Key="DefaultTalButtonStyle" TargetType="local:TalButton" BasedOn="{StaticResource {x:Type mu:PUButton}}">
         <Setter Property="Height" Value="{StaticResource ButtonHeight}"/>
         <Setter Property="Padding" Value="{StaticResource ButtonPadding}"/>
-        <Setter Property="FontSize" Value="{StaticResource NormalFontSize}"/>
+        <Setter Property="FontSize" Value="{StaticResource FontSize.Normal}"/>
         <Setter Property="BorderCornerRadius" Value="{StaticResource ButtonCornerRadius}"/>
         <Setter Property="BorderThickness" Value="{StaticResource ButtonBorderThickness}"/>
         <Setter Property="BorderBrush" Value="{StaticResource ButtonBorderBrush}"/>

@@ -41,14 +41,14 @@
                     <ColumnDefinition Width="*" />
                     <ColumnDefinition Width="16" />
                 </Grid.ColumnDefinitions>
-                <TextBlock FontSize="16" TextWrapping="Wrap" Text="{Binding Caption}" HorizontalAlignment="Stretch" />
+                <local:TalText TextStyle="FatTitle" TextWrapping="Wrap" Text="{Binding Caption}" HorizontalAlignment="Stretch" />
                 <tb:TalTouch Grid.Column="1" x:Name="close" Click="Btn_Click" TouchStyle="Icon">
                     <svgc:SvgViewbox Source="Icons/关闭/粗.svg"/>
                 </tb:TalTouch>
             </Grid>
             <StackPanel Grid.Row="1" Orientation="Horizontal" Margin="0, 24, 0, 0"> 
                 <Image Source="{svgc:SvgImage Source=/Icons/Warn/24.svg}" Width="24" Height="24" VerticalAlignment="Top" />
-                <TextBlock Margin="16, 0, 0, 0" FontSize="14" TextWrapping="Wrap"  VerticalAlignment="Center" Text="{Binding Message}" MaxWidth="352"/>
+                <local:TalText Margin="16, 0, 0, 0" TextWrapping="Wrap" Text="{Binding Message}" MaxWidth="352"/>
             </StackPanel>
             
             <StackPanel Grid.Row="2" x:Name="body" Width="392" Orientation="Vertical" HorizontalAlignment="Left" VerticalAlignment="Top" />

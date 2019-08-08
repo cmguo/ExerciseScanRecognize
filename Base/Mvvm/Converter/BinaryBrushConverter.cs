@@ -4,7 +4,7 @@ using System.Windows.Media;
 namespace Base.Mvvm.Converter
 {
     [ValueConversion(typeof(object), typeof(Brush))]
-    public class BooleanBrushConverter : BooleanConverter<Brush>
+    public class BinaryBrushConverter : BinaryConverter<Brush>
     {
     }
 

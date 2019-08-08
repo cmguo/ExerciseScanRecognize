@@ -3,7 +3,7 @@
 namespace Base.Mvvm.Converter
 {
     [ValueConversion(typeof(object), typeof(bool))]
-    public class BoolConverter : BooleanConverter<bool>
+    public class BoolConverter : BinaryConverter<bool>
     {
         public BoolConverter()
         {

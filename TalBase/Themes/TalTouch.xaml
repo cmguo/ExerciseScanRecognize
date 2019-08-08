@@ -64,6 +64,7 @@
                 <Setter Property="BorderThickness" Value="0"/>
                 <Setter Property="Background" Value="#01000001"/>
                 <Setter Property="Foreground" Value="White"/>
+                <Setter Property="HorizontalAlignment" Value="Center"/>
                 <Setter Property="Opacity" Value="0.5"/>
                 <Setter Property="Template">
                     <Setter.Value>

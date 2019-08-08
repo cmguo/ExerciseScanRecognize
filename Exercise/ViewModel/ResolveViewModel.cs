@@ -193,6 +193,8 @@ namespace Exercise.ViewModel
             }
             if (title != null)
             {
+                MessageBox.Show(Application.Current.MainWindow, "ssss", "xxx", MessageBoxButton.OKCancel);
+                return;
                 int n = PopupDialog.Show(obj as FrameworkElement, title, message, 0, btn, "取消");
                 if (n != 0)
                     return;

@@ -79,20 +79,18 @@
                     <StackPanel Orientation="Horizontal" Margin="0, 15, 0, 15" Width="190" >
                         <svgc:SvgViewbox Width="16" Height="16" Margin="0, 0, 8, 0"
                                Source="{Binding Converter={StaticResource ExceptionListConverter}, ConverterParameter=Image}" />
-                        <TextBlock FontSize="14" Foreground="#FF2D4A66" FontWeight="Bold"
+                        <tal:TalText TextStyle="Title"
                                    Text="{Binding Converter={StaticResource ExceptionListConverter}, ConverterParameter=Tree}"/>
                     </StackPanel>
                     <HierarchicalDataTemplate.ItemTemplate>
                         <DataTemplate>
-                            <TextBlock FontSize="14" Foreground="#FF2D4A66" Padding="32, 9, 0, 9" Width="190" TextTrimming="CharacterEllipsis" 
+                            <tal:TalText Padding="32, 9, 0, 9" Width="190" TextTrimming="CharacterEllipsis" 
                                 Text="{Binding Converter={StaticResource ExceptionConverter}, ConverterParameter=Tree}" >
-
                                 <TextBlock.ToolTip>
                                     <ToolTip Style="{DynamicResource TooltipStyle}" Content="{Binding Converter={StaticResource ExceptionConverter}, ConverterParameter=Tree}" Placement="Bottom"
                                         VerticalOffset="3" Width="183" MaxWidth="183"/>
                                 </TextBlock.ToolTip>
-
-                            </TextBlock>
+                            </tal:TalText>
                         </DataTemplate>
                     </HierarchicalDataTemplate.ItemTemplate>
                 </HierarchicalDataTemplate>
@@ -148,7 +146,7 @@
                        DataContext="{Binding SelectedException, Converter={StaticResource ExceptionConverter}, ConverterParameter=Message}"
                        Visibility="{Binding Converter={StaticResource NonNullVisibleConverter}}">
                     <Image Width="16" Height="16"  Margin="0, 0, 8, 0" Source="{svgc:SvgImage Source=/Icons/异常.svg}" />
-                    <TextBlock Grid.Column="1" FontSize="14" Foreground="#FF2D4A66" TextWrapping="Wrap" Text="{Binding}" Width="200" />
+                    <tal:TalText Grid.Column="1" TextWrapping="Wrap" Text="{Binding}" Width="200" />
                 </StackPanel>
             </StackPanel>
 
@@ -200,7 +198,7 @@
                           ItemsSource="{Binding SelectedExceptionList.Exceptions}" Style="{StaticResource DefaultListView}">
                     <ListView.ItemTemplate>
                         <DataTemplate>
-                            <TextBlock Margin="14, 7, 14, 7" FontSize="14" Foreground="#FF2D4A66" Text="{Binding Converter={StaticResource ExceptionConverter}, ConverterParameter=Tree}" />
+                            <tal:TalText Margin="14, 7, 14, 7" Text="{Binding Converter={StaticResource ExceptionConverter}, ConverterParameter=Tree}" />
                         </DataTemplate>
                     </ListView.ItemTemplate>
                 </ListView>

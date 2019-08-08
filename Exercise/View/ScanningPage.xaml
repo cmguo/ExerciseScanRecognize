@@ -86,7 +86,7 @@
 
         <StackPanel Grid.Column="1" Orientation="Vertical" Width="346" Background="White">
             
-            <TextBlock Margin="0, 88, 0, 0" FontSize="26" Foreground="#FF2D4A66" HorizontalAlignment="Center"
+            <tal:TalText Margin="0, 88, 0, 0" TextStyle="Largest" HorizontalAlignment="Center"
                        Text="{Binding LastPage.Student.Name}"/>
 
             <Grid Margin="0, 16, 0, 0" Width="210" Height="26">

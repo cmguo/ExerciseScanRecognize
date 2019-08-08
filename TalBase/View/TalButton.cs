@@ -75,11 +75,13 @@ namespace TalBase.View
             private void Window_PreviewGotKeyboardFocus(object sender, KeyboardFocusChangedEventArgs e)
             {
                 focused = e.NewFocus;
+                Debug.WriteLine(focused);
                 if (focused == window)
                     return;
                 foreach (TalButton b in buttons)
                 {
                     b.IsActive = b.IsFocused || (b.IsDefault && !(focused is Button));
+                    Debug.WriteLine(b + " -> " + b.IsActive);
                 }
             }
 

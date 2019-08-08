@@ -5,7 +5,7 @@
     <Application.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary Source="pack://application:,,,/TalBase;component/Themes/BlueSkin.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/TalBase;component/Themes/Skin.xaml" />
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </Application.Resources>

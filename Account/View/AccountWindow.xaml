@@ -39,7 +39,7 @@
         </Popup>
 
         <cv:NonNullTrueConverter x:Key="NonNullTrueConverter" />
-        <cv:BooleanBrushConverter x:Key="BorderBrushConverter" TrueValue="#FF2D4A66" FalseValue="#332D4A66" />
+        <cv:BinaryBrushConverter x:Key="BorderBrushConverter" TrueValue="#FF2D4A66" FalseValue="#332D4A66" />
 
     </Window.Resources>
 

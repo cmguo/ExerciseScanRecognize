@@ -4,7 +4,7 @@ using System.Windows.Data;
 
 namespace Base.Mvvm.Converter
 {
-    public class BooleanConverter<T> : IValueConverter
+    public class BinaryConverter<T> : IValueConverter
     {
 
         public T TrueValue { get; set; }
@@ -14,7 +14,7 @@ namespace Base.Mvvm.Converter
         public object[] TrueValues { get; set; }
         public object[] FalseValues { get; set; }
 
-        public BooleanConverter()
+        public BinaryConverter()
         {
             FalseValues = new object[] { 0, false, "", null };
         }

@@ -21,7 +21,6 @@
         <ResourceDictionary>
             
             <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary Source="pack://application:,,,/TalBase;component/Themes/Generic.xaml" />
                 <ResourceDictionary Source="../Themes/ListView.xaml" />
             </ResourceDictionary.MergedDictionaries>
 
@@ -99,7 +98,7 @@
                     <ColumnDefinition Width="16" />
                 </Grid.ColumnDefinitions>
                 <TextBlock FontSize="16" Foreground="#FF2D4A66" FontWeight="Bold" Text="{Binding Title, ElementName=Window}" VerticalAlignment="Center" />
-                <tal:TalTouch Grid.Column="2" x:Name="close" Width="16" Height="16" TouchStyle="Icon" Click="Close_Click">
+                <tal:TalTouch Grid.Column="2" x:Name="close" TouchStyle="Icon" Click="Close_Click">
                     <svgc:SvgViewbox Source="Icons/关闭/粗.svg"/>
                 </tal:TalTouch>
             </Grid>

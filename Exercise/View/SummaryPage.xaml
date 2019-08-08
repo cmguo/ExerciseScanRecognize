@@ -73,6 +73,7 @@
                     <StackPanel.Resources>
                         <Style TargetType="TextBlock">
                             <Setter Property="FontSize" Value="20" />
+                            <Setter Property="Foreground" Value="#FF2D4A66" />
                         </Style>
                     </StackPanel.Resources>
                     <TextBlock Text="本次扫描共收回" />
@@ -102,8 +103,7 @@
                                Command="{Binding SubmitCommand}" CommandParameter="{Binding ElementName=Page}" 
                                Visibility="{Binding ExceptionCount, Converter={StaticResource NoExceptionConverter}}">
                     <tal:TalButton.Style>
-                        <Style TargetType="tal:TalButton" BasedOn="{StaticResource DefaultTalButtonStyle}">
-                           
+                        <Style TargetType="tal:TalButton">
                             <Style.Triggers>
                                 <DataTrigger Binding="{Binding StudentCount}" Value="0" >
                                     <Setter Property="IsEnabled" Value="False"/>
@@ -124,6 +124,7 @@
             <DockPanel.Resources>
                 <Style TargetType="TextBlock">
                     <Setter Property="FontSize" Value="14" />
+                    <Setter Property="Foreground" Value="#FF2D4A66" />
                 </Style>
             </DockPanel.Resources>
 
@@ -140,9 +141,9 @@
                     <DataGrid Grid.Row="1" Margin="26, 0, 26, 0" ItemsSource="{Binding Exceptions}"
                               IsReadOnly="True" Focusable="False" Style="{StaticResource DefaultDataGridStyle}">
                         <DataGrid.Columns>
-                            <DataGridTextColumn Header="异常项" Width="283" 
+                            <DataGridTextColumn Header="异常项" Width="283" FontSize="14"
                                                 Binding="{Binding Converter={StaticResource ExceptionListConverter}, ConverterParameter=Tree}" />
-                            <DataGridTextColumn Header="回收试卷（份）" Width="*" 
+                            <DataGridTextColumn Header="回收试卷（份）" Width="*" FontSize="14"
                                                 Binding="{Binding Exceptions.Count}" />
                         </DataGrid.Columns>
                     </DataGrid>
@@ -166,7 +167,7 @@
                     <DataGrid Grid.Row="1" Margin="26, 0, 26, 0" ItemsSource="{Binding ClassDetails}"
                               IsReadOnly="True" Focusable="False" Style="{StaticResource DefaultDataGridStyle}">
                         <DataGrid.Columns>
-                            <DataGridTextColumn Header="班级" Width="196" Binding="{Binding Name}"/>
+                            <DataGridTextColumn Header="班级" Width="196" FontSize="14" Binding="{Binding Name}"/>
                             <DataGridTextColumn Header="回收试卷（份）" Width="160" Binding="{Binding Result.Count}" />
                             <DataGridTextColumn Header="总人数（人）" Width="*" Binding="{Binding StudentCount}" />
                         </DataGrid.Columns>

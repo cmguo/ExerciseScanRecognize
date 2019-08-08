@@ -16,30 +16,28 @@
     <Page.DataContext>
         <vm:HomeViewModel />
     </Page.DataContext>
-    
-    <Page.Resources>
-        <ResourceDictionary>
 
-            <tal:TalTouch x:Key="Histroy" TouchStyle="Label"
+    <Page.Resources>
+
+        <tal:TalTouch x:Key="Histroy" TouchStyle="Label"
                 Command="{Binding HistroyCommand}" Background="{x:Null}"
                 CommandParameter="{Binding Source={x:Reference Page}}">
-                <StackPanel Orientation="Horizontal">
-                    <Image Width="17" Height="17" VerticalAlignment="Center" Source="{svgc:SvgImage Source=/Icons/管理.svg}" />
-                    <TextBlock Margin="5, 0, 0, 0" VerticalAlignment="Center" Text="试卷扫描记录管理" />
-                </StackPanel>
-            </tal:TalTouch>
+            <StackPanel Orientation="Horizontal">
+                <Image Width="17" Height="17" VerticalAlignment="Center" Source="{svgc:SvgImage Source=/Icons/管理.svg}" />
+                <TextBlock Margin="5, 0, 0, 0" VerticalAlignment="Center" Text="试卷扫描记录管理" />
+            </StackPanel>
+        </tal:TalTouch>
 
-            <tal:TalTouch x:Key="Discard" Focusable="False"
+        <tal:TalTouch x:Key="Discard" Focusable="False"
                     Command="{Binding DiscardCommand}">
-                <StackPanel Orientation="Horizontal">
-                    <Image Width="24" Height="24" VerticalAlignment="Center" Source="{svgc:SvgImage Source=/Icons/放弃扫描.svg}" />
-                    <TextBlock Margin="5, 0, 0, 0" VerticalAlignment="Center" Text="放弃本次扫描" />
-                </StackPanel>
-            </tal:TalTouch>
-            
-        </ResourceDictionary>
-    </Page.Resources>
+            <StackPanel Orientation="Horizontal">
+                <Image Width="24" Height="24" VerticalAlignment="Center" Source="{svgc:SvgImage Source=/Icons/放弃扫描.svg}" />
+                <TextBlock Margin="5, 0, 0, 0" VerticalAlignment="Center" Text="放弃本次扫描" />
+            </StackPanel>
+        </tal:TalTouch>
 
+    </Page.Resources>
+    
     <tb:TitleBarManager.GlobalButtons>
         <tb:TitleButton Name="Discard" Content="{StaticResource Discard}" />
     </tb:TitleBarManager.GlobalButtons>

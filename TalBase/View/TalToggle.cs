@@ -47,8 +47,9 @@ namespace TalBase.View
             }
         }
 
-        public TalToggle()
+        static TalToggle()
         {
+            DefaultStyleKeyProperty.OverrideMetadata(typeof(TalToggle), new FrameworkPropertyMetadata(typeof(TalToggle)));
         }
 
     }

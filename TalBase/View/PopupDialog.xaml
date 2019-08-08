@@ -42,7 +42,7 @@
                     <ColumnDefinition Width="16" />
                 </Grid.ColumnDefinitions>
                 <TextBlock FontSize="16" TextWrapping="Wrap" Text="{Binding Caption}" HorizontalAlignment="Stretch" />
-                <tb:TalTouch Grid.Column="1" x:Name="close" Width="16" Height="16" Click="Btn_Click" TouchStyle="Icon">
+                <tb:TalTouch Grid.Column="1" x:Name="close" Click="Btn_Click" TouchStyle="Icon">
                     <svgc:SvgViewbox Source="Icons/关闭/粗.svg"/>
                 </tb:TalTouch>
             </Grid>

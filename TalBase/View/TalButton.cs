@@ -12,7 +12,7 @@ namespace TalBase.View
     {
         static TalButton()
         {
-            //DefaultStyleKeyProperty.OverrideMetadata(typeof(TalButton), new FrameworkPropertyMetadata(typeof(TalButton)));
+            DefaultStyleKeyProperty.OverrideMetadata(typeof(TalButton), new FrameworkPropertyMetadata(typeof(TalButton)));
         }
 
         public enum ButtonSizes

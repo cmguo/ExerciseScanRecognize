@@ -8,10 +8,25 @@ namespace TalBase.View
 
         public enum TouchStyles
         {
+            /*
+             * 普通按钮样式，鼠标悬浮时改变背景
+             */
             Button,
+            /*
+             * 文字样式，正常时半透明，鼠标悬浮时高亮（不透明）
+             */
             Label,
+            /*
+             * 图标样式，大小16x16，正常时半透明，鼠标悬浮时高亮（不透明）
+             */
             Icon,
-            Solid, 
+            /*
+             * 实心按键样式，鼠标悬浮、按下时都有不同背景
+             */
+            Solid,
+            /*
+             * 实心y有边框按键样式，鼠标悬浮、按下时都有不同背景
+             */
             Fill
         }
 
@@ -26,7 +41,7 @@ namespace TalBase.View
 
         static TalTouch()
         {
-            //DefaultStyleKeyProperty.OverrideMetadata(typeof(TalButton2), new FrameworkPropertyMetadata(typeof(TalButton2)));
+            DefaultStyleKeyProperty.OverrideMetadata(typeof(TalTouch), new FrameworkPropertyMetadata(typeof(TalTouch)));
         }
 
         public TalTouch()

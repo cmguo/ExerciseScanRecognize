@@ -24,9 +24,8 @@
 
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary Source="pack://application:,,,/Exercise;component/Themes/TreeView.xaml" />
-                <ResourceDictionary Source="pack://application:,,,/TalBase;component/Themes/Generic.xaml" />
-                <ResourceDictionary Source="pack://application:,,,/Exercise;component/Themes/Generic.xaml" />
+                <ResourceDictionary Source="../Themes/TreeView.xaml" />
+                <ResourceDictionary Source="../Themes/Generic.xaml" />
                 <ResourceDictionary Source="../Themes/ListView.xaml" />
             </ResourceDictionary.MergedDictionaries>
 
@@ -159,13 +158,12 @@
             
             <StackPanel Orientation="Vertical">
                 <StackPanel.Resources>
-                    <Style TargetType="tal:TalButton" BasedOn="{StaticResource DefaultTalButtonStyle}">
+                    <Style TargetType="tal:TalButton">
                         <Setter Property="HorizontalAlignment" Value="Stretch"/>
                         <Setter Property="Margin" Value="0, 14, 0, 0"/>
                     </Style>
                 </StackPanel.Resources>
-                <tal:TalButton 
-                    IsDefault="True"
+                <tal:TalButton IsDefault="True"
                     Command="{Binding RescanCommand}" CommandParameter="{Binding ElementName=Page}" 
                     Visibility="{Binding Content, RelativeSource={RelativeSource Self}, Converter={StaticResource NonNullVisibleConverter}}"
                     Content="{Binding SelectedException, Converter={StaticResource ExceptionConverter}, ConverterParameter=Rescan}" />
@@ -187,7 +185,7 @@
                         Visibility="{Binding Text, ElementName=ListTitle, Converter={StaticResource NonNullVisibleConverter}}">
 
                 <StackPanel.Resources>
-                    <Style TargetType="tal:TalButton" BasedOn="{StaticResource DefaultTalButtonStyle}">
+                    <Style TargetType="tal:TalButton">
                         <Setter Property="HorizontalAlignment" Value="Stretch"/>
                         <Setter Property="Margin" Value="0, 14, 0, 0"/>
                     </Style>

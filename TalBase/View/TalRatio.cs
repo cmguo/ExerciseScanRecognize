@@ -10,8 +10,17 @@ namespace TalBase.View
 
         public enum RatioStyles
         {
-            Normal, 
+            /*
+             * 普通样式，有边框，鼠标悬浮时、按下、选中时改变边框颜色
+             */
+            Normal,
+            /*
+             * 实心样式，无边框，鼠标悬浮时、按下、选中时改变背景颜色
+             */
             Solid,
+            /*
+             * 实心样式，有边框，鼠标悬浮时、按下、选中时改变背景、边框颜色
+             */
             Fill
         }
 
@@ -23,6 +32,11 @@ namespace TalBase.View
             get { return (RatioStyles)GetValue(RatioStyleProperty); }
             set { SetValue(RatioStyleProperty, value); }
         }
+        static TalRatio()
+        {
+            DefaultStyleKeyProperty.OverrideMetadata(typeof(TalRatio), new FrameworkPropertyMetadata(typeof(TalRatio)));
+        }
+
 
     }
 }

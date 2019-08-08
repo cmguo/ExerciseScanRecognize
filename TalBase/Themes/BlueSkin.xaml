@@ -1,0 +1,38 @@
+<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:sys="clr-namespace:System;assembly=mscorlib"
+                    xmlns:local="clr-namespace:TalBase.View">
+
+    <!--Button-->
+    <sys:Double x:Key="ButtonHeight">32</sys:Double>
+    <Thickness x:Key="ButtonPadding">20, 0, 20, 0</Thickness>
+    <CornerRadius x:Key="ButtonCornerRadius">3</CornerRadius>
+    <Thickness x:Key="ButtonBorderThickness">1, 1, 1, 1</Thickness>
+    <SolidColorBrush x:Key="ButtonBorderBrush">#332D4A66</SolidColorBrush>
+    <!--Small-->
+    <sys:Double x:Key="SmallButtonHeight">24</sys:Double>
+    <Thickness x:Key="SmallButtonPadding">12, 0, 12, 0</Thickness>
+    <!--Large-->
+    <sys:Double x:Key="LargeButtonHeight">40</sys:Double>
+    <Thickness x:Key="LargeButtonPadding">24, 0, 24, 0</Thickness>
+    <sys:Double x:Key="LargeFontSize">16</sys:Double>
+    <!--Normal-->
+    <SolidColorBrush x:Key="ButtonBackground">#FF4C84FF</SolidColorBrush>
+    <SolidColorBrush x:Key="ButtonForeground">White</SolidColorBrush>
+    <!--MouseOver-->
+    <SolidColorBrush x:Key="ButtonCoverBrush">#ff739FFF</SolidColorBrush>
+    <!--Inactive-->
+    <SolidColorBrush x:Key="ButtonInactiveBorderBrush">#802D4A66</SolidColorBrush>
+    <SolidColorBrush x:Key="ButtonInactiveForeground">#FF2D4A66</SolidColorBrush>
+    <SolidColorBrush x:Key="ButtonInactiveBackground">White</SolidColorBrush>
+    <!--Disabled-->
+    <SolidColorBrush x:Key="ButtonDisabledBackground">#FF4C84FF</SolidColorBrush>
+    <SolidColorBrush x:Key="ButtonDisabledForeground">#FF2D4A66</SolidColorBrush>
+    <!--Pressed-->
+    <SolidColorBrush x:Key="ButtonPressedBackground">#FF3068E3</SolidColorBrush>
+
+    <!--Font-->
+    <sys:Double x:Key="NormalFontSize">14</sys:Double>
+    <SolidColorBrush x:Key="NormalFontColor">#FF2D4A66</SolidColorBrush>
+
+</ResourceDictionary>

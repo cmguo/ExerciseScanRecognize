@@ -26,32 +26,22 @@
                                     Padding="{TemplateBinding Padding}">
                                 <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
                             </Border>
+                            <ControlTemplate.Triggers>
+                                <Trigger Property="IsMouseOver" Value="True">
+                                    <Setter Property="BorderBrush" Value="#802D4A66"/>
+                                </Trigger>
+                                <Trigger Property="IsPressed" Value="True">
+                                    <Setter Property="BorderBrush" Value="#FF2D4A66"/>
+                                    <Setter Property="Background" Value="#FFF5F8FB"/>
+                                </Trigger>
+                                <Trigger Property="IsChecked" Value="True">
+                                    <Setter Property="BorderBrush" Value="#FF2D4A66"/>
+                                </Trigger>
+                            </ControlTemplate.Triggers>
                         </ControlTemplate>
                     </Setter.Value>
                 </Setter>
             </Trigger>
-            <MultiTrigger>
-                <MultiTrigger.Conditions>
-                    <Condition Property="ToggleStyle" Value="Normal"/>
-                    <Condition Property="IsMouseOver" Value="True"/>
-                </MultiTrigger.Conditions>
-                <Setter Property="BorderBrush" Value="#802D4A66"/>
-            </MultiTrigger>
-            <MultiTrigger>
-                <MultiTrigger.Conditions>
-                    <Condition Property="ToggleStyle" Value="Normal"/>
-                    <Condition Property="IsPressed" Value="True"/>
-                </MultiTrigger.Conditions>
-                <Setter Property="BorderBrush" Value="#FF2D4A66"/>
-                <Setter Property="Background" Value="#FFF5F8FB"/>
-            </MultiTrigger>
-            <MultiTrigger>
-                <MultiTrigger.Conditions>
-                    <Condition Property="ToggleStyle" Value="Normal"/>
-                    <Condition Property="IsChecked" Value="True"/>
-                </MultiTrigger.Conditions>
-                <Setter Property="BorderBrush" Value="#FF2D4A66"/>
-            </MultiTrigger>
 
             <!--Solid-->
             <Trigger Property="ToggleStyle" Value="Solid">
@@ -67,32 +57,22 @@
                                     Padding="{TemplateBinding Padding}">
                                 <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
                             </Border>
+                            <ControlTemplate.Triggers>
+                                <Trigger Property="IsMouseOver" Value="True">
+                                    <Setter Property="Background" Value="#404C84FF"/>
+                                </Trigger>
+                                <Trigger Property="IsPressed" Value="True">
+                                    <Setter Property="Background" Value="#80739FFF"/>
+                                </Trigger>
+                                <Trigger Property="IsChecked" Value="True">
+                                    <Setter Property="Background" Value="#FF4C84FF"/>
+                                    <Setter Property="Foreground" Value="White"/>
+                                </Trigger>
+                            </ControlTemplate.Triggers>
                         </ControlTemplate>
                     </Setter.Value>
                 </Setter>
             </Trigger>
-            <MultiTrigger>
-                <MultiTrigger.Conditions>
-                    <Condition Property="ToggleStyle" Value="Solid"/>
-                    <Condition Property="IsMouseOver" Value="True"/>
-                </MultiTrigger.Conditions>
-                <Setter Property="Background" Value="#404C84FF"/>
-            </MultiTrigger>
-            <MultiTrigger>
-                <MultiTrigger.Conditions>
-                    <Condition Property="ToggleStyle" Value="Solid"/>
-                    <Condition Property="IsPressed" Value="True"/>
-                </MultiTrigger.Conditions>
-                <Setter Property="Background" Value="#80739FFF"/>
-            </MultiTrigger>
-            <MultiTrigger>
-                <MultiTrigger.Conditions>
-                    <Condition Property="ToggleStyle" Value="Solid"/>
-                    <Condition Property="IsChecked" Value="True"/>
-                </MultiTrigger.Conditions>
-                <Setter Property="Background" Value="#FF4C84FF"/>
-                <Setter Property="Foreground" Value="White"/>
-            </MultiTrigger>
 
             <!--Switch-->
             <Trigger Property="ToggleStyle" Value="Switch">

@@ -18,7 +18,6 @@
         <ResourceDictionary>
             
             <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary Source="pack://application:,,,/TalBase;component/Themes/Generic.xaml" />
                 <ResourceDictionary Source="../../Themes/ButtonList.xaml" />
             </ResourceDictionary.MergedDictionaries>
             

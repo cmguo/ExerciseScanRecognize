@@ -59,6 +59,8 @@
 
             <!--Icon-->
             <Trigger Property="TouchStyle" Value="Icon">
+                <Setter Property="Width" Value="16"/>
+                <Setter Property="Height" Value="16"/>
                 <Setter Property="BorderThickness" Value="0"/>
                 <Setter Property="Background" Value="#01000001"/>
                 <Setter Property="Foreground" Value="White"/>
@@ -99,24 +101,18 @@
                                     Padding="{TemplateBinding Padding}">
                                 <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
                             </Border>
+                            <ControlTemplate.Triggers>
+                                <Trigger Property="IsMouseOver" Value="True">
+                                    <Setter Property="Background" Value="#404C84FF"/>
+                                </Trigger>
+                                <Trigger Property="IsPressed" Value="True">
+                                    <Setter Property="Background" Value="#80739FFF"/>
+                                </Trigger>
+                            </ControlTemplate.Triggers>
                         </ControlTemplate>
                     </Setter.Value>
                 </Setter>
             </Trigger>
-            <MultiTrigger>
-                <MultiTrigger.Conditions>
-                    <Condition Property="TouchStyle" Value="Solid" />
-                    <Condition Property="IsMouseOver" Value="True" />
-                </MultiTrigger.Conditions>
-                <Setter Property="Background" Value="#404C84FF"/>
-            </MultiTrigger>
-            <MultiTrigger>
-                <MultiTrigger.Conditions>
-                    <Condition Property="TouchStyle" Value="Solid" />
-                    <Condition Property="IsPressed" Value="True" />
-                </MultiTrigger.Conditions>
-                <Setter Property="Background" Value="#80739FFF"/>
-            </MultiTrigger>
 
             <!--Fill-->
             <Trigger Property="TouchStyle" Value="Fill">
@@ -132,25 +128,19 @@
                                     Padding="{TemplateBinding Padding}">
                                 <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
                             </Border>
+                            <ControlTemplate.Triggers>
+                                <Trigger Property="IsMouseOver" Value="True">
+                                    <Setter Property="BorderBrush" Value="#802D4A66"/>
+                                </Trigger>
+                                <Trigger Property="IsPressed" Value="True">
+                                    <Setter Property="BorderBrush" Value="#FF2D4A66"/>
+                                    <Setter Property="Background" Value="#FFF5F8FB"/>
+                                </Trigger>
+                            </ControlTemplate.Triggers>
                         </ControlTemplate>
                     </Setter.Value>
                 </Setter>
             </Trigger>
-            <MultiTrigger>
-                <MultiTrigger.Conditions>
-                    <Condition Property="TouchStyle" Value="Fill"/>
-                    <Condition Property="IsMouseOver" Value="True"/>
-                </MultiTrigger.Conditions>
-                <Setter Property="BorderBrush" Value="#802D4A66"/>
-            </MultiTrigger>
-            <MultiTrigger>
-                <MultiTrigger.Conditions>
-                    <Condition Property="TouchStyle" Value="Fill"/>
-                    <Condition Property="IsPressed" Value="True"/>
-                </MultiTrigger.Conditions>
-                <Setter Property="BorderBrush" Value="#FF2D4A66"/>
-                <Setter Property="Background" Value="#FFF5F8FB"/>
-            </MultiTrigger>
 
         </Style.Triggers>
     </Style>

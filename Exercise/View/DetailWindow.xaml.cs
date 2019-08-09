@@ -18,6 +18,7 @@ namespace Exercise.View
         {
             InitializeComponent();
             save.Visibility = ExerciseModel.Instance.ExerciseData == null ? Visibility.Collapsed : Visibility.Visible;
+            exception.Visibility = ExerciseModel.Instance.Exceptions.Count == 0 ? Visibility.Collapsed : Visibility.Visible;
         }
 
         private void Close_Click(object sender, RoutedEventArgs e)

@@ -1,6 +1,8 @@
 ﻿using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Exercise.Algorithm
 {
@@ -23,6 +25,40 @@ namespace Exercise.Algorithm
         public IList<Marker> AreaMarkers { get; set; }
         public IList<Area> AreaInfo { get; set; }
 
+        [JsonIgnore]
+        public Location QRCodeLocation => GetQRCodeLocation();
+        [JsonIgnore]
+        public Location AreaLocation => GetAreaLocation();
+
+        private Location GetAreaLocation()
+        {
+            if (AreaMarkers == null || AreaMarkers.Count < 2)
+                return null;
+            return AreaMarkers.Select(a => a.MarkerLocation).Aggregate((l, r) => new Location()
+            {
+                LeftTop = new Point() { X = Math.Min(l.LeftTop.X, r.LeftTop.X), Y = Math.Min(l.LeftTop.Y, r.LeftTop.Y) },
+                RightBottom = new Point() { X = Math.Max(l.RightBottom.X, r.RightBottom.X), Y = Math.Max(l.RightBottom.Y, r.RightBottom.Y) },
+            });
+        }
+
+        private Location GetQRCodeLocation()
+        {
+            if (PaperMarkers == null || PaperMarkers.Count < 2)
+                return null;
+            return new Location()
+            {
+                LeftTop = new Point()
+                {
+                    X = PaperMarkers[0].MarkerLocation.RightBottom.X,
+                    Y = PaperMarkers[0].MarkerLocation.LeftTop.Y
+                }, 
+                RightBottom = new Point
+                {
+                    X = PaperMarkers[1].MarkerLocation.LeftTop.X,
+                    Y = PaperMarkers[1].MarkerLocation.RightBottom.Y
+                }
+            };
+        }
 
         [JsonExtensionData]
         private IDictionary<string, JToken> _additionalData

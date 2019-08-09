@@ -23,12 +23,12 @@ namespace Exercise.View.Resolve
         public AnswerExceptionPage()
         {
             InitializeComponent();
-            Loaded += AnswerExceptionPage_Initialized;
+            Loaded += AnswerExceptionPage_Loaded;
             Unloaded += AnswerExceptionPage_Unloaded;
             answers.SelectionChanged += Answers_SelectionChanged;
         }
 
-        private void AnswerExceptionPage_Initialized(object sender, System.EventArgs e)
+        private void AnswerExceptionPage_Loaded(object sender, System.EventArgs e)
         {
             Exception ex = DataContext as Exception;
             type = ex.Type;

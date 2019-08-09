@@ -114,7 +114,7 @@ namespace Exercise.Model
         private int scanIndex = 0;
         private int readIndex = 0;
         private int cancel = 0;
-        private Page lastPage;
+        private Page halfPage;
         private ExerciseData exerciseData;
 
         public ScanModel()
@@ -277,7 +277,8 @@ namespace Exercise.Model
             scanBatch = 0;
             scanIndex = 0;
             savePath = null;
-            lastPage = null;
+            halfPage = null;
+            LastPage = null;
             PaperCode = null;
             exerciseData = null;
             RaisePropertyChanged("PageCode");
@@ -295,13 +296,13 @@ namespace Exercise.Model
             Page page1 = null;
             lock (mutex)
             {
-                if (lastPage == null)
+                if (halfPage == null)
                 {
-                    lastPage = page;
+                    halfPage = page;
                     return;
                 }
-                page1 = lastPage;
-                lastPage = null;
+                page1 = halfPage;
+                halfPage = null;
             }
             Log.d("AddImage " + fileName);
             if (cancel == CANCEL_DROP)
@@ -519,10 +520,10 @@ namespace Exercise.Model
         {
             Log.d("ScanDevice_ScanCompleted");
             IsScanning = false;
-            if (lastPage != null)
+            if (halfPage != null)
             {
-                File.Delete(lastPage.PagePath);
-                lastPage = null;
+                File.Delete(halfPage.PagePath);
+                halfPage = null;
                 --readIndex;
             }
             if (Pages.Count * 2 == readIndex)

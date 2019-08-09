@@ -18,7 +18,16 @@ namespace Exercise.View
     {
         internal ReturnConverter()
         {
-            VisibleValues = new object[] { TaskStatus.Failed, TaskStatus.Completed };
+            VisibleValues = new object[] { TaskStatus.Completed };
+            HiddenValues = new object[0];
+        }
+    }
+
+    internal class DiscardConverter : VisibilityConverter
+    {
+        internal DiscardConverter()
+        {
+            VisibleValues = new object[] { TaskStatus.Failed };
             HiddenValues = new object[0];
         }
     }

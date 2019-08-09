@@ -21,7 +21,7 @@ namespace Exercise.ViewModel
 
         #region Properties
 
-        public Page LastPage => scanModel.LastPage;
+        public Page LastPage => exerciseModel.LastPage;
 
         public int _ExercisePageCount;
         public int ExercisePageCount

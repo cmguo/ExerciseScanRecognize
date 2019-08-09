@@ -113,14 +113,15 @@
 
             <Grid x:Name="save" Grid.Row="2" Margin="0, 24, 0, 0">
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="Auto" />
                     <ColumnDefinition Width="*" />
                     <ColumnDefinition Width="Auto" />
                 </Grid.ColumnDefinitions>
-                <Image Grid.Column="0" Width="14" Height="14" Source="{svgc:SvgImage Source=Icons/bad.svg}" VerticalAlignment="Center"/>
-                <TextBlock  Grid.Column="1" Margin="4, 0, 0, 0" FontSize="12" Foreground="#FFFF6767" 
-                            VerticalAlignment="Center" Text="当前扫描异常尚未处理完，成绩可能存在偏差" />
-                <tal:TalButton Grid.Column="2" Content="下载成绩表" Click="Export_Click" />
+                <StackPanel Grid.Column="0" x:Name="exception">
+                    <Image Width="14" Height="14" Source="{svgc:SvgImage Source=Icons/bad.svg}" VerticalAlignment="Center"/>
+                    <TextBlock Grid.Column="1" Margin="4, 0, 0, 0" FontSize="12" Foreground="#FFFF6767" 
+                                VerticalAlignment="Center" Text="当前扫描异常尚未处理完，成绩可能存在偏差" />
+                </StackPanel>
+                <tal:TalButton Grid.Column="1" Content="下载成绩表" Click="Export_Click" />
             </Grid>
             
         </Grid>

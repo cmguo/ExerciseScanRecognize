@@ -74,9 +74,12 @@ namespace Exercise.Model
             double score = 0;
             IList<ItemException> AnswerExceptions = new List<ItemException>();
             IList<ItemException> CorrectionExceptions = new List<ItemException>();
+            Location areaLocation = page.Answer.AreaLocation;
             foreach (AnswerData.Area aa in page.Answer.AreaInfo)
             {
                 AreaType type = aa.AreaType;
+                if (aa.AreaLocation == null)
+                    aa.AreaLocation = areaLocation;
                 IList<ItemException> exceptions = type == AreaType.Answer ? CorrectionExceptions : AnswerExceptions;
                 foreach (AnswerData.Question qa in aa.QuestionInfo)
                 {
@@ -204,7 +207,7 @@ namespace Exercise.Model
         {
             double score = 0;
             string answer = ia.AnalyzeResult == null ? ""
-                : string.Join(",", ia.AnalyzeResult.Where(r => r != null).Select(r => r.Value).Where(v => v != null));
+                : string.Join("", ia.AnalyzeResult.Where(r => r != null).Select(r => r.Value).Where(v => v != null));
             if (ia.StatusOfItem == 0)
             {
                 if (type == AreaType.Choice)
@@ -325,12 +328,11 @@ namespace Exercise.Model
                 SAnswer = e;
                 Answers = Problem.Value.Split(',').Concat(new string[] { NULL_ANSWER }).ToList();
                 SelectedAnswer = w;
-                //Location = new Location()
-                //{
-                //    LeftTop = new Point() { X = a.AreaLocation.LeftTop.X, Y = i.ItemLocation.LeftTop.Y },
-                //    RightBottom = new Point() { X = a.AreaLocation.RightBottom.X, Y = i.ItemLocation.RightBottom.Y },
-                //};
-                Location = i.ItemLocation;
+                Location = new Location()
+                {
+                    LeftTop = new Point() { X = a.AreaLocation.LeftTop.X, Y = i.ItemLocation.LeftTop.Y },
+                    RightBottom = new Point() { X = a.AreaLocation.RightBottom.X, Y = i.ItemLocation.RightBottom.Y },
+                };
             }
 
             public void InputNumber(int? n)

@@ -2,6 +2,7 @@
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using static Exercise.Model.ExerciseModel;
 
 namespace Exercise.View.Resolve
 {
@@ -16,6 +17,14 @@ namespace Exercise.View.Resolve
             InitializeComponent();
             studentList.GotKeyboardFocus += StudentList_GotKeyboardFocus;
             studentList.LostKeyboardFocus += StudentList_LostKeyboardFocus;
+            Loaded += NoStudentCodePage_Loaded;
+        }
+
+        private void NoStudentCodePage_Loaded(object sender, RoutedEventArgs e)
+        {
+            Exception ex = DataContext as Exception;
+            ResolvePage rp = UITreeHelper.GetParentOfType<ResolvePage>(this);
+            rp.SetPaperFocusRect(PaperOverlayConverter.MakeRect(ex.Page.Answer.QRCodeLocation, 0));
         }
 
         private void StudentList_LostKeyboardFocus(object sender, KeyboardFocusChangedEventArgs e)

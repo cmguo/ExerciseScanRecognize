@@ -120,7 +120,7 @@
                                     </StackPanel>
                                     <StackPanel DockPanel.Dock="Right" Orientation="Horizontal" VerticalAlignment="Center">
                                         <tal:TalHyperlink Content="查看扫描结果" 
-                                        Command="{Binding SummaryCommand, Source={StaticResource ViewModel}}">
+                                                          Command="{Binding SummaryCommand, Source={StaticResource ViewModel}}">
                                             <tal:TalHyperlink.CommandParameter>
                                                 <MultiBinding Converter="{StaticResource MultiValueConverter}">
                                                     <Binding ElementName="Page"/>
@@ -129,8 +129,8 @@
                                             </tal:TalHyperlink.CommandParameter>
                                         </tal:TalHyperlink>
                                         <tal:TalHyperlink Content="放弃本次扫描" Margin="16, 0, 0, 0"
-                                        Command="{Binding DiscardCommand, Source={StaticResource ViewModel}}"
-                                        CommandParameter="{Binding}" />
+                                                          Command="{Binding DiscardCommand, Source={StaticResource ViewModel}}"
+                                                          CommandParameter="{Binding}" />
                                     </StackPanel>
                                     <Border/>
                                 </DockPanel>

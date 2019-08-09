@@ -56,7 +56,7 @@ namespace Exercise.ViewModel
         public HistoryViewModel()
         {
             SummaryCommand = new RelayCommand((o) => Summary(o));
-            DiscardCommand = new RelayCommand((o) => DiscardRemove(o as Record));
+            DiscardCommand = new RelayCommand((o) => Remove(o as Record));
             ReturnCommand = new RelayCommand((o) => Return(o));
             Pages = new ObservableCollection<object>();
             new RelayCommand((o) => historyModel.Load()).Execute(null);
@@ -65,7 +65,7 @@ namespace Exercise.ViewModel
             PageIndex = 1;
         }
 
-        private void DiscardRemove(Record record)
+        private void Remove(Record record)
         {
             int result = PopupDialog.Show(Application.Current.MainWindow,"放弃扫描任务", "放弃后，本次扫描结果将作废，确认放弃么？", 0, "放弃本次扫描", "取消");
             if (result == 0)

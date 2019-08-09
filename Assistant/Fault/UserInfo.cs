@@ -1,7 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Diagnostics;
-
-namespace Assistant.Fault
+﻿namespace Assistant.Fault
 {
     public partial class UserInfo
     {

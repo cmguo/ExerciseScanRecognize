@@ -44,8 +44,6 @@ namespace Exercise.View
             {
                 switch (status)
                 {
-                    case SubmitModel.TaskStatus.Failed:
-                        return "本次扫描结果已经保存，后续可在“扫描记录管理”中重新上传";
                     case SubmitModel.TaskStatus.Completed:
                         return "稍后您可在网页端测试记录页面查看本次扫描结果";
                     default:

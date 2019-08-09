@@ -2,6 +2,7 @@
 using Exercise.Model;
 using Exercise.View;
 using System.ComponentModel;
+using System.Threading.Tasks;
 using System.Windows;
 using TalBase.View;
 using TalBase.ViewModel;
@@ -18,6 +19,7 @@ namespace Exercise.ViewModel
 
         public RelayCommand RetryCommand { get; private set; }
         public RelayCommand ReturnCommand { get; private set; }
+        public RelayCommand DiscardCommand { get; private set; }
         public RelayCommand CloseCommand { get; private set; }
 
         #endregion
@@ -32,6 +34,7 @@ namespace Exercise.ViewModel
             Task.PropertyChanged += Task_PropertyChanged;
             RetryCommand = new RelayCommand((e) => Retry(e));
             ReturnCommand = new RelayCommand((e) => Return(e));
+            DiscardCommand = new RelayCommand((e) => Discard(e));
             CloseCommand = new RelayCommand((e) => Close(e));
         }
 
@@ -51,6 +54,16 @@ namespace Exercise.ViewModel
             (obj as System.Windows.Controls.Page).NavigationService.Navigate(new HomePage());
         }
 
+        private void Discard(object obj)
+        {
+            int result = PopupDialog.Show(obj as UIElement, "放弃扫描任务", "放弃后，本次扫描结果将作废，确认放弃么？", 0, "放弃本次扫描", "取消");
+            if (result == 0)
+            {
+                submitModel.Remove(Task);
+                (obj as System.Windows.Controls.Page).NavigationService.Navigate(new HomePage());
+            }
+        }
+
         private async void Close(object obj)
         {
             if (Task.Status != SubmitModel.TaskStatus.Submiting)
@@ -60,7 +73,7 @@ namespace Exercise.ViewModel
             if (result == 0)
             {
                 await submitModel.Cancel(Task);
-                HistoryModel.Instance.Clear();
+                submitModel.Remove(Task);
                 Application.Current.MainWindow.Close();
             }
             else

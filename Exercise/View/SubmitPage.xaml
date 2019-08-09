@@ -59,9 +59,12 @@
             <tal:TalButton Command="{Binding RetryCommand}" IsDefault="True"
                 CommandParameter="{Binding RelativeSource={RelativeSource AncestorType={x:Type Page}}}" 
                 Content="重新上传" Visibility="{Binding Task.Status, Converter={StaticResource RetryConverter}}" />
+            <tal:TalButton Command="{Binding DiscardCommand}" Margin="24, 0, 0, 0"
+                CommandParameter="{Binding RelativeSource={RelativeSource AncestorType={x:Type Page}}}" 
+                Content="放弃扫描" Visibility="{Binding Task.Status, Converter={StaticResource ReturnConverter}}" />
             <tal:TalButton Command="{Binding ReturnCommand}" Margin="24, 0, 0, 0"
                 CommandParameter="{Binding RelativeSource={RelativeSource AncestorType={x:Type Page}}}" 
-                Content="返回首页" Visibility="{Binding Task.Status, Converter={StaticResource ReturnConverter}}" />
+                Content="返回首页" Visibility="Collapsed" />
         </StackPanel>
 
     </Grid>

@@ -144,6 +144,11 @@ namespace Exercise.Model
             submitAction.Execute(task);
         }
 
+        public void Submit(SubmitTask task)
+        {
+            submitAction.Execute(task);
+        }
+
         public Task Cancel(SubmitTask task)
         {
             task.cancel = true;
@@ -159,9 +164,10 @@ namespace Exercise.Model
             });
         }
 
-        public void Submit(SubmitTask task)
+        public void Remove(SubmitTask task)
         {
-            submitAction.Execute(task);
+            SubmitTasks.Remove(task.path);
+            HistoryModel.Instance.Clear();
         }
 
         private async Task SubmitWork(SubmitTask task)

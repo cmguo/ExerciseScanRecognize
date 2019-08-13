@@ -18,6 +18,7 @@
         Choice = 0, // Single, Multiple, Judge
         FillBlank = 1,
         Answer = 2,
+        Judge = 3,
     }
 
     public enum QuestionType : int
@@ -25,9 +26,9 @@
         None = 0,
         SingleChoice = 1, 
         MultipleChoice = 2, 
+        Judge = 3,
         FillBlank = 3,
         Answer = 4,
-        Judge = 5
     }
 
     public enum PagingInfo : int

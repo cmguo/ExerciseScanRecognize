@@ -16,7 +16,7 @@ namespace Assistant.Service
     public interface IAssistant
     {
 
-        [Post("/report")]
+        [Post("/saveClientCrashLog")]
         Task<ReportResult> FaultReport([Body] CrashReport report);
 
     }

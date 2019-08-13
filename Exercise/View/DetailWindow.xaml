@@ -116,7 +116,7 @@
                     <ColumnDefinition Width="*" />
                     <ColumnDefinition Width="Auto" />
                 </Grid.ColumnDefinitions>
-                <StackPanel Grid.Column="0" x:Name="exception">
+                <StackPanel Grid.Column="0" x:Name="exception" Orientation="Horizontal">
                     <Image Width="14" Height="14" Source="{svgc:SvgImage Source=Icons/bad.svg}" VerticalAlignment="Center"/>
                     <TextBlock Grid.Column="1" Margin="4, 0, 0, 0" FontSize="12" Foreground="#FFFF6767" 
                                 VerticalAlignment="Center" Text="当前扫描异常尚未处理完，成绩可能存在偏差" />

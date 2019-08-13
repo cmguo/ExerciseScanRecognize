@@ -117,7 +117,9 @@ namespace Exercise.View.Resolve
             object n = (sender as FrameworkElement).DataContext;
             if ((n is int))
             {
-                analyze.SelectedException.InputNumber((n is int) ? (int)n : (int?)null);
+                score.SelectedText = n.ToString();
+                ++score.SelectionStart;
+                score.SelectionLength = 0;
             }
             else
             {

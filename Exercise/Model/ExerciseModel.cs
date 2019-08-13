@@ -1,4 +1,5 @@
 ﻿using Base.Misc;
+using Base.Mvvm;
 using Base.Service;
 using Exercise.Algorithm;
 using Exercise.Service;
@@ -115,7 +116,6 @@ namespace Exercise.Model
             service = Services.Get<IExercise>();
             Exceptions = new ObservableCollection<ExceptionList>();
             PageStudents = new ObservableCollection<StudentInfo>();
-            //BackgroundWork.Execute(service.getQuestionTypeMap().ContinueWith((t) => PageAnalyze.SetQuestionTypeMap(t.Result)));
             /* Test
             ExerciseData = new ExerciseData() { Title = "三角函数" };
             AddException(ExceptionType.NoPageCode, new Page());
@@ -142,6 +142,8 @@ namespace Exercise.Model
             string path = historyModel.NewRecord().LocalPath;
             scanModel.SetSavePath(path);
             SavePath = path;
+            var types = await service.getQuestionTypeMap();
+            PageAnalyze.SetQuestionTypeMap(types);
             await schoolModel.Refresh();
         }
 
@@ -441,7 +443,7 @@ namespace Exercise.Model
                     emptyPages.Add(null);
                 RaisePropertyChanged("ExerciseData");
                 scanModel.SetExerciseData(ExerciseData);
-                historyModel.SetTitle(ExerciseData.Title, ExerciseData.Course);
+                historyModel.SetTitle(ExerciseData.Title, ExerciseData.SubjectName);
             }
             catch (System.Exception e)
             {

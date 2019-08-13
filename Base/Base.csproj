@@ -144,7 +144,6 @@
     <Compile Include="Service\StringData.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="..\Libraries\DataUtils.dll" />
     <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

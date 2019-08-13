@@ -38,7 +38,7 @@ namespace Exercise.Service
         [Post("/updateRecord")]
         Task<Nothing> updateRecord(HistoryData.Record record);
 
-        [Get("/getQuestionTypeMap")]
+        [Get("/getQuestionType")]
         Task<Dictionary<QuestionType, IList<QuestionType>>> getQuestionTypeMap();
 
         [Post("/submitUseLog")]

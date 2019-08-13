@@ -1,4 +1,5 @@
 ﻿using Account.Model;
+using Base.Helpers;
 using Base.Misc;
 using Base.Mvvm;
 using Base.Service;
@@ -142,7 +143,7 @@ namespace Exercise.Model
         {
             LocalRecords.Clear();
             await LoadLocal();
-            WorkingRecord = LocalRecords.FirstOrDefault();
+            WorkingRecord = LocalRecords.MaxItem(l => l.ScanDate);
             return WorkingRecord;
         }
 

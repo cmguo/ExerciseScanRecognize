@@ -9,6 +9,7 @@ using System.Windows;
 using static Exercise.Service.HistoryData;
 using static Exercise.Model.SubmitModel;
 using System;
+using Assistant;
 
 namespace Exercise.ViewModel
 {
@@ -33,6 +34,12 @@ namespace Exercise.ViewModel
             StartCommand = new RelayCommand((e) => Start(e));
             HistroyCommand = new RelayCommand((e) => History(e));
             SourceList = scanModel.SourceList;
+            AppStatus.Instance.Busy = false;
+        }
+
+        public override void Release()
+        {
+            AppStatus.Instance.Busy = true;
         }
 
         private static bool checkLocal = true;

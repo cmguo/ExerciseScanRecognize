@@ -23,7 +23,6 @@ namespace Application
             Logger.SetLogPath(Exercise.Component.DATA_PATH);
             Logger.Config("logger.xml");
             ErrorMessageBox.Init();
-            Assistant.Update.UpdateHandler.Init();
             //Misc.Jni.Init();
             this.Exit += App_Exit;
         }
@@ -41,12 +40,12 @@ namespace Application
                 base.OnStartup(e);
                 Window window = new MainWindow();
                 new AccountWindow().ShowDialog();
+                Assistant.Update.UpdateHandler.Init(Exercise.Component.DATA_PATH);
             }
             else
             {
                 this.Shutdown();
             }
-         
         }
    
     }

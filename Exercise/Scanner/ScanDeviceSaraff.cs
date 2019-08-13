@@ -251,7 +251,7 @@ namespace Exercise.Scanner
             string scanner = twain32.GetSourceProductName(SourceIndex);
             if (imageDevices[SourceIndex] == null)
             {
-                ImageDevice device = ImageDevice.List.MaxItem(
+                ImageDevice device = ImageDevice.List.MinItem(
                     d => EditDistance(d.Caption, scanner));
                 imageDevices[SourceIndex] = device;
             }

@@ -9,10 +9,12 @@ namespace Exercise.Service
     public class ExerciseData
     {
         public string Title { get; set; }
-        public string Course { get; set; }
+        public int SubjectCode { get; set; }
+        public string SubjectName { get; set; }
 
         [JsonProperty("typesettingResultList")]
         public IList<PageData> Pages { get; set; }
+        [JsonProperty("questionDetailItems")]
         public IList<Question> Answers { get; set; }
 
         [JsonIgnore]
@@ -41,18 +43,11 @@ namespace Exercise.Service
             }
         }
 
-        public class Item
-        {
-            public string Value { get; set; }
-        }
-
         public class Question
         {
             public string QuestionId { get; set; }
-            public IList<Item> ItemInfo { get; set; }
+            public IList<string> ItemInfo { get; set; }
         }
-
-        public Dictionary<QuestionType, IList<QuestionType>> QuestionTypeMap;
 
     }
 }

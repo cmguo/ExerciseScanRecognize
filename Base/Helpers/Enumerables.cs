@@ -21,14 +21,26 @@ namespace Base.Helpers
             }
         };
 
+        public static T MinItem<T>(this IEnumerable<T> source, Func<T, T, int> comparer)
+        {
+            return source.Aggregate((t1, t2) => comparer(t1, t2) < 0 ? t1 : t2);
+        }
+
+        public static T MinItem<T, TK>(this IEnumerable<T> source, Func<T, TK> selector)
+        {
+            IComparer<TK> comparer = Comparer<TK>.Default;
+            return source.Aggregate((t1, t2) => comparer.Compare(selector(t1), selector(t2)) < 0 ? t1 : t2);
+        }
+
         public static T MaxItem<T>(this IEnumerable<T> source, Func<T, T, int> comparer)
         {
-            return source.OrderBy(t => t, new FuncComparer<T>((t1, t2) => comparer(t1, t2))).FirstOrDefault();
+            return source.Aggregate((t1, t2) => comparer(t1, t2) > 0 ? t1 : t2);
         }
 
         public static T MaxItem<T, TK>(this IEnumerable<T> source, Func<T, TK> selector)
         {
-            return source.OrderBy(selector).FirstOrDefault();
+            IComparer<TK> comparer = Comparer<TK>.Default;
+            return source.Aggregate((t1, t2) => comparer.Compare(selector(t1), selector(t2)) > 0 ? t1 : t2);
         }
 
     }

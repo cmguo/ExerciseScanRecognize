@@ -72,7 +72,7 @@ namespace Assistant.Fault
         {
             IAssistant service = Services.Get<IAssistant>();
             DirectoryInfo di = new DirectoryInfo(logPath);
-            IList<string> postUrls = null;
+            IDictionary<string, string> postUrls = null;
             foreach (FileInfo f in di.GetFiles())
             {
                 if (!f.Name.EndsWith(".report"))
@@ -82,14 +82,14 @@ namespace Assistant.Fault
                 ReportResult result = await service.FaultReport(cr);
                 postUrls = result.FilePostUrls;
             }
-            for (int i = 0; i < postUrls.Count; ++i)
+            for (int i = 0; i < report.Files.Count; ++i)
             {
                 using (FileStream fs = new FileStream(logPath + "\\" + report.Files[i], FileMode.Open, FileAccess.Read))
                 {
                     StreamContent content = new StreamContent(fs);
                     content.Headers.Add("Content-Type", "application/zip");
                     HttpClient hc = new HttpClient();
-                    var response = await hc.PutAsync(postUrls[i], content);
+                    var response = await hc.PutAsync(postUrls[report.Files[i]], content);
                     if (response.StatusCode.CompareTo(HttpStatusCode.Ambiguous) >= 0)
                         throw new HttpResponseException(response.StatusCode, response.ReasonPhrase);
                 }

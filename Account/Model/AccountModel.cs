@@ -59,6 +59,7 @@ namespace Account.Model
         {
             ServiceUris = new Dictionary<string, string>();
             ServiceUris.Add("开发环境", "http://zx.idev.talcloud.com/homework/api/v1/answerCardApp");
+            ServiceUris.Add("联调环境", "http://zx.iunion.talcloud.com/homework/api/v1/answerCardApp");
             ServiceUris.Add("测试环境", "http://zx.itest.talcloud.com/homework/api/v1/answerCardApp");
             ServiceUris.Add("线上环境", "http://zx.ipub.talcloud.com/homework/api/v1/answerCardApp");
             ServiceUris.Add("演示环境", "http://zx.ishow.talcloud.com/homework/api/v1/answerCardApp");

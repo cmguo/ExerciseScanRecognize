@@ -187,9 +187,14 @@ namespace Exercise.Model
             {
                 HistoryModel.Instance.EndDuration();
                 if (task.Status != TaskStatus.Completed)
+                {
                     await task.Save();
+                    await HistoryModel.Instance.Save();
+                }
                 else
+                {
                     HistoryModel.Instance.Clear();
+                }
             }
         }
 

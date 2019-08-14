@@ -10,6 +10,7 @@ namespace Exercise.Service
 {
     [BaseUri("http://homework.idev.talcloud.com/homework/api/v1/answerCardApp")]
     [MessageHandler(typeof(AccountHandler))]
+    [DelegatingHandler(typeof(LoggingHandler))]
     [ContentSerializer(typeof(ResultSerializer))]
     public interface IExercise
     {
@@ -41,7 +42,7 @@ namespace Exercise.Service
         [Get("/getQuestionType")]
         Task<Dictionary<QuestionType, IList<QuestionType>>> getQuestionTypeMap();
 
-        [Post("/submitUseLog")]
+        [Post("/saveClientUserLog")]
         Task<Nothing>SubmitUseLog(UseLog useLog);
     }
 }

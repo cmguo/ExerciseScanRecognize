@@ -23,24 +23,24 @@ namespace Base.Helpers
 
         public static T MinItem<T>(this IEnumerable<T> source, Func<T, T, int> comparer)
         {
-            return source.Aggregate((t1, t2) => comparer(t1, t2) < 0 ? t1 : t2);
+            return source.Count() == 0 ? default(T) : source.Aggregate((t1, t2) => comparer(t1, t2) < 0 ? t1 : t2);
         }
 
         public static T MinItem<T, TK>(this IEnumerable<T> source, Func<T, TK> selector)
         {
             IComparer<TK> comparer = Comparer<TK>.Default;
-            return source.Aggregate((t1, t2) => comparer.Compare(selector(t1), selector(t2)) < 0 ? t1 : t2);
+            return source.Count() == 0 ? default(T) : source.Aggregate((t1, t2) => comparer.Compare(selector(t1), selector(t2)) < 0 ? t1 : t2);
         }
 
         public static T MaxItem<T>(this IEnumerable<T> source, Func<T, T, int> comparer)
         {
-            return source.Aggregate((t1, t2) => comparer(t1, t2) > 0 ? t1 : t2);
+            return source.Count() == 0 ? default(T) : source.Aggregate((t1, t2) => comparer(t1, t2) > 0 ? t1 : t2);
         }
 
         public static T MaxItem<T, TK>(this IEnumerable<T> source, Func<T, TK> selector)
         {
             IComparer<TK> comparer = Comparer<TK>.Default;
-            return source.Aggregate((t1, t2) => comparer.Compare(selector(t1), selector(t2)) > 0 ? t1 : t2);
+            return source.Count() == 0 ? default(T) : source.Aggregate((t1, t2) => comparer.Compare(selector(t1), selector(t2)) > 0 ? t1 : t2);
         }
 
     }

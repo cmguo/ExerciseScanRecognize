@@ -26,6 +26,6 @@
     </root>
     
     <logger name="Base">
-        <level value="WARN" />
+        <level value="DEBUG" />
     </logger>
 </log4net>

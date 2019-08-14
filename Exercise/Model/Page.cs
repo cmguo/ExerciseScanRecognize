@@ -46,7 +46,7 @@ namespace Exercise.Model
         [JsonIgnore]
         public double Score => Analyze == null ? 0 : Analyze.Score;
 
-        public int DuplexPageCount => (PageIndex % 2) + 1 + (Another == null ? 0 : 1);
+        public int DuplexPageCount => (PageIndex % 2) + 1 + (Another == null || Another == this ? 0 : 1);
 
         [JsonIgnore]
         public double DuplexScore => Analyze == null ? 0 : Analyze.DuplexScore;

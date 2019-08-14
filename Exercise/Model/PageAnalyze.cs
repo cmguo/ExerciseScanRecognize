@@ -16,7 +16,7 @@ namespace Exercise.Model
 
         private static Dictionary<QuestionType, IList<QuestionType>> questionTypeMap = 
             new Dictionary<QuestionType, IList<QuestionType>>();
-        private static IList<ExerciseData.Question> standardAnswers = new List<ExerciseData.Question>();
+        private static IDictionary<string, IList<string>> standardAnswers;
 
         #region Properties
 
@@ -61,7 +61,7 @@ namespace Exercise.Model
             questionTypeMap = map;
         }
 
-        public static void SetStandardAnswers(IList<ExerciseData.Question> answers)
+        public static void SetStandardAnswers(IDictionary<string, IList<string>> answers)
         {
             standardAnswers = answers;
         }
@@ -83,15 +83,16 @@ namespace Exercise.Model
                 foreach (AnswerData.Question qa in aa.QuestionInfo)
                 {
                     PageData.Question qp = GetQuestion(page.MetaData, qa.QuestionId);
-                    ExerciseData.Question qe = standardAnswers == null ? null
-                        : standardAnswers.Where(q => q.QuestionId == qa.QuestionId).FirstOrDefault();
+                    IList<string> qe = null;
+                    if (standardAnswers != null)
+                        standardAnswers.TryGetValue(qa.QuestionId, out qe);
                     for (int i = 0; i < qa.ItemInfo.Count; ++i)
                     {
                         PageData.Item ip = qp.ItemInfo[i];
                         if (ip.PagingInfo != PagingInfo.None && ip.PagingInfo != PagingInfo.Down)
                             continue;
                         AnswerData.Item ia = qa.ItemInfo[i];
-                        string ie = qe == null ? null : qe.ItemInfo[ip.Index]; // 注意分页
+                        string ie = (qe == null || ip.Index >= qe.Count) ? null : qe[ip.Index]; // 注意分页
                         string answer = Analyze(type, qp.QuestionType, ip, ia, ie);
                         if (ia.StatusOfItem > 0)
                             exceptions.Add(new ItemException(aa, qp, ip, ia, ie, answer));
@@ -355,7 +356,9 @@ namespace Exercise.Model
                     if (SelectedAnswer == "")
                         throw new System.Exception("请为本题打分");
                     double score = double.Parse(SelectedAnswer);
-                    if (score > Problem.TotalScore)
+                    if (score < 0 || score > Problem.TotalScore)
+                        throw new System.Exception("输入值不在有效范围中");
+                    if (score != Math.Floor(score) && !Answers.Contains(SelectedAnswer))
                         throw new System.Exception("输入值不在有效范围中");
                     Answer.Score = score;
                 }

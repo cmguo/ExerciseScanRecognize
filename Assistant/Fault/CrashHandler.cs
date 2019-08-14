@@ -81,6 +81,8 @@ namespace Assistant.Fault
                 cr.Update2(report);
                 ReportResult result = await service.FaultReport(cr);
                 postUrls = result.FilePostUrls;
+                if (postUrls == null)
+                    throw new NullReferenceException("postUrls == null");
             }
             for (int i = 0; i < report.Files.Count; ++i)
             {

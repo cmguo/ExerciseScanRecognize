@@ -32,7 +32,6 @@ namespace Account.Service
                 uri = request.RequestUri.ToString().Replace(oldUrl, uri);
                 request.RequestUri = new Uri(uri);
             }
-            Log.d(request.RequestUri);
             HttpResponseMessage resp = await base.SendAsync(request, cancellationToken).ConfigureAwait(false);
             if (resp.StatusCode.CompareTo(HttpStatusCode.Ambiguous) >= 0)
                 throw new HttpResponseException(resp.StatusCode, resp.ReasonPhrase);

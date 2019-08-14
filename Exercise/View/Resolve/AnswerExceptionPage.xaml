@@ -91,16 +91,13 @@
                     </ItemsPanelTemplate>
                 </ListView.ItemsPanel>
                 <ListView.Resources>
-                    <DataTemplate DataType="{x:Type sys:Int32}">
+                    <DataTemplate DataType="{x:Type sys:Char}">
                         <tal:TalTouch Click="Score_Click" MinWidth="56" TouchStyle="Solid"
                                         Content="{Binding Converter={StaticResource ToStringConverter}}" />
                     </DataTemplate>
                     <DataTemplate DataType="{x:Type sys:Boolean}">
-                        <tal:TalTouch Click="Score_Click" Width="120" TouchStyle="Solid">
-                            <StackPanel Orientation="Horizontal">
-                                <Image Width="16" Source="/Icons/Clear.png" />
-                                <TextBlock Margin="8, 0, 0, 0" Text="删除" VerticalAlignment="Center"/>
-                            </StackPanel>
+                        <tal:TalTouch Click="Score_Click" Width="56" TouchStyle="Solid">
+                            <Image Width="16" Source="/Icons/Clear.png" />
                         </tal:TalTouch>
                     </DataTemplate>
                 </ListView.Resources>

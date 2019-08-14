@@ -31,13 +31,13 @@ namespace Exercise.Service
             }
             public long ScanDate { get; set; }
             public IList<ClassDetail> DetailList { get; set; }
+            public UseLog UseLog { get; set; }
 
             [JsonIgnore]
             public DateTime DataTime => SystemUtil.DateTimeFromTimestamp(ScanDate);
             [JsonIgnore]
             public string LocalPath { get; internal set; }
 
-            public UseLog UseLog { get; internal set; }
         }
 
         public partial class ClassDetail

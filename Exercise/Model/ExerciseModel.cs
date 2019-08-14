@@ -387,12 +387,15 @@ namespace Exercise.Model
             else if (e.PropertyName == "LastPage")
             {
                 Page page = scanModel.LastPage;
-                if (page != null && page.Another != null)
+                if (page != null)
                 {
-                    page.Student = schoolModel.GetStudent(page.StudentCode);
                     page.Analyze = PageAnalyze.Analyze(page);
-                    LastPage = page;
-                    RaisePropertyChanged("LastPage");
+                    if (page.Another != null)
+                    {
+                        page.Student = schoolModel.GetStudent(page.StudentCode);
+                        LastPage = page;
+                        RaisePropertyChanged("LastPage");
+                    }
                 }
             }
             else if (e.PropertyName == "IsCompleted")
@@ -437,6 +440,7 @@ namespace Exercise.Model
             try
             {
                 ExerciseData = await service.GetExercise(PaperCode);
+                PageAnalyze.SetStandardAnswers(ExerciseData.Answers);
                 int n = (ExerciseData.Pages.Count + 1) / 2;
                 emptyPages = new List<Page>(n);
                 while (n-- > 0)

@@ -15,7 +15,7 @@ namespace Exercise.Service
         [JsonProperty("typesettingResultList")]
         public IList<PageData> Pages { get; set; }
         [JsonProperty("questionDetailItems")]
-        public IList<Question> Answers { get; set; }
+        public IDictionary<string, IList<string>> Answers { get; set; }
 
         [JsonIgnore]
         public IList<PageData.Question> Questions { get; set; }
@@ -41,12 +41,6 @@ namespace Exercise.Service
                     ql = q;
                 }
             }
-        }
-
-        public class Question
-        {
-            public string QuestionId { get; set; }
-            public IList<string> ItemInfo { get; set; }
         }
 
     }

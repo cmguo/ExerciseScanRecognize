@@ -38,7 +38,16 @@ namespace Exercise.Model
 
         public ObservableCollection<Page> Pages { get; private set; }
         public ObservableCollection<Page> PageDropped { get; private set; }
-        public Page LastPage { get; private set; }
+        private Page _LastPage;
+        public Page LastPage
+        {
+            get => _LastPage;
+            private set
+            {
+                _LastPage = value;
+                RaisePropertyChanged("LastPage");
+            }
+        }
 
         public string[] SourceList
         {
@@ -114,7 +123,7 @@ namespace Exercise.Model
         private int scanIndex = 0;
         private int readIndex = 0;
         private int cancel = 0;
-        private Page halfPage;
+        private PagePair halfPage;
         private ExerciseData exerciseData;
 
         public ScanModel()
@@ -132,7 +141,7 @@ namespace Exercise.Model
 
         public override void Shutdown()
         {
-            algorithm.Shutdown();
+            Shutdown();
         }
 
         public void SetSavePath(string path)
@@ -288,50 +297,40 @@ namespace Exercise.Model
 
         private async Task AddImage(string fileName)
         {
+            Log.d("AddImage " + fileName);
             int n1 = fileName.LastIndexOf('_') + 1;
             int n2 = fileName.LastIndexOf(".");
             int index = Int32.Parse(fileName.Substring(n1, n2 - n1));
             Page page = new Page() { ScanBatch = scanBatch, ScanIndex = index, PagePath = fileName,
                 PageName = fileName.Substring(fileName.LastIndexOf('\\') + 1) };
-            Page page1 = null;
-            lock (mutex)
+            PagePair pages = halfPage;
+            if (pages == null)
             {
-                if (halfPage == null)
-                {
-                    halfPage = page;
-                    return;
-                }
-                page1 = halfPage;
+                halfPage = pages = new PagePair(page);
+                page = null;
+            }
+            else
+            {
                 halfPage = null;
             }
-            Log.d("AddImage " + fileName);
-            if (cancel == CANCEL_DROP)
-            {
-                page1.Another = page;
-                Pages.Add(page1);
+            if (!await ScanTwoPage(pages, page))
                 return;
-            }
-            Page page2 = page;
-            Page[] pages = new Page[] { page1, page2 };
-            long tick = Environment.TickCount;
-            //for (int i = 0; i < 1000; ++i)
-            //{
-                await ScanTwoPage(pages, tick);
-                //await Task.Delay(500);
-            //}
-            pages[0].TotalIndex = Pages.Count;
-            pages[1].TotalIndex = Pages.Count;
-            if (pages[0].Another == null)
-                ReleasePage(pages[1]);
+            LastPage = pages.Page2;
+            pages.Page1.TotalIndex = Pages.Count;
+            pages.Page2.TotalIndex = Pages.Count;
+            if (pages.Page1.Another == null)
+                ReleasePage(pages.Page2);
             int drop = PageDropped.Count;
             try
             {
-                Pages.Add(pages[0]);
+                Pages.Add(pages.Page1);
             }
             catch (Exception e)
             {
                 Log.d(e);
             }
+            pages.Page1 = null;
+            pages.Page2 = null;
             while (drop < PageDropped.Count)
             {
                 Page p1 = PageDropped[drop++];
@@ -359,8 +358,8 @@ namespace Exercise.Model
             }
         }
 
-        private int[] elapseCounts = new int[5];
-        private long[] elapseTicks = new long[5];
+        private int[] elapseCounts = new int[4];
+        private long[] elapseTicks = new long[4];
 
         private long AddTick(int index, long tick)
         {
@@ -370,74 +369,108 @@ namespace Exercise.Model
             return tick1;
         }
 
-        private async Task ScanTwoPage(Page[] pages, long tick)
+        private async Task<bool> ScanTwoPage(PagePair pages, Page page2)
         {
-            tick = AddTick(0, tick); // queue wait
-            tick = await ReadPage(pages[0], tick); // tick 1
-            if (pages[0].PaperCode == null)
+            long tick = Environment.TickCount;
+            if (page2 == null)
             {
-                tick = await ReadPage(pages[1], tick);
-                if (pages[1].PaperCode != null)
+                tick = await ReadPage(pages.Page1, tick);
+                // 识别正面二维码
+                int task = pages.SetPageCode(true);
+                if (task == 0) // 正面二维码没有识别出来，反面图片还没有到达
+                    return false; // 直接返回，反面图片到达后，会继续处理
+                if (task == 2) // 正面二维码没有识别出来，反面图片已经到达
                 {
-                    pages[0].Exception = null;
-                    Page p = pages[0];
-                    pages[0] = pages[1];
-                    pages[1] = p;
+                    // 识别反面二维码
+                    tick = await ReadPage(pages.Page2, tick);
+                    if (pages.SetPageCode(false) == 0) // 反面二维码没有识别出来
+                        return true; // 放弃，结束
+                    task = 3;
                 }
-            }
-            pages[1].PaperCode = pages[0].PaperCode;
-            pages[1].PageIndex = pages[0].PageIndex + 1;
-            pages[1].StudentCode = pages[0].StudentCode;
-            pages[0].Another = pages[1];
-            if (pages[0].PaperCode == null)
-                return;
-            if (PaperCode == null)
-            {
-                PaperCode = pages[0].PaperCode;
-                Log.d("PageCode=" + PaperCode);
-                RaisePropertyChanged("PageCode");
-            }
-            if (PaperCode != pages[0].PaperCode)
-                return;
-            if (exerciseData == null)
-            {
-                await Task.Run(() => WaitExerciseData());
-                if (exerciseData == null)
-                    return;
-            }
-            tick = AddTick(2, tick);
-            tick = await ScanPage(pages[0], tick); // tick 3,4
-            LastPage = pages[0];
-            RaisePropertyChanged("LastPage");
-            if (pages[1].PageIndex < exerciseData.Pages.Count)
-            {
-                tick = await ScanPage(pages[1], tick);
-                LastPage = pages[1];
-                RaisePropertyChanged("LastPage");
+                // task == 1 // // 正面二维码已经识别出来，反面图片还没有到达
+                // task == 3 // // 正面二维码已经识别出来，反面图片已经到达
+                if (!await WaitExerciseData(pages.PaperCode))
+                    return task == 3 || pages.Finish(true);
+                tick = AddTick(1, tick);
+                await ScanPage(pages.Page1, tick); // 分析正面
+                bool finish = pages.Finish(true); // 可能反面分析也已经完成
+                LastPage = pages.Page1;
+                if (task == 3)
+                {
+                    if (pages.Page2.PageIndex < exerciseData.Pages.Count)
+                        await ScanPage(pages.Page2, tick);
+                    else
+                        pages.DropPage2();
+                    finish = pages.Finish(false);
+                }
+                return finish;
             }
             else
             {
-                pages[0].Another = null;
+                halfPage = null;
+                int task = pages.SetAnotherPage(page2);
+                if (task == 0) // 正在分析正面二维码
+                    return false; // 不等待，直接返回，正面分析完成后，会继续处理
+                if (task == 3) // 正面分析二维码已经失败，需要尝试反面
+                {
+                    tick = await ReadPage(pages.Page2, tick);
+                    if (pages.SetPageCode(false) == 0) // 反面二维码没有识别出来
+                        return true; // 放弃，结束
+                }
+                // task == 2 or 3 // 二维码识别完成，继续分析
+                if (!await WaitExerciseData(pages.PaperCode))
+                    return task == 3 || pages.Finish(false); // 可能正面分析已经完成
+                tick = AddTick(1, tick);
+                bool finish = false;
+                if (task == 3) // 可能需要分析正面
+                {
+                    tick = await ScanPage(pages.Page1, tick);
+                    finish = pages.Finish(true);
+                    LastPage = pages.Page1;
+                }
+                if (pages.Page2.PageIndex < exerciseData.Pages.Count)
+                    tick = await ScanPage(pages.Page2, tick);
+                else
+                    pages.DropPage2();
+                finish = pages.Finish(false);
+                return finish;
             }
         }
 
-        private void WaitExerciseData()
+        private async Task<bool> WaitExerciseData(string code)
         {
-            lock (mutex)
+            if (PaperCode == null)
             {
-                while (exerciseData == null && cancel != CANCEL_DROP)
-                {
-                    Monitor.Wait(mutex);
-                }
+                PaperCode = code;
+                Log.d("PageCode=" + PaperCode);
+                RaisePropertyChanged("PageCode");
             }
+            if (PaperCode != code)
+                return false;
+            if (exerciseData == null)
+            {
+                await Task.Run(() =>
+                {
+                    lock (mutex)
+                    {
+                        while (exerciseData == null && cancel != CANCEL_DROP)
+                        {
+                            Monitor.Wait(mutex);
+                        }
+                    }
+                });
+            }
+            if (exerciseData == null)
+                return false;
+            return true;
         }
 
         private async Task<long> ReadPage(Page page, long tick)
         {
             try
             {
-                Algorithm.QRCodeData code = await algorithm.GetCode(new Algorithm.PageRaw() { ImgPathIn = page.PagePath });
-                tick = AddTick(1, tick);
+                QRCodeData code = await algorithm.GetCode(new PageRaw() { ImgPathIn = page.PagePath });
+                tick = AddTick(0, tick);
                 if (code.PaperInfo != null)
                 {
                     int split = code.PaperInfo.IndexOf('_');
@@ -478,7 +511,7 @@ namespace Exercise.Model
             try
             {
                 AnswerData answerData = await algorithm.GetAnswer(pageData, page.PagePath, outPath);
-                tick = AddTick(3, tick);
+                tick = AddTick(2, tick);
                 page.Answer = answerData;
                 using (FileStream fs = new FileStream(outPath, FileMode.Open, FileAccess.Read))
                 {
@@ -486,7 +519,7 @@ namespace Exercise.Model
                     byte[] output = md5.ComputeHash(fs);
                     page.PageName = BitConverter.ToString(output).Replace("-", "").ToLower() + ".jpg";
                 }
-                tick = AddTick(4, tick);
+                tick = AddTick(3, tick);
                 File.Delete(page.PagePath);
                 page.PagePath = savePath + "\\" + page.PageName;
                 File.Move(outPath, page.PagePath);
@@ -522,7 +555,7 @@ namespace Exercise.Model
             IsScanning = false;
             if (halfPage != null)
             {
-                File.Delete(halfPage.PagePath);
+                File.Delete(halfPage.Page1.PagePath);
                 halfPage = null;
                 --readIndex;
             }

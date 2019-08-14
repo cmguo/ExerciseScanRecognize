@@ -110,6 +110,7 @@
     <Compile Include="Configuration.cs" />
     <Compile Include="Model\HistoryModel.cs" />
     <Compile Include="Model\PageAnalyze.cs" />
+    <Compile Include="Model\PagePair.cs" />
     <Compile Include="Model\SubmitModel.cs" />
     <Compile Include="Model\SchoolModel.cs" />
     <Compile Include="Model\ExerciseModel.cs" />

@@ -106,8 +106,9 @@ namespace Exercise.View.Resolve
         {
             List<object> scores = new List<object>();
             for (int i = 1; i < 10; ++i)
-                scores.Add(i);
-            scores.Add(0);
+                scores.Add((char)('0' + i));
+            scores.Add('0');
+            scores.Add('.');
             scores.Add(false);
             numbers.ItemsSource = scores;
         }
@@ -115,7 +116,7 @@ namespace Exercise.View.Resolve
         private void Score_Click(object sender, RoutedEventArgs e)
         {
             object n = (sender as FrameworkElement).DataContext;
-            if ((n is int))
+            if (n is char)
             {
                 score.SelectedText = n.ToString();
                 ++score.SelectionStart;

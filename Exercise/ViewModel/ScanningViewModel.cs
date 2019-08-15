@@ -143,7 +143,7 @@ namespace Exercise.ViewModel
             while (true)
             {
                 int result = -1;
-                if (scanModel.Exception != null)
+                if (scanModel.ScanException != null)
                 {
                     result = PopupDialog.Show(obj as UIElement, "扫描停止", "扫描仪发生异常，请检查后重试。", 1, "查看结果", "继续扫描");
                 }

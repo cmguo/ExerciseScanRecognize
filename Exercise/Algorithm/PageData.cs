@@ -37,7 +37,7 @@ namespace Exercise.Algorithm
             public Location ItemLocation { get; set; }
 
             [JsonExtensionData]
-            private IDictionary<string, JToken> _additionalData
+            internal IDictionary<string, JToken> _additionalData
                  = new Dictionary<string, JToken>();
         }
 
@@ -51,7 +51,7 @@ namespace Exercise.Algorithm
             public IList<Item> ItemInfo { get; set; }
 
             [JsonExtensionData]
-            private IDictionary<string, JToken> _additionalData
+            internal IDictionary<string, JToken> _additionalData
                  = new Dictionary<string, JToken>();
         }
 
@@ -59,13 +59,11 @@ namespace Exercise.Algorithm
         {
             public int AreaId { get; set; }
             public AreaType AreaType { get; set; }
-            //public int NumOfQuestions { get; set; }
-            public PagingInfo PagingInfo { get; set; }
             public Location AreaLocation { get; set; } // 相对于图像左上角的位置，相对位置
             public IList<Question> QuestionInfo { get; set; }
 
             [JsonExtensionData]
-            private IDictionary<string, JToken> _additionalData
+            internal IDictionary<string, JToken> _additionalData
                  = new Dictionary<string, JToken>();
         }
 

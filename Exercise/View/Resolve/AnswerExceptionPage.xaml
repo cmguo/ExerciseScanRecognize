@@ -96,8 +96,11 @@
                                         Content="{Binding Converter={StaticResource ToStringConverter}}" />
                     </DataTemplate>
                     <DataTemplate DataType="{x:Type sys:Boolean}">
-                        <tal:TalTouch Click="Score_Click" Width="56" TouchStyle="Solid">
-                            <Image Width="16" Source="/Icons/Clear.png" />
+                        <tal:TalTouch Click="Score_Click" Width="56" TouchStyle="Solid" Padding="4, 0, 4, 0">
+                            <StackPanel Orientation="Horizontal">
+                                <Image Width="16" Source="/Icons/Clear.png" />
+                                <TextBlock Margin="4, 0, 0, 0" Text="删除" VerticalAlignment="Center"/>
+                            </StackPanel>
                         </tal:TalTouch>
                     </DataTemplate>
                 </ListView.Resources>

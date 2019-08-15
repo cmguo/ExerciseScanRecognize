@@ -30,6 +30,13 @@ namespace Base.Mvvm
             ActionException?.Invoke(owner, e1);
         }
 
+        public static void RaiseException(object owner, Exception e, object parameter = null)
+        {
+            ActionExceptionEventArgs e1 = new ActionExceptionEventArgs(e) { Parameter = parameter };
+            if (!e1.IsHandled)
+                ActionException?.Invoke(owner, e1);
+        }
+
         public static event EventHandler<ActionExceptionEventArgs> ActionException;
 
         public enum ActionStatus

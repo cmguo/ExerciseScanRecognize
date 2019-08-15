@@ -23,7 +23,6 @@ namespace Application
             Logger.SetLogPath(Exercise.Component.DATA_PATH);
             Logger.Config("logger.xml");
             ErrorMessageBox.Init();
-            //Misc.Jni.Init();
             this.Exit += App_Exit;
         }
 

@@ -12,6 +12,7 @@ using System.IO;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Windows.Threading;
 
 namespace Exercise.Algorithm
 {
@@ -27,6 +28,7 @@ namespace Exercise.Algorithm
         };
 
         private Dictionary<string, string> methodNames;
+
         private Thread[] threadPool = new Thread[4];
         private Queue<Task> tasks = new Queue<Task>();
 
@@ -35,24 +37,44 @@ namespace Exercise.Algorithm
         private Thread readThread;
         private int taskId = 0;
         private Dictionary<int, RemoteTask> remoteTasks;
+        private Action<string> onErr;
+        private Dispatcher dispatcher;
 
-        public Algorithm(bool? client = null)
+        public Algorithm(bool? client, Action<string> onErr)
         {
+            this.onErr = onErr;
+            dispatcher = Dispatcher.CurrentDispatcher;
             if (client == null || client == false)
             {
-                if (client == null)
+                try
                 {
-                    BackgroundWork.Execute(() => Task.Run(() =>
+                    JavaVM.Jni.Init();
+                    if (client == null)
+                    {
+                        BackgroundWork.Execute(() => Task.Run(() =>
+                        {
+                            try
+                            {
+                                Bridge.RegisterAssembly(typeof(AnswerSheetAnalyze).Assembly);
+                                AnswerSheetAnalyze.init();
+                                //Test();
+                            }
+                            catch (Exception e)
+                            {
+                                WriterException(e);
+                            }
+                        }));
+                    }
+                    else
                     {
                         Bridge.RegisterAssembly(typeof(AnswerSheetAnalyze).Assembly);
                         AnswerSheetAnalyze.init();
-                        //Test();
-                    }));
+                    }
                 }
-                else
+                catch (Exception e)
                 {
-                    Bridge.RegisterAssembly(typeof(AnswerSheetAnalyze).Assembly);
-                    AnswerSheetAnalyze.init();
+                    WriterException(e);
+                    throw;
                 }
                 methodNames = new Dictionary<string, string>();
                 methodNames.Add("GetCode", AnswerSheetAnalyze.METHOD_QR_CODE_RECOGNIZE);
@@ -125,6 +147,34 @@ namespace Exercise.Algorithm
                     page.ImgPathIn = null;
                     page.ImgPathOut = null;
                 }
+            }
+        }
+
+        private void WriterException(Exception e)
+        {
+            string message;
+            if (e is JNIException)
+            {
+                var is64Process = (IntPtr.Size == 8);
+                message = "没有检测到正确配置的 Java 环境，请安装 " + (is64Process ? 64 : 32) + "位 Java 运行时环境。";
+            }
+            else if (e is java.lang.Exception)
+            {
+                message = "失败算法初始化失败，可能是系统环境问题，请联系服务人员排查。";
+            }
+            else
+            {
+                message = e.ToString().Replace("\r", "\\r").Replace("\n", "\\n");
+            }
+            if (onErr == null)
+            {
+                StreamWriter writer = new StreamWriter(Console.OpenStandardOutput(), ServiceEncoidng);
+                writer.WriteLine(message);
+                writer.Flush();
+            }
+            else
+            {
+                dispatcher.Invoke(() => onErr(message));
             }
         }
 
@@ -317,7 +367,16 @@ namespace Exercise.Algorithm
                     p.Start();
                     Log.d("ReadService encoding=" + p.StandardInput.Encoding);
                     string pid = p.StandardOutput.ReadLine();
-                    Log.d("ReadService pid=" + pid);
+                    if (pid != null && pid.Length < 8)
+                    {
+                        Log.d("ReadService pid=" + pid);
+                    }
+                    else
+                    {
+                        dispatcher.Invoke(() => onErr(pid == null ? "识别服务未正常启动，请联系服务人员。" 
+                            : pid.Replace("\\n", "\n").Replace("\\r", "\r")));
+                        break;
+                    }
                     lock (remoteTasks)
                     {
                         foreach (var t in remoteTasks)

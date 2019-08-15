@@ -96,6 +96,7 @@
     <Compile Include="Events\IEvent.cs" />
     <Compile Include="Events\TopicAttribute.cs" />
     <Compile Include="Helpers\Enumerables.cs" />
+    <Compile Include="Helpers\Properties.cs" />
     <Compile Include="Misc\Logger.cs" />
     <Compile Include="Misc\SystemUtil.cs" />
     <Compile Include="Misc\UITreeHelper.cs" />

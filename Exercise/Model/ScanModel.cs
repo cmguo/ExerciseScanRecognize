@@ -102,19 +102,19 @@ namespace Exercise.Model
             }
         }
 
-        private Exception _Exception;
-        public Exception Exception
+        private Exception _ScanException;
+        public Exception ScanException
         {
-            get { return _Exception; }
+            get { return _ScanException; }
             set
             {
-                _Exception = value;
-                RaisePropertyChanged("Exception");
+                _ScanException = value;
+                RaisePropertyChanged("ScanException");
             }
         }
 
         private IScanDevice scanDevice = new ScanDeviceSaraff(Application.Current.MainWindow);
-        private Algorithm.Algorithm algorithm = new Algorithm.Algorithm(true);
+        private Algorithm.Algorithm algorithm;
 
         private object mutex = new object();
 
@@ -128,6 +128,10 @@ namespace Exercise.Model
 
         public ScanModel()
         {
+            algorithm = new Algorithm.Algorithm(true, (m) =>
+            {
+                Base.Mvvm.Action.RaiseException(this, new AlgorithmException(0, m));
+            });
             Pages = new ObservableCollection<Page>();
             PageDropped = new ObservableCollection<Page>();
             scanDevice.OnImage += ScanDevice_OnImage;
@@ -167,7 +171,7 @@ namespace Exercise.Model
             Log.d("Scan");
             IsScanning = true;
             IsCompleted = false;
-            Exception = null;
+            ScanException = null;
             cancel = 0;
             ++scanBatch;
             scanIndex = 0;
@@ -183,7 +187,7 @@ namespace Exercise.Model
                 cancel = CANCEL_DROP;
                 IsScanning = false;
                 IsCompleted = true;
-                Exception = e;
+                ScanException = e;
                 throw;
             }
         }
@@ -546,7 +550,7 @@ namespace Exercise.Model
         private void ScanDevice_ScanException(object sender, ScanEvent e)
         {
             Log.d("ScanDevice_ScanException");
-            Exception = e.Exception;
+            ScanException = e.Exception;
         }
 
         private void ScanDevice_ScanCompleted(object sender, ScanEvent e)

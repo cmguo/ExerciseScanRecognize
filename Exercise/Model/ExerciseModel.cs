@@ -205,7 +205,7 @@ namespace Exercise.Model
             Clear();
             await schoolModel.Load(path);
             ExerciseData = await JsonPersistent.LoadAsync<ExerciseData>(path + "\\exercise.json");
-            PageAnalyze.SetStandardAnswers(ExerciseData.Answers);
+            PageAnalyze.SetExerciseData(ExerciseData);
             schoolModel.GetHasPageStudents((s) =>
             {
                 PageStudents.Add(s);
@@ -230,7 +230,7 @@ namespace Exercise.Model
             targetException = null;
             ExerciseData = null;
             ExerciseException = null;
-            PageAnalyze.SetStandardAnswers(null);
+            PageAnalyze.SetExerciseData(null);
             LastPage = null;
             PageStudents.Clear();
             Exceptions.Clear();
@@ -389,7 +389,10 @@ namespace Exercise.Model
                 Page page = scanModel.LastPage;
                 if (page != null)
                 {
-                    page.Analyze = PageAnalyze.Analyze(page);
+                    if (LastPage != null && LastPage.Another == page)
+                        page.Analyze = PageAnalyze.Analyze(page, LastPage.Analyze, true);
+                    else
+                        page.Analyze = PageAnalyze.Analyze(page, true);
                     if (page.Another != null)
                     {
                         page.Student = schoolModel.GetStudent(page.StudentCode);
@@ -440,7 +443,7 @@ namespace Exercise.Model
             try
             {
                 ExerciseData = await service.GetExercise(PaperCode);
-                PageAnalyze.SetStandardAnswers(ExerciseData.Answers);
+                PageAnalyze.SetExerciseData(ExerciseData);
                 int n = (ExerciseData.Pages.Count + 1) / 2;
                 emptyPages = new List<Page>(n);
                 while (n-- > 0)
@@ -467,12 +470,12 @@ namespace Exercise.Model
             if (page.PaperCode == PaperCode && page.Student != null)
             {
                 if (page.Analyze == null)
-                    page.Analyze = PageAnalyze.Analyze(page);
+                    page.Analyze = PageAnalyze.Analyze(page, false);
                 if (page.Another != null)
                 {
                     page.Another.Student = page.Student;
                     if (page.Another.Analyze == null)
-                        page.Another.Analyze = PageAnalyze.Analyze(page.Another, page.Analyze);
+                        page.Another.Analyze = PageAnalyze.Analyze(page.Another, page.Analyze, false);
                 }
                 if (page.Student.AnswerPages == null)
                 {

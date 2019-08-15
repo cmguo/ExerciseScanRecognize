@@ -16,6 +16,7 @@ namespace Exercise.Model
 
         private static Dictionary<QuestionType, IList<QuestionType>> questionTypeMap = 
             new Dictionary<QuestionType, IList<QuestionType>>();
+        private static IList<PageData.Question> normalizedQuestions;
         private static IDictionary<string, IList<string>> standardAnswers;
 
         #region Properties
@@ -61,12 +62,21 @@ namespace Exercise.Model
             questionTypeMap = map;
         }
 
-        public static void SetStandardAnswers(IDictionary<string, IList<string>> answers)
+        public static void SetExerciseData(ExerciseData data)
         {
-            standardAnswers = answers;
+            if (data == null)
+            {
+                normalizedQuestions = null;
+                standardAnswers = null;
+            }
+            else
+            {
+                normalizedQuestions = data.Questions;
+                standardAnswers = data.Answers;
+            }
         }
 
-        public static PageAnalyze Analyze(Page page)
+        public static PageAnalyze Analyze(Page page, bool apply)
         {
             if (page.Answer == null)
                 return null;
@@ -77,21 +87,28 @@ namespace Exercise.Model
             foreach (AnswerData.Area aa in page.Answer.AreaInfo)
             {
                 AreaType type = aa.AreaType;
+                PageData.Area ap = page.MetaData.AreaInfo.Where(a => a.AreaId == aa.AreaId).First();
                 if (aa.AreaLocation == null)
                     aa.AreaLocation = areaLocation;
+                if (apply)
+                    aa.ApplyFrom(ap);
                 IList<ItemException> exceptions = type == AreaType.Answer ? CorrectionExceptions : AnswerExceptions;
                 foreach (AnswerData.Question qa in aa.QuestionInfo)
                 {
-                    PageData.Question qp = GetQuestion(page.MetaData, qa.QuestionId);
+                    PageData.Question qp = normalizedQuestions.Where(q => q.QuestionId == qa.QuestionId).First();
+                    if (apply)
+                        qa.ApplyFrom(qp);
                     IList<string> qe = null;
                     if (standardAnswers != null)
                         standardAnswers.TryGetValue(qa.QuestionId, out qe);
                     for (int i = 0; i < qa.ItemInfo.Count; ++i)
                     {
                         PageData.Item ip = qp.ItemInfo[i];
+                        AnswerData.Item ia = qa.ItemInfo[i];
+                        if (apply)
+                            ia.ApplyFrom(ip);
                         if (ip.PagingInfo != PagingInfo.None && ip.PagingInfo != PagingInfo.Down)
                             continue;
-                        AnswerData.Item ia = qa.ItemInfo[i];
                         string ie = (qe == null || ip.Index >= qe.Count) ? null : qe[ip.Index]; // 注意分页
                         string answer = Analyze(type, qp.QuestionType, ip, ia, ie);
                         if (ia.StatusOfItem > 0)
@@ -107,9 +124,9 @@ namespace Exercise.Model
             return new PageAnalyze() { AnswerExceptions = AnswerExceptions, CorrectionExceptions = CorrectionExceptions, Score = score };
         }
 
-        public static PageAnalyze Analyze(Page page, PageAnalyze another)
+        public static PageAnalyze Analyze(Page page, PageAnalyze another, bool apply)
         {
-            PageAnalyze analyze = Analyze(page);
+            PageAnalyze analyze = Analyze(page, apply);
             if (analyze == null)
                 return another == null ? null : new PageAnalyze() { Another = another };
             another.Another = analyze;
@@ -273,12 +290,6 @@ namespace Exercise.Model
         {
             return questionTypeMap.Where(d => d.Key == qtype || d.Value.Contains(qtype))
                 .Select(d => d.Key).FirstOrDefault();
-        }
-
-        private static PageData.Question GetQuestion(PageData data, string questionId)
-        {
-            return data.AreaInfo.SelectMany(a => a.QuestionInfo)
-                .Where(q => q.QuestionId == questionId).First();
         }
 
         #endregion

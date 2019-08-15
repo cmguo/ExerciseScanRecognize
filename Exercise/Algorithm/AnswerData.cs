@@ -82,6 +82,16 @@ namespace Exercise.Algorithm
             public IList<Result> AnalyzeResult { get; set; }
             public double Score { get; set; }
 
+            public void ApplyFrom(PageData.Item item)
+            {
+                _additionalData.Add("HalfScore", item.HalfScore);
+                _additionalData.Add("TotalScore", item.TotalScore);
+                foreach (var d in item._additionalData)
+                {
+                    _additionalData.Add(d);
+                }
+            }
+
             [JsonExtensionData]
             private IDictionary<string, JToken> _additionalData
                  = new Dictionary<string, JToken>();
@@ -94,6 +104,15 @@ namespace Exercise.Algorithm
             public Location QuestionLocation { get; set; }
             public IList<Item> ItemInfo { get; set; }
 
+            public void ApplyFrom(PageData.Question question)
+            {
+                _additionalData.Add("Index", question.Index);
+                _additionalData.Add("QuestionType", (int) question.QuestionType);
+                foreach (var d in question._additionalData)
+                {
+                    _additionalData.Add(d);
+                }
+            }
 
             [JsonExtensionData]
             private IDictionary<string, JToken> _additionalData
@@ -106,6 +125,14 @@ namespace Exercise.Algorithm
             public AreaType AreaType { get; set; }
             public Location AreaLocation { get; set; }
             public IList<Question> QuestionInfo { get; set; }
+
+            public void ApplyFrom(PageData.Area area)
+            {
+                foreach (var d in area._additionalData)
+                {
+                    _additionalData.Add(d);
+                }
+            }
 
             [JsonExtensionData]
             private IDictionary<string, JToken> _additionalData

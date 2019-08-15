@@ -108,6 +108,7 @@
     <Compile Include="Algorithm\AlgorithmException.cs" />
     <Compile Include="Component.cs" />
     <Compile Include="Configuration.cs" />
+    <Compile Include="JavaVM\Jni.cs" />
     <Compile Include="Model\HistoryModel.cs" />
     <Compile Include="Model\PageAnalyze.cs" />
     <Compile Include="Model\PagePair.cs" />
@@ -281,6 +282,7 @@
   <ItemGroup>
     <None Include="..\Libraries\answer-sheet-analyze-sdk.jar" />
   </ItemGroup>
+  <ItemGroup />
   <PropertyGroup>
     <PrepareForRunDependsOn>$(PrepareForRunDependsOn);MyCopyFilesToOutputDirectory</PrepareForRunDependsOn>
   </PropertyGroup>

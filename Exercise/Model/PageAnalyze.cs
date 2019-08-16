@@ -66,11 +66,13 @@ namespace Exercise.Model
         {
             if (data == null)
             {
+                questionTypeMap = null;
                 normalizedQuestions = null;
                 standardAnswers = null;
             }
             else
             {
+                questionTypeMap = data.QuestionTypeMap;
                 normalizedQuestions = data.Questions;
                 standardAnswers = data.Answers;
             }
@@ -107,7 +109,7 @@ namespace Exercise.Model
                         AnswerData.Item ia = qa.ItemInfo[i];
                         if (apply)
                             ia.ApplyFrom(ip);
-                        if (ip.PagingInfo != PagingInfo.None && ip.PagingInfo != PagingInfo.Down)
+                        if (ia.PagingInfo != PagingInfo.None && ia.PagingInfo != PagingInfo.Down)
                             continue;
                         string ie = (qe == null || ip.Index >= qe.Count) ? null : qe[ip.Index]; // 注意分页
                         string answer = Analyze(type, qp.QuestionType, ip, ia, ie);
@@ -265,7 +267,7 @@ namespace Exercise.Model
                 }
                 else
                 {
-                    if (ia.AnalyzeResult.Last() == null || ia.AnalyzeResult.Last().Value == "")
+                    if (ia.AnalyzeResult.Last() == null || ia.AnalyzeResult.Last().Value == null)
                     {
                         ia.StatusOfItem = 101;
                         answer += "0";
@@ -288,8 +290,9 @@ namespace Exercise.Model
 
         private static QuestionType MapQuestionType(QuestionType qtype)
         {
-            return questionTypeMap.Where(d => d.Key == qtype || d.Value.Contains(qtype))
-                .Select(d => d.Key).FirstOrDefault();
+            return questionTypeMap == null ? qtype 
+                : questionTypeMap.Where(d => d.Key == qtype || d.Value.Contains(qtype))
+                    .Select(d => d.Key).FirstOrDefault();
         }
 
         #endregion

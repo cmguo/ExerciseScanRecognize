@@ -16,6 +16,7 @@ namespace Exercise.Service
         public IList<PageData> Pages { get; set; }
         [JsonProperty("questionDetailItems")]
         public IDictionary<string, IList<string>> Answers { get; set; }
+        public Dictionary<QuestionType, IList<QuestionType>> QuestionTypeMap { get; set; }
 
         [JsonIgnore]
         public IList<PageData.Question> Questions { get; set; }

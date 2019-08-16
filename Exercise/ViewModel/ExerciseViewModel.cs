@@ -101,7 +101,10 @@ namespace Exercise.ViewModel
                 return;
             }
             if (!scanModel.IsScanning && scanModel.IsCompleted)
+            {
+                exerciseModel.Discard();
                 return;
+            }
             e.Cancel = true;
             await scanModel.CancelScan(true);
             exerciseModel.Discard();

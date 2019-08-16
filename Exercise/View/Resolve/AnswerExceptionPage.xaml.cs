@@ -58,17 +58,24 @@ namespace Exercise.View.Resolve
                 answers.UnselectAll();
                 if (analyze.SelectedException == null)
                     return;
-                foreach (char c in analyze.SelectedException.SelectedAnswer)
+                if (type == ExceptionType.AnswerException)
                 {
-                    ListViewItem item = answers.ItemContainerGenerator.ContainerFromItem(c.ToString()) as ListViewItem;
-                    if (item != null)
-                        item.IsSelected = true;
+                    foreach (char c in analyze.SelectedException.SelectedAnswer)
+                    {
+                        ListViewItem item = answers.ItemContainerGenerator.ContainerFromItem(c.ToString()) as ListViewItem;
+                        if (item != null)
+                            item.IsSelected = true;
+                    }
+                    if (answers.SelectedItems.Count == 0)
+                    {
+                        ListViewItem item = answers.ItemContainerGenerator.ContainerFromItem(PageAnalyze.NULL_ANSWER) as ListViewItem;
+                        if (item != null)
+                            item.IsSelected = true;
+                    }
                 }
-                if (answers.SelectedItems.Count == 0)
+                else
                 {
-                    ListViewItem item = answers.ItemContainerGenerator.ContainerFromItem(PageAnalyze.NULL_ANSWER) as ListViewItem;
-                    if (item != null)
-                        item.IsSelected = true;
+                    score.SelectionStart = score.Text.Length;
                 }
                 ResolvePage rp = UITreeHelper.GetParentOfType<ResolvePage>(this);
                 rp.SetPaperFocusRect(PaperOverlayConverter.MakeRect(analyze.SelectedException.Location, 0));

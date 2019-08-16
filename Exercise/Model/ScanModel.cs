@@ -145,7 +145,7 @@ namespace Exercise.Model
 
         public override void Shutdown()
         {
-            Shutdown();
+            algorithm.Shutdown();
         }
 
         public void SetSavePath(string path)
@@ -524,7 +524,7 @@ namespace Exercise.Model
                     page.PageName = BitConverter.ToString(output).Replace("-", "").ToLower() + ".jpg";
                 }
                 tick = AddTick(3, tick);
-                File.Delete(page.PagePath);
+                //File.Delete(page.PagePath);
                 page.PagePath = savePath + "\\" + page.PageName;
                 File.Move(outPath, page.PagePath);
             }

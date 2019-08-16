@@ -142,8 +142,6 @@ namespace Exercise.Model
             string path = historyModel.NewRecord().LocalPath;
             scanModel.SetSavePath(path);
             SavePath = path;
-            var types = await service.getQuestionTypeMap();
-            PageAnalyze.SetQuestionTypeMap(types);
             await schoolModel.Refresh();
         }
 
@@ -443,6 +441,7 @@ namespace Exercise.Model
             try
             {
                 ExerciseData = await service.GetExercise(PaperCode);
+                ExerciseData.QuestionTypeMap = await service.getQuestionTypeMap();
                 PageAnalyze.SetExerciseData(ExerciseData);
                 int n = (ExerciseData.Pages.Count + 1) / 2;
                 emptyPages = new List<Page>(n);

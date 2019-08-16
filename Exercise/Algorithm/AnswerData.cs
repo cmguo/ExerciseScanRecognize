@@ -77,6 +77,7 @@ namespace Exercise.Algorithm
         public class Item
         {
             public int Index { get; set; } // 0 SUCCESS 1 检测结果异常
+            public PagingInfo PagingInfo { get; set; }
             public int StatusOfItem { get; set; } // 0 SUCCESS 1 检测结果异常
             public Location ItemLocation { get; set; } // 相对于图像左上角的位置，绝对位置
             public IList<Result> AnalyzeResult { get; set; }
@@ -84,6 +85,7 @@ namespace Exercise.Algorithm
 
             public void ApplyFrom(PageData.Item item)
             {
+                _additionalData.Add("Value", item.Value);
                 _additionalData.Add("HalfScore", item.HalfScore);
                 _additionalData.Add("TotalScore", item.TotalScore);
                 foreach (var d in item._additionalData)

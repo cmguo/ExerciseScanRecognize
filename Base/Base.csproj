@@ -91,9 +91,12 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Config\DebugOnlyAttribute.cs" />
     <Compile Include="Events\Event.cs" />
     <Compile Include="Events\EventBus.cs" />
     <Compile Include="Events\IEvent.cs" />
+    <Compile Include="Events\IEventQueue.cs" />
+    <Compile Include="Events\ExternalAttribute.cs" />
     <Compile Include="Events\TopicAttribute.cs" />
     <Compile Include="Helpers\Enumerables.cs" />
     <Compile Include="Helpers\Properties.cs" />

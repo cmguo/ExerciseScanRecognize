@@ -40,14 +40,9 @@ namespace Exercise.Model
                     Page p = Page1;
                     Page1 = Page2;
                     Page2 = p;
-                    Page2.Another = null;
                     Page2.Exception = null;
                     SyncCode();
                     return 3;
-                }
-                else
-                {
-                    Page1.Another = Page2;
                 }
                 return 0;
             }
@@ -56,6 +51,8 @@ namespace Exercise.Model
         internal int SetAnotherPage(Page p)
         {
             Page2 = p;
+            Page1.Another = Page2;
+            Page2.Another = Page1;
             if (PaperCode == null)
                 return 3;
             if (PaperCode == Empty)
@@ -69,7 +66,6 @@ namespace Exercise.Model
             Page2.PaperCode = Page1.PaperCode;
             Page2.PageIndex = Page1.PageIndex + 1;
             Page2.StudentCode = Page1.StudentCode;
-            Page1.Another = Page2;
         }
 
         internal bool Finish(bool first)
@@ -81,6 +77,7 @@ namespace Exercise.Model
         internal void DropPage2()
         {
             Page1.Another = null;
+            Page2.Another = null;
         }
     }
 }

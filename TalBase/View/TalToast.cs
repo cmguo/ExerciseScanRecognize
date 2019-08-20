@@ -22,7 +22,7 @@ namespace TalBase.View
 
         static TalToast()
         {
-            //DefaultStyleKeyProperty.OverrideMetadata(typeof(TalButton2), new FrameworkPropertyMetadata(typeof(TalButton2)));
+            DefaultStyleKeyProperty.OverrideMetadata(typeof(TalToast), new FrameworkPropertyMetadata(typeof(TalToast)));
         }
 
         private static TalToast instance;

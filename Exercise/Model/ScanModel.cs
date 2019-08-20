@@ -319,7 +319,11 @@ namespace Exercise.Model
             }
             if (!await ScanTwoPage(pages, page))
                 return;
-            LastPage = pages.Page2;
+            if (pages.Page1.Another != null)
+            {
+                LastPage = pages.Page2;
+                pages.Page2.Another = null;
+            }
             pages.Page1.TotalIndex = Pages.Count;
             pages.Page2.TotalIndex = Pages.Count;
             if (pages.Page1.Another == null)

@@ -11,26 +11,22 @@ namespace Base.Events
 
         public static EventBus Instance = new EventBus();
 
-        private Dictionary<string, EventBase> topicEvents = new Dictionary<string, EventBase>();
+        private IEventQueue externalQueue;
+        private Dictionary<string, IEvent> topicEvents = new Dictionary<string, IEvent>();
+
+        public void SetExternalQueue(IEventQueue queue)
+        {
+            externalQueue = queue;
+        }
 
         public new EventType GetEvent<EventType>() where EventType : EventBase, new()
         {
             EventType @event = base.GetEvent<EventType>();
-            Type eventType = @event.GetType();
-            if (eventType.IsGenericType)
+            if (@event is IEvent e)
             {
-                if (eventType.GetGenericTypeDefinition() == typeof(Event<int>).GetGenericTypeDefinition())
-                    eventType = eventType.GetGenericArguments()[0];
-            }
-            TopicAttribute[] topic = eventType.GetCustomAttributes(typeof(TopicAttribute), false) as TopicAttribute[];
-            if (topic != null)
-            {
-                lock (topicEvents)
+                if (e.Topic != null)
                 {
-                    foreach (TopicAttribute t in topic)
-                    {
-                        topicEvents[t.Name] = @event;
-                    }
+                    topicEvents.Add(e.Topic, e);
                 }
             }
             return @event;
@@ -39,25 +35,42 @@ namespace Base.Events
 
         public bool PublishEvent(string topic, string args)
         {
-            EventBase @event = null;
+            IEvent @event = null;
             lock (topicEvents)
             {
                 if (!topicEvents.TryGetValue(topic, out @event))
                     return false;
             }
-            Type eventType = @event.GetType();
-            if (!eventType.IsGenericType)
-                eventType = eventType.BaseType;
-            if (!eventType.IsGenericType
-                || eventType.GetGenericTypeDefinition() != typeof(Event<int>).GetGenericTypeDefinition())
-            {
-                return false;
-            }
-            Type argsType = eventType.GetGenericArguments()[0];
-            object argsObj = JsonConvert.DeserializeObject(args, argsType);
-            @event.GetType().GetMethod("Publish").Invoke(@event, new object[] { argsObj });
+            @event.Publish(args);
             return true;
         }
+
+        public void SubscribeEvent(string topic, Action<string, string> action)
+        {
+            IEvent @event = null;
+            lock (topicEvents)
+            {
+                if (!topicEvents.TryGetValue(topic, out @event))
+                    throw new InvalidOperationException("No such Event");
+            }
+            @event.Subscribe(action);
+        }
+
+        internal void SubscribeExternal<Arg>(Event<Arg> @event)
+        {
+            externalQueue.Subscribe(@event);
+        }
+
+        internal void UnsubscribeExternal<Arg>(Event<Arg> @event)
+        {
+            externalQueue.Unsubscribe(@event);
+        }
+
+        internal void PublishExternal<Arg>(Event<Arg> @event, Arg payload)
+        {
+            externalQueue.Send<Arg>(@event, payload);
+        }
+
 
     }
 }

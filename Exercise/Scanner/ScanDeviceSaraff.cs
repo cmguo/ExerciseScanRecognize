@@ -209,7 +209,7 @@ namespace Exercise.Scanner
             twain32.Capabilities.PixelType.Set(TwPixelType.RGB);
             XResolution = 200;
             YResolution = 200;
-            AttachImageDevice();
+            //AttachImageDevice();
         }
 
         public void CheckStatus()
@@ -218,8 +218,8 @@ namespace Exercise.Scanner
             //if (condition != TwCC.Success)
             //    throw new Exception(condition.ToString());
             OpenDataSource();
-            if (imageDevices[SourceIndex] != null && !imageDevices[SourceIndex].Present)
-                throw new InvalidOperationException("image device not connected");
+            //if (imageDevices[SourceIndex] != null && !imageDevices[SourceIndex].Present)
+            //    throw new InvalidOperationException("image device not connected");
         }
 
         public void Scan(short count)

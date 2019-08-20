@@ -56,6 +56,13 @@ namespace Exercise.View
                     }
                 }
             }
+            else if (e.Action == NotifyCollectionChangedAction.Add)
+            {
+                if (Items.Count == e.NewItems.Count)
+                {
+                    this.SelectNext();
+                }
+            }
             base.OnItemsChanged(e);
         }
 

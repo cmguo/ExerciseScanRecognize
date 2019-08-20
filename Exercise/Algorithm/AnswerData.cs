@@ -85,12 +85,16 @@ namespace Exercise.Algorithm
 
             public void ApplyFrom(PageData.Item item)
             {
-                _additionalData.Add("Value", item.Value);
-                _additionalData.Add("HalfScore", item.HalfScore);
-                _additionalData.Add("TotalScore", item.TotalScore);
+                if (!_additionalData.ContainsKey("value"))
+                    _additionalData.Add("value", item.Value);
+                if (!_additionalData.ContainsKey("halfScore"))
+                    _additionalData.Add("halfScore", item.HalfScore);
+                if (!_additionalData.ContainsKey("totalScore"))
+                    _additionalData.Add("totalScore", item.TotalScore);
                 foreach (var d in item._additionalData)
                 {
-                    _additionalData.Add(d);
+                    if (!_additionalData.ContainsKey(d.Key))
+                        _additionalData.Add(d);
                 }
             }
 
@@ -108,11 +112,14 @@ namespace Exercise.Algorithm
 
             public void ApplyFrom(PageData.Question question)
             {
-                _additionalData.Add("Index", question.Index);
-                _additionalData.Add("QuestionType", (int) question.QuestionType);
+                if (!_additionalData.ContainsKey("value"))
+                    _additionalData.Add("index", question.Index);
+                if (!_additionalData.ContainsKey("questionType"))
+                    _additionalData.Add("questionType", (int) question.QuestionType);
                 foreach (var d in question._additionalData)
                 {
-                    _additionalData.Add(d);
+                    if (!_additionalData.ContainsKey(d.Key))
+                        _additionalData.Add(d);
                 }
             }
 
@@ -132,7 +139,8 @@ namespace Exercise.Algorithm
             {
                 foreach (var d in area._additionalData)
                 {
-                    _additionalData.Add(d);
+                    if (!_additionalData.ContainsKey(d.Key))
+                        _additionalData.Add(d);
                 }
             }
 

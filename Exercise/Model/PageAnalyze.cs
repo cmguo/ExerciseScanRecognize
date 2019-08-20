@@ -126,13 +126,16 @@ namespace Exercise.Model
             return new PageAnalyze() { AnswerExceptions = AnswerExceptions, CorrectionExceptions = CorrectionExceptions, Score = score };
         }
 
-        public static PageAnalyze Analyze(Page page, PageAnalyze another, bool apply)
+        public static PageAnalyze Analyze(Page page, Page another, bool apply)
         {
             PageAnalyze analyze = Analyze(page, apply);
             if (analyze == null)
-                return another == null ? null : new PageAnalyze() { Another = another };
-            another.Another = analyze;
-            analyze.Another = another;
+                return another.Analyze == null ? null : new PageAnalyze() { Another = another.Analyze };
+            if (another.Analyze == null)
+                another.Analyze = new PageAnalyze() { Another = analyze };
+            else
+                another.Analyze.Another = analyze;
+            analyze.Another = another.Analyze;
             return analyze;
         }
 
@@ -230,6 +233,16 @@ namespace Exercise.Model
             int status = 0;
             if (type == AreaType.Choice || type == AreaType.Judge)
             {
+                if (ie != null)
+                {
+                    ie = ie.Replace('对', 'T');
+                    ie = ie.Replace('错', 'F');
+                    ie = ie.Replace('✓', 'T');
+                    ie = ie.Replace('×', 'F');
+                    ie = ie.Replace("正确", "T");
+                    ie = ie.Replace("错误", "F");
+                    ie = String.Join("", ie.Where(c => (c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z'))).ToUpper();
+                }
                 qtype = MapQuestionType(qtype);
                 if (qtype == QuestionType.SingleChoice || qtype == QuestionType.Judge)
                 {
@@ -250,7 +263,10 @@ namespace Exercise.Model
                     }
                     else if (answer.Length > 0 && answer.Except(ie).Count() == 0)
                     {
-                        score = ip.HalfScore;
+                        if (ie.Except(answer).Count() == 0)
+                            score = ip.TotalScore;
+                        else
+                            score = ip.HalfScore;
                     }
                 }
             }

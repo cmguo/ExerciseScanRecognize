@@ -113,10 +113,16 @@ namespace Exercise.View
             if (0 < parent.Items.Count)
             {
                 TreeViewItemEx next = parent.ItemContainerGenerator.ContainerFromIndex(0) as TreeViewItemEx;
-                if (next != null)
+                if (next == null)
+                {
+                    if (parent.ItemContainerGenerator.Status != System.Windows.Controls.Primitives.GeneratorStatus.ContainersGenerated)
+                    {
+                        parent.ItemContainerGenerator.StatusChanged += ItemContainerGenerator_StatusChanged;
+                    }
+                }
+                else
                 {
                     SelectNext(next);
-                    return;
                 }
             }
             else if (parent is TreeViewItemEx)
@@ -125,5 +131,15 @@ namespace Exercise.View
             }
         }
 
+        private static void ItemContainerGenerator_StatusChanged(object sender, System.EventArgs e)
+        {
+            ItemContainerGenerator itemContainer = sender as ItemContainerGenerator;
+            TreeViewItemEx next = itemContainer.ContainerFromIndex(0) as TreeViewItemEx;
+            if (next != null)
+            {
+                itemContainer.StatusChanged -= ItemContainerGenerator_StatusChanged;
+                next.IsSelected = true;
+            }
+        }
     }
 }

@@ -387,8 +387,8 @@ namespace Exercise.Model
                 Page page = scanModel.LastPage;
                 if (page != null)
                 {
-                    if (LastPage != null && LastPage.Another == page)
-                        page.Analyze = PageAnalyze.Analyze(page, LastPage.Analyze, true);
+                    if ((page.PageIndex & 1) != 0)
+                        page.Analyze = PageAnalyze.Analyze(page, page.Another, true);
                     else
                         page.Analyze = PageAnalyze.Analyze(page, true);
                     if (page.Another != null)
@@ -474,7 +474,7 @@ namespace Exercise.Model
                 {
                     page.Another.Student = page.Student;
                     if (page.Another.Analyze == null)
-                        page.Another.Analyze = PageAnalyze.Analyze(page.Another, page.Analyze, false);
+                        page.Another.Analyze = PageAnalyze.Analyze(page.Another, page, false);
                 }
                 if (page.Student.AnswerPages == null)
                 {

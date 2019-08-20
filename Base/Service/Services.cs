@@ -1,4 +1,5 @@
-﻿using Refit;
+﻿using Base.Config;
+using Refit;
 using System;
 using System.Net.Http;
 
@@ -19,6 +20,10 @@ namespace Base.Service
             HttpMessageHandler handler = (HttpMessageHandler) Activator.CreateInstance(mhdlAttr.Value);
             foreach (DelegatingHandlerAttribute d in dhdlAttr)
             {
+#if !DEBUG
+                if (d.Value.GetCustomAttributes(typeof(DebugOnlyAttribute), true).Length > 0)
+                    continue;
+#endif
                 handler = (HttpMessageHandler)Activator.CreateInstance(d.Value, handler);
             }
             if (retryAttr.Length > 0)

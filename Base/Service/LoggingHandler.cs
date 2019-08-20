@@ -1,4 +1,5 @@
-﻿using Base.Misc;
+﻿using Base.Config;
+using Base.Misc;
 using System;
 using System.Net.Http;
 using System.Threading;
@@ -6,6 +7,8 @@ using System.Threading.Tasks;
 
 namespace Base.Service
 {
+
+    [DebugOnly]
     public class LoggingHandler : DelegatingHandler
     {
 

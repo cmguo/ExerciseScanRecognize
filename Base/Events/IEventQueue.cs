@@ -2,8 +2,8 @@
 {
     public interface IEventQueue
     {
-        void Subscribe<Arg>(Event<Arg> @event);
-        void Unsubscribe<Arg>(Event<Arg> @event);
-        void Send<Arg>(Event<Arg> @event, Arg msg);
+        void Subscribe(IEvent @event);
+        void Unsubscribe(IEvent @event);
+        void Publish(IEvent @event, string msg);
     }
 }

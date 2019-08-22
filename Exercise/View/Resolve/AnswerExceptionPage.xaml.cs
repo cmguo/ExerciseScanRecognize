@@ -3,7 +3,6 @@ using static Exercise.Model.ExerciseModel;
 using System.Collections.Generic;
 using Base.Misc;
 using Exception = Exercise.Model.ExerciseModel.Exception;
-using TalBase.View;
 using Exercise.Model;
 using System.Windows.Controls;
 using System;

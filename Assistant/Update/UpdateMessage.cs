@@ -2,7 +2,8 @@
 
 namespace Assistant.Update
 {
-    [Topic("app/update")]
+    [Topic("version")]
+    [External]
     public class UpdateMessage
     {
         public string Url { get; set; }

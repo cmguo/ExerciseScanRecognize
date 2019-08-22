@@ -2260,7 +2260,7 @@
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:读卷客户端"
         "ProductCode" = "8:{CEE6B7E5-CBD9-4524-A6D4-315C73084322}"
-        "PackageCode" = "8:{AA402CFC-2B4B-443E-900E-023D85AA28D3}"
+        "PackageCode" = "8:{29890DEB-A16E-4480-9890-78ADF60A6EA9}"
         "UpgradeCode" = "8:{86F0F312-44F0-4A04-B94C-97F93EA80D06}"
         "AspNetVersion" = "8:4.0.30319.0"
         "RestartWWWService" = "11:FALSE"
@@ -2420,6 +2420,20 @@
             "Folder" = "8:_82BD899DB07E47F686DCABCFB06211C7"
             "WorkingFolder" = "8:_4B23E1A3533948F1922BEEE5376FE8A5"
             "Icon" = "8:_15A68A852E074FC0855B57142F813A98"
+            "Feature" = "8:"
+            }
+            "{970C0BB2-C7D0-45D7-ABFA-7EC378858BC0}:_C18BDFC413204A2DA264E9A27E686A39"
+            {
+            "Name" = "8:uninstall.exe"
+            "Arguments" = "8:/x [ProductCode]"
+            "Description" = "8:"
+            "ShowCmd" = "3:1"
+            "IconIndex" = "3:0"
+            "Transitive" = "11:FALSE"
+            "Target" = "8:_8BFDF0CD057D49118F52A4AE76B4ECB2"
+            "Folder" = "8:_4B23E1A3533948F1922BEEE5376FE8A5"
+            "WorkingFolder" = "8:_AE008BC4C54F4472926E7EED9C0DC0C6"
+            "Icon" = "8:"
             "Feature" = "8:"
             }
         }

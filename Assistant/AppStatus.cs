@@ -1,9 +1,5 @@
 ﻿using Base.Mvvm;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Threading;
 
 namespace Assistant
@@ -13,7 +9,7 @@ namespace Assistant
 
         public static AppStatus Instance = new AppStatus();
 
-        private bool _Busy = false;
+        private bool _Busy = true;
         public bool Busy {
             get => _Busy;
             set

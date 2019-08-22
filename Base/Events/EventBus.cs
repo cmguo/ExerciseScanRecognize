@@ -1,27 +1,33 @@
-﻿using Newtonsoft.Json;
-using Prism.Events;
+﻿using Prism.Events;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.Composition;
 
 namespace Base.Events
 {
 
-    public class EventBus : EventAggregator
+    [Export]
+    public class EventBus
     {
 
-        public static EventBus Instance = new EventBus();
+        internal static EventBus Instance;
 
+        [Import]
+        private IEventAggregator eventAggregator;
+
+        [Import]
         private IEventQueue externalQueue;
+
         private Dictionary<string, IEvent> topicEvents = new Dictionary<string, IEvent>();
 
-        public void SetExternalQueue(IEventQueue queue)
+        public EventBus()
         {
-            externalQueue = queue;
+            Instance = this;
         }
 
-        public new EventType GetEvent<EventType>() where EventType : EventBase, new()
+        public EventType GetEvent<EventType>() where EventType : EventBase, new()
         {
-            EventType @event = base.GetEvent<EventType>();
+            EventType @event = eventAggregator.GetEvent<EventType>();
             if (@event is IEvent e)
             {
                 if (e.Topic != null)
@@ -56,19 +62,30 @@ namespace Base.Events
             @event.Subscribe(action);
         }
 
-        internal void SubscribeExternal<Arg>(Event<Arg> @event)
+        public void UnsubscribeEvent(string topic, Action<string, string> action)
+        {
+            IEvent @event = null;
+            lock (topicEvents)
+            {
+                if (!topicEvents.TryGetValue(topic, out @event))
+                    throw new InvalidOperationException("No such Event");
+            }
+            @event.Unsubscribe(action);
+        }
+
+        internal void SubscribeExternal(IEvent @event)
         {
             externalQueue.Subscribe(@event);
         }
 
-        internal void UnsubscribeExternal<Arg>(Event<Arg> @event)
+        internal void UnsubscribeExternal(IEvent @event)
         {
             externalQueue.Unsubscribe(@event);
         }
 
-        internal void PublishExternal<Arg>(Event<Arg> @event, Arg payload)
+        internal void PublishExternal(IEvent @event, string payload)
         {
-            externalQueue.Send<Arg>(@event, payload);
+            externalQueue.Publish(@event, payload);
         }
 
 

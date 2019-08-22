@@ -9,5 +9,6 @@ namespace Base.Events
 
         void Publish(string payload);
         void Subscribe(Action<string, string> action);
+        void Unsubscribe(Action<string, string> action);
     }
 }

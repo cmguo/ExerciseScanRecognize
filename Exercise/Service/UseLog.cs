@@ -1,8 +1,4 @@
-﻿using Exercise.Algorithm;
-using System;
-using System.Collections.Generic;
-
-namespace Exercise.Service
+﻿namespace Exercise.Service
 {
     public class UseLog
     {

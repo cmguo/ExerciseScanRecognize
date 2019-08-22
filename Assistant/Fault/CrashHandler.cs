@@ -5,6 +5,8 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
+using System.ComponentModel.Composition;
 using System.IO;
 using System.Net;
 using System.Net.Http;
@@ -12,7 +14,8 @@ using System.Threading.Tasks;
 
 namespace Assistant.Fault
 {
-    public class CrashHandler
+    [Export("crash")]
+    public class CrashHandler : Base.Boot.IAssistant
     {
         private static readonly Logger Log = Logger.GetLogger<CrashHandler>();
 
@@ -21,54 +24,66 @@ namespace Assistant.Fault
             ContractResolver = new CamelCasePropertyNamesContractResolver()
         };
 
-        private static string logPath;
         private static CrashReport report;
 
-        public static void Init(string path, bool main = false)
+        public static void InitUpload(string logPath)
         {
-            logPath = path;
             try
             {
-                report = new CrashReport(path);
-                if (main)
+                report = new CrashReport(logPath);
+                int n = 0;
+                DirectoryInfo di2 = new DirectoryInfo(logPath);
+                foreach (FileInfo f in di2.GetFiles())
                 {
-                    int n = 0;
-                    DirectoryInfo di2 = new DirectoryInfo(logPath);
-                    foreach (FileInfo f in di2.GetFiles())
-                    {
-                        if (f.Name.EndsWith(".zip"))
-                            f.Delete();
-                        if (f.Name.EndsWith(".report"))
-                            ++n;
-                    }
-                    if (n > 0)
-                        report.Update2();
+                    if (f.Name.EndsWith(".zip"))
+                        f.Delete();
+                    if (f.Name.EndsWith(".report"))
+                        ++n;
                 }
+                if (n > 0)
+                    report.Update2();
             }
             catch
             {
             }
+        }
+
+        private string logPath;
+
+        [ImportingConstructor]
+        public CrashHandler(Base.Boot.IProduct product)
+        {
+            logPath = product.LogPath;
+            if (report == null)
+                report = new CrashReport();
+            else
+                AppStatus.Instance.PropertyChanged += AppStatus_PropertyChanged;
             AppDomain.CurrentDomain.UnhandledException += CurrentDomain_UnhandledException;
         }
 
-        public static void AddModuleInfo(ApplicationInfo.ModuleInfo module)
+        public void AddModuleInfo(ApplicationInfo.ModuleInfo module)
         {
             report.AppInfo.Modules.Add(module);
         }
 
-        public static async void UploadReports()
+        private async void AppStatus_PropertyChanged(object sender, PropertyChangedEventArgs e)
         {
+            if (e.PropertyName != "Busy" || AppStatus.Instance.Busy)
+            {
+                return;
+            }
             try
             {
-                await Task.Run(_UploadReports);
+                await Task.Run(UploadReports);
+                AppStatus.Instance.PropertyChanged -= AppStatus_PropertyChanged;
             }
-            catch (Exception e)
+            catch (Exception ex)
             {
-                Log.w("UploadReports", e);
+                Log.w("UploadReports", ex);
             }
         }
 
-        private static async Task _UploadReports()
+        private async Task UploadReports()
         {
             IAssistant service = Services.Get<IAssistant>();
             DirectoryInfo di = new DirectoryInfo(logPath);
@@ -106,7 +121,7 @@ namespace Assistant.Fault
             }
         }
 
-        private static void CurrentDomain_UnhandledException(object sender, UnhandledExceptionEventArgs e)
+        private void CurrentDomain_UnhandledException(object sender, UnhandledExceptionEventArgs e)
         {
             Log.w(e.ExceptionObject);
             string path = logPath + "\\" + DateTime.Now.ToString("D") 

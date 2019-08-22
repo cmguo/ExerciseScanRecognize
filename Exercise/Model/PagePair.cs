@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace Exercise.Model
+﻿namespace Exercise.Model
 {
     internal class PagePair
     {

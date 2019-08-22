@@ -1,6 +1,7 @@
 ﻿using Newtonsoft.Json;
 using Prism.Events;
 using System;
+using System.Collections.Generic;
 
 namespace Base.Events
 {
@@ -8,6 +9,9 @@ namespace Base.Events
     {
         public string Topic { get; }
         public bool IsExternal { get; }
+
+        private Dictionary<Action<string, string>, SubscriptionToken> tokens = 
+            new Dictionary<Action<string, string>, SubscriptionToken>();
 
         public Event()
         {
@@ -33,7 +37,7 @@ namespace Base.Events
         {
             if (IsExternal)
             {
-                EventBus.Instance.PublishExternal(this, payload);
+                EventBus.Instance.PublishExternal(this, JsonConvert.SerializeObject(payload));
             }
             else
             {
@@ -47,7 +51,7 @@ namespace Base.Events
             {
                 if (base.Subscriptions.Count == 0)
                 {
-                    EventBus.Instance.UnsubscribeExternal(this);
+                    EventBus.Instance.SubscribeExternal(this);
                 }
             }
             return base.Subscribe(action, threadOption, keepSubscriberReferenceAlive, filter);
@@ -70,7 +74,17 @@ namespace Base.Events
 
         public void Subscribe(Action<string, string> action)
         {
-            base.Subscribe(arg => action(Topic, JsonConvert.SerializeObject(arg)));
+            SubscriptionToken token = base.Subscribe(arg => action(Topic, JsonConvert.SerializeObject(arg)));
+            tokens.Add(action, token);
+        }
+
+        public void Unsubscribe(Action<string, string> action)
+        {
+            SubscriptionToken token = null;
+            if (tokens.TryGetValue(action, out token))
+            {
+                base.Unsubscribe(token);
+            }
         }
 
     }

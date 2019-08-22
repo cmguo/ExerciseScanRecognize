@@ -10,6 +10,14 @@ namespace Base.Misc
             return ConfigurationManager.AppSettings[key];
         }
 
+        public static string GetByKey(string key, string dflt)
+        {
+            string value = GetByKey(key);
+            if (value == null)
+                value = dflt;
+            return value;
+        }
+
         public static void SetByKey(string key, string value)
         {
             config.AppSettings.Settings.Remove(key);

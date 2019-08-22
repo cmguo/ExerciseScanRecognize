@@ -1,11 +1,21 @@
-﻿using System;
+﻿using Base.Boot;
+using System;
+using System.ComponentModel.Composition;
 using System.IO;
 
 namespace Exercise
 {
-    public class Component
+    [Export(typeof(IProduct))]
+    public class Component : IProduct
     {
+
+        public static readonly string PRODUCT_CODE = "{CEE6B7E5-CBD9-4524-A6D4-315C73084322}";
+
         public static readonly string DATA_PATH = GetRootPath() + "\\Exercise";
+
+        public string ProductCode => PRODUCT_CODE;
+
+        public string LogPath => DATA_PATH;
 
         static Component()
         {

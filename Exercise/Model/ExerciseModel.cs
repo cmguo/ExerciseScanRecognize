@@ -1,5 +1,4 @@
 ﻿using Base.Misc;
-using Base.Mvvm;
 using Base.Service;
 using Exercise.Algorithm;
 using Exercise.Service;
@@ -126,7 +125,6 @@ namespace Exercise.Model
             AddException(ExceptionType.AnswerException, new Page() { Student = student });
             AddException(ExceptionType.CorrectionException, new Page() { Student = student });
             //*/
-            Assistant.Fault.CrashHandler.UploadReports();
         }
 
         public void Discard()

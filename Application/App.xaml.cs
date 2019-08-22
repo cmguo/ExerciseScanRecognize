@@ -1,4 +1,5 @@
 ﻿using Account;
+using Base.Boot;
 using Base.Misc;
 using Exercise.View;
 using System;
@@ -19,7 +20,7 @@ namespace Application
         private static System.Threading.Mutex mutex;
         App()
         {
-            Assistant.Fault.CrashHandler.Init(Exercise.Component.DATA_PATH, true);
+            Assistant.Fault.CrashHandler.InitUpload(Exercise.Component.DATA_PATH);
             Logger.SetLogPath(Exercise.Component.DATA_PATH);
             Logger.Config("logger.xml");
             ErrorMessageBox.Init();
@@ -37,9 +38,7 @@ namespace Application
             if (mutex.WaitOne(0, false))
             {
                 base.OnStartup(e);
-                Window window = new MainWindow();
-                new AccountWindow().ShowDialog();
-                Assistant.Update.UpdateHandler.Init(Exercise.Component.DATA_PATH);
+                Bootstrap.Start();
             }
             else
             {

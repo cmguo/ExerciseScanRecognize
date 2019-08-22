@@ -1,32 +1,44 @@
-﻿using System;
+﻿using System.ComponentModel.Composition;
 using System.Diagnostics;
 using System.IO;
 using System.Net.Http;
 using System.Text;
 using System.Windows;
+using Base.Boot;
 using Base.Events;
 using TalBase.View;
 
 namespace Assistant.Update
 {
-    public class UpdateHandler
+
+    [Export("update")]
+    [InheritedExport(typeof(IAssistant)),
+        ExportMetadata("MainProcessOnly", true)]
+    public class UpdateHandler : IAssistant
     {
 
-        private static string logPath;
-        private static Event<UpdateMessage> @event = EventBus.Instance.GetEvent<Event<UpdateMessage>>();
-        private static Event<string> @event2 = EventBus.Instance.GetEvent<Event<string>>();
+        private string savePath;
+        private string productCode;
+        private EventBus eventBus;
 
-        private static UpdateMessage message;
+        private Event<UpdateMessage> @event;
 
-        public static void Init(string path)
+        private UpdateMessage message;
+
+        [ImportingConstructor]
+        public UpdateHandler(IProduct product, EventBus bus)
         {
-            logPath = path;
+            savePath = product.LogPath;
+            productCode = product.ProductCode;
+            eventBus = bus;
+            @event = eventBus.GetEvent<Event<UpdateMessage>>();
             @event.Subscribe(OnUpdate, Prism.Events.ThreadOption.UIThread);
+            //@event.Publish(new UpdateMessage());
         }
 
-        private static async void OnUpdate(UpdateMessage msg)
+        private async void OnUpdate(UpdateMessage msg)
         {
-            string setup = logPath + "\\" + "Setup." + msg.Version + ".msi";
+            string setup = savePath + "\\" + "Setup." + msg.Version + ".msi";
             HttpClient hc = new HttpClient();
             using (Stream his = await hc.GetStreamAsync(msg.Url))
             using (Stream fos = File.Open(setup, FileMode.OpenOrCreate))
@@ -43,16 +55,16 @@ namespace Assistant.Update
             Update();
         }
 
-        private static void AppStatus_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
+        private void AppStatus_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
         {
-            if (e.PropertyName == "Busy" && !AppStatus.Instance.Busy)
+            if (e.PropertyName == "Free" && AppStatus.Instance.Free)
             {
                 AppStatus.Instance.PropertyChanged -= AppStatus_PropertyChanged;
                 Update();
             }
         }
 
-        private static void Update()
+        private void Update()
         {
             int result = PopupDialog.Show(Application.Current.MainWindow,
                 "更新软件", "已有新的版本，是否更新？", 0, "更新", "不更新");
@@ -62,7 +74,7 @@ namespace Assistant.Update
             }
             string setup = message.Url;
             string bat = setup + ".bat";
-            string script = "msiexec /x " + setup + "/q\r\n";
+            string script = "msiexec /x '" + productCode +  "' /q\r\n";
             script += "msiexec /i " + setup + "\r\n";
             using (Stream fos = File.Open(setup, FileMode.OpenOrCreate))
             {

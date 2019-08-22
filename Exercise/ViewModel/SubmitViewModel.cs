@@ -2,7 +2,6 @@
 using Exercise.Model;
 using Exercise.View;
 using System.ComponentModel;
-using System.Threading.Tasks;
 using System.Windows;
 using TalBase.View;
 using TalBase.ViewModel;

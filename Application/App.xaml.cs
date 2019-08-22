@@ -1,9 +1,5 @@
-﻿using Account;
-using Base.Boot;
+﻿using Base.Boot;
 using Base.Misc;
-using Exercise.View;
-using System;
-using System.IO;
 using System.Windows;
 using TalBase.Model;
 using TalBase.View;
@@ -30,6 +26,7 @@ namespace Application
         private void App_Exit(object sender, ExitEventArgs e)
         {
             ModelBase.ShutdownAll();
+            Bootstrap.Stop();
         }
 
         protected override void OnStartup(StartupEventArgs e)

@@ -14,7 +14,7 @@ namespace Exercise
     {
 
         [ImportMany(typeof(IAssistant))]
-        private IEnumerable<Lazy<IAssistant, IAssistantMetadata>> assistants;
+        private IEnumerable<Lazy<IAssistant, IAssistantMetadata>> assistants = null;
 
         public ExerciseShell()
         {

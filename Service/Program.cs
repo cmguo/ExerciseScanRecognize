@@ -18,6 +18,7 @@ namespace Service
             string procName = Process.GetCurrentProcess().MainModule.FileName;
             Logger.Config(new Uri(procName.Replace("\\Service.exe", "\\servicelogger.xml")));
             Bootstrap.Start();
+            Bootstrap.Stop();
         }
 
     }

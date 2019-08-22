@@ -9,9 +9,16 @@ namespace Base.Boot
     public class Bootstrap
     {
 
+        private static BaseBootstrapper baseBootstrapper = new BaseBootstrapper();
+
         public static void Start()
         {
-            new BaseBootstrapper().Run();
+            baseBootstrapper.Run();
+        }
+
+        public static void Stop()
+        {
+            baseBootstrapper.Stop();
         }
     }
 }

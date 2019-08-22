@@ -13,10 +13,10 @@ namespace Base.Events
         internal static EventBus Instance;
 
         [Import]
-        private IEventAggregator eventAggregator;
+        private IEventAggregator eventAggregator = null;
 
         [Import]
-        private IEventQueue externalQueue;
+        private IEventQueue externalQueue = null;
 
         private Dictionary<string, IEvent> topicEvents = new Dictionary<string, IEvent>();
 

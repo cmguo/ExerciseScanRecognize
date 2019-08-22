@@ -50,7 +50,7 @@
             <RowDefinition />
         </Grid.RowDefinitions>
 
-        <ListView Grid.Row="0" x:Name="questions" BorderThickness="0" Background="Transparent" 
+        <ListView Grid.Row="0" x:Name="questions" BorderThickness="0" Background="Transparent" MaxHeight="200"
                   ItemContainerStyle="{StaticResource ButtonListStyle}"
                   ItemsSource="{Binding Exceptions}" ItemTemplate="{StaticResource ExceptionItem}"
                   SelectedItem="{Binding SelectedException}" SelectionMode="Single">

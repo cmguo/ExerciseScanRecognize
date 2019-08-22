@@ -30,6 +30,11 @@ namespace Base.Boot
             base.Run();
         }
 
+        public void Stop()
+        {
+            Container.Dispose();
+        }
+
         protected override void ConfigureAggregateCatalog()
         {
             base.ConfigureAggregateCatalog();

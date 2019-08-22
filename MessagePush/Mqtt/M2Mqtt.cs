@@ -11,7 +11,7 @@ namespace MessagePush.Mqtt
 {
 
     [Export(typeof(IEventQueue))]
-    public class M2Mqtt : IEventQueue
+    public class M2Mqtt : IEventQueue, IDisposable
     {
 
         private static readonly Logger Log = Logger.GetLogger<M2Mqtt>();
@@ -42,6 +42,11 @@ namespace MessagePush.Mqtt
             string userName = "Signature|" + Configuration.AccessKey + "|" + Configuration.InstanceId;
             string passWord = HMACSHA1(Configuration.SecretKey, clientId);
             client.Connect(clientId, userName, passWord, true, Configuration.KeepAlivePeriod);
+        }
+
+        public void Dispose()
+        {
+            client.Disconnect();
         }
 
         public void Publish(IEvent @event, string msg)

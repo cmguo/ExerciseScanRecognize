@@ -1,4 +1,5 @@
-﻿using Base.Misc;
+﻿using Base.Helpers;
+using Base.Misc;
 using Base.Service;
 using Exercise.Algorithm;
 using Exercise.Service;
@@ -145,7 +146,7 @@ namespace Exercise.Model
 
         internal void FillAll()
         {
-            Page l = PageStudents.First().AnswerPages.Where(p => p != null).First();
+            StudentInfo student = PageStudents.MaxItem(s => s.AnswerPages.Select(p => p.Answer != null).Count());
             schoolModel.GetNoPageStudents(s => {
                 s.AnswerPages = new List<Page>(emptyPages);
                 PageStudents.Add(s);
@@ -156,7 +157,11 @@ namespace Exercise.Model
                 {
                     if (s.AnswerPages[i] == null)
                     {
-                        s.AnswerPages[i] = l;
+                        s.AnswerPages[i] = student.AnswerPages[i];
+                    }
+                    else if (s.AnswerPages[i].PagePath == null)
+                    {
+                        s.AnswerPages[i] = Page.EmptyPage;
                     }
                 }
             }
@@ -315,7 +320,7 @@ namespace Exercise.Model
         public void SaveClassDetail(string fileName)
         {
             var package = new ExcelPackage();
-            foreach (ClassInfo c in schoolModel.Classes)
+            foreach (ClassInfo c in schoolModel.Classes.Sort())
             {
                 ExcelWorksheet worksheet = package.Workbook.Worksheets.Add(c.ClassName);
                 ExerciseData exerciseData = ExerciseModel.Instance.ExerciseData;

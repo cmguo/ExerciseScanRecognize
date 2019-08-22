@@ -43,5 +43,25 @@ namespace Base.Helpers
             return source.Count() == 0 ? default(T) : source.Aggregate((t1, t2) => comparer.Compare(selector(t1), selector(t2)) > 0 ? t1 : t2);
         }
 
+        public static IEnumerable<T> Sort<T>(this IEnumerable<T> source)
+        {
+            return source.OrderBy(s => s);
+        }
+
+        public static IEnumerable<T> SortDescending<T>(this IEnumerable<T> source)
+        {
+            return source.OrderByDescending(s => s);
+        }
+
+        public static IEnumerable<T> Sort<T>(this IEnumerable<T> source, Func<T, T, int> comparer)
+        {
+            return source.OrderBy(s => s, new FuncComparer<T>(comparer));
+        }
+
+        public static IEnumerable<T> SortDescending<T>(this IEnumerable<T> source, Func<T, T, int> comparer)
+        {
+            return source.OrderByDescending(s => s, new FuncComparer<T>(comparer));
+        }
+
     }
 }

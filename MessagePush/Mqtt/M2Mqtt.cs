@@ -20,6 +20,8 @@ namespace MessagePush.Mqtt
 
         public M2Mqtt()
         {
+            if (Configuration.Uri == null)
+                return;
             // create client instance 
             client = new MqttClient(Configuration.Uri);
 
@@ -44,6 +46,8 @@ namespace MessagePush.Mqtt
 
         public void Publish(IEvent @event, string msg)
         {
+            if (client == null)
+                return;
             // publish a message on "/home/temperature" topic with QoS 2 
             client.Publish(Topic(@event.Topic),
                 Encoding.UTF8.GetBytes(msg), MqttMsgBase.QOS_LEVEL_AT_LEAST_ONCE, false);
@@ -51,12 +55,16 @@ namespace MessagePush.Mqtt
 
         public void Subscribe(IEvent @event)
         {
+            if (client == null)
+                return;
             // subscribe to the topic "/home/temperature" with QoS 2 
             client.Subscribe(new string[] { Topic(@event.Topic) }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_LEAST_ONCE });
         }
 
         public void Unsubscribe(IEvent @event)
         {
+            if (client == null)
+                return;
             client.Unsubscribe(new string[] { Topic(@event.Topic) });
         }
 

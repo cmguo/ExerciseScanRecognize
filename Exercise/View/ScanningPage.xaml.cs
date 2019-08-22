@@ -13,6 +13,7 @@ namespace Exercise.View
         public ScanningPage()
         {
             InitializeComponent();
+            DataContext = FindResource("ViewModel");
             ScanningViewModel vm = DataContext as ScanningViewModel;
             vm.PropertyChanged += Vm_PropertyChanged;
             KeyDown += ScanningPage_KeyDown;

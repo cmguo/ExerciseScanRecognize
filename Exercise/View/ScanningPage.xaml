@@ -12,16 +12,14 @@
       d:DesignHeight="652" d:DesignWidth="1200"
       Title="WebPage">
 
-    <Page.DataContext>
-        <vm:ScanningViewModel />
-    </Page.DataContext>
-
     <Page.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="../Themes/DataGrid.xaml" />
             </ResourceDictionary.MergedDictionaries>
 
+            <vm:ScanningViewModel x:Key="ViewModel" />
+            
             <Style x:Key="DataGridRowStyle" TargetType="DataGridRow">
                 <Setter Property="Background" Value="#F4F8FE"/>
                 <Setter Property="Height" Value="30"/>
@@ -30,13 +28,15 @@
                 <Setter Property="Margin" Value="0"/>
                 <Setter Property="HorizontalAlignment" Value="Left"/>
             </Style>
-            <StackPanel x:Key="ClassDetail" Orientation="Vertical" Background="#F4F8FE" Margin="0, 16, 0, 0">
+            
+            <StackPanel x:Key="ClassDetail" Orientation="Vertical" Background="#F4F8FE" Margin="0, 16, 0, 0"
+                        DataContext="{StaticResource ViewModel}">
                 <StackPanel Margin="16, 16, 0, 0" Orientation="Horizontal" HorizontalAlignment="Left">
                     <TextBlock FontSize="14" Foreground="#2D4A66">
                         <TextBlock.Text>
-                            <MultiBinding StringFormat="已扫描{0}张试卷，共识别{1}人}">
+                            <MultiBinding StringFormat="已扫描{0}张试卷，共识别{1}人">
                                 <Binding Path="PageCount" />
-                                <Binding Path="StudentSumary" />
+                                <Binding Path="StudentSummary" />
                             </MultiBinding>
                         </TextBlock.Text>
                     </TextBlock> 
@@ -142,7 +142,7 @@
                 <StackPanel Margin="88,0,0,0" >
                     <TextBlock FontSize="14" Foreground="#FF7F8E99" Text="已识别人数" HorizontalAlignment="Center"/>
                     <TextBlock FontSize="24" Foreground="#FF2D4A66" Margin="0,8,0,0" HorizontalAlignment="Center" 
-                               Text="{Binding StudentSumary, StringFormat={}{0}人}"/>
+                               Text="{Binding StudentSummary, StringFormat={}{0}人}"/>
                 </StackPanel>
             </StackPanel>
             <tal:TalButton Margin="0,48,0,0" IsDefault="True" Width="230" Height="40" ButtonSize="Large" Content="结束扫描，查看结果" HorizontalAlignment="Center"
@@ -150,7 +150,7 @@
         </StackPanel>
         
         <DataGrid Grid.Column="1" x:Name="perf" Visibility="Collapsed" VerticalAlignment="Top" HorizontalAlignment="Center" Height="400" Background="Transparent"
-                  ItemsSource="{Binding Usages}" Style="{StaticResource DefaultDataGridStyle}">
+                  ItemsSource="{Binding SysResUsages}" Style="{StaticResource DefaultDataGridStyle}">
             <DataGrid.Columns>
                 <DataGridTextColumn Header="项目" Width="180" Binding="{Binding Item1}"/>
                 <DataGridTextColumn Header="数值" Width="120" Binding="{Binding Item2}"/>

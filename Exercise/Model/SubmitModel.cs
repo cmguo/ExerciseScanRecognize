@@ -107,7 +107,7 @@ namespace Exercise.Model
                 .ToList();
             SubmitData sdata = new SubmitData() { PaperId = exerciseId, Data = data };
             SubmitPrepare prepare = new SubmitPrepare() { PaperId = exerciseId, ClassIdList = classes.Select(c => c.ClassId).ToList() };
-            IList<string> names = data.SelectMany(s => s.PageInfo.Select(p => p.ImageName)).ToList();
+            IList<string> names = data.SelectMany(s => s.PageInfo.Select(p => p.ImageName)).Distinct().ToList();
             SubmitTask task = new SubmitTask() { Status = TaskStatus.Wait, Prepare = prepare, Submit = sdata, PageNames = names };
             task.path = path;
             task.Total = task.Left;

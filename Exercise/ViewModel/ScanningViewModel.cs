@@ -29,14 +29,14 @@ namespace Exercise.ViewModel
             get { return _ExercisePageCount; }
             private set{ _ExercisePageCount = value ; RaisePropertyChanged("ExercisePageCount"); }
         }
-        public int _studentCount;
-        public int StudentSumary
+        public int _studentSummary;
+        public int StudentSummary
         {
-            get { return _studentCount; }
-            private set { _studentCount = value; RaisePropertyChanged("StudentSumary"); }
+            get { return _studentSummary; }
+            private set { _studentSummary = value; RaisePropertyChanged("StudentSummary"); }
         }
 
-        public ObservableCollection<Tuple<string, long>> Usages { get; set; }
+        public ObservableCollection<Tuple<string, long>> SysResUsages { get; set; }
 
         #endregion
 
@@ -58,10 +58,10 @@ namespace Exercise.ViewModel
             exerciseModel.PageStudents.CollectionChanged += PageStudents_CollectionChanged;
             exerciseModel.PropertyChanged += ExerciseModel_PropertyChanged;
             CloseMessage = "当前仍有扫描任务进行中，" + CloseMessage;
-            StudentSumary = exerciseModel.PageStudents.Count;
+            StudentSummary = exerciseModel.PageStudents.Count;
             if (exerciseModel.ExerciseData != null)
                 ExercisePageCount = exerciseModel.ExerciseData.Pages.Count;
-            Usages = new ObservableCollection<Tuple<string, long>>();
+            SysResUsages = new ObservableCollection<Tuple<string, long>>();
             timer.Interval = TimeSpan.FromSeconds(5);
             timer.Tick += Timer_Tick;
             timer.Start();
@@ -83,7 +83,6 @@ namespace Exercise.ViewModel
             Update();
             System.Windows.Controls.Page page = obj as System.Windows.Controls.Page;
             FrameworkElement element = page.Resources["ClassDetail"] as FrameworkElement;
-            element.DataContext = this;
             int result = PopupDialog.Show(obj as UIElement, "确认", "扫描仪中还有试卷待扫描，确认结束扫描并查看结果吗？", element, 0, "查看结果", "继续扫描");
             if (result == 0 && exerciseModel.ExerciseData == null)
             {
@@ -139,7 +138,6 @@ namespace Exercise.ViewModel
             Update();
             System.Windows.Controls.Page page = obj as System.Windows.Controls.Page;
             FrameworkElement element = page.Resources["ClassDetail"] as FrameworkElement;
-            element.DataContext = this;
             while (true)
             {
                 int result = -1;
@@ -175,7 +173,7 @@ namespace Exercise.ViewModel
 
         private void PageStudents_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
         {
-            StudentSumary = exerciseModel.PageStudents.Count;
+            StudentSummary = exerciseModel.PageStudents.Count;
         }
 
         private void ExerciseModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
@@ -212,17 +210,17 @@ namespace Exercise.ViewModel
             if (IsCompleted)
                 return;
             Process currentProcess = System.Diagnostics.Process.GetCurrentProcess();
-            Usages.Clear();
-            Usages.Add(Tuple.Create("VirtualMemorySize64", currentProcess.VirtualMemorySize64));
-            Usages.Add(Tuple.Create("PrivateMemorySize64", currentProcess.PrivateMemorySize64));
-            Usages.Add(Tuple.Create("WorkingSet64", currentProcess.WorkingSet64));
-            Usages.Add(Tuple.Create("managed heap", System.GC.GetTotalMemory(false)));
+            SysResUsages.Clear();
+            SysResUsages.Add(Tuple.Create("VirtualMemorySize64", currentProcess.VirtualMemorySize64));
+            SysResUsages.Add(Tuple.Create("PrivateMemorySize64", currentProcess.PrivateMemorySize64));
+            SysResUsages.Add(Tuple.Create("WorkingSet64", currentProcess.WorkingSet64));
+            SysResUsages.Add(Tuple.Create("managed heap", System.GC.GetTotalMemory(false)));
             if (javaRuntime != null)
             {
-                Usages.Add(Tuple.Create("java gc", javaRuntime.Invoke<long>("totalMemory", "()J")));
-                Usages.Add(Tuple.Create("java gc max", javaRuntime.Invoke<long>("maxMemory", "()J")));
+                SysResUsages.Add(Tuple.Create("java gc", javaRuntime.Invoke<long>("totalMemory", "()J")));
+                SysResUsages.Add(Tuple.Create("java gc max", javaRuntime.Invoke<long>("maxMemory", "()J")));
             }
-            foreach (var u in Usages)
+            foreach (var u in SysResUsages)
                 Log.d(u.Item1 + ": " + u.Item2 / 1000000 + " M");
         }
 

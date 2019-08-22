@@ -13,11 +13,11 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x86'">
     <StartAction>Project</StartAction>
-    <StartProgram>D:\Debug\App.exe</StartProgram>
+    <StartProgram>C:\Program Files %28x86%29\好未来\读卷客户端\App.exe</StartProgram>
     <StartWorkingDirectory>
     </StartWorkingDirectory>
     <RemoteDebugEnabled>false</RemoteDebugEnabled>
-    <RemoteDebugMachine>server.natappfree.cc:44666</RemoteDebugMachine>
+    <RemoteDebugMachine>10.145.108.48:4022</RemoteDebugMachine>
   </PropertyGroup>
   <PropertyGroup>
     <EnableSecurityDebugging>false</EnableSecurityDebugging>

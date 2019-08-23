@@ -1,6 +1,7 @@
 ﻿using Base.Events;
 using Base.Misc;
 using System;
+using System.Collections.Generic;
 using System.ComponentModel.Composition;
 using System.Security.Cryptography;
 using System.Text;
@@ -17,6 +18,7 @@ namespace MessagePush.Mqtt
         private static readonly Logger Log = Logger.GetLogger<M2Mqtt>();
 
         private MqttClient client;
+        private Dictionary<string, IEvent> events = new Dictionary<string, IEvent>();
 
         public M2Mqtt()
         {
@@ -54,7 +56,7 @@ namespace MessagePush.Mqtt
             if (client == null)
                 return;
             // publish a message on "/home/temperature" topic with QoS 2 
-            client.Publish(Topic(@event.Topic),
+            client.Publish(WrapTopic(@event.Topic),
                 Encoding.UTF8.GetBytes(msg), MqttMsgBase.QOS_LEVEL_AT_LEAST_ONCE, false);
         }
 
@@ -63,26 +65,28 @@ namespace MessagePush.Mqtt
             if (client == null)
                 return;
             // subscribe to the topic "/home/temperature" with QoS 2 
-            client.Subscribe(new string[] { Topic(@event.Topic) }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_LEAST_ONCE });
+            client.Subscribe(new string[] { WrapTopic(@event.Topic) }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_LEAST_ONCE });
+            events.Add(@event.Topic, @event);
         }
 
         public void Unsubscribe(IEvent @event)
         {
             if (client == null)
                 return;
-            client.Unsubscribe(new string[] { Topic(@event.Topic) });
+            client.Unsubscribe(new string[] { WrapTopic(@event.Topic) });
+            events.Remove(@event.Topic);
         }
 
         #region Event Handlers
 
         private void Client_MqttMsgUnsubscribed(object sender, MqttMsgUnsubscribedEventArgs e)
         {
-            Log.w("MqttMsgUnsubscribed " + e.MessageId);
+            Log.d("MqttMsgUnsubscribed " + e.MessageId);
         }
 
         private void Client_MqttMsgSubscribed(object sender, MqttMsgSubscribedEventArgs e)
         {
-            Log.w("MqttMsgSubscribed " + e.MessageId);
+            Log.d("MqttMsgSubscribed " + e.MessageId);
         }
 
         private void Client_ConnectionClosed(object sender, EventArgs e)
@@ -92,20 +96,30 @@ namespace MessagePush.Mqtt
 
         private void Client_MqttMsgPublished(object sender, MqttMsgPublishedEventArgs e)
         {
-            Log.w("MqttMsgPublished " + e.MessageId + " " + e.IsPublished);
+            Log.d("MqttMsgPublished " + e.MessageId + " " + e.IsPublished);
         }
 
         private void Client_MqttMsgPublishReceived(object sender, MqttMsgPublishEventArgs e)
         {
-            Log.w("MqttMsgPublishReceived " + e.Topic + " " + e.Message);
-            //PublishEvent(e.Topic, new string(Encoding.UTF8.GetChars(e.Message)));
+            Log.d("MqttMsgPublishReceived " + e.Topic + " " + e.Message);
+            IEvent @event = null;
+            string topic = UnwrapTopic(e.Topic);
+            if (events.TryGetValue(topic, out @event))
+                @event.Publish(new string(Encoding.UTF8.GetChars(e.Message)));
+            else
+                Log.w("MqttMsgPublishReceived unknown topic" + topic);
         }
 
         #endregion
 
-        private static string Topic(string topic)
+        private static string WrapTopic(string topic)
         {
             return Configuration.ParentTopic + topic + "-topic";
+        }
+
+        private static string UnwrapTopic(string topic)
+        {
+            return topic.Replace(Configuration.ParentTopic, "").Replace("-topic", "");
         }
 
         private static string HMACSHA1(string key, string dataToSign)

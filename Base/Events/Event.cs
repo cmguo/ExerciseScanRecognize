@@ -69,7 +69,7 @@ namespace Base.Events
         public void Publish(string payload)
         {
             Arg argsObj = JsonConvert.DeserializeObject<Arg>(payload);
-            Publish(argsObj);
+            base.Publish(argsObj);
         }
 
         public void Subscribe(Action<string, string> action)

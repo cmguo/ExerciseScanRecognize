@@ -1,5 +1,4 @@
-﻿using Base.Config;
-using Refit;
+﻿using Refit;
 using System;
 using System.Net.Http;
 

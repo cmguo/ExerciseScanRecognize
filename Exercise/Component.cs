@@ -24,7 +24,7 @@ namespace Exercise
 
         private static string GetRootPath()
         {
-            string path = Configuration.SavePath;
+            string path = ExerciseConfig.Instance.SavePath;
             if (path != null)
                 return path;
             path = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);

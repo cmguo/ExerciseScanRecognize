@@ -7,13 +7,14 @@ using TalBase.ViewModel;
 using TalBase.Utils;
 using System.Collections.Generic;
 using System.Windows;
+using System.Linq;
 
 namespace Account.ViewModel
 {
     public class AccountViewModel : ViewModelBase
     {
 
-        public ICollection<string> ServiceUris => accountModel.ServiceUris.Keys;
+        public IEnumerable<string> ServiceUris => accountModel.ServiceUris.Select(s => s.Name);
 
         public int SelectedServiceUri
         {

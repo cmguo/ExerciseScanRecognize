@@ -113,6 +113,7 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ExerciseConfig.cs" />
     <Compile Include="Algorithm\Algorithm.cs" />
     <Compile Include="Algorithm\AnswerData.cs" />
     <Compile Include="Algorithm\ExceptionJsonConverter.cs" />
@@ -123,7 +124,6 @@
     <Compile Include="Algorithm\QRCodeData.cs" />
     <Compile Include="Algorithm\AlgorithmException.cs" />
     <Compile Include="Component.cs" />
-    <Compile Include="Configuration.cs" />
     <Compile Include="JavaVM\Jni.cs" />
     <Compile Include="Model\HistoryModel.cs" />
     <Compile Include="Model\PageAnalyze.cs" />

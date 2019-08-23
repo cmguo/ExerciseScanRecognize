@@ -26,7 +26,7 @@ namespace Account.Service
             string ticket = AccountModel.Instance.Account.Ticket;
             if (ticket != null)
                 request.Headers.TryAddWithoutValidation("ticket", ticket);
-            string uri = AccountModel.Instance.ServiceUri;
+            string uri = AccountConfig.Instance.ServiceUri;
             if (uri != null)
             {
                 uri = request.RequestUri.ToString().Replace(oldUrl, uri);

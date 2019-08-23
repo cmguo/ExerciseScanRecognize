@@ -1,7 +1,6 @@
 ﻿using Prism.Logging;
 using Prism.Mef;
 using Prism.Modularity;
-using System;
 using System.ComponentModel.Composition.Hosting;
 using System.Windows;
 

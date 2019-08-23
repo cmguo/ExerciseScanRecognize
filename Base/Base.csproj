@@ -101,7 +101,11 @@
     <Compile Include="Boot\IProduct.cs" />
     <Compile Include="Boot\LoggerFacade.cs" />
     <Compile Include="Boot\Shell.cs" />
+    <Compile Include="Config\BaseElement.cs" />
+    <Compile Include="Config\BaseSection.cs" />
     <Compile Include="Config\DebugOnlyAttribute.cs" />
+    <Compile Include="Config\ElementCollection.cs" />
+    <Compile Include="Config\SimpleElement.cs" />
     <Compile Include="Events\Event.cs" />
     <Compile Include="Events\EventBus.cs" />
     <Compile Include="Events\IEvent.cs" />
@@ -133,7 +137,6 @@
     <Compile Include="Mvvm\ObservableCollections.cs" />
     <Compile Include="Mvvm\Action.cs" />
     <Compile Include="Mvvm\RelayCommand.cs" />
-    <Compile Include="Misc\Configuration.cs" />
     <Compile Include="Misc\JsonPersistent.cs" />
     <Compile Include="Misc\SingleThreadTaskScheduler.cs" />
     <Compile Include="Misc\SystemInfo.cs" />

@@ -1,6 +1,4 @@
-﻿using Base.Events;
-using System;
-using System.Collections.Generic;
+﻿using System;
 using System.ComponentModel.Composition;
 using System.Windows;
 

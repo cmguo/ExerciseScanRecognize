@@ -3,6 +3,7 @@ using Base.Misc;
 using Base.Mvvm;
 using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
@@ -31,9 +32,7 @@ namespace Account.Model
             }
         }
 
-        public string ServiceUri { get; private set; }
-
-        public Dictionary<string, string> ServiceUris { get; private set; }
+        public IList<ServiceUriElement> ServiceUris { get; private set; }
 
         private int _SelectedServiceUri;
         public int SelectedServiceUri {
@@ -41,9 +40,8 @@ namespace Account.Model
             set
             {
                 _SelectedServiceUri = value;
-                string uri = ServiceUris.ElementAt(value).Value;
-                ServiceUri = uri;
-                Configuration.ServiceUri = uri;
+                string uri = ServiceUris[value].Value;
+                config.ServiceUri = uri;
             }
         }
 
@@ -51,23 +49,18 @@ namespace Account.Model
 
         public AccountData Account { get; private set; }
 
+        private AccountConfig config = AccountConfig.Instance;
         private IAccount service;
 
         private DispatcherTimer timer;
 
         public AccountModel()
         {
-            ServiceUris = new Dictionary<string, string>();
-            ServiceUris.Add("开发环境", "http://zx.idev.talcloud.com/homework/api/v1/answerCardApp");
-            ServiceUris.Add("联调环境", "http://zx.iunion.talcloud.com/homework/api/v1/answerCardApp");
-            ServiceUris.Add("测试环境", "http://zx.itest.talcloud.com/homework/api/v1/answerCardApp");
-            ServiceUris.Add("线上环境", "http://zx.ipub.talcloud.com/homework/api/v1/answerCardApp");
-            ServiceUris.Add("演示环境", "http://zx.ishow.talcloud.com/homework/api/v1/answerCardApp");  
-            ServiceUri = Configuration.ServiceUri;
-            _SelectedServiceUri = ServiceUris.Values.ToList().IndexOf(Configuration.ServiceUri);
+            ServiceUris = config.ServiceUris.Cast<ServiceUriElement>().ToList();
+            _SelectedServiceUri = ServiceUris.Select(s => s.Value).ToList().IndexOf(config.ServiceUri);
             //LoginData = new LoginData() { LoginName = "huanglaoshi3", Password = "2019@100tal",
             //    AuthenticationType = LoginData.LOGIN_BY_PASSWORD };
-            LoginData = new LoginData() { LoginName = Configuration.AccountName,
+            LoginData = new LoginData() { LoginName = AccountConfig.Instance.AccountName,
                 AuthenticationType = LoginData.LOGIN_BY_PASSWORD };
             Account = new Service.AccountData();
             service = Base.Service.Services.Get<IAccount>();
@@ -96,7 +89,7 @@ namespace Account.Model
             LoginData.Password = null;
             LoginData.Ticket = Account.Ticket;
             LoginData.AuthenticationType = LoginData.LOGIN_BY_TICKET;
-            Configuration.AccountName = LoginData.LoginName;
+            AccountConfig.Instance.AccountName = LoginData.LoginName;
             timer.Start();
             Base.Mvvm.Action.ActionException += Action_ActionException;
         }

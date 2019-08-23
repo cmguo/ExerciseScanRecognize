@@ -17,15 +17,17 @@ namespace MessagePush.Mqtt
 
         private static readonly Logger Log = Logger.GetLogger<M2Mqtt>();
 
+        private static readonly M2MqttConfig config = M2MqttConfig.Instance;
+
         private MqttClient client;
         private Dictionary<string, IEvent> events = new Dictionary<string, IEvent>();
 
         public M2Mqtt()
         {
-            if (Configuration.Uri == null)
+            if (config.ServiceUri == null)
                 return;
             // create client instance 
-            client = new MqttClient(Configuration.Uri);
+            client = new MqttClient(config.ServiceUri);
 
             // register to message received 
             client.MqttMsgPublishReceived += Client_MqttMsgPublishReceived;
@@ -34,16 +36,16 @@ namespace MessagePush.Mqtt
             client.MqttMsgSubscribed += Client_MqttMsgSubscribed;
             client.MqttMsgUnsubscribed += Client_MqttMsgUnsubscribed;
 
-            string clientId = Configuration.ClientId;
+            string clientId = config.ClientId;
             if (clientId == null)
             {
                 clientId = Guid.NewGuid().ToString();
-                Configuration.ClientId = clientId;
+                config.ClientId = clientId;
             }
-            clientId = Configuration.GroupId + "@@@" + clientId;
-            string userName = "Signature|" + Configuration.AccessKey + "|" + Configuration.InstanceId;
-            string passWord = HMACSHA1(Configuration.SecretKey, clientId);
-            client.Connect(clientId, userName, passWord, true, Configuration.KeepAlivePeriod);
+            clientId = config.GroupId + "@@@" + clientId;
+            string userName = "Signature|" + config.AccessKey + "|" + config.InstanceId;
+            string passWord = HMACSHA1(config.SecretKey, clientId);
+            client.Connect(clientId, userName, passWord, true, config.KeepAlivePeriod);
         }
 
         public void Dispose()
@@ -114,12 +116,12 @@ namespace MessagePush.Mqtt
 
         private static string WrapTopic(string topic)
         {
-            return Configuration.ParentTopic + topic + "-topic";
+            return config.ParentTopic + topic + "-topic";
         }
 
         private static string UnwrapTopic(string topic)
         {
-            return topic.Replace(Configuration.ParentTopic, "").Replace("-topic", "");
+            return topic.Replace(config.ParentTopic, "").Replace("-topic", "");
         }
 
         private static string HMACSHA1(string key, string dataToSign)

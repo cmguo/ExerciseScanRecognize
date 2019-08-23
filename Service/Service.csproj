@@ -89,7 +89,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <None Include="service.config" />
+    <None Include="app.config" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\Libraries\answer-sheet-analyze-sdk.j4n.jar" />

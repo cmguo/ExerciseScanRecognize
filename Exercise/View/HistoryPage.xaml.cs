@@ -31,20 +31,14 @@ namespace Exercise.View
             local.Items.SortDescriptions.Add(
                 new SortDescription("ScanDate", ListSortDirection.Descending));
             PreviewMouseWheel += (sender, e) =>
-
             {
-
                 var eventArg = new MouseWheelEventArgs(e.MouseDevice,e.Timestamp , e.Delta)
                 {
                     RoutedEvent = UIElement.MouseWheelEvent,
-
                     Source = sender
                 };
-
                 this.ScrollViewer.RaiseEvent(eventArg);
-
             };
-
         }
 
         private void DataGrid_MouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)

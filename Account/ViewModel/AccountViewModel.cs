@@ -14,7 +14,8 @@ namespace Account.ViewModel
     public class AccountViewModel : ViewModelBase
     {
 
-        public IEnumerable<string> ServiceUris => accountModel.ServiceUris.Select(s => s.Name);
+        public IEnumerable<string> ServiceUris =>
+            accountModel.ServiceUris == null ? null : accountModel.ServiceUris.Select(s => s.Name);
 
         public int SelectedServiceUri
         {

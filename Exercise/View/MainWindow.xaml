@@ -11,6 +11,7 @@
         x:Name="window"
         Icon="/Icons/logo.ico"
         Width="1200" Height="700"
+        Title="读卷客户端"
         ResizeMode="NoResize"
         WindowStartupLocation="CenterScreen"
         WindowStyle="None">

@@ -58,6 +58,8 @@ namespace Account.Model
         {
             ServiceUris = config.ServiceUris.Cast<ServiceUriElement>().ToList();
             _SelectedServiceUri = ServiceUris.Select(s => s.Value).ToList().IndexOf(config.ServiceUri);
+            if (_SelectedServiceUri < 0)
+                ServiceUris = null;
             //LoginData = new LoginData() { LoginName = "huanglaoshi3", Password = "2019@100tal",
             //    AuthenticationType = LoginData.LOGIN_BY_PASSWORD };
             LoginData = new LoginData() { LoginName = AccountConfig.Instance.AccountName,

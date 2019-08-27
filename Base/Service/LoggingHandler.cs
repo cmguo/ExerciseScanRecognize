@@ -21,7 +21,7 @@ namespace Base.Service
 
         protected override async Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
         {
-            Log.d("Request: " + request.ToString());
+            Log.i("Request: " + request.ToString());
             if (request.Content != null)
             {
                 Log.d(await request.Content.ReadAsStringAsync());

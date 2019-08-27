@@ -5504,7 +5504,7 @@
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:读卷客户端"
         "ProductCode" = "8:{CEE6B7E5-CBD9-4524-A6D4-315C73084322}"
-        "PackageCode" = "8:{74E76F4D-D679-4C55-8AF0-C1AB0007886C}"
+        "PackageCode" = "8:{DC5CEAFF-5588-45F7-AAA0-83F47D26BBC9}"
         "UpgradeCode" = "8:{86F0F312-44F0-4A04-B94C-97F93EA80D06}"
         "AspNetVersion" = "8:4.0.30319.0"
         "RestartWWWService" = "11:FALSE"

@@ -31,7 +31,8 @@ namespace Base.Boot
 
         public void Stop()
         {
-            Container.Dispose();
+            if (Container != null)
+                Container.Dispose();
         }
 
         protected override void ConfigureAggregateCatalog()

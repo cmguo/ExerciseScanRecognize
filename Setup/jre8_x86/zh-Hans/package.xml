@@ -1,0 +1,15 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+
+<Package xmlns="http://schemas.microsoft.com/developer/2004/01/bootstrapper" Name="DisplayName" Culture="Culture">
+
+    <!-- Defines a localizable string table for error messages-->
+    <Strings>
+        <String Name="DisplayName">Java 运行时库(x86)</String>
+        <String Name="Culture">zh</String>
+        <String Name="AdminRequired">你没有安装 Java 运行时库(x86)所需的权限。请与管理员联系。</String>
+        <String Name="InvalidPlatformWin9x">不支持在 Windows 95 上安装 Java 运行时库(x86)。请与应用程序供应商联系。</String>
+        <String Name="InvalidPlatformWinNT">不支持在 Windows NT 4.0 上安装 Java 运行时库(x86)。请与应用程序供应商联系。</String>
+        <String Name="GeneralFailure">尝试安装 Java 运行时库(x86)时失败。</String>
+        <String Name="JRERedistExe">https://www.oracle.com/technetwork/java/javase/downloads/jre8-downloads-2133155.html</String>
+    </Strings>
+</Package>

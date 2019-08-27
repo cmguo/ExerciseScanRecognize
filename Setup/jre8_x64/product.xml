@@ -1,0 +1,38 @@
+﻿<?xml version="1.0" encoding="utf-8" ?> 
+
+<Product xmlns="http://schemas.microsoft.com/developer/2004/01/bootstrapper" ProductCode="Java Platform SE 8 U221(x64)">
+
+  <!-- Defines list of files to be copied on build -->
+  <PackageFiles>
+    <PackageFile Name="jre-8u221-windows-x64.exe" HomeSite="JRERedistExe"/>
+    <PackageFile Name="JavaCheck64.bat"/>
+  </PackageFiles>
+
+  <InstallChecks>
+    <ExternalCheck Property="VersionFullCheck" PackageFile="JavaCheck64.bat"/>
+  </InstallChecks>
+
+  <!-- Defines how to invoke the setup for the Visual C++ 10.0 redist -->
+  <Commands Reboot="Defer">
+    <Command PackageFile="jre-8u221-windows-x64.exe">
+
+      <!-- These checks determine whether the package is to be installed -->
+      <InstallConditions>
+        <BypassIf Property="VersionFullCheck" Compare="ValueEqualTo" Value="0"/>
+        <!-- Block install if user does not have admin privileges -->
+        <FailIf Property="AdminUser" Compare="ValueEqualTo" Value="false" String="AdminRequired"/>
+        <!-- Block install on any platform other than x64 -->
+        <BypassIf Property="ProcessorArchitecture" Compare="ValueNotEqualTo" Value="AMD64"/>
+        <!-- Block install on Vista or below -->
+        <FailIf Property="VersionNT" Compare="VersionLessThan" Value="6.00" String="InvalidPlatformWinNT"/>
+      </InstallConditions>
+      
+      <ExitCodes>
+        <ExitCode Value="0" Result="Success"/>
+        <ExitCode Value="3010" Result="SuccessReboot"/>
+        <DefaultExitCode Result="Fail" FormatMessageFromSystem="true" String="GeneralFailure" />
+      </ExitCodes>
+      
+    </Command>
+  </Commands>
+</Product>

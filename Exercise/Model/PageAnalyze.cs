@@ -105,13 +105,13 @@ namespace Exercise.Model
                         standardAnswers.TryGetValue(qa.QuestionId, out qe);
                     for (int i = 0; i < qa.ItemInfo.Count; ++i)
                     {
-                        PageData.Item ip = qp.ItemInfo[i];
                         AnswerData.Item ia = qa.ItemInfo[i];
+                        PageData.Item ip = qp.ItemInfo[ia.Index];
                         if (apply)
                             ia.ApplyFrom(ip);
                         if (ia.PagingInfo != PagingInfo.None && ia.PagingInfo != PagingInfo.Down)
                             continue;
-                        string ie = (qe == null || ip.Index >= qe.Count) ? null : qe[ip.Index]; // 注意分页
+                        string ie = (qe == null || ia.Index >= qe.Count) ? null : qe[ia.Index]; // 注意分页
                         string answer = Analyze(type, qp.QuestionType, ip, ia, ie);
                         if (ia.StatusOfItem > 0)
                             exceptions.Add(new ItemException(aa, qp, ip, ia, ie, answer));

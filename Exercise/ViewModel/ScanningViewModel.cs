@@ -93,12 +93,12 @@ namespace Exercise.ViewModel
                 if (exerciseModel.ExerciseData == null)
                 {
                     exerciseModel.Discard();
-                    (obj as System.Windows.Controls.Page).NavigationService.Navigate(new HomePage());
+                    Navigate<HomePage>(obj as System.Windows.Controls.Page);
                 }
                 else
                 {
                     await exerciseModel.MakeResult();
-                    (obj as System.Windows.Controls.Page).NavigationService.Navigate(new SummaryPage());
+                    Navigate<SummaryPage>(obj as System.Windows.Controls.Page);
                 }
             }
             else
@@ -125,7 +125,7 @@ namespace Exercise.ViewModel
                 if (result == 0)
                 {
                     exerciseModel.Discard();
-                    (obj as System.Windows.Controls.Page).NavigationService.Navigate(new HomePage());
+                    Navigate<HomePage>(obj as System.Windows.Controls.Page);
                     break;
                 }
             }
@@ -158,7 +158,7 @@ namespace Exercise.ViewModel
                         break;
                     }
                     await exerciseModel.MakeResult();
-                    page.NavigationService.Navigate(new SummaryPage());
+                    Navigate<SummaryPage>(obj as System.Windows.Controls.Page);
                     break;
                 }
                 else

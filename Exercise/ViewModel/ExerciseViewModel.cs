@@ -118,7 +118,7 @@ namespace Exercise.ViewModel
             {
                 await scanModel.CancelScan(true);
                 exerciseModel.Discard();
-                (obj as System.Windows.Controls.Page).NavigationService.Navigate(new HomePage());
+                Navigate<HomePage>(obj as System.Windows.Controls.Page);
             }
         }
 

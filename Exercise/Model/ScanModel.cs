@@ -197,7 +197,7 @@ namespace Exercise.Model
             Log.d("CancelScan " + drop);
             lock (mutex)
             {
-                cancel = drop ? CANCEL_DROP : CANCEL_STOP;
+                cancel = (drop || cancel == CANCEL_DROP) ? CANCEL_DROP : CANCEL_STOP;
                 Monitor.PulseAll(mutex);
             }
             scanDevice.CancelScan(drop);

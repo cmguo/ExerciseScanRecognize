@@ -82,6 +82,8 @@ namespace Exercise.Model
             }
         }
 
+        public bool IsDropped => cancel == CANCEL_DROP;
+
         private bool _IsCompleted;
         public bool IsCompleted
         {

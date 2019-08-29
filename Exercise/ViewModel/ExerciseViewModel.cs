@@ -114,7 +114,7 @@ namespace Exercise.ViewModel
         protected async Task Discard(object obj)
         {
             int result = PopupDialog.Show(obj as UIElement, "放弃扫描任务", "放弃后，本次扫描结果将作废，确认放弃么？", 0, "放弃本次扫描", "取消");
-            if (result == 0)
+            if (result == 0 && (obj as System.Windows.Controls.Page).NavigationService != null)
             {
                 await scanModel.CancelScan(true);
                 exerciseModel.Discard();

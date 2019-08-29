@@ -80,6 +80,8 @@ namespace Exercise.ViewModel
         protected override async Task EndScan(object obj)
         {
             await scanModel.CancelScan(false);
+            if (scanModel.IsDropped)
+                return;
             Update();
             System.Windows.Controls.Page page = obj as System.Windows.Controls.Page;
             FrameworkElement element = page.Resources["ClassDetail"] as FrameworkElement;
@@ -109,6 +111,8 @@ namespace Exercise.ViewModel
 
         private async Task OnStatus(object obj)
         {
+            if (scanModel.IsDropped)
+                return;
             await scanModel.CancelScan(true);
             string msg = null;
             if (Status == 0)

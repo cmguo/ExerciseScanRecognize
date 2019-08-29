@@ -1,4 +1,5 @@
-﻿using Base.Boot;
+﻿using Account;
+using Base.Boot;
 using Base.Misc;
 using System.Windows;
 using TalBase.Model;
@@ -25,6 +26,7 @@ namespace Application
 
         private void App_Exit(object sender, ExitEventArgs e)
         {
+            Log.d("Exit");
             ModelBase.ShutdownAll();
             Bootstrap.Stop();
         }
@@ -35,7 +37,12 @@ namespace Application
             if (mutex.WaitOne(0, false))
             {
                 base.OnStartup(e);
-                Bootstrap.Start();
+                AccountWindow accountWindow = new AccountWindow();
+                accountWindow.Activated += (s, e1) =>
+                {
+                    Bootstrap.Start();
+                };
+                accountWindow.Show();
             }
             else
             {

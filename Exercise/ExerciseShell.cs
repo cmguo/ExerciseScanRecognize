@@ -18,6 +18,8 @@ namespace Exercise
 
         public ExerciseShell()
         {
+            if (Application.Current != null)
+                Application.Current.MainWindow = new MainWindow();
         }
 
         public override void Initialize()
@@ -25,8 +27,6 @@ namespace Exercise
             if (Application.Current != null)
             {
                 assistants.Any(a => a.Value == null);
-                Window window = new MainWindow();
-                new AccountWindow().ShowDialog();
             }
             else
             {

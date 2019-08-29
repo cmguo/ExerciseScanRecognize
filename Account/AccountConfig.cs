@@ -44,15 +44,12 @@ namespace Account
     {
 
         private static ConfigurationPropertyCollection properties;
-        private static ConfigurationProperty propStartupWindow;
         private static ConfigurationProperty propServiceUri;
         private static ConfigurationProperty propServiceUris;
         private static ConfigurationProperty propAccountName;
 
         static AccountConfig()
         {
-            propStartupWindow = new ConfigurationProperty("StartupWindow", typeof(SimpleElement<string>),
-                null, ConfigurationPropertyOptions.IsRequired);
             propServiceUri = new ConfigurationProperty("ServiceUri", typeof(SimpleElement<string>),
                 null, ConfigurationPropertyOptions.IsRequired);
             propServiceUris = new ConfigurationProperty("ServiceUris", typeof(ServiceUriCollection),
@@ -61,7 +58,6 @@ namespace Account
                 null, ConfigurationPropertyOptions.None);
 
             properties = new ConfigurationPropertyCollection();
-            properties.Add(propStartupWindow);
             properties.Add(propServiceUri);
             properties.Add(propServiceUris);
             properties.Add(propAccountName);
@@ -72,9 +68,6 @@ namespace Account
         #region Properties
 
         protected override ConfigurationPropertyCollection Properties => properties;
-
-        [ConfigurationProperty("StartupWindow", IsRequired = true)]
-        public string StartupWindow => base[propStartupWindow] as string;
 
         [ConfigurationProperty("ServiceUri", IsRequired = true)]
         public string ServiceUri

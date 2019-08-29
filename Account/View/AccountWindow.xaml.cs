@@ -1,4 +1,6 @@
 ﻿using Account.ViewModel;
+using Base.Misc;
+using System;
 using System.Windows;
 using System.Windows.Controls.Primitives;
 
@@ -9,6 +11,8 @@ namespace Account
     /// </summary>
     public partial class AccountWindow : Window
     {
+        private static readonly Logger Log = Logger.GetLogger<AccountWindow>();
+
         public AccountWindow()
         {
             InitializeComponent();
@@ -28,15 +32,23 @@ namespace Account
         private void Close_Click(object sender, RoutedEventArgs e)
         {
             Close();
-            Window window = Application.Current.MainWindow;
-            if (!window.IsActive)
-                window.Close();
         }
 
         private void Logout_Click(object sender, RoutedEventArgs e)
         {
             Popup popup = FindResource("LogoutPopup") as Popup;
             popup.IsOpen = true;
+        }
+
+        protected override void OnClosed(EventArgs e)
+        {
+            base.OnClosed(e);
+            Window window = Application.Current.MainWindow;
+            if (!window.IsActive)
+            {
+                Log.d("Close MainWindow");
+                window.Close();
+            }
         }
     }
 }

@@ -50,6 +50,7 @@ namespace MessagePush.Mqtt
 
         public void Dispose()
         {
+            Log.d("Dispose");
             client.Disconnect();
         }
 

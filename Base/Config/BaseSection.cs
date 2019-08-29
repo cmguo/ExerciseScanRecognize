@@ -1,11 +1,14 @@
-﻿using System;
+﻿using Base.Misc;
+using System;
 using System.Configuration;
+using System.Xml;
 
 namespace Base.Config
 {
     public class BaseSection : ConfigurationSection
     {
 
+        private static readonly Logger Log = Logger.GetLogger<BaseSection>();
         //
         // 摘要:
         //     获取或设置的属性或此配置元素的特性。
@@ -68,6 +71,18 @@ namespace Base.Config
         public override bool IsReadOnly()
         {
             return false;
+        }
+
+        protected override bool OnDeserializeUnrecognizedAttribute(string name, string value)
+        {
+            Log.w("Unrecognized attribute " + name);
+            return true;
+        }
+
+        protected override bool OnDeserializeUnrecognizedElement(string elementName, XmlReader reader)
+        {
+            Log.w("Unrecognized element " + elementName);
+            return true;
         }
     }
 }

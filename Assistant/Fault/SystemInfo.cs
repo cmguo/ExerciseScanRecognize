@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Management;
+using System.Threading.Tasks;
 
 namespace Assistant.Fault
 {
@@ -25,12 +26,15 @@ namespace Assistant.Fault
 
             public CpuInfo(int unused)
             {
-                using (var managementObject = new ManagementObject("Win32_Processor.DeviceID='CPU0'"))
+                Task.Run(() =>
                 {
-                    Name = managementObject["Name"].ToString();
-                    Kernel = Int32.Parse(managementObject["NumberOfCores"].ToString());
-                    Freqence = Int32.Parse(managementObject["MaxClockSpeed"].ToString()) * 1024 * 1024;
-                }
+                    using (var managementObject = new ManagementObject("Win32_Processor.DeviceID='CPU0'"))
+                    {
+                        Name = managementObject["Name"].ToString();
+                        Kernel = Int32.Parse(managementObject["NumberOfCores"].ToString());
+                        Freqence = Int32.Parse(managementObject["MaxClockSpeed"].ToString()) * 1024 * 1024;
+                    }
+                });
             }
         }
 
@@ -46,12 +50,14 @@ namespace Assistant.Fault
 
             public MemoryInfo(int unused)
             {
-                ManagementObjectSearcher searcher = new ManagementObjectSearcher("Select * from Win32_PhysicalMemory");
-                foreach (ManagementObject obj in searcher.Get())
+                Task.Run(() =>
                 {
-                    Total = Int64.Parse(obj["Capacity"].ToString());
-                }
-                Update();
+                    ManagementObjectSearcher searcher = new ManagementObjectSearcher("Select * from Win32_PhysicalMemory");
+                    foreach (ManagementObject obj in searcher.Get())
+                    {
+                        Total = Int64.Parse(obj["Capacity"].ToString());
+                    }
+                });
             }
 
             public void Update()
@@ -127,13 +133,16 @@ namespace Assistant.Fault
 
         public SystemInfo(string path)
         {
-            ManagementObjectSearcher searcher = new ManagementObjectSearcher("Select * from Win32_OperatingSystem");
-            foreach (ManagementObject obj in searcher.Get())
+            Task.Run(() =>
             {
-                OsName = obj["Caption"].ToString();
-                OsVersion = obj["Version"].ToString();
-                SerialNo = obj["SerialNumber"].ToString();
-            }
+                ManagementObjectSearcher searcher = new ManagementObjectSearcher("Select * from Win32_OperatingSystem");
+                foreach (ManagementObject obj in searcher.Get())
+                {
+                    OsName = obj["Caption"].ToString();
+                    OsVersion = obj["Version"].ToString();
+                    SerialNo = obj["SerialNumber"].ToString();
+                }
+            });
             Cpu = new CpuInfo(0);
             Memory = new MemoryInfo(0);
             Storage = new StorageInfo(path);

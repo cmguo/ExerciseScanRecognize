@@ -2,6 +2,8 @@
 
 namespace Base.Service
 {
+
+    [AttributeUsage(AttributeTargets.Interface, AllowMultiple = true)]
     public class DelegatingHandlerAttribute : Attribute
     {
         public Type Value { get; private set; }

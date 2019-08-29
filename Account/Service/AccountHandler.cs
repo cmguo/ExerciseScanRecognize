@@ -11,13 +11,14 @@ using System.Threading.Tasks;
 
 namespace Account.Service
 {
-    public class AccountHandler : HttpClientHandler
+    public class AccountHandler : DelegatingHandler
     {
         private string oldUrl = (typeof(IAccount).GetCustomAttributes(typeof(BaseUriAttribute)).First() as BaseUriAttribute).Value;
 
         private static readonly Logger Log = Logger.GetLogger<AccountHandler>();
 
-        public AccountHandler()
+        public AccountHandler(HttpMessageHandler innerHandler)
+            : base(innerHandler)
         {
         }
 

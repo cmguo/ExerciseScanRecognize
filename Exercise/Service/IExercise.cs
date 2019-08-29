@@ -9,8 +9,8 @@ using TalBase.Service;
 namespace Exercise.Service
 {
     [BaseUri("http://homework.idev.talcloud.com/homework/api/v1/answerCardApp")]
-    [MessageHandler(typeof(AccountHandler))]
     [DelegatingHandler(typeof(LoggingHandler))]
+    [DelegatingHandler(typeof(AccountHandler))]
     [ContentSerializer(typeof(ResultSerializer))]
     public interface IExercise
     {

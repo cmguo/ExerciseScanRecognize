@@ -10,8 +10,8 @@ namespace Assistant.Service
 
     
     [BaseUri("http://homework.idev.talcloud.com/homework/api/v1/answerCardApp")]
-    [MessageHandler(typeof(AccountHandler))]
     [DelegatingHandler(typeof(LoggingHandler))]
+    [DelegatingHandler(typeof(AccountHandler))]
     [ContentSerializer(typeof(ResultSerializer))]
     [Retry(3, 1000)]
     public interface IAssistant

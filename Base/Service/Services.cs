@@ -10,13 +10,14 @@ namespace Base.Service
         public static I Get<I>()
         {
             BaseUriAttribute uriAttr = (BaseUriAttribute)typeof(I).GetCustomAttributes(typeof(BaseUriAttribute), true)[0];
-            MessageHandlerAttribute mhdlAttr = (MessageHandlerAttribute)typeof(I).GetCustomAttributes(typeof(MessageHandlerAttribute), true)[0];
+            MessageHandlerAttribute[] mhdlAttr = (MessageHandlerAttribute[])typeof(I).GetCustomAttributes(typeof(MessageHandlerAttribute), true);
             DelegatingHandlerAttribute[] dhdlAttr = (DelegatingHandlerAttribute[])typeof(I).GetCustomAttributes(typeof(DelegatingHandlerAttribute), true);
             ContentSerializer cserAttr = (ContentSerializer)typeof(I).GetCustomAttributes(typeof(ContentSerializer), true)[0];
             RetryAttribute[] retryAttr = (RetryAttribute[])typeof(I).GetCustomAttributes(typeof(RetryAttribute), true);
             RefitSettings settings = new RefitSettings();
             settings.ContentSerializer = (IContentSerializer) Activator.CreateInstance(cserAttr.Value);
-            HttpMessageHandler handler = (HttpMessageHandler) Activator.CreateInstance(mhdlAttr.Value);
+            Type msgh = (mhdlAttr.Length > 0) ? mhdlAttr[0].Value : typeof(HttpClientHandler);
+            HttpMessageHandler handler = (HttpMessageHandler) Activator.CreateInstance(msgh);
             foreach (DelegatingHandlerAttribute d in dhdlAttr)
             {
 #if !DEBUG

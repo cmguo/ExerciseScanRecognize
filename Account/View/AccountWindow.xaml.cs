@@ -44,7 +44,7 @@ namespace Account
         {
             base.OnClosed(e);
             Window window = Application.Current.MainWindow;
-            if (!window.IsActive)
+            if (!window.IsVisible)
             {
                 Log.d("Close MainWindow");
                 window.Close();

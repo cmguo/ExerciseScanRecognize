@@ -417,7 +417,6 @@ namespace Exercise.Model
             }
             else
             {
-                halfPage = null;
                 int task = pages.SetAnotherPage(page2);
                 if (task == 0) // 正在分析正面二维码
                     return false; // 不等待，直接返回，正面分析完成后，会继续处理
@@ -530,7 +529,7 @@ namespace Exercise.Model
                     page.PageName = BitConverter.ToString(output).Replace("-", "").ToLower() + ".jpg";
                 }
                 tick = AddTick(3, tick);
-                //File.Delete(page.PagePath);
+                File.Delete(page.PagePath);
                 page.PagePath = savePath + "\\" + page.PageName;
                 File.Move(outPath, page.PagePath);
             }
@@ -565,7 +564,13 @@ namespace Exercise.Model
             IsScanning = false;
             if (halfPage != null)
             {
-                File.Delete(halfPage.Page1.PagePath);
+                try
+                {
+                    File.Delete(halfPage.Page1.PagePath);
+                }
+                catch
+                {
+                }
                 halfPage = null;
                 --readIndex;
             }

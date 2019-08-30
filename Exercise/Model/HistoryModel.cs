@@ -8,6 +8,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
+using System.Linq;
 using System.Threading.Tasks;
 using static Exercise.Service.HistoryData;
 
@@ -151,6 +152,8 @@ namespace Exercise.Model
             string path = Component.DATA_PATH;
             foreach (string path1 in Directory.EnumerateDirectories(path))
             {
+                if (path1.Substring(path.Length + 1).Any(c => c < '0' || c > '9'))
+                    continue;
                 foreach (string path2 in Directory.EnumerateDirectories(path1))
                 {
                     string path3 = path2 + "\\record.json";

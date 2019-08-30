@@ -3,6 +3,9 @@
 *.jpg
 *.pdf
 *.zip
+*.lnk
+*.docx
+*.xlsx
 .*
 *.Designer.cs
 obj/

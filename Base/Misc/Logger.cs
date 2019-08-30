@@ -1,6 +1,7 @@
 ﻿using log4net;
 using log4net.Config;
 using System;
+using System.Diagnostics;
 using System.Windows;
 using System.Windows.Resources;
 
@@ -17,6 +18,11 @@ namespace Base.Misc
             DEBUG, 
             INFO, 
             VERBOSE,
+        }
+
+        static Logger()
+        {
+            GlobalContext.Properties["pid"] = Process.GetCurrentProcess().Id;
         }
 
         public static void SetLogPath(string path)

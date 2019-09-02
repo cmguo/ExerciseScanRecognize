@@ -6,9 +6,9 @@ using System.Windows;
 // 控制。更改这些特性值可修改
 // 与程序集关联的信息。
 [assembly: AssemblyTitle("TalBase")]
-[assembly: AssemblyDescription("")]
+[assembly: AssemblyDescription("业务基础库")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("")]
+[assembly: AssemblyCompany("好未来")]
 [assembly: AssemblyProduct("TalBase")]
 [assembly: AssemblyCopyright("Copyright ©  2019")]
 [assembly: AssemblyTrademark("")]

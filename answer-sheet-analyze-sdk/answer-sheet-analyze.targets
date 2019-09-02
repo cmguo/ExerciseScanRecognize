@@ -1,0 +1,12 @@
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+ <ItemGroup>
+  <Content Include="$(MSBuildThisFileDirectory)answer-sheet-analyze-sdk.jar">
+     <Link>answer-sheet-analyze-sdk.jar</Link>
+     <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+  </Content>
+  <Content Include="$(MSBuildThisFileDirectory)answer-sheet-analyze-sdk.j4n.jar">
+     <Link>answer-sheet-analyze-sdk.j4n.jar</Link>
+     <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+  </Content>
+ </ItemGroup>
+</Project>

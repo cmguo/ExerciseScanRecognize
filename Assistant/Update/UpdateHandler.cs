@@ -10,6 +10,7 @@ using System.Windows;
 using Base.Boot;
 using Base.Events;
 using Base.Misc;
+using TalBase;
 using TalBase.View;
 
 namespace Assistant.Update

@@ -8,7 +8,8 @@ using TalBase.View;
 using System.Windows;
 using static Exercise.Service.HistoryData;
 using static Exercise.Model.SubmitModel;
-using Assistant;
+using TalBase;
+using TalBase.ViewModel;
 
 namespace Exercise.ViewModel
 {

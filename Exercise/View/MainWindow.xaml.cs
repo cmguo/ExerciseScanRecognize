@@ -64,6 +64,7 @@ namespace Exercise.View
             frmMain.NavigationService.RemoveBackEntry();
             LoadNavButtons(page);
             lastPage = page;
+            DataContext = lastPage.DataContext;
         }
 
         private void UnLoadNavButtons(Page page)

@@ -74,7 +74,6 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AppStatus.cs" />
     <Compile Include="Fault\ReportResult.cs" />
     <Compile Include="Online\OnlineHandler.cs" />
     <Compile Include="Online\OnlineStatus.cs" />

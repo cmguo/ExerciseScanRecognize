@@ -338,7 +338,7 @@ namespace Exercise.Scanner
 
         private void Twain32_AcquireError(object sender, Twain32.AcquireErrorEventArgs e)
         {
-            Log.w("Twain32_AcquireError " + e.Exception.Message);
+            Log.w("Twain32_AcquireError ", e.Exception);
             if (ScanException != null)
             {
                 window.Dispatcher.Invoke(() =>

@@ -1,8 +1,4 @@
-﻿
-using System;
-using Microsoft.VisualBasic.Devices;
-
-namespace TalBase.Utils
+﻿namespace TalBase.Utils
 {
     public class NetWorkManager
     {

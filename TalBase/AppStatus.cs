@@ -2,7 +2,7 @@
 using System;
 using System.Windows.Threading;
 
-namespace Assistant
+namespace TalBase
 {
     public class AppStatus : NotifyBase
     {

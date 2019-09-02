@@ -88,13 +88,8 @@ namespace Exercise.ViewModel
             IgnoreListCommand = new RelayCommand((e) => Resolve(e, SelectedExceptionList, ResolveType.Ignore));
             RemovePageListCommand = new RelayCommand((e) => Resolve(e, SelectedExceptionList, ResolveType.RemovePage));
             CloseMessage = "本次扫描结果未上传，" + CloseMessage;
-            Exceptions.CollectionChanged += Exceptions_CollectionChanged;
             exerciseModel.BeforeReplacePage += ExerciseModel_BeforeReplacePage;
             ReturnCommand = new RelayCommand((o) => Return(o));
-            foreach (ExceptionList el in Exceptions)
-            {
-                el.Exceptions.CollectionChanged += Exceptions_CollectionChanged;
-            }
             exceptionCount = ExceptionCount;
             HistoryModel.Instance.BeginDuration(HistoryModel.DurationType.Resolve);
         }
@@ -104,12 +99,7 @@ namespace Exercise.ViewModel
             Update();
             HistoryModel.Instance.EndDuration(exceptionCount - ExceptionCount);
             base.Release();
-            Exceptions.CollectionChanged -= Exceptions_CollectionChanged;
             exerciseModel.BeforeReplacePage -= ExerciseModel_BeforeReplacePage;
-            foreach (ExceptionList el in Exceptions)
-            {
-                el.Exceptions.CollectionChanged -= Exceptions_CollectionChanged;
-            }
         }
 
         public void InitSelection()
@@ -241,27 +231,6 @@ namespace Exercise.ViewModel
             await exerciseModel.CancelScanOne();
             await exerciseModel.Save();
             (obj as System.Windows.Controls.Page).NavigationService.Navigate(new SummaryPage());
-        }
-
-        private void Exceptions_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
-        {
-            if (sender == Exceptions)
-            {
-                if (e.NewItems != null)
-                {
-                    foreach (ExceptionList el in e.NewItems)
-                    {
-                        el.Exceptions.CollectionChanged += Exceptions_CollectionChanged;
-                    }
-                }
-                if (e.OldItems != null)
-                {
-                    foreach (ExceptionList el in e.OldItems)
-                    {
-                        el.Exceptions.CollectionChanged -= Exceptions_CollectionChanged;
-                    }
-                }
-            }
         }
 
     }

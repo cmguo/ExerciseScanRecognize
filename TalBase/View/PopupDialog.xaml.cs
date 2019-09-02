@@ -1,10 +1,8 @@
 ﻿using Base.Misc;
 using Base.Mvvm.Converter;
-using Panuon.UI;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
-using System.Windows.Media;
 
 namespace TalBase.View
 {

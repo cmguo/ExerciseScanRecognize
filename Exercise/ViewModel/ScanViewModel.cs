@@ -83,7 +83,14 @@ namespace Exercise.ViewModel
             catch (Exception e)
             {
                 Log.w("Check", e);
-                PopupDialog.Show(obj as UIElement, "发现错误", "扫描仪未正确连接，请检查后重试。", 0, "确定");
+                ConfirmationRequest.RaiseForResult(new Confirmation
+                {
+                    Title = "发现错误",
+                    Content = "扫描仪未正确连接，请检查后重试。",
+                    DefaultButton = 0,
+                    Buttons = new string[] { "确定" }, 
+                    Owner = obj as UIElement
+                });
                 return false;
             }
             int result = 0;

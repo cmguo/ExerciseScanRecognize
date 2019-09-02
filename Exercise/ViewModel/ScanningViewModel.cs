@@ -3,6 +3,7 @@ using Base.Mvvm;
 using Exercise.Model;
 using Exercise.View;
 using net.sf.jni4net.jni;
+using Prism.Interactivity.InteractionRequest;
 using System;
 using System.Collections.ObjectModel;
 using System.Diagnostics;

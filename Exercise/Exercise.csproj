@@ -48,6 +48,9 @@
     <Reference Include="Newtonsoft.Json, Version=12.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>..\packages\Newtonsoft.Json.12.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
+    <Reference Include="Panuon.UI, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Panuon.UI.1.0.0\lib\net40\Panuon.UI.dll</HintPath>
+    </Reference>
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
     <Reference Include="Prism, Version=6.3.0.0, Culture=neutral, PublicKeyToken=40ee6c3a2184dc59, processorArchitecture=MSIL">
@@ -63,28 +66,28 @@
       <HintPath>..\packages\Refit.4.7.9\lib\net461\Refit.dll</HintPath>
     </Reference>
     <Reference Include="SharpVectors.Converters.Wpf, Version=1.3.0.0, Culture=neutral, PublicKeyToken=b532964b8548be77, processorArchitecture=MSIL">
-      <HintPath>..\packages\SharpVectors.Reloaded.Cmguo.1.3.0\lib\net40\SharpVectors.Converters.Wpf.dll</HintPath>
+      <HintPath>..\packages\SharpVectors.Reloaded.1.3.0\lib\net40\SharpVectors.Converters.Wpf.dll</HintPath>
     </Reference>
     <Reference Include="SharpVectors.Core, Version=1.3.0.0, Culture=neutral, PublicKeyToken=7407205e337c98ef, processorArchitecture=MSIL">
-      <HintPath>..\packages\SharpVectors.Reloaded.Cmguo.1.3.0\lib\net40\SharpVectors.Core.dll</HintPath>
+      <HintPath>..\packages\SharpVectors.Reloaded.1.3.0\lib\net40\SharpVectors.Core.dll</HintPath>
     </Reference>
     <Reference Include="SharpVectors.Css, Version=1.3.0.0, Culture=neutral, PublicKeyToken=7a46e3f532fdb787, processorArchitecture=MSIL">
-      <HintPath>..\packages\SharpVectors.Reloaded.Cmguo.1.3.0\lib\net40\SharpVectors.Css.dll</HintPath>
+      <HintPath>..\packages\SharpVectors.Reloaded.1.3.0\lib\net40\SharpVectors.Css.dll</HintPath>
     </Reference>
     <Reference Include="SharpVectors.Dom, Version=1.3.0.0, Culture=neutral, PublicKeyToken=517340b6277b1a7a, processorArchitecture=MSIL">
-      <HintPath>..\packages\SharpVectors.Reloaded.Cmguo.1.3.0\lib\net40\SharpVectors.Dom.dll</HintPath>
+      <HintPath>..\packages\SharpVectors.Reloaded.1.3.0\lib\net40\SharpVectors.Dom.dll</HintPath>
     </Reference>
     <Reference Include="SharpVectors.Model, Version=1.3.0.0, Culture=neutral, PublicKeyToken=2236cfc76b505845, processorArchitecture=MSIL">
-      <HintPath>..\packages\SharpVectors.Reloaded.Cmguo.1.3.0\lib\net40\SharpVectors.Model.dll</HintPath>
+      <HintPath>..\packages\SharpVectors.Reloaded.1.3.0\lib\net40\SharpVectors.Model.dll</HintPath>
     </Reference>
     <Reference Include="SharpVectors.Rendering.Gdi, Version=1.3.0.0, Culture=neutral, PublicKeyToken=03902092284347e3, processorArchitecture=MSIL">
-      <HintPath>..\packages\SharpVectors.Reloaded.Cmguo.1.3.0\lib\net40\SharpVectors.Rendering.Gdi.dll</HintPath>
+      <HintPath>..\packages\SharpVectors.Reloaded.1.3.0\lib\net40\SharpVectors.Rendering.Gdi.dll</HintPath>
     </Reference>
     <Reference Include="SharpVectors.Rendering.Wpf, Version=1.3.0.0, Culture=neutral, PublicKeyToken=d0902381100df30e, processorArchitecture=MSIL">
-      <HintPath>..\packages\SharpVectors.Reloaded.Cmguo.1.3.0\lib\net40\SharpVectors.Rendering.Wpf.dll</HintPath>
+      <HintPath>..\packages\SharpVectors.Reloaded.1.3.0\lib\net40\SharpVectors.Rendering.Wpf.dll</HintPath>
     </Reference>
     <Reference Include="SharpVectors.Runtime.Wpf, Version=1.3.0.0, Culture=neutral, PublicKeyToken=d16e717f0a981fb9, processorArchitecture=MSIL">
-      <HintPath>..\packages\SharpVectors.Reloaded.Cmguo.1.3.0\lib\net40\SharpVectors.Runtime.Wpf.dll</HintPath>
+      <HintPath>..\packages\SharpVectors.Reloaded.1.3.0\lib\net40\SharpVectors.Runtime.Wpf.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.Composition" />
@@ -201,10 +204,6 @@
       <Project>{2f6a6a39-eed7-4dba-a62c-cbdf3ce0f1bc}</Project>
       <Name>Base</Name>
     </ProjectReference>
-    <ProjectReference Include="..\submodule\PanuonUI\Panuon.UI\Panuon.UI.csproj">
-      <Project>{72b3698e-1784-4101-99ae-fc7b8f48e96d}</Project>
-      <Name>Panuon.UI</Name>
-    </ProjectReference>
     <ProjectReference Include="..\submodule\Saraff.Twain.NET\Saraff.Twain.csproj">
       <Project>{658f9851-4d1c-4d57-904e-f9d7da7f24fc}</Project>
       <Name>Saraff.Twain</Name>
@@ -285,7 +284,6 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
-    <None Include="app.config.transform" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup />

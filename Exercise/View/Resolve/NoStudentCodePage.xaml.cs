@@ -16,7 +16,7 @@ namespace Exercise.View.Resolve
         {
             InitializeComponent();
             studentList.GotKeyboardFocus += StudentList_GotKeyboardFocus;
-            studentList.LostKeyboardFocus += StudentList_LostKeyboardFocus;
+            studentList.DropDownOpened += StudentList_DropDownOpened;
             Loaded += NoStudentCodePage_Loaded;
         }
 
@@ -25,11 +25,6 @@ namespace Exercise.View.Resolve
             Exception ex = DataContext as Exception;
             ResolvePage rp = UITreeHelper.GetParentOfType<ResolvePage>(this);
             rp.SetPaperFocusRect(PaperOverlayConverter.MakeRect(ex.Page.Answer.QRCodeLocation, 0));
-        }
-
-        private void StudentList_LostKeyboardFocus(object sender, KeyboardFocusChangedEventArgs e)
-        {
-            //studentList.IsDropDownOpen = false;
         }
 
         private void StudentList_GotKeyboardFocus(object sender, KeyboardFocusChangedEventArgs e)
@@ -57,7 +52,17 @@ namespace Exercise.View.Resolve
 
         private void StudentList_TextChanged(object sender, TextChangedEventArgs e)
         {
-            //studentList.IsDropDownOpen = true;
+            studentList.IsDropDownOpen = true;
         }
+
+        private void StudentList_DropDownOpened(object sender, System.EventArgs e)
+        {
+            var textBox = Keyboard.FocusedElement as TextBox;
+            if (textBox != null)
+            {
+                textBox.SelectionLength = 0;
+            }
+        }
+
     }
 }

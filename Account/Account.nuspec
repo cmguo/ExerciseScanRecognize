@@ -1,0 +1,19 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
+  <metadata>
+    <id>Account</id>
+    <version>1.0.0</version>
+    <title>Account</title>
+    <authors>好未来</authors>
+    <owners>好未来</owners>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>账号组件</description>
+    <copyright>Copyright ©  2019</copyright>
+    <dependencies>
+      <dependency id="TalBase" version="1.0.0" />
+    </dependencies>
+  </metadata>
+  <files>
+    <file src="app.config.transform" target="content\app.config.transform" />
+  </files>
+</package>

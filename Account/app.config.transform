@@ -1,0 +1,15 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<configuration>
+  <configSections>
+    <section name="account" type="Account.AccountConfig,Account" allowExeDefinition="MachineToLocalUser" />
+  </configSections>
+  <account>
+    <ServiceUri Value="http://zx.talcloud.com/homework/api/v1/answerCardApp"/>
+    <ServiceUris>
+      <add Name="开发环境" Value="http://zx.idev.talcloud.com/homework/api/v1/answerCardApp"/>
+      <add Name="测试环境" Value="http://zx.itest.talcloud.com/homework/api/v1/answerCardApp"/>
+      <add Name="联调环境" Value="http://zx.iunion.talcloud.com/homework/api/v1/answerCardApp"/>
+      <add Name="演示环境" Value="http://zx.ishow.talcloud.com/homework/api/v1/answerCardApp"/>
+    </ServiceUris>
+  </account>
+</configuration>

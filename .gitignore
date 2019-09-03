@@ -6,8 +6,10 @@
 *.lnk
 *.docx
 *.xlsx
+*.nupkg
 .*
 *.Designer.cs
+Sample/
 obj/
 bin/
 Debug/

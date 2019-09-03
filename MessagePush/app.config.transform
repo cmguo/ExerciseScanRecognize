@@ -1,0 +1,15 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<configuration>
+  <configSections>
+    <section name="m2mqtt" type="MessagePush.Mqtt.M2MqttConfig,MessagePush" allowExeDefinition="MachineToLocalUser" />
+  </configSections>
+  <m2mqtt
+    ServiceUri="mqtt-cn-v6419rnxz01.mqtt.aliyuncs.com"
+    InstanceId="mqtt-cn-v6419rnxz01"
+    GroupId="GID-SEG-DEV-APP-EXERCISE"
+    AccessKey="LTAI2ZHy84cB5Zji"
+    SecretKey="sIrFBrtRtDCHhh6C1LQlor6xFbzYsi"
+    ParentTopic="seg-dev-app-exercise-"
+    KeepAlivePeriod="60"
+    />
+</configuration>

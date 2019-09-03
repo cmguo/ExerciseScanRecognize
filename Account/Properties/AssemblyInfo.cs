@@ -4,13 +4,13 @@ using System.Runtime.InteropServices;
 // 有关程序集的一般信息由以下
 // 控制。更改这些特性值可修改
 // 与程序集关联的信息。
-[assembly: AssemblyTitle("AccountData")]
-[assembly: AssemblyDescription("")]
+[assembly: AssemblyTitle("Account")]
+[assembly: AssemblyDescription("账号组件")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("AccountData")]
+[assembly: AssemblyCompany("好未来")]
+[assembly: AssemblyProduct("Account")]
 [assembly: AssemblyCopyright("Copyright ©  2019")]
-[assembly: AssemblyTrademark("")]
+[assembly: AssemblyTrademark("Tal")]
 [assembly: AssemblyCulture("")]
 
 // 将 ComVisible 设置为 false 会使此程序集中的类型

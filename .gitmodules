@@ -1,3 +1,6 @@
 [submodule "submodule/Saraff.Twain.NET"]
 	path = submodule/Saraff.Twain.NET
 	url = git@github.com:cmguo/Saraff.Twain.NET.git
+[submodule "submodule/PanuonUI"]
+	path = submodule/PanuonUI
+	url = git@github.com:cmguo/PanuonUI.git

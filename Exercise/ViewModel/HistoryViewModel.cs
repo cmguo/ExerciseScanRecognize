@@ -67,7 +67,7 @@ namespace Exercise.ViewModel
 
         private void Remove(Record record)
         {
-            int result = PopupDialog.Show(Application.Current.MainWindow,"放弃扫描任务", "放弃后，本次扫描结果将作废，确认放弃么？", 0, "放弃本次扫描", "取消");
+            int result = RaiseConfirmation("放弃扫描任务", "放弃后，本次扫描结果将作废，确认放弃么？", 0, "放弃本次扫描", "取消");
             if (result == 0)
             {
                 historyModel.Remove(record);

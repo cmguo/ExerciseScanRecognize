@@ -1,6 +1,7 @@
 ﻿using Base.Mvvm;
 using Exercise.Model;
 using Exercise.View;
+using System;
 using System.ComponentModel;
 using System.Windows;
 using TalBase.View;
@@ -55,7 +56,7 @@ namespace Exercise.ViewModel
 
         private void Discard(object obj)
         {
-            int result = PopupDialog.Show(obj as UIElement, "放弃扫描任务", "放弃后，本次扫描结果将作废，确认放弃么？", 0, "放弃本次扫描", "取消");
+            int result = RaiseConfirmation(obj as UIElement, "放弃扫描任务", "放弃后，本次扫描结果将作废，确认放弃么？", 0, "放弃本次扫描", "取消");
             if (result == 0)
             {
                 submitModel.Remove(Task);
@@ -68,7 +69,7 @@ namespace Exercise.ViewModel
             if (Task.Status != SubmitModel.TaskStatus.Submiting)
                 return;
             CancelEventArgs e = obj as CancelEventArgs;
-            int result = PopupDialog.Show(obj as UIElement, "退出软件", "扫描结果上传中，退出后，扫描结果将放弃，确认退出吗？", 0, "退出", "取消");
+            int result = RaiseConfirmation(obj as UIElement, "退出软件", "扫描结果上传中，退出后，扫描结果将放弃，确认退出吗？", 0, "退出", "取消");
             if (result == 0)
             {
                 await submitModel.Cancel(Task);

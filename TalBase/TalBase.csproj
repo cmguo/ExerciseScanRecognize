@@ -122,13 +122,15 @@
     <Compile Include="Service\ResultSerializer.cs" />
     <Compile Include="Service\NothingJsonConverter.cs" />
     <Compile Include="Utils\Utils.cs" />
-    <Compile Include="ViewModel\IConfirmation.cs" />
-    <Compile Include="ViewModel\InteractionRequestEx.cs" />
+    <Compile Include="ViewModel\Information.cs" />
+    <Compile Include="ViewModel\Confirmation.cs" />
+    <Compile Include="View\InteractionTrigger.cs" />
     <Compile Include="ViewModel\ViewModelBase.cs" />
     <Compile Include="View\ErrorMessageBox.cs" />
     <Compile Include="View\PopupDialog.xaml.cs">
       <DependentUpon>PopupDialog.xaml</DependentUpon>
     </Compile>
+    <Compile Include="View\ToastAction.cs" />
     <Compile Include="View\PopupDialogAction.cs" />
     <Compile Include="View\TalToast.cs" />
     <Compile Include="View\TalHyperlink.cs" />

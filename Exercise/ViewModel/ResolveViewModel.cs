@@ -124,11 +124,11 @@ namespace Exercise.ViewModel
             }
             if (ex.Page != null)
             {
-                TalToast.Show("X该试卷仍无法识别，请检查后重新扫描");
+                RaiseInformation("X该试卷仍无法识别，请检查后重新扫描");
             }
             else
             {
-                TalToast.Show("该份试卷的异常已处理完成");
+                RaiseInformation("该份试卷的异常已处理完成");
             }
             if (Exceptions.Count == 0)
                 (obj as System.Windows.Controls.Page).NavigationService.Navigate(new SummaryPage());
@@ -138,7 +138,7 @@ namespace Exercise.ViewModel
         {
             if (e.Old != SelectedException.Page)
             {
-                int result = PopupDialog.Show(Application.Current.MainWindow,"替换试卷确认", "您放入的学生试卷已经有扫描结果，确认替换吗？", 0, "确认", "取消");
+                int result = RaiseConfirmation("替换试卷确认", "您放入的学生试卷已经有扫描结果，确认替换吗？", 0, "确认", "取消");
                 e.Cancel = result == 1;
             }
         }
@@ -183,7 +183,7 @@ namespace Exercise.ViewModel
             }
             if (title != null)
             {
-                int n = PopupDialog.Show(obj as FrameworkElement, title, message, 0, btn, "取消");
+                int n = RaiseConfirmation(obj, title, message, 0, btn, "取消");
                 if (n != 0)
                     return;
             }
@@ -192,7 +192,7 @@ namespace Exercise.ViewModel
             if (Exceptions.Count == 0)
             {
                 await exerciseModel.Save();
-                TalToast.Show("异常已全部处理完成");
+                RaiseInformation("异常已全部处理完成");
                 (obj as System.Windows.Controls.Page).NavigationService.Navigate(new SummaryPage());
             }
             else if (ex.Page == null)
@@ -208,20 +208,19 @@ namespace Exercise.ViewModel
                         toast = "该份试卷的异常已处理完成";
                         break;
                 }
-                TalToast.Show(toast);
+                RaiseInformation(toast);
             }
         }
 
         private void Resolve(object obj, ExerciseModel.ExceptionList list, ResolveType type)
         {
-            int n = PopupDialog.Show(obj as FrameworkElement, "忽略异常",
-                "确认忽略以上异常？", 0, "确认", "取消");
+            int n = RaiseConfirmation(obj, "忽略异常", "确认忽略以上异常？", 0, "确认", "取消");
             if (n != 0)
                 return;
             exerciseModel.Resolve(list, type);
             if (Exceptions.Count == 0)
             {
-                TalToast.Show("异常已全部处理完成");
+                RaiseInformation("异常已全部处理完成");
                 (obj as System.Windows.Controls.Page).NavigationService.Navigate(new SummaryPage());
             }
         }

@@ -94,7 +94,7 @@ namespace Exercise.ViewModel
             if (exerciseModel.SavePath == null)
                 return;
             CancelEventArgs e = obj as CancelEventArgs;
-            int result = PopupDialog.Show("退出软件", CloseMessage, 1, "退出", "取消");
+            int result = RaiseConfirmation("退出软件", CloseMessage, 1, "退出", "取消");
             if (result != 0)
             {
                 e.Cancel = true;
@@ -113,7 +113,7 @@ namespace Exercise.ViewModel
 
         protected async Task Discard(object obj)
         {
-            int result = PopupDialog.Show(obj as UIElement, "放弃扫描任务", "放弃后，本次扫描结果将作废，确认放弃么？", 0, "放弃本次扫描", "取消");
+            int result = RaiseConfirmation(obj as UIElement, "放弃扫描任务", "放弃后，本次扫描结果将作废，确认放弃么？", 0, "放弃本次扫描", "取消");
             if (result == 0 && (obj as System.Windows.Controls.Page).NavigationService != null)
             {
                 await scanModel.CancelScan(true);

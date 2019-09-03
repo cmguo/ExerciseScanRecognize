@@ -8,7 +8,6 @@
         xmlns:svgc="http://sharpvectors.codeplex.com/svgc/"
         xmlns:cv="clr-namespace:Base.Mvvm.Converter;assembly=Base"
         xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
-        xmlns:prism="http://prismlibrary.com/"
         mc:Ignorable="d"
         x:Name="window"
         Icon="/Icons/logo.ico"
@@ -24,13 +23,16 @@
     <Window.CommandBindings>
         <CommandBinding Command="ApplicationCommands.Close" Executed="Close_Click"/>
     </Window.CommandBindings>
-    
+
     <i:Interaction.Triggers>
-        <prism:InteractionRequestTrigger SourceObject="{Binding ConfirmationRequest, Mode=OneWay}">
+        <tal:InteractionTrigger SourceObject="{Binding ConfirmationRequest, Mode=OneWay}">
             <tal:PopupDialogAction/>
-        </prism:InteractionRequestTrigger>
+        </tal:InteractionTrigger>
+        <tal:InteractionTrigger SourceObject="{Binding InformationRequest, Mode=OneWay}">
+            <tal:ToastAction/>
+        </tal:InteractionTrigger>
     </i:Interaction.Triggers>
-    
+
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>

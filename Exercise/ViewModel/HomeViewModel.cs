@@ -55,7 +55,7 @@ namespace Exercise.ViewModel
                 SubmitTask task = await SubmitModel.Instance.Load(record.LocalPath);
                 string msg = task == null ? "因客户端非正常关闭，上次读卷尚未完成，是否继续处理？" 
                     : "因客户端非正常关闭，上次读卷结果尚未完成，是否继续处理？";
-                int result = PopupDialog.Show(obj as UIElement, "提示", msg, 0, "继续处理", "忽略");
+                int result = RaiseConfirmation(obj, "提示", msg, 0, "继续处理", "忽略");
                 if (result == 0)
                 {
                     try

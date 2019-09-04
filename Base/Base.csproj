@@ -114,6 +114,7 @@
     <Compile Include="Events\TopicAttribute.cs" />
     <Compile Include="Helpers\Enumerables.cs" />
     <Compile Include="Helpers\Properties.cs" />
+    <Compile Include="Misc\Dumpper.cs" />
     <Compile Include="Misc\FileAppender.cs" />
     <Compile Include="Misc\Logger.cs" />
     <Compile Include="Misc\SystemUtil.cs" />
@@ -167,6 +168,7 @@
     <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <Import Project="$(MSBuildExtensionsPath)\ExtensionPack\MSBuild.ExtensionPack.VersionNumber.targets"/>
   <Import Project="..\packages\Refit.4.7.9\build\net461\refit.targets" Condition="Exists('..\packages\Refit.4.7.9\build\net461\refit.targets')" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>

@@ -461,6 +461,7 @@
     </Content>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <Import Project="$(MSBuildExtensionsPath)\ExtensionPack\MSBuild.ExtensionPack.VersionNumber.targets"/>
   <PropertyGroup>
     <PrepareForRunDependsOn>$(PrepareForRunDependsOn);MyCopyFilesToOutputDirectory</PrepareForRunDependsOn>
   </PropertyGroup>

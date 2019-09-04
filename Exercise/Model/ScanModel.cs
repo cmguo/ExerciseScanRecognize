@@ -141,7 +141,14 @@ namespace Exercise.Model
             scanDevice.ScanException += ScanDevice_ScanException;
             scanDevice.ScanCompleted += ScanDevice_ScanCompleted;
             IsCompleted = true;
-            scanDevice.Open();
+            try
+            {
+                scanDevice.Open();
+            }
+            catch
+            {
+                Base.Mvvm.Action.RaiseException(this, new System.NotSupportedException("没有找到可用的扫描仪"));
+            }
             //BackgroudWork.Execute(DetectSource);
         }
 

@@ -196,6 +196,12 @@
     <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <Import Project="$(MSBuildExtensionsPath)\ExtensionPack\MSBuild.ExtensionPack.VersionNumber.targets"/>
+  <PropertyGroup>
+    <PostBuildEvent>IF "$(ConfigurationName)"=="Release" (
+      nuget pack "$(ProjectPath)" -Prop Configuration=Release -OutputDirectory "$(SolutionDir)nuget-packages"
+    )</PostBuildEvent>
+  </PropertyGroup>
   <Import Project="..\packages\Refit.4.7.9\build\net461\refit.targets" Condition="Exists('..\packages\Refit.4.7.9\build\net461\refit.targets')" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>

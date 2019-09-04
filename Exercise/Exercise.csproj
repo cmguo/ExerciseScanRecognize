@@ -312,6 +312,7 @@
     <Copy SourceFiles="@(None)" DestinationFolder="$(OutDir)" />
   </Target>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <Import Project="$(MSBuildExtensionsPath)\ExtensionPack\MSBuild.ExtensionPack.VersionNumber.targets"/>
   <Import Project="..\packages\Refit.4.7.9\build\net461\refit.targets" Condition="Exists('..\packages\Refit.4.7.9\build\net461\refit.targets')" />
   <Import Project="..\packages\Jni4net.0.8.8\build\jni4net.targets" Condition="Exists('..\packages\Jni4net.0.8.8\build\jni4net.targets')" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">

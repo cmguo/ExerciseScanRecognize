@@ -468,12 +468,6 @@
   <Target Name="MyCopyFilesToOutputDirectory">
     <Copy SourceFiles="@(None)" DestinationFolder="$(OutDir)" />
   </Target>
-  <PropertyGroup>
-    <PrepareForRunDependsOn>$(PrepareForRunDependsOn);MyCopyFilesToOutputDirectory</PrepareForRunDependsOn>
-  </PropertyGroup>
-  <Target Name="MyCopyFilesToOutputDirectory">
-    <Copy SourceFiles="@(None)" DestinationFolder="$(OutDir)" />
-  </Target>
   <Import Project="..\packages\Jni4net.0.8.8\build\jni4net.targets" Condition="Exists('..\packages\Jni4net.0.8.8\build\jni4net.targets')" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>

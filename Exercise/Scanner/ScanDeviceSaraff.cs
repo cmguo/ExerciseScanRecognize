@@ -201,7 +201,8 @@ namespace Exercise.Scanner
                 twain32.Capabilities.DeviceEvent.Set(TwDE.PaperJam);
                 twain32.Capabilities.DeviceEvent.Set(TwDE.PaperDoubleFeed);
             }
-            twain32.Capabilities.CameraSide.Set(TwCS.Both);
+            if (twain32.Capabilities.CameraSide.IsSupported(TwQC.Set)) // AT440
+                twain32.Capabilities.CameraSide.Set(TwCS.Both);
             twain32.Capabilities.DuplexEnabled.Set(true);
             twain32.Capabilities.ImageFileFormat.Set(TwFF.Jfif);
             twain32.Capabilities.Compression.Set(TwCompression.Jpeg);

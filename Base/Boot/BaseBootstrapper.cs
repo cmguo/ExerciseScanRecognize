@@ -2,6 +2,7 @@
 using Prism.Mef;
 using Prism.Modularity;
 using System.ComponentModel.Composition.Hosting;
+using System.Configuration;
 using System.Windows;
 
 namespace Base.Boot
@@ -38,10 +39,21 @@ namespace Base.Boot
         protected override void ConfigureAggregateCatalog()
         {
             base.ConfigureAggregateCatalog();
-            DirectoryCatalog catalog = new DirectoryCatalog(".");
-            DirectoryCatalog catalog2 = new DirectoryCatalog(".", "*.exe");
-            AggregateCatalog.Catalogs.Add(catalog);
-            AggregateCatalog.Catalogs.Add(catalog2);
+            string modules = ConfigurationManager.AppSettings.Get("AggregateModules");
+            if (modules == null)
+            {
+                DirectoryCatalog catalog = new DirectoryCatalog(".");
+                DirectoryCatalog catalog2 = new DirectoryCatalog(".", "*.exe");
+                AggregateCatalog.Catalogs.Add(catalog);
+                AggregateCatalog.Catalogs.Add(catalog2);
+            }
+            else
+            {
+                foreach (string m in modules.Split(','))
+                {
+                    AggregateCatalog.Catalogs.Add(new AssemblyCatalog(m));
+                }
+            }
         }
 
         protected override DependencyObject CreateShell()

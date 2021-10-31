@@ -97,7 +97,7 @@
   <ItemGroup>
     <Compile Include="Boot\BaseBootstrapper.cs" />
     <Compile Include="Boot\Bootstrap.cs" />
-    <Compile Include="Boot\IAssistant.cs" />
+    <Compile Include="Boot\IComponent.cs" />
     <Compile Include="Boot\IProduct.cs" />
     <Compile Include="Boot\LoggerFacade.cs" />
     <Compile Include="Boot\Shell.cs" />
@@ -168,7 +168,7 @@
     <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <Import Project="$(MSBuildExtensionsPath)\ExtensionPack\MSBuild.ExtensionPack.VersionNumber.targets"/>
+  <Import Project="$(MSBuildExtensionsPath)\ExtensionPack\MSBuild.ExtensionPack.VersionNumber.targets" />
   <Import Project="..\packages\Refit.4.7.9\build\net461\refit.targets" Condition="Exists('..\packages\Refit.4.7.9\build\net461\refit.targets')" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>

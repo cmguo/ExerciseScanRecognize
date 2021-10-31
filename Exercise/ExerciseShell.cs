@@ -13,8 +13,8 @@ namespace Exercise
     public class ExerciseShell : Shell
     {
 
-        [ImportMany(typeof(IAssistant))]
-        private IEnumerable<Lazy<IAssistant, IAssistantMetadata>> assistants = null;
+        [ImportMany(typeof(IComponent))]
+        private IEnumerable<Lazy<IComponent, IComponentMetadata>> assistants = null;
 
         public ExerciseShell()
         {

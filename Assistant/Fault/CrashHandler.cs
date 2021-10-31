@@ -16,7 +16,7 @@ using TalBase;
 namespace Assistant.Fault
 {
     [Export("crash")]
-    public class CrashHandler : Base.Boot.IAssistant
+    public class CrashHandler : Base.Boot.IComponent
     {
         private static readonly Logger Log = Logger.GetLogger<CrashHandler>();
 

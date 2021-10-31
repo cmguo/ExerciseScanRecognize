@@ -17,9 +17,9 @@ namespace Assistant.Update
 {
 
     [Export("update")]
-    [InheritedExport(typeof(IAssistant)),
+    [InheritedExport(typeof(IComponent)),
         ExportMetadata("MainProcessOnly", true)]
-    public class UpdateHandler : IAssistant
+    public class UpdateHandler : IComponent
     {
 
         private static readonly Logger Log = Logger.GetLogger<UpdateHandler>();

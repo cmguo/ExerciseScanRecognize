@@ -5,9 +5,9 @@ using System.ComponentModel.Composition;
 
 namespace Assistant.Online
 {
-    [InheritedExport(typeof(IAssistant)),
+    [InheritedExport(typeof(IComponent)),
         ExportMetadata("MainProcessOnly", true)]
-    public class OnlineHandler : IAssistant
+    public class OnlineHandler : IComponent
     {
         [ImportingConstructor]
         public OnlineHandler(EventBus bus)
